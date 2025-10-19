@@ -702,33 +702,139 @@
                             </button>
                         </div>
 
-                        {/* Resources Section - abbreviated for space */}
+                        {/* Resources Section */}
                         {showResources && (
                             <div className="mt-6 bg-white rounded-lg shadow-md p-6">
                                 <h2 className="text-2xl font-bold text-gray-800 mb-4">📚 Essential Resources</h2>
-                                <p className="text-gray-600 mb-4">All resources with links available in the full roadmap document.</p>
-                                <div className="grid md:grid-cols-3 gap-4 text-sm">
+                                
+                                <div className="grid md:grid-cols-2 gap-6">
                                     <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">SQL</h3>
-                                        <ul className="space-y-1">
-                                            <li><a href="https://sqlbolt.com/" target="_blank" className="text-blue-600 hover:underline">SQLBolt</a></li>
-                                            <li><a href="https://mode.com/sql-tutorial/" target="_blank" className="text-blue-600 hover:underline">Mode SQL</a></li>
-                                            <li><a href="https://leetcode.com/problemset/database/" target="_blank" className="text-blue-600 hover:underline">LeetCode SQL</a></li>
+                                        <h3 className="font-semibold text-indigo-700 mb-2 flex items-center">
+                                            🗃️ SQL Learning (Priority!)
+                                        </h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://sqlbolt.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">SQLBolt (Interactive)</a></li>
+                                            <li><a href="https://mode.com/sql-tutorial/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Mode SQL Tutorial (Comprehensive)</a></li>
+                                            <li><a href="https://www.kaggle.com/learn/intro-to-sql" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kaggle Intro to SQL</a></li>
+                                            <li><a href="https://www.kaggle.com/learn/advanced-sql" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kaggle Advanced SQL</a></li>
+                                            <li><a href="https://leetcode.com/problemset/database/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LeetCode SQL Problems</a></li>
+                                            <li><a href="https://www.stratascratch.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">StrataScratch (Interview Qs)</a></li>
+                                            <li><a href="https://www.hackerrank.com/domains/sql" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">HackerRank SQL</a></li>
+                                            <li><a href="https://dataengineeracademy.com/courses/sql-tutorial-free/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Data Engineering Academy SQL</a></li>
                                         </ul>
                                     </div>
+                                    
                                     <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">ML Frameworks</h3>
-                                        <ul className="space-y-1">
-                                            <li><a href="https://course.fast.ai/" target="_blank" className="text-blue-600 hover:underline">Fast.ai</a></li>
-                                            <li><a href="https://www.learnpytorch.io/" target="_blank" className="text-blue-600 hover:underline">Learn PyTorch</a></li>
-                                            <li><a href="https://huggingface.co/learn/llm-course/" target="_blank" className="text-blue-600 hover:underline">HF LLM Course</a></li>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🔥 PyTorch & Deep Learning</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://course.fast.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Fast.ai Practical Deep Learning</a></li>
+                                            <li><a href="https://www.learnpytorch.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Learn PyTorch (Zero to Mastery)</a></li>
+                                            <li><a href="https://pytorch.org/tutorials/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch Official Tutorials</a></li>
                                         </ul>
                                     </div>
+                                    
                                     <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">MLOps</h3>
-                                        <ul className="space-y-1">
-                                            <li><a href="https://madewithml.com/" target="_blank" className="text-blue-600 hover:underline">Made With ML</a></li>
-                                            <li><a href="https://github.com/DataTalksClub/mlops-zoomcamp" target="_blank" className="text-blue-600 hover:underline">MLOps Zoomcamp</a></li>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🤖 Transformers & LLMs</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://huggingface.co/learn/llm-course/chapter1/1" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face LLM Course</a></li>
+                                            <li><a href="https://www.deeplearning.ai/short-courses/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DeepLearning.AI Short Courses</a></li>
+                                            <li><a href="https://github.com/huggingface/peft" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PEFT Library (LoRA/QLoRA)</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🚀 MLOps & Deployment</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://madewithml.com/courses/mlops/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Made With ML MLOps Course</a></li>
+                                            <li><a href="https://github.com/DataTalksClub/mlops-zoomcamp" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MLOps Zoomcamp</a></li>
+                                            <li><a href="https://mlflow.org/docs/latest/index.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MLflow Documentation</a></li>
+                                            <li><a href="https://docs.wandb.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Weights & Biases Docs</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">⚙️ Data Engineering</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://docs.getdbt.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">dbt (data build tool)</a></li>
+                                            <li><a href="https://airflow.apache.org/docs/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Apache Airflow</a></li>
+                                            <li><a href="https://docs.prefect.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Prefect</a></li>
+                                            <li><a href="https://github.com/DataTalksClub/data-engineering-zoomcamp" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Data Engineering Zoomcamp</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🐳 Docker & Kubernetes</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Docker Getting Started</a></li>
+                                            <li><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kubernetes Tutorial</a></li>
+                                            <li><a href="https://www.youtube.com/watch?v=X48VuDVv0do" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">K8s Tutorial (TechWorld)</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🧠 TensorFlow</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google ML Crash Course</a></li>
+                                            <li><a href="https://www.coursera.org/professional-certificates/tensorflow-in-practice" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DeepLearning.AI TensorFlow</a></li>
+                                            <li><a href="https://www.tensorflow.org/tutorials" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">TensorFlow Tutorials</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">☁️ Cloud Platforms</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://aws.amazon.com/sagemaker/getting-started/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">AWS SageMaker</a></li>
+                                            <li><a href="https://cloud.google.com/vertex-ai/docs" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google Vertex AI</a></li>
+                                            <li><a href="https://huggingface.co/spaces" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face Spaces (Free)</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">💼 Interview Prep</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://stanford-cs329s.github.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Stanford ML Systems Design</a></li>
+                                            <li><a href="https://www.educative.io/courses/grokking-the-machine-learning-interview" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Grokking ML Interview</a></li>
+                                            <li><a href="https://leetcode.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LeetCode</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">💻 Practice Platforms</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://colab.research.google.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google Colab (Free GPU)</a></li>
+                                            <li><a href="https://www.kaggle.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kaggle</a></li>
+                                            <li><a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">GitHub</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">👥 Communities</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://datatalks.club/slack.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DataTalks.Club Slack</a></li>
+                                            <li><a href="https://mlops.community/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MLOps Community</a></li>
+                                            <li><a href="https://huggingface.co/join/discord" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face Discord</a></li>
+                                            <li><a href="https://forums.fast.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Fast.ai Forums</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">📚 Books (Priority Order)</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li className="text-gray-700">1. Learning SQL (Beaulieu)</li>
+                                            <li className="text-gray-700">2. Hands-On ML (Géron)</li>
+                                            <li className="text-gray-700">3. Designing ML Systems (Huyen)</li>
+                                            <li className="text-gray-700">4. NLP with Transformers</li>
+                                            <li className="text-gray-700">5. Introducing MLOps (Treveil)</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🛠️ Additional Tools</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">FastAPI Documentation</a></li>
+                                            <li><a href="https://www.gradio.app/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Gradio (ML Demos)</a></li>
+                                            <li><a href="https://streamlit.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Streamlit (Dashboards)</a></li>
+                                            <li><a href="https://www.evidentlyai.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Evidently AI (Monitoring)</a></li>
                                         </ul>
                                     </div>
                                 </div>
