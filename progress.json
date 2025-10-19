@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-10-19T15:05:05.120Z",
+  "lastUpdated": "2025-10-19T15:09:49.131Z",
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-3": false,
@@ -7,7 +7,5 @@
     "Week 1: SQL Intensive Bootcamp (45 hours)-2": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-4": true
   },
-  "expandedMonths": {
-    "Month 1: SQL Mastery + Python/Docker Foundations": true
-  }
+  "expandedMonths": {}
 }
