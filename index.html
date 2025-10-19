@@ -370,12 +370,47 @@
                                         Master SQL → Build ML Systems → Land Your Dream Job
                                     </p>
                                 </div>
-                                <button
-                                    onClick={clearProgress}
-                                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg transition-colors"
-                                >
-                                    Reset Progress
-                                </button>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => {
+                                            const progressData = {
+                                                date: new Date().toISOString().split('T')[0],
+                                                overallProgress: overallProgress,
+                                                checkedTasks: checkedTasks,
+                                                totalTasks: Object.values(roadmapData).reduce((acc, month) => {
+                                                    return acc + Object.values(month).reduce((weekAcc, tasks) => weekAcc + tasks.length, 0);
+                                                }, 0),
+                                                completedTasks: Object.keys(checkedTasks).filter(key => checkedTasks[key]).length
+                                            };
+                                            
+                                            const text = `ML Engineer Roadmap Progress Report
+Generated: ${progressData.date}
+Overall Progress: ${progressData.overallProgress}%
+Tasks Completed: ${progressData.completedTasks}/${progressData.totalTasks}
+
+Completed Tasks:
+${Object.entries(checkedTasks)
+    .filter(([_, checked]) => checked)
+    .map(([taskId]) => `✅ ${taskId}`)
+    .join('\n')}
+
+Copy this and share with Claude to get personalized help!`;
+                                            
+                                            navigator.clipboard.writeText(text).then(() => {
+                                                alert('Progress copied to clipboard! Paste it in your next chat with Claude.');
+                                            });
+                                        }}
+                                        className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm rounded-lg transition-colors"
+                                    >
+                                        📋 Export Progress
+                                    </button>
+                                    <button
+                                        onClick={clearProgress}
+                                        className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg transition-colors"
+                                    >
+                                        Reset Progress
+                                    </button>
+                                </div>
                             </div>
                             
                             {/* Overall Progress */}
