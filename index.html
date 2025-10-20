@@ -21,7 +21,7 @@
             const GITHUB_BRANCH = 'main';
             const PROGRESS_FILE = 'progress.json';
             
-            const roadmapData = {
+            const mainRoadmapData = {
                 "Month 1: SQL Mastery + Python/Docker Foundations": {
                     "Week 1: SQL Intensive Bootcamp (45 hours)": [
                         "Complete SQLBolt (all exercises)",
@@ -291,15 +291,225 @@
                 }
             };
 
+            const mathRoadmapData = {
+                "Foundations: Linear Algebra & Calculus": {
+                    "Module 1: Linear Algebra Fundamentals": [
+                        "Watch 3Blue1Brown Essence of Linear Algebra (full series)",
+                        "Read Mathematics for ML Ch 2: Linear Algebra",
+                        "Complete exercises: Vectors and vector spaces",
+                        "Complete exercises: Matrix operations",
+                        "Implement matrix multiplication in NumPy from scratch",
+                        "Study eigenvalues and eigenvectors",
+                        "Implement eigenvalue decomposition",
+                        "Learn Singular Value Decomposition (SVD)",
+                        "Implement SVD from scratch",
+                        "Apply SVD to image compression project"
+                    ],
+                    "Module 2: Matrix Calculus for ML": [
+                        "Read Mathematics for ML Ch 5: Vector Calculus",
+                        "Study gradients and Jacobians",
+                        "Learn chain rule for backpropagation",
+                        "Practice computing gradients manually",
+                        "Implement gradient computation in NumPy",
+                        "Study Hessian matrices",
+                        "Watch 3Blue1Brown calculus series (optional review)",
+                        "Complete Fast.ai Computational Linear Algebra videos",
+                        "Implement QR decomposition",
+                        "Study numerical stability in matrix operations"
+                    ],
+                    "Module 3: Optimization Foundations": [
+                        "Study gradient descent algorithm",
+                        "Implement gradient descent from scratch",
+                        "Learn stochastic gradient descent (SGD)",
+                        "Implement SGD with mini-batches",
+                        "Study momentum and its intuition",
+                        "Implement SGD with momentum",
+                        "Learn RMSprop algorithm",
+                        "Learn Adam optimizer mathematics",
+                        "Implement Adam from scratch (follow Aman Arora tutorial)",
+                        "Compare all optimizers on same task"
+                    ]
+                },
+                "Core ML Mathematics": {
+                    "Module 4: Probability & Statistics": [
+                        "Read Mathematics for ML Ch 6: Probability",
+                        "Study probability distributions (Gaussian, Bernoulli)",
+                        "Learn maximum likelihood estimation (MLE)",
+                        "Study Bayes' theorem and applications",
+                        "Read Murphy's Probabilistic ML Ch 1-2",
+                        "Learn expectation and variance",
+                        "Study covariance and correlation",
+                        "Practice probability problem sets",
+                        "Learn Central Limit Theorem",
+                        "Apply probability to ML problem"
+                    ],
+                    "Module 5: Information Theory": [
+                        "Read MacKay's Information Theory Ch 1-2",
+                        "Learn entropy and its intuition",
+                        "Study cross-entropy loss derivation",
+                        "Understand KL divergence",
+                        "Learn mutual information",
+                        "Study Jensen-Shannon divergence",
+                        "Implement entropy calculations",
+                        "Connect information theory to ML losses",
+                        "Read about information bottleneck theory",
+                        "Study VAE from information theory perspective"
+                    ]
+                },
+                "Neural Networks from Scratch": {
+                    "Module 6: Feedforward Networks": [
+                        "Watch 3Blue1Brown Neural Networks series (all 4 videos)",
+                        "Read Understanding Deep Learning Ch 1-3 (Prince)",
+                        "Implement neuron forward pass in NumPy",
+                        "Implement activation functions (ReLU, Sigmoid, Tanh)",
+                        "Build complete forward propagation",
+                        "Derive backpropagation equations on paper",
+                        "Implement backpropagation from scratch (follow Victor Zhou)",
+                        "Test on XOR problem",
+                        "Train on MNIST with your implementation",
+                        "Compare with PyTorch results"
+                    ],
+                    "Module 7: CNNs from Scratch": [
+                        "Read Understanding Deep Learning Ch 10 (CNNs)",
+                        "Watch CS231n CNN lectures (Stanford)",
+                        "Understand convolution operation mathematically",
+                        "Implement 2D convolution in NumPy",
+                        "Implement max pooling",
+                        "Derive CNN backpropagation",
+                        "Follow Victor Zhou CNN tutorial completely",
+                        "Implement batch normalization",
+                        "Build simple CNN for MNIST",
+                        "Analyze learned filters visually"
+                    ],
+                    "Module 8: Advanced Architectures": [
+                        "Study ResNet architecture and skip connections",
+                        "Understand batch normalization mathematics",
+                        "Learn layer normalization",
+                        "Study dropout from probabilistic perspective",
+                        "Implement dropout from scratch",
+                        "Learn weight initialization (Xavier, He)",
+                        "Study vanishing/exploding gradients",
+                        "Read about residual learning theory",
+                        "Implement simple ResNet block",
+                        "Compare different normalization techniques"
+                    ]
+                },
+                "Transformers & Attention": {
+                    "Module 9: Attention Mechanisms": [
+                        "Read 'Attention Is All You Need' paper carefully",
+                        "Watch 3Blue1Brown attention visualization",
+                        "Follow Sebastian Raschka self-attention tutorial",
+                        "Implement self-attention from scratch",
+                        "Derive attention gradient computations",
+                        "Implement scaled dot-product attention",
+                        "Understand query, key, value intuition",
+                        "Implement multi-head attention",
+                        "Implement cross-attention",
+                        "Test attention on simple sequence task"
+                    ],
+                    "Module 10: Transformer Architecture": [
+                        "Read Understanding Deep Learning Ch 12 (Transformers)",
+                        "Study positional encoding mathematics",
+                        "Implement positional encoding",
+                        "Build transformer encoder from scratch",
+                        "Build transformer decoder from scratch",
+                        "Understand masked attention",
+                        "Implement complete transformer",
+                        "Study layer norm in transformers",
+                        "Read about transformer variants (BERT, GPT)",
+                        "Watch Karpathy's GPT video"
+                    ],
+                    "Module 11: LLM Mathematics": [
+                        "Complete Karpathy's Zero to Hero series",
+                        "Implement bigram language model",
+                        "Build GPT from scratch (follow Karpathy)",
+                        "Study tokenization (BPE) mathematics",
+                        "Understand temperature sampling",
+                        "Learn nucleus sampling (top-p)",
+                        "Study perplexity as evaluation metric",
+                        "Understand RLHF at high level",
+                        "Read about LoRA mathematics",
+                        "Study quantization techniques"
+                    ]
+                },
+                "Advanced Topics": {
+                    "Module 12: Optimization Deep Dive": [
+                        "Read Understanding Deep Learning Ch 7 (Gradients)",
+                        "Study learning rate schedules",
+                        "Learn cosine annealing",
+                        "Understand warmup strategies",
+                        "Study second-order methods (Newton, L-BFGS)",
+                        "Learn about natural gradients",
+                        "Study adaptive learning rates",
+                        "Implement learning rate finder",
+                        "Read about loss landscape visualization",
+                        "Study gradient clipping mathematics"
+                    ],
+                    "Module 13: Regularization & Generalization": [
+                        "Study L1 and L2 regularization derivations",
+                        "Understand dropout as ensemble",
+                        "Learn about early stopping theory",
+                        "Study data augmentation mathematics",
+                        "Read about double descent phenomenon",
+                        "Learn PAC learning basics",
+                        "Study VC dimension (optional)",
+                        "Understand bias-variance tradeoff",
+                        "Read about lottery ticket hypothesis",
+                        "Study neural tangent kernels (advanced)"
+                    ],
+                    "Module 14: Modern Architectures": [
+                        "Study Vision Transformers (ViT)",
+                        "Learn about diffusion models mathematics",
+                        "Read about score-based models",
+                        "Study GANs from game theory perspective",
+                        "Learn VAE mathematics (ELBO derivation)",
+                        "Understand normalizing flows",
+                        "Study graph neural networks basics",
+                        "Learn about meta-learning",
+                        "Read about neural ODEs",
+                        "Study latest architecture papers"
+                    ]
+                },
+                "Implementation Projects": {
+                    "Project 1: Build Your Own Deep Learning Framework": [
+                        "Design autograd system like PyTorch",
+                        "Implement Tensor class with gradients",
+                        "Build automatic differentiation",
+                        "Implement common layers (Linear, Conv2d)",
+                        "Create optimizer base class",
+                        "Implement SGD, Adam optimizers",
+                        "Build loss functions",
+                        "Create data loading utilities",
+                        "Add training loop utilities",
+                        "Document your framework with examples"
+                    ],
+                    "Project 2: Implement Classic Papers": [
+                        "Implement LeNet from scratch",
+                        "Implement AlexNet architecture",
+                        "Build ResNet with skip connections",
+                        "Implement U-Net for segmentation",
+                        "Build seq2seq with attention",
+                        "Implement BERT pretraining",
+                        "Build GPT-2 from scratch",
+                        "Implement simple GAN",
+                        "Build VAE with good visualizations",
+                        "Create comparison report of all implementations"
+                    ]
+                }
+            };
+
+            const [activeTab, setActiveTab] = useState('main');
             const [expandedMonths, setExpandedMonths] = useState({});
             const [expandedWeeks, setExpandedWeeks] = useState({});
-            const [checkedTasks, setCheckedTasks] = useState({});
+            const [checkedTasks, setCheckedTasks] = useState({ main: {}, math: {} });
             const [showResources, setShowResources] = useState(false);
             const [syncStatus, setSyncStatus] = useState('loading');
             const [lastSyncTime, setLastSyncTime] = useState(null);
             const [githubToken, setGithubToken] = useState('');
             const [showTokenSetup, setShowTokenSetup] = useState(false);
             const [fileSha, setFileSha] = useState(null);
+
+            const currentRoadmap = activeTab === 'main' ? mainRoadmapData : mathRoadmapData;
 
             useEffect(() => {
                 const savedToken = localStorage.getItem('githubToken');
@@ -308,30 +518,30 @@
                     loadProgressFromGitHub(savedToken);
                 } else {
                     setShowTokenSetup(true);
-                    const savedCheckedTasks = localStorage.getItem('mlRoadmapCheckedTasks');
-                    const savedExpandedMonths = localStorage.getItem('mlRoadmapExpandedMonths');
-                    const savedExpandedWeeks = localStorage.getItem('mlRoadmapExpandedWeeks');
-                    if (savedCheckedTasks) setCheckedTasks(JSON.parse(savedCheckedTasks));
-                    if (savedExpandedMonths) setExpandedMonths(JSON.parse(savedExpandedMonths));
-                    if (savedExpandedWeeks) setExpandedWeeks(JSON.parse(savedExpandedWeeks));
+                    const savedData = localStorage.getItem('mlRoadmapProgress');
+                    if (savedData) {
+                        const parsed = JSON.parse(savedData);
+                        setCheckedTasks(parsed.checkedTasks || { main: {}, math: {} });
+                        setExpandedMonths(parsed.expandedMonths || {});
+                        setExpandedWeeks(parsed.expandedWeeks || {});
+                        setActiveTab(parsed.activeTab || 'main');
+                    }
                     setSyncStatus('no-token');
                 }
             }, []);
 
             useEffect(() => {
-                if (githubToken && Object.keys(checkedTasks).length > 0) {
-                    localStorage.setItem('mlRoadmapCheckedTasks', JSON.stringify(checkedTasks));
+                if (githubToken && (Object.keys(checkedTasks.main).length > 0 || Object.keys(checkedTasks.math).length > 0)) {
+                    const progressData = {
+                        checkedTasks,
+                        expandedMonths,
+                        expandedWeeks,
+                        activeTab
+                    };
+                    localStorage.setItem('mlRoadmapProgress', JSON.stringify(progressData));
                     saveProgressToGitHub();
                 }
-            }, [checkedTasks]);
-
-            useEffect(() => {
-                localStorage.setItem('mlRoadmapExpandedMonths', JSON.stringify(expandedMonths));
-            }, [expandedMonths]);
-
-            useEffect(() => {
-                localStorage.setItem('mlRoadmapExpandedWeeks', JSON.stringify(expandedWeeks));
-            }, [expandedWeeks]);
+            }, [checkedTasks, expandedMonths, expandedWeeks, activeTab]);
 
             const loadProgressFromGitHub = async (token = githubToken) => {
                 try {
@@ -347,9 +557,10 @@
                         const data = await response.json();
                         setFileSha(data.sha);
                         const content = JSON.parse(atob(data.content));
-                        setCheckedTasks(content.checkedTasks || {});
+                        setCheckedTasks(content.checkedTasks || { main: {}, math: {} });
                         if (content.expandedMonths) setExpandedMonths(content.expandedMonths);
                         if (content.expandedWeeks) setExpandedWeeks(content.expandedWeeks);
+                        if (content.activeTab) setActiveTab(content.activeTab);
                         setLastSyncTime(new Date().toLocaleTimeString());
                         setSyncStatus('synced');
                     } else if (response.status === 404) {
@@ -357,8 +568,11 @@
                     }
                 } catch (error) {
                     console.error('Error loading from GitHub:', error);
-                    const savedCheckedTasks = localStorage.getItem('mlRoadmapCheckedTasks');
-                    if (savedCheckedTasks) setCheckedTasks(JSON.parse(savedCheckedTasks));
+                    const savedData = localStorage.getItem('mlRoadmapProgress');
+                    if (savedData) {
+                        const parsed = JSON.parse(savedData);
+                        setCheckedTasks(parsed.checkedTasks || { main: {}, math: {} });
+                    }
                     setSyncStatus('error');
                 }
             };
@@ -371,9 +585,10 @@
                     
                     const progressData = {
                         lastUpdated: new Date().toISOString(),
-                        checkedTasks: checkedTasks,
-                        expandedMonths: expandedMonths,
-                        expandedWeeks: expandedWeeks
+                        checkedTasks,
+                        expandedMonths,
+                        expandedWeeks,
+                        activeTab
                     };
 
                     const content = btoa(JSON.stringify(progressData, null, 2));
@@ -427,34 +642,41 @@
             };
 
             const toggleTask = (taskId) => {
-                setCheckedTasks(prev => ({ ...prev, [taskId]: !prev[taskId] }));
+                setCheckedTasks(prev => ({
+                    ...prev,
+                    [activeTab]: {
+                        ...prev[activeTab],
+                        [taskId]: !prev[activeTab][taskId]
+                    }
+                }));
             };
 
-            const calculateProgress = () => {
+            const calculateProgress = (roadmapData, roadmapType) => {
                 const totalTasks = Object.values(roadmapData).reduce((acc, month) => {
                     return acc + Object.values(month).reduce((weekAcc, tasks) => weekAcc + tasks.length, 0);
                 }, 0);
-                const completedTasks = Object.keys(checkedTasks).filter(key => checkedTasks[key]).length;
+                const completedTasks = Object.keys(checkedTasks[roadmapType] || {}).filter(key => checkedTasks[roadmapType][key]).length;
                 return Math.round((completedTasks / totalTasks) * 100);
             };
 
-            const getMonthProgress = (monthData) => {
+            const getMonthProgress = (monthData, roadmapType) => {
                 const totalTasks = Object.values(monthData).reduce((acc, tasks) => acc + tasks.length, 0);
                 const completedTasks = Object.values(monthData).reduce((acc, tasks) => {
                     return acc + tasks.filter((_, idx) => {
                         const taskId = `${Object.keys(monthData).find(week => monthData[week] === tasks)}-${idx}`;
-                        return checkedTasks[taskId];
+                        return checkedTasks[roadmapType]?.[taskId];
                     }).length;
                 }, 0);
                 return Math.round((completedTasks / totalTasks) * 100);
             };
 
-            const getWeekProgress = (weekName, tasks) => {
-                const completedTasks = tasks.filter((_, idx) => checkedTasks[`${weekName}-${idx}`]).length;
+            const getWeekProgress = (weekName, tasks, roadmapType) => {
+                const completedTasks = tasks.filter((_, idx) => checkedTasks[roadmapType]?.[`${weekName}-${idx}`]).length;
                 return Math.round((completedTasks / tasks.length) * 100);
             };
 
-            const overallProgress = calculateProgress();
+            const mainProgress = calculateProgress(mainRoadmapData, 'main');
+            const mathProgress = calculateProgress(mathRoadmapData, 'math');
 
             const getSyncStatusDisplay = () => {
                 const statuses = {
@@ -526,7 +748,7 @@
                         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
                             <div className="flex items-center justify-between mb-4">
                                 <div>
-                                    <h1 className="text-3xl font-bold text-gray-800 mb-2">SQL-First ML Engineer Roadmap</h1>
+                                    <h1 className="text-3xl font-bold text-gray-800 mb-2">ML Engineer Roadmap Tracker</h1>
                                     <p className="text-gray-600">Master SQL → Build ML Systems → Land Your Dream Job</p>
                                 </div>
                                 <div className="text-right">
@@ -542,42 +764,90 @@
                                 </div>
                             </div>
                             
-                            <div className="mb-4">
-                                <div className="flex justify-between text-sm text-gray-600 mb-1">
-                                    <span>Overall Progress</span>
-                                    <span className="font-semibold">{overallProgress}%</span>
+                            <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                        <span>🚀 Main Roadmap Progress</span>
+                                        <span className="font-semibold">{mainProgress}%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-3">
+                                        <div 
+                                            className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-500"
+                                            style={{ width: `${mainProgress}%` }}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="w-full bg-gray-200 rounded-full h-4">
-                                    <div 
-                                        className="bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 h-4 rounded-full transition-all duration-500"
-                                        style={{ width: `${overallProgress}%` }}
-                                    />
+                                <div>
+                                    <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                        <span>🧮 Math Foundations Progress</span>
+                                        <span className="font-semibold">{mathProgress}%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-3">
+                                        <div 
+                                            className="bg-gradient-to-r from-purple-500 to-pink-600 h-3 rounded-full transition-all duration-500"
+                                            style={{ width: `${mathProgress}%` }}
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-                                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                                    <span className="text-xs font-semibold text-blue-800">Week 4</span>
-                                    <p className="text-xs text-blue-700">Data Analyst Ready</p>
-                                </div>
-                                <div className="bg-green-50 p-3 rounded-lg border border-green-200">
-                                    <span className="text-xs font-semibold text-green-800">Week 8</span>
-                                    <p className="text-xs text-green-700">Data Engineer Ready</p>
-                                </div>
-                                <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
-                                    <span className="text-xs font-semibold text-purple-800">Week 14</span>
-                                    <p className="text-xs text-purple-700">ML Engineer Ready</p>
-                                </div>
-                                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
-                                    <span className="text-xs font-semibold text-yellow-800">Week 16+</span>
-                                    <p className="text-xs text-yellow-700">Interview Pipeline</p>
-                                </div>
+                            <div className="flex gap-3 mb-4">
+                                <button
+                                    onClick={() => setActiveTab('main')}
+                                    className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                        activeTab === 'main'
+                                            ? 'bg-indigo-600 text-white shadow-md'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    📊 SQL-First ML Roadmap
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('math')}
+                                    className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
+                                        activeTab === 'math'
+                                            ? 'bg-purple-600 text-white shadow-md'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    🧮 Mathematical Foundations
+                                </button>
                             </div>
+
+                            {activeTab === 'main' && (
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+                                    <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                                        <span className="text-xs font-semibold text-blue-800">Week 4</span>
+                                        <p className="text-xs text-blue-700">Data Analyst Ready</p>
+                                    </div>
+                                    <div className="bg-green-50 p-3 rounded-lg border border-green-200">
+                                        <span className="text-xs font-semibold text-green-800">Week 8</span>
+                                        <p className="text-xs text-green-700">Data Engineer Ready</p>
+                                    </div>
+                                    <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
+                                        <span className="text-xs font-semibold text-purple-800">Week 14</span>
+                                        <p className="text-xs text-purple-700">ML Engineer Ready</p>
+                                    </div>
+                                    <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                                        <span className="text-xs font-semibold text-yellow-800">Week 16+</span>
+                                        <p className="text-xs text-yellow-700">Interview Pipeline</p>
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeTab === 'math' && (
+                                <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                                    <p className="text-sm text-purple-800">
+                                        <strong>💡 Work through this track alongside the main roadmap.</strong> Focus on 1-2 modules per week. 
+                                        This deep mathematical understanding will differentiate you from bootcamp graduates in technical interviews.
+                                    </p>
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-4">
-                            {Object.entries(roadmapData).map(([monthName, monthData]) => {
-                                const monthProgress = getMonthProgress(monthData);
+                            {Object.entries(currentRoadmap).map(([monthName, monthData]) => {
+                                const monthProgress = getMonthProgress(monthData, activeTab);
                                 const isMonthExpanded = expandedMonths[monthName];
                                 
                                 return (
@@ -594,7 +864,9 @@
                                                 <span className="text-sm font-medium text-gray-600">{monthProgress}%</span>
                                                 <div className="w-24 bg-gray-200 rounded-full h-2">
                                                     <div 
-                                                        className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
+                                                        className={`h-2 rounded-full transition-all duration-500 ${
+                                                            activeTab === 'main' ? 'bg-indigo-600' : 'bg-purple-600'
+                                                        }`}
                                                         style={{ width: `${monthProgress}%` }}
                                                     />
                                                 </div>
@@ -604,7 +876,7 @@
                                         {isMonthExpanded && (
                                             <div className="p-4 border-t border-gray-200">
                                                 {Object.entries(monthData).map(([weekName, tasks]) => {
-                                                    const weekProgress = getWeekProgress(weekName, tasks);
+                                                    const weekProgress = getWeekProgress(weekName, tasks, activeTab);
                                                     const weekKey = `${monthName}-${weekName}`;
                                                     const isWeekExpanded = expandedWeeks[weekKey];
                                                     
@@ -616,13 +888,17 @@
                                                             >
                                                                 <div className="flex items-center space-x-2">
                                                                     <span className="text-sm">{isWeekExpanded ? '▼' : '▶'}</span>
-                                                                    <h3 className="text-lg font-semibold text-indigo-700">{weekName}</h3>
+                                                                    <h3 className={`text-lg font-semibold ${
+                                                                        activeTab === 'main' ? 'text-indigo-700' : 'text-purple-700'
+                                                                    }`}>{weekName}</h3>
                                                                 </div>
                                                                 <div className="flex items-center space-x-2">
                                                                     <span className="text-xs font-medium text-gray-600">{weekProgress}%</span>
                                                                     <div className="w-16 bg-gray-200 rounded-full h-1.5">
                                                                         <div 
-                                                                            className="bg-indigo-500 h-1.5 rounded-full transition-all duration-300"
+                                                                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                                                                                activeTab === 'main' ? 'bg-indigo-500' : 'bg-purple-500'
+                                                                            }`}
                                                                             style={{ width: `${weekProgress}%` }}
                                                                         />
                                                                     </div>
@@ -633,7 +909,7 @@
                                                                 <div className="space-y-2 ml-6 mt-2">
                                                                     {tasks.map((task, idx) => {
                                                                         const taskId = `${weekName}-${idx}`;
-                                                                        const isChecked = checkedTasks[taskId] || false;
+                                                                        const isChecked = checkedTasks[activeTab]?.[taskId] || false;
                                                                         
                                                                         return (
                                                                             <label
@@ -800,53 +1076,6 @@
                                             <li className="text-gray-700">5. Introducing MLOps (Treveil)</li>
                                         </ul>
                                     </div>
-                                    
-                                    <div className="md:col-span-2 bg-indigo-50 p-4 rounded-lg border border-indigo-200">
-                                        <h3 className="font-semibold text-indigo-900 mb-2">🧮 Mathematical ML Foundations (Optional Track)</h3>
-                                        <p className="text-sm text-indigo-800 mb-3">
-                                            Strengthen your competitive edge with deep mathematical understanding. Work through these alongside the main roadmap.
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div>
-                                                <h4 className="font-semibold text-indigo-800 text-sm mb-1">Core Textbooks</h4>
-                                                <ul className="space-y-1 text-xs">
-                                                    <li><a href="https://d2l.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Dive into Deep Learning (d2l.ai)</a></li>
-                                                    <li><a href="https://udlbook.github.io/udlbook/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Understanding Deep Learning (Prince)</a></li>
-                                                    <li><a href="https://mml-book.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Mathematics for ML (Deisenroth)</a></li>
-                                                    <li><a href="https://probml.github.io/pml-book/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Probabilistic ML (Murphy)</a></li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-indigo-800 text-sm mb-1">Video Courses</h4>
-                                                <ul className="space-y-1 text-xs">
-                                                    <li><a href="https://www.3blue1brown.com/topics/neural-networks" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">3Blue1Brown Neural Networks</a></li>
-                                                    <li><a href="https://karpathy.ai/zero-to-hero.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Karpathy: Neural Networks Zero to Hero</a></li>
-                                                    <li><a href="https://github.com/fastai/numerical-linear-algebra" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Fast.ai Computational Linear Algebra</a></li>
-                                                    <li><a href="https://introtodeeplearning.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MIT 6.S191 Deep Learning</a></li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-indigo-800 text-sm mb-1">From-Scratch Tutorials</h4>
-                                                <ul className="space-y-1 text-xs">
-                                                    <li><a href="https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Self-Attention from Scratch</a></li>
-                                                    <li><a href="https://victorzhou.com/blog/intro-to-cnns-part-1/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CNNs from Scratch (NumPy)</a></li>
-                                                    <li><a href="https://amaarora.github.io/posts/2021-03-13-optimizers.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Optimizers from Scratch</a></li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-indigo-800 text-sm mb-1">Code Repositories</h4>
-                                                <ul className="space-y-1 text-xs">
-                                                    <li><a href="https://github.com/eriklindernoren/ML-From-Scratch" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">ML From Scratch (NumPy)</a></li>
-                                                    <li><a href="https://github.com/ddbourgin/numpy-ml" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">numpy-ml (Documented)</a></li>
-                                                    <li><a href="https://github.com/mrdbourke/pytorch-deep-learning" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch Deep Learning Course</a></li>
-                                                    <li><a href="https://github.com/yunjey/pytorch-tutorial" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch Tutorial (Concise)</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <p className="text-xs text-indigo-700 mt-3">
-                                            💡 <strong>Tip:</strong> Tackle 1-2 math topics per week alongside main roadmap. Focus on areas where you want deeper understanding.
-                                        </p>
-                                    </div>
                                 </div>
                             </div>
                         )}
@@ -868,3 +1097,4 @@
     </script>
 </body>
 </html>
+                
