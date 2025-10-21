@@ -943,10 +943,10 @@
                             </button>
                         </div>
 
-                        {showResources && (
+                        {showResources && activeTab === 'ml' && (
                             <div className="mt-6 bg-white rounded-lg shadow-md p-6">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-4">📚 Essential Resources</h2>
-                                
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4">📚 ML Engineer Resources</h2>
+
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div>
                                         <h3 className="font-semibold text-indigo-700 mb-2 flex items-center">
@@ -1112,6 +1112,65 @@
                                         </div>
                                         <p className="text-xs text-indigo-700 mt-3">
                                             💡 <strong>Tip:</strong> Tackle 1-2 math topics per week alongside main roadmap. Focus on areas where you want deeper understanding.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {showResources && activeTab === 'math' && (
+                            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4">📐 Math Foundations Resources</h2>
+
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h3 className="font-semibold text-emerald-700 mb-2">Core Textbooks (All Free)</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://d2l.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Dive into Deep Learning (d2l.ai)</a></li>
+                                            <li><a href="https://udlbook.github.io/udlbook/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Understanding Deep Learning (Prince)</a></li>
+                                            <li><a href="https://mml-book.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Mathematics for Machine Learning (Deisenroth)</a></li>
+                                            <li><a href="https://probml.github.io/pml-book/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Probabilistic Machine Learning (Murphy)</a></li>
+                                            <li><a href="http://www.inference.org.uk/mackay/itila/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Information Theory (MacKay)</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="font-semibold text-emerald-700 mb-2">Video Courses</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://www.3blue1brown.com/topics/neural-networks" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">3Blue1Brown Neural Networks</a></li>
+                                            <li><a href="https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">3Blue1Brown Linear Algebra</a></li>
+                                            <li><a href="https://karpathy.ai/zero-to-hero.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Karpathy: Neural Networks Zero to Hero</a></li>
+                                            <li><a href="https://github.com/fastai/numerical-linear-algebra" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Fast.ai Computational Linear Algebra</a></li>
+                                            <li><a href="https://introtodeeplearning.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MIT 6.S191 Deep Learning</a></li>
+                                            <li><a href="http://cs231n.stanford.edu/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CS231n: CNNs (Stanford)</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="font-semibold text-emerald-700 mb-2">From-Scratch Tutorials</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Self-Attention from Scratch (Raschka)</a></li>
+                                            <li><a href="https://victorzhou.com/blog/intro-to-cnns-part-1/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CNNs from Scratch (Victor Zhou)</a></li>
+                                            <li><a href="https://amaarora.github.io/posts/2021-03-13-optimizers.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Optimizers from Scratch (Aman Arora)</a></li>
+                                            <li><a href="https://towardsdatascience.com/coding-a-neural-network-from-scratch-in-numpy-31f04e4d605/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Neural Network from Scratch in NumPy</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div>
+                                        <h3 className="font-semibold text-emerald-700 mb-2">GitHub Repositories</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://github.com/eriklindernoren/ML-From-Scratch" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">ML From Scratch (24k+ stars)</a></li>
+                                            <li><a href="https://github.com/ddbourgin/numpy-ml" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">numpy-ml (15k+ stars)</a></li>
+                                            <li><a href="https://github.com/mrdbourke/pytorch-deep-learning" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch Deep Learning Course</a></li>
+                                            <li><a href="https://github.com/yunjey/pytorch-tutorial" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch Tutorial (30k+ stars)</a></li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="md:col-span-2 bg-emerald-50 p-4 rounded-lg border border-emerald-200">
+                                        <h3 className="font-semibold text-emerald-900 mb-2">💡 Learning Strategy</h3>
+                                        <p className="text-sm text-emerald-800">
+                                            <strong>Recommended Approach:</strong> Work through 1-2 modules per week (~10 hours/week) alongside your main ML roadmap.
+                                            Focus on understanding over speed. Implement everything from scratch in NumPy before using PyTorch - this builds deep intuition.
                                         </p>
                                     </div>
                                 </div>
