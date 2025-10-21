@@ -1,13 +1,19 @@
 {
-  "lastUpdated": "2025-10-21T10:43:10.458Z",
+  "lastUpdated": "2025-10-21T10:46:42.152Z",
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-3": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-1": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-2": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-4": true,
-    "Week 1: SQL Intensive Bootcamp (45 hours)-6": true
+    "Week 1: SQL Intensive Bootcamp (45 hours)-6": true,
+    "Week 1: Linear Algebra Basics-0": true
   },
-  "expandedMonths": {},
-  "expandedWeeks": {}
+  "expandedMonths": {
+    "Month 1: Mathematical Foundations": true,
+    "Month 2: Probability & Statistics": false
+  },
+  "expandedWeeks": {
+    "Month 1: Mathematical Foundations-Week 1: Linear Algebra Basics": true
+  }
 }
