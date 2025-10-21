@@ -300,6 +300,7 @@
             const [githubToken, setGithubToken] = useState('');
             const [showTokenSetup, setShowTokenSetup] = useState(false);
             const [fileSha, setFileSha] = useState(null);
+            const [activeTab, setActiveTab] = useState('main');
 
             useEffect(() => {
                 const savedToken = localStorage.getItem('githubToken');
@@ -575,7 +576,35 @@
                             </div>
                         </div>
 
-                        <div className="space-y-4">
+                        {/* Tab Navigation */}
+                        <div className="bg-white rounded-t-lg shadow-md mt-6 overflow-hidden">
+                            <div className="flex border-b border-gray-200">
+                                <button
+                                    onClick={() => setActiveTab('main')}
+                                    className={`flex-1 px-6 py-4 font-semibold text-sm transition-all ${
+                                        activeTab === 'main'
+                                            ? 'bg-white text-indigo-600 border-b-2 border-indigo-600'
+                                            : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+                                    }`}
+                                >
+                                    📊 SQL-First ML Roadmap
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('math')}
+                                    className={`flex-1 px-6 py-4 font-semibold text-sm transition-all ${
+                                        activeTab === 'math'
+                                            ? 'bg-white text-purple-600 border-b-2 border-purple-600'
+                                            : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+                                    }`}
+                                >
+                                    🧮 Mathematical Foundations
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Tab Content */}
+                        {activeTab === 'main' && (
+                            <div className="space-y-4 bg-white shadow-md rounded-b-lg p-4"
                             {Object.entries(roadmapData).map(([monthName, monthData]) => {
                                 const monthProgress = getMonthProgress(monthData);
                                 const isMonthExpanded = expandedMonths[monthName];
@@ -666,187 +695,14 @@
                                 );
                             })}
                         </div>
+                        )}
 
-                        <div className="mt-6">
-                            <button
-                                onClick={() => setShowResources(!showResources)}
-                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md"
-                            >
-                                {showResources ? 'Hide' : 'Show'} Resources & Links
-                            </button>
-                        </div>
-
-                        {showResources && (
-                            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
-                                <h2 className="text-2xl font-bold text-gray-800 mb-4">📚 Essential Resources</h2>
-                                
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2 flex items-center">
-                                            🗃️ SQL Learning (Priority!)
-                                        </h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://sqlbolt.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">SQLBolt (Interactive)</a></li>
-                                            <li><a href="https://mode.com/sql-tutorial/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Mode SQL Tutorial (Comprehensive)</a></li>
-                                            <li><a href="https://www.kaggle.com/learn/intro-to-sql" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kaggle Intro to SQL</a></li>
-                                            <li><a href="https://www.kaggle.com/learn/advanced-sql" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kaggle Advanced SQL</a></li>
-                                            <li><a href="https://leetcode.com/problemset/database/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LeetCode SQL Problems</a></li>
-                                            <li><a href="https://www.stratascratch.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">StrataScratch (Interview Qs)</a></li>
-                                            <li><a href="https://www.hackerrank.com/domains/sql" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">HackerRank SQL</a></li>
-                                            <li><a href="https://dataengineeracademy.com/courses/sql-tutorial-free/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Data Engineering Academy SQL</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">PyTorch & Deep Learning</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://course.fast.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Fast.ai Practical Deep Learning</a></li>
-                                            <li><a href="https://www.learnpytorch.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Learn PyTorch (Zero to Mastery)</a></li>
-                                            <li><a href="https://pytorch.org/tutorials/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch Official Tutorials</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">Transformers & LLMs</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://huggingface.co/learn/llm-course/chapter1/1" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face LLM Course</a></li>
-                                            <li><a href="https://www.deeplearning.ai/short-courses/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DeepLearning.AI Short Courses</a></li>
-                                            <li><a href="https://github.com/huggingface/peft" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PEFT Library (LoRA/QLoRA)</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">MLOps & Deployment</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://madewithml.com/courses/mlops/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Made With ML MLOps Course</a></li>
-                                            <li><a href="https://github.com/DataTalksClub/mlops-zoomcamp" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MLOps Zoomcamp</a></li>
-                                            <li><a href="https://mlflow.org/docs/latest/index.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MLflow Documentation</a></li>
-                                            <li><a href="https://docs.wandb.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Weights & Biases Docs</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">Data Engineering</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://docs.getdbt.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">dbt (data build tool)</a></li>
-                                            <li><a href="https://airflow.apache.org/docs/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Apache Airflow</a></li>
-                                            <li><a href="https://docs.prefect.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Prefect</a></li>
-                                            <li><a href="https://github.com/DataTalksClub/data-engineering-zoomcamp" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Data Engineering Zoomcamp</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">Docker & Kubernetes</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Docker Getting Started</a></li>
-                                            <li><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kubernetes Tutorial</a></li>
-                                            <li><a href="https://www.youtube.com/watch?v=X48VuDVv0do" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">K8s Tutorial (TechWorld)</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">TensorFlow</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google ML Crash Course</a></li>
-                                            <li><a href="https://www.coursera.org/professional-certificates/tensorflow-in-practice" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DeepLearning.AI TensorFlow</a></li>
-                                            <li><a href="https://www.tensorflow.org/tutorials" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">TensorFlow Tutorials</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">Cloud Platforms</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://aws.amazon.com/sagemaker/getting-started/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">AWS SageMaker</a></li>
-                                            <li><a href="https://cloud.google.com/vertex-ai/docs" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google Vertex AI</a></li>
-                                            <li><a href="https://huggingface.co/spaces" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face Spaces (Free)</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">Interview Prep</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://stanford-cs329s.github.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Stanford ML Systems Design</a></li>
-                                            <li><a href="https://www.educative.io/courses/grokking-the-machine-learning-interview" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Grokking ML Interview</a></li>
-                                            <li><a href="https://leetcode.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LeetCode</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">Practice Platforms</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://colab.research.google.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google Colab (Free GPU)</a></li>
-                                            <li><a href="https://www.kaggle.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kaggle</a></li>
-                                            <li><a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">GitHub</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">Communities</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li><a href="https://datatalks.club/slack.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DataTalks.Club Slack</a></li>
-                                            <li><a href="https://mlops.community/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MLOps Community</a></li>
-                                            <li><a href="https://huggingface.co/join/discord" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face Discord</a></li>
-                                            <li><a href="https://forums.fast.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Fast.ai Forums</a></li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div>
-                                        <h3 className="font-semibold text-indigo-700 mb-2">Books (Priority Order)</h3>
-                                        <ul className="space-y-1 text-sm">
-                                            <li className="text-gray-700">1. Learning SQL (Beaulieu)</li>
-                                            <li className="text-gray-700">2. Hands-On ML (Géron)</li>
-                                            <li className="text-gray-700">3. Designing ML Systems (Huyen)</li>
-                                            <li className="text-gray-700">4. NLP with Transformers</li>
-                                            <li className="text-gray-700">5. Introducing MLOps (Treveil)</li>
-                                        </ul>
-                                    </div>
-                                    
-                                    <div className="md:col-span-2 bg-indigo-50 p-4 rounded-lg border border-indigo-200">
-                                        <h3 className="font-semibold text-indigo-900 mb-2">🧮 Mathematical ML Foundations (Optional Track)</h3>
-                                        <p className="text-sm text-indigo-800 mb-3">
-                                            Strengthen your competitive edge with deep mathematical understanding. Work through these alongside the main roadmap.
-                                        </p>
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div>
-                                                <h4 className="font-semibold text-indigo-800 text-sm mb-1">Core Textbooks</h4>
-                                                <ul className="space-y-1 text-xs">
-                                                    <li><a href="https://d2l.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Dive into Deep Learning (d2l.ai)</a></li>
-                                                    <li><a href="https://udlbook.github.io/udlbook/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Understanding Deep Learning (Prince)</a></li>
-                                                    <li><a href="https://mml-book.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Mathematics for ML (Deisenroth)</a></li>
-                                                    <li><a href="https://probml.github.io/pml-book/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Probabilistic ML (Murphy)</a></li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-indigo-800 text-sm mb-1">Video Courses</h4>
-                                                <ul className="space-y-1 text-xs">
-                                                    <li><a href="https://www.3blue1brown.com/topics/neural-networks" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">3Blue1Brown Neural Networks</a></li>
-                                                    <li><a href="https://karpathy.ai/zero-to-hero.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Karpathy: Neural Networks Zero to Hero</a></li>
-                                                    <li><a href="https://github.com/fastai/numerical-linear-algebra" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Fast.ai Computational Linear Algebra</a></li>
-                                                    <li><a href="https://introtodeeplearning.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MIT 6.S191 Deep Learning</a></li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-indigo-800 text-sm mb-1">From-Scratch Tutorials</h4>
-                                                <ul className="space-y-1 text-xs">
-                                                    <li><a href="https://sebastianraschka.com/blog/2023/self-attention-from-scratch.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Self-Attention from Scratch</a></li>
-                                                    <li><a href="https://victorzhou.com/blog/intro-to-cnns-part-1/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">CNNs from Scratch (NumPy)</a></li>
-                                                    <li><a href="https://amaarora.github.io/posts/2021-03-13-optimizers.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Optimizers from Scratch</a></li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-indigo-800 text-sm mb-1">Code Repositories</h4>
-                                                <ul className="space-y-1 text-xs">
-                                                    <li><a href="https://github.com/eriklindernoren/ML-From-Scratch" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">ML From Scratch (NumPy)</a></li>
-                                                    <li><a href="https://github.com/ddbourgin/numpy-ml" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">numpy-ml (Documented)</a></li>
-                                                    <li><a href="https://github.com/mrdbourke/pytorch-deep-learning" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch Deep Learning Course</a></li>
-                                                    <li><a href="https://github.com/yunjey/pytorch-tutorial" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch Tutorial (Concise)</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <p className="text-xs text-indigo-700 mt-3">
-                                            💡 <strong>Tip:</strong> Tackle 1-2 math topics per week alongside main roadmap. Focus on areas where you want deeper understanding.
-                                        </p>
-                                    </div>
+                        {activeTab === 'math' && (
+                            <div className="bg-white shadow-md rounded-b-lg p-8">
+                                <div className="text-center py-12">
+                                    <div className="text-6xl mb-4">🧮</div>
+                                    <h2 className="text-2xl font-bold text-gray-800 mb-2">Mathematical Foundations Track</h2>
+                                    <p className="text-gray-600">Coming soon - this section will contain your math curriculum</p>
                                 </div>
                             </div>
                         )}
