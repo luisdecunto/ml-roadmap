@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-10-21T10:47:01.859Z",
+  "lastUpdated": "2025-10-21T10:48:04.602Z",
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-3": true,
@@ -8,15 +8,22 @@
     "Week 1: SQL Intensive Bootcamp (45 hours)-4": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-6": true,
     "Week 1: Linear Algebra Basics-0": false,
-    "Module 1: Linear Algebra Fundamentals (15-20 hours)-0": true
+    "Module 1: Linear Algebra Fundamentals (15-20 hours)-0": false,
+    "Module 1: Linear Algebra Fundamentals (15-20 hours)-2": true
   },
   "expandedMonths": {
     "Month 1: Mathematical Foundations": true,
     "Month 2: Probability & Statistics": false,
-    "Foundations: Linear Algebra & Calculus": true
+    "Foundations: Linear Algebra & Calculus": true,
+    "Capstone Projects": true,
+    "Advanced Topics & Optimization": false,
+    "Month 1: SQL Mastery + Python/Docker Foundations": true
   },
   "expandedWeeks": {
     "Month 1: Mathematical Foundations-Week 1: Linear Algebra Basics": true,
-    "Foundations: Linear Algebra & Calculus-Module 1: Linear Algebra Fundamentals (15-20 hours)": true
+    "Foundations: Linear Algebra & Calculus-Module 1: Linear Algebra Fundamentals (15-20 hours)": true,
+    "Capstone Projects-Project 2: Implement Classic Papers (50-60 hours)": false,
+    "Capstone Projects-Project 1: Build Your Own Deep Learning Framework (40-50 hours)": false,
+    "Month 1: SQL Mastery + Python/Docker Foundations-Week 1: SQL Intensive Bootcamp (45 hours)": true
   }
 }
