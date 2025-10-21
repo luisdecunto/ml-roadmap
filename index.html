@@ -11,53 +11,390 @@
 </head>
 <body>
     <div id="root"></div>
-
     <script type="text/babel">
         const { useState, useEffect } = React;
-
         const MLRoadmapTracker = () => {
-            const [activeTab, setActiveTab] = useState('main');
+            // GitHub config
+            const GITHUB_USERNAME = 'luisdecunto';
+            const GITHUB_REPO = 'ml-roadmap';
+            const GITHUB_BRANCH = 'main';
+            const PROGRESS_FILE = 'progress.json';
             
+            // Roadmap data - using external link for full version to keep file size manageable
+            const roadmapDataUrl = 'https://raw.githubusercontent.com/luisdecunto/ml-roadmap/main/roadmap-data.json';
+            
+            const [activeTab, setActiveTab] = useState('main');
+            const [roadmapData, setRoadmapData] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [expandedMonths, setExpandedMonths] = useState({});
+            const [expandedWeeks, setExpandedWeeks] = useState({});
+            const [checkedTasks, setCheckedTasks] = useState({ main: {}, math: {} });
+            const [syncStatus, setSyncStatus] = useState('loading');
+            const [lastSyncTime, setLastSyncTime] = useState(null);
+            const [githubToken, setGithubToken] = useState('');
+            const [showTokenSetup, setShowTokenSetup] = useState(false);
+            const [fileSha, setFileSha] = useState(null);
+
+            // Load roadmap data on mount
+            useEffect(() => {
+                // Use embedded data instead of external fetch
+                const embeddedData = {
+                    main: {
+                        "Month 1: SQL + Python/Docker": {
+                            "Week 1: SQL Bootcamp (45h)": ["SQLBolt", "Mode Basic SQL", "Mode Intermediate SQL", "Mode Advanced SQL", "Kaggle Intro SQL", "Kaggle Advanced SQL", "W3Schools SQL", "freeCodeCamp SQL", "Learning SQL Ch1-8", "30 LeetCode Easy", "HackerRank Easy+Med", "Setup PostgreSQL", "Practice DB"],
+                            "Week 2: Advanced SQL (46h)": ["CTEs", "Window Functions", "Recursive queries", "EXPLAIN/optimization", "Indexes", "Mode Analytics", "DataCamp SQL", "Kaggle Pandas", "20 LeetCode Medium", "StrataScratch", "1M+ rows DB", "Optimize queries", "SQL→Pandas", "Git basics"],
+                            "Week 3: SQL Project (46h)": ["E-commerce dataset", "DB schema", "CLV query", "Cohort analysis", "Recommendations", "Churn indicators", "Revenue trends", "RFM segmentation", "10+ queries", "Optimize", "Data quality", "Visualizations", "README", "Polish repo", "Docker tutorial", "Containerize DB", "Docker Compose", "5 Hard problems"],
+                            "Week 4: Python + DE (45h)": ["Python review", "Pandas advanced", "NumPy", "DE Academy SQL", "Bash/CLI", "ETL Extract", "ETL Transform", "ETL Load", "Scheduling", "Pandas exercises", "10 SQL problems", "Update resume", "LinkedIn post", "Join communities"]
+                        },
+                        "Month 2: DL + MLOps": {
+                            "Week 5: PyTorch (44h)": ["Fast.ai 1-2", "Learn PyTorch 1-3", "PyTorch basics", "NN fundamentals", "Image classifier", "Tensor ops", "ML env setup", "Git workflows", "Dockerize", "15 SQL problems"],
+                            "Week 6: DL + FastAPI (46h)": ["Fast.ai 3-4", "Learn PyTorch 4-6", "FastAPI tutorial", "CNN CIFAR-10", "API endpoint", "Input validation", "Error handling", "Test API", "SQL portfolio", "Blog post", "Daily SQL"],
+                            "Week 7: MLflow + P1 (48h)": ["Fast.ai 5", "MLflow docs", "PyTorch Ch7", "DB patterns", "Transfer learning", "15+ experiments", "10 SQL problems", "P1: Choose", "P1: Architecture", "P1: Structure", "P1: DB schema", "P1: Pipeline", "P1: README"],
+                            "Week 8: Complete P1 (48h)": ["P1: Train", "P1: MLflow", "P1: FastAPI+DB", "P1: Store predictions", "P1: Latency", "P1: Drift", "P1: Query metrics", "P1: Dashboard", "P1: Trends", "P1: Versioning", "P1: Docker", "P1: Deploy", "P1: Docs", "P1: API docs", "Medium article", "Demo video", "LinkedIn", "Update resume"]
+                        },
+                        "Month 3: Transformers + LLMs": {
+                            "Week 9: Transformers (44h)": ["HF Course 1-2", "DeepLearning.AI HF", "Fast.ai 8", "Attention paper", "SQL text data", "BERT sentiment", "Gradio demo", "Models", "Text SQL", "Columnar DBs", "Data warehouse"],
+                            "Week 10: LLM Project (48h)": ["HF Course 3-4", "LoRA/QLoRA", "P2: Model", "P2: Domain", "P2: 5-10k examples", "P2: DB schema", "P2: Versions", "P2: Quality", "P2: Configs", "P2: LoRA", "P2: W&B", "P2: Experiments", "P2: Eval"],
+                            "Week 11: Complete P2 (46h)": ["P2: Fine-tune", "P2: Quantization", "P2: FastAPI", "P2: Streaming", "P2: Token tracking", "P2: Logging", "P2: Security", "P2: Deploy", "P2: Docs", "Feature stores", "SQL features", "Prototype", "Blog", "Share", "Update portfolio"],
+                            "Week 12: TF + dbt (44h)": ["TF Weeks 1-2", "ML Crash Course", "dbt basics", "TF classifier", "PyTorch→ONNX", "Test TF", "dbt project", "15 SQL opt", "dbt GitHub", "SQL→dbt docs"]
+                        },
+                        "Month 4: K8s + Cloud + Jobs": {
+                            "Week 13: K8s + P3 (46h)": ["K8s tutorial", "K8s concepts", "K8s for ML", "minikube", "Deploy to K8s", "kubectl", "YAML", "P3: Choose", "P3: Structure", "P3: Schema", "P3: Pipeline", "P3: Train"],
+                            "Week 14: Complete P3 (48h)": ["P3: Optimize", "P3: FastAPI+DB", "P3: Docker", "P3: K8s deploy", "P3: Monitoring", "P3: Docs", "ML Systems Ch1-5", "Design patterns", "3 designs", "50 SQL Qs", "Explain projects", "Mock interview"],
+                            "Week 15: Cloud (44h)": ["SageMaker/Vertex", "CI/CD", "Cloud deploy", "GitHub Actions", "20 Hard SQL", "OPTIONAL: DE pipeline", "OPTIONAL: Extract", "OPTIONAL: dbt", "OPTIONAL: Warehouse", "OPTIONAL: Docs"],
+                            "Week 16: Launch (42h)": ["Review READMEs", "Demo videos", "Portfolio site", "2-3 articles", "ATS resume", "LinkedIn", "About section", "50 companies", "30 applications", "10 covers", "15 informational", "Communities", "Share"]
+                        },
+                        "Month 5: Interviews": {
+                            "Weeks 17-20 (140h)": ["Daily: 3-5 SQL", "Daily: ML coding", "Daily: System design", "12 mock interviews", "60 applications", "Follow-ups", "12 informational", "Study topics", "100 SQL Qs", "Whiteboard SQL", "Algorithms", "Review projects", "STAR stories", "Career transition", "LinkedIn", "Optional: AWS cert"]
+                        }
+                    },
+                    math: {
+                        "Foundations: LinAlg + Calc": {
+                            "M1: Linear Algebra": ["3B1B series", "MML Ch2", "Vectors exercises", "Matrix ops", "Implement matmul", "Eigenvalues", "Implement eigen", "SVD", "Implement SVD", "Image compression"],
+                            "M2: Matrix Calculus": ["MML Ch5", "Gradients/Jacobians", "Chain rule", "Practice gradients", "Implement grads", "Hessians", "3B1B calculus", "Fast.ai LinAlg", "QR decomp", "Numerical stability"],
+                            "M3: Optimization": ["Gradient descent", "Implement GD", "SGD", "Implement SGD", "Momentum", "Implement momentum", "RMSprop", "Adam math", "Implement Adam", "Compare"]
+                        },
+                        "Core ML Math": {
+                            "M4: Probability": ["MML Ch6", "Distributions", "MLE", "Bayes", "Murphy 1-2", "Expectation", "Covariance", "Problem sets", "CLT", "Apply"],
+                            "M5: Info Theory": ["MacKay 1-2", "Entropy", "Cross-entropy", "KL divergence", "Mutual info", "JS divergence", "Implement", "Connect to ML", "Info bottleneck", "VAE perspective"]
+                        },
+                        "NN from Scratch": {
+                            "M6: Feedforward": ["3B1B NN", "UDL Ch1-3", "Neuron", "Activations", "Forward prop", "Derive backprop", "Implement backprop", "XOR", "MNIST", "Compare PyTorch"],
+                            "M7: CNNs": ["UDL Ch10", "CS231n", "Conv math", "Implement conv", "Max pooling", "CNN backprop", "Zhou tutorial", "Batch norm", "CNN MNIST", "Visualize filters"],
+                            "M8: Advanced": ["ResNet", "Batch norm math", "Layer norm", "Dropout theory", "Implement dropout", "Initialization", "Vanishing grads", "Residual theory", "ResNet block", "Compare norms"]
+                        },
+                        "Transformers": {
+                            "M9: Attention": ["Attention paper", "3B1B attention", "Raschka tutorial", "Implement self-attn", "Derive gradients", "Scaled dot-prod", "Q/K/V", "Multi-head", "Cross-attention", "Test"],
+                            "M10: Transformer": ["UDL Ch12", "Positional encoding", "Implement pos", "Encoder", "Decoder", "Masked attention", "Complete transformer", "Layer norm", "Variants", "Karpathy GPT"],
+                            "M11: LLMs": ["Karpathy series", "Bigram LM", "GPT scratch", "BPE", "Temperature", "Nucleus", "Perplexity", "RLHF", "LoRA math", "Quantization"]
+                        },
+                        "Advanced": {
+                            "M12: Opt Deep": ["UDL Ch7", "LR schedules", "Cosine annealing", "Warmup", "Second-order", "Natural grads", "Adaptive LR", "LR finder", "Loss landscape", "Grad clipping"],
+                            "M13: Regularization": ["L1/L2", "Dropout ensemble", "Early stopping", "Data aug", "Double descent", "PAC learning", "VC dimension", "Bias-variance", "Lottery ticket", "Neural tangent"],
+                            "M14: Modern": ["ViT", "Diffusion", "Score-based", "GANs", "VAE ELBO", "Normalizing flows", "GNNs", "Meta-learning", "Neural ODEs", "Papers"]
+                        },
+                        "Projects": {
+                            "P1: DL Framework": ["Design autograd", "Tensor class", "Auto diff", "Layers", "Optimizer base", "SGD/Adam", "Losses", "Data loading", "Training", "Docs"],
+                            "P2: Classic Papers": ["LeNet", "AlexNet", "ResNet", "U-Net", "seq2seq", "BERT", "GPT-2", "GAN", "VAE", "Report"]
+                        }
+                    }
+                };
+                setRoadmapData(embeddedData);
+                setLoading(false);
+
+                // Load progress
+                const savedToken = localStorage.getItem('githubToken');
+                if (savedToken) {
+                    setGithubToken(savedToken);
+                    loadProgressFromGitHub(savedToken);
+                } else {
+                    setShowTokenSetup(true);
+                    const savedData = localStorage.getItem('mlRoadmapProgress');
+                    if (savedData) {
+                        const parsed = JSON.parse(savedData);
+                        setCheckedTasks(parsed.checkedTasks || { main: {}, math: {} });
+                        setExpandedMonths(parsed.expandedMonths || {});
+                        setExpandedWeeks(parsed.expandedWeeks || {});
+                        setActiveTab(parsed.activeTab || 'main');
+                    }
+                    setSyncStatus('no-token');
+                }
+            }, []);
+
+            useEffect(() => {
+                if (githubToken && (Object.keys(checkedTasks.main).length > 0 || Object.keys(checkedTasks.math).length > 0)) {
+                    const progressData = { checkedTasks, expandedMonths, expandedWeeks, activeTab };
+                    localStorage.setItem('mlRoadmapProgress', JSON.stringify(progressData));
+                    saveProgressToGitHub();
+                }
+            }, [checkedTasks, expandedMonths, expandedWeeks, activeTab]);
+
+            const loadProgressFromGitHub = async (token = githubToken) => {
+                try {
+                    setSyncStatus('loading');
+                    const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${PROGRESS_FILE}`, {
+                        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        setFileSha(data.sha);
+                        const content = JSON.parse(atob(data.content));
+                        setCheckedTasks(content.checkedTasks || { main: {}, math: {} });
+                        if (content.expandedMonths) setExpandedMonths(content.expandedMonths);
+                        if (content.expandedWeeks) setExpandedWeeks(content.expandedWeeks);
+                        if (content.activeTab) setActiveTab(content.activeTab);
+                        setLastSyncTime(new Date().toLocaleTimeString());
+                        setSyncStatus('synced');
+                    } else if (response.status === 404) {
+                        await saveProgressToGitHub(token);
+                    }
+                } catch (error) {
+                    console.error('Error loading:', error);
+                    setSyncStatus('error');
+                }
+            };
+
+            const saveProgressToGitHub = async (token = githubToken) => {
+                if (!token) return;
+                try {
+                    setSyncStatus('saving');
+                    const progressData = {
+                        lastUpdated: new Date().toISOString(),
+                        checkedTasks, expandedMonths, expandedWeeks, activeTab
+                    };
+                    const content = btoa(JSON.stringify(progressData, null, 2));
+                    const body = { message: 'Update progress', content: content, branch: GITHUB_BRANCH };
+                    if (fileSha) body.sha = fileSha;
+                    const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${PROGRESS_FILE}`, {
+                        method: 'PUT',
+                        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body)
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        setFileSha(data.content.sha);
+                        setLastSyncTime(new Date().toLocaleTimeString());
+                        setSyncStatus('synced');
+                    }
+                } catch (error) {
+                    console.error('Error saving:', error);
+                    setSyncStatus('error');
+                }
+            };
+
+            const saveToken = () => {
+                if (githubToken.trim()) {
+                    localStorage.setItem('githubToken', githubToken);
+                    setShowTokenSetup(false);
+                    loadProgressFromGitHub(githubToken);
+                }
+            };
+
+            const toggleMonth = (month) => setExpandedMonths(prev => ({ ...prev, [month]: !prev[month] }));
+            const toggleWeek = (weekKey) => setExpandedWeeks(prev => ({ ...prev, [weekKey]: !prev[weekKey] }));
+            const toggleTask = (taskId) => {
+                setCheckedTasks(prev => ({
+                    ...prev,
+                    [activeTab]: { ...prev[activeTab], [taskId]: !prev[activeTab][taskId] }
+                }));
+            };
+
+            const calculateProgress = (data, type) => {
+                if (!data) return 0;
+                const total = Object.values(data).reduce((acc, month) => 
+                    acc + Object.values(month).reduce((weekAcc, tasks) => weekAcc + tasks.length, 0), 0);
+                const completed = Object.keys(checkedTasks[type] || {}).filter(key => checkedTasks[type][key]).length;
+                return Math.round((completed / total) * 100);
+            };
+
+            const getMonthProgress = (monthData, type) => {
+                const total = Object.values(monthData).reduce((acc, tasks) => acc + tasks.length, 0);
+                const completed = Object.values(monthData).reduce((acc, tasks) => {
+                    return acc + tasks.filter((_, idx) => {
+                        const taskId = `${Object.keys(monthData).find(week => monthData[week] === tasks)}-${idx}`;
+                        return checkedTasks[type]?.[taskId];
+                    }).length;
+                }, 0);
+                return Math.round((completed / total) * 100);
+            };
+
+            const getWeekProgress = (weekName, tasks, type) => {
+                const completed = tasks.filter((_, idx) => checkedTasks[type]?.[`${weekName}-${idx}`]).length;
+                return Math.round((completed / tasks.length) * 100);
+            };
+
+            if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="text-2xl">Loading...</div></div>;
+            if (!roadmapData) return <div className="min-h-screen flex items-center justify-center"><div className="text-2xl">Error loading data</div></div>;
+
+            const currentRoadmap = roadmapData[activeTab];
+            const mainProgress = calculateProgress(roadmapData.main, 'main');
+            const mathProgress = calculateProgress(roadmapData.math, 'math');
+
+            const statusDisplay = {
+                'loading': { text: 'Loading...', color: 'text-gray-600', icon: '⏳' },
+                'saving': { text: 'Saving...', color: 'text-blue-600', icon: '💾' },
+                'synced': { text: `Synced${lastSyncTime ? ` ${lastSyncTime}` : ''}`, color: 'text-green-600', icon: '✅' },
+                'error': { text: 'Local only', color: 'text-red-600', icon: '❌' },
+                'no-token': { text: 'Setup', color: 'text-yellow-600', icon: '⚠️' }
+            }[syncStatus] || { text: '', color: '', icon: '' };
+
+            if (showTokenSetup) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8 flex items-center justify-center">
+                        <div className="bg-white rounded-lg shadow-xl p-8 max-w-2xl w-full">
+                            <h2 className="text-2xl font-bold text-gray-800 mb-4">🔐 GitHub Sync Setup</h2>
+                            <p className="text-gray-600 mb-6">Create a GitHub Personal Access Token for auto-sync</p>
+                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                                <h3 className="font-semibold text-blue-900 mb-2">Quick Setup:</h3>
+                                <ol className="list-decimal list-inside space-y-2 text-sm text-blue-800">
+                                    <li>Go to <a href="https://github.com/settings/tokens" target="_blank" className="underline">GitHub Settings → Tokens</a></li>
+                                    <li>Generate token (classic), check <strong>"repo"</strong> scope only</li>
+                                    <li>Copy and paste below</li>
+                                </ol>
+                            </div>
+                            <input type="password" value={githubToken} onChange={(e) => setGithubToken(e.target.value)} 
+                                placeholder="ghp_xxxxxxxxxxxx" className="w-full px-4 py-2 border rounded-lg mb-4" />
+                            <div className="flex gap-3">
+                                <button onClick={saveToken} disabled={!githubToken.trim()} 
+                                    className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 text-white font-semibold py-3 rounded-lg">
+                                    Enable Sync
+                                </button>
+                                <button onClick={() => { setShowTokenSetup(false); setSyncStatus('no-token'); }} 
+                                    className="px-6 py-3 border rounded-lg hover:bg-gray-50">
+                                    Skip
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
             return (
                 <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8">
                     <div className="max-w-5xl mx-auto">
                         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-                            <h1 className="text-3xl font-bold text-gray-800 mb-4">
-                                ML Roadmap Tracker - Testing
-                            </h1>
-                            
-                            <div className="flex gap-3 mb-4">
-                                <button
-                                    onClick={() => setActiveTab('main')}
-                                    className={`flex-1 py-3 px-4 rounded-lg font-semibold ${
-                                        activeTab === 'main'
-                                            ? 'bg-indigo-600 text-white'
-                                            : 'bg-gray-100 text-gray-700'
-                                    }`}
-                                >
-                                    Main Roadmap
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab('math')}
-                                    className={`flex-1 py-3 px-4 rounded-lg font-semibold ${
-                                        activeTab === 'math'
-                                            ? 'bg-purple-600 text-white'
-                                            : 'bg-gray-100 text-gray-700'
-                                    }`}
-                                >
-                                    Math Foundations
-                                </button>
+                            <div className="flex items-center justify-between mb-4">
+                                <div>
+                                    <h1 className="text-3xl font-bold text-gray-800 mb-2">ML Roadmap Tracker</h1>
+                                    <p className="text-gray-600">SQL → ML → Math → Jobs</p>
+                                </div>
+                                <div className="text-right">
+                                    <div className={`text-sm ${statusDisplay.color} font-semibold`}>
+                                        {statusDisplay.icon} {statusDisplay.text}
+                                    </div>
+                                    <button onClick={() => setShowTokenSetup(true)} className="mt-2 px-3 py-1 bg-gray-500 text-white text-xs rounded">
+                                        ⚙️ Settings
+                                    </button>
+                                </div>
                             </div>
                             
-                            <div className="p-4 bg-gray-50 rounded">
-                                <p className="text-lg">
-                                    Active Tab: <strong>{activeTab}</strong>
-                                </p>
-                                <p className="mt-2 text-sm text-gray-600">
-                                    If you see this, React is working! The full version is too large for one artifact.
-                                    I'll need to create a smaller version or split it into multiple files.
-                                </p>
+                            <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                        <span>🚀 Main Roadmap</span>
+                                        <span className="font-semibold">{mainProgress}%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-3">
+                                        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all" style={{ width: `${mainProgress}%` }} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                        <span>🧮 Math Foundations</span>
+                                        <span className="font-semibold">{mathProgress}%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-3">
+                                        <div className="bg-gradient-to-r from-purple-500 to-pink-600 h-3 rounded-full transition-all" style={{ width: `${mathProgress}%` }} />
+                                    </div>
+                                </div>
                             </div>
+
+                            <div className="flex gap-3">
+                                <button onClick={() => setActiveTab('main')} className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${activeTab === 'main' ? 'bg-indigo-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                                    📊 SQL-First ML
+                                </button>
+                                <button onClick={() => setActiveTab('math')} className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${activeTab === 'math' ? 'bg-purple-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                                    🧮 Math Foundations
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            {Object.entries(currentRoadmap).map(([monthName, monthData]) => {
+                                const monthProgress = getMonthProgress(monthData, activeTab);
+                                const isMonthExpanded = expandedMonths[monthName];
+                                
+                                return (
+                                    <div key={monthName} className="bg-white rounded-lg shadow-md overflow-hidden">
+                                        <button onClick={() => toggleMonth(monthName)} className="w-full p-4 flex items-center justify-between hover:bg-gray-50">
+                                            <div className="flex items-center space-x-3">
+                                                <span>{isMonthExpanded ? '▼' : '▶'}</span>
+                                                <h2 className="text-xl font-semibold text-gray-800">{monthName}</h2>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <span className="text-sm font-medium text-gray-600">{monthProgress}%</span>
+                                                <div className="w-24 bg-gray-200 rounded-full h-2">
+                                                    <div className={`h-2 rounded-full transition-all ${activeTab === 'main' ? 'bg-indigo-600' : 'bg-purple-600'}`} style={{ width: `${monthProgress}%` }} />
+                                                </div>
+                                            </div>
+                                        </button>
+
+                                        {isMonthExpanded && (
+                                            <div className="p-4 border-t border-gray-200">
+                                                {Object.entries(monthData).map(([weekName, tasks]) => {
+                                                    const weekProgress = getWeekProgress(weekName, tasks, activeTab);
+                                                    const weekKey = `${monthName}-${weekName}`;
+                                                    const isWeekExpanded = expandedWeeks[weekKey];
+                                                    
+                                                    return (
+                                                        <div key={weekName} className="mb-4 last:mb-0">
+                                                            <button onClick={() => toggleWeek(weekKey)} className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-50">
+                                                                <div className="flex items-center space-x-2">
+                                                                    <span className="text-sm">{isWeekExpanded ? '▼' : '▶'}</span>
+                                                                    <h3 className={`text-lg font-semibold ${activeTab === 'main' ? 'text-indigo-700' : 'text-purple-700'}`}>{weekName}</h3>
+                                                                </div>
+                                                                <div className="flex items-center space-x-2">
+                                                                    <span className="text-xs font-medium text-gray-600">{weekProgress}%</span>
+                                                                    <div className="w-16 bg-gray-200 rounded-full h-1.5">
+                                                                        <div className={`h-1.5 rounded-full transition-all ${activeTab === 'main' ? 'bg-indigo-500' : 'bg-purple-500'}`} style={{ width: `${weekProgress}%` }} />
+                                                                    </div>
+                                                                </div>
+                                                            </button>
+                                                            
+                                                            {isWeekExpanded && (
+                                                                <div className="space-y-2 ml-6 mt-2">
+                                                                    {tasks.map((task, idx) => {
+                                                                        const taskId = `${weekName}-${idx}`;
+                                                                        const isChecked = checkedTasks[activeTab]?.[taskId] || false;
+                                                                        
+                                                                        return (
+                                                                            <label key={taskId} className="flex items-start space-x-3 p-2 rounded hover:bg-gray-50 cursor-pointer">
+                                                                                <input type="checkbox" checked={isChecked} onChange={() => toggleTask(taskId)} 
+                                                                                    className="mt-1 w-5 h-5 text-indigo-600 rounded" />
+                                                                                <span className={`flex-1 text-gray-700 ${isChecked ? 'line-through text-gray-400' : ''}`}>
+                                                                                    {task}
+                                                                                </span>
+                                                                                {isChecked && <span className="text-green-500">✓</span>}
+                                                                            </label>
+                                                                        );
+                                                                    })}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        <div className="mt-8 bg-white rounded-lg shadow-md p-6 text-center">
+                            <p className="text-gray-600 mb-2 font-semibold">
+                                🎯 {activeTab === 'main' ? 'SQL First → ML Skills → Deploy → Apply' : 'Math Foundations → Understand Deeply → Stand Out'}
+                            </p>
+                            <p className="text-lg font-bold text-indigo-600">You've got this! 🚀</p>
                         </div>
                     </div>
                 </div>
@@ -68,3 +405,4 @@
     </script>
 </body>
 </html>
+                
