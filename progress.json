@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-10-22T14:03:16.264Z",
+  "lastUpdated": "2025-10-22T14:03:21.556Z",
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-3": true,
@@ -12,8 +12,13 @@
     "Module 1: Linear Algebra Fundamentals (15-20 hours)-2": false,
     "Module 1: Linear Algebra Fundamentals (15-20 hours)-3": false,
     "Module 1: Linear Algebra Fundamentals (15-20 hours)-1": false,
-    "Week 1: SQL Intensive Bootcamp (45 hours)-5": true
+    "Week 1: SQL Intensive Bootcamp (45 hours)-5": true,
+    "Week 1: SQL Intensive Bootcamp (45 hours)-7": true
   },
-  "expandedMonths": {},
-  "expandedWeeks": {}
+  "expandedMonths": {
+    "Month 1: SQL Mastery + Python/Docker Foundations": true
+  },
+  "expandedWeeks": {
+    "Month 1: SQL Mastery + Python/Docker Foundations-Week 1: SQL Intensive Bootcamp (45 hours)": true
+  }
 }
