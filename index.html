@@ -35,7 +35,7 @@
                         "Read 'Learning SQL' Chapters 1-8",
                         "Solve 30 LeetCode SQL Easy problems",
                         "Complete HackerRank SQL Easy + Medium",
-                        "Setup PostgreSQL locally (follow guides/postgresql_setup.md - ~45min)"
+                        "Setup PostgreSQL locally (follow <a href='guides/postgresql_setup.html' target='_blank'>guides/postgresql_setup.html</a> - ~45min)"
                     ],
                     "Week 2: Advanced SQL + Python/Pandas (46 hours)": [
                         "Read Mode SQL Tutorial: CTEs (WITH clause) + work through examples",
@@ -70,7 +70,7 @@
                         "Create visualizations with Matplotlib/Seaborn",
                         "Write comprehensive README with business context",
                         "Polish GitHub repo with professional documentation",
-                        "Setup Docker + Docker Compose (follow guides/docker_setup.md - ~60min)",
+                        "Setup Docker + Docker Compose (follow <a href='guides/docker_setup.html' target='_blank'>guides/docker_setup.html</a> - ~60min)",
                         "Attempt 5 LeetCode SQL Hard problems"
                     ],
                     "Week 4: Python Deep Dive + Data Engineering (45 hours)": [
@@ -104,7 +104,7 @@
                         "Read: 'A Neural Network in 11 lines of Python' (iamtrask.github.io)",
                         "Build: Fast.ai Lesson 1 project - train image classifier on pets dataset",
                         "Practice: PyTorch tensor operations (indexing, reshaping, broadcasting)",
-                        "Setup ML environment (follow guides/ml_environment_setup.md - ~60min)",
+                        "Setup ML environment (follow <a href='guides/ml_environment_setup.html' target='_blank'>guides/ml_environment_setup.html</a> - ~60min)",
                         "Practice: Solve 15 LeetCode SQL problems (3 per day throughout week)"
                     ],
                     "Week 6: Deep Learning + FastAPI (46 hours)": [
@@ -978,11 +978,12 @@
                                                                                     onChange={() => toggleTask(taskId)}
                                                                                     className="mt-1 w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
                                                                                 />
-                                                                                <span className={`flex-1 text-gray-700 transition-all ${
-                                                                                    isChecked ? 'line-through text-gray-400' : ''
-                                                                                }`}>
-                                                                                    {task}
-                                                                                </span>
+                                                                                <span
+                                                                                    className={`flex-1 text-gray-700 transition-all ${
+                                                                                        isChecked ? 'line-through text-gray-400' : ''
+                                                                                    }`}
+                                                                                    dangerouslySetInnerHTML={{ __html: task }}
+                                                                                />
                                                                                 {isChecked && <span className="text-green-500">✓</span>}
                                                                             </label>
                                                                         );
@@ -1245,9 +1246,9 @@
                                             <div>
                                                 <h4 className="font-semibold text-yellow-800 text-sm mb-2">Setup Guides</h4>
                                                 <ul className="space-y-1 text-xs">
-                                                    <li><a href="guides/postgresql_setup.md" target="_blank" className="text-blue-600 hover:underline">PostgreSQL Setup (~45 min)</a></li>
-                                                    <li><a href="guides/docker_setup.md" target="_blank" className="text-blue-600 hover:underline">Docker & Docker Compose (~60 min)</a></li>
-                                                    <li><a href="guides/ml_environment_setup.md" target="_blank" className="text-blue-600 hover:underline">ML Environment (Anaconda, PyTorch) (~60 min)</a></li>
+                                                    <li><a href="guides/postgresql_setup.html" target="_blank" className="text-blue-600 hover:underline">PostgreSQL Setup (~45 min)</a></li>
+                                                    <li><a href="guides/docker_setup.html" target="_blank" className="text-blue-600 hover:underline">Docker & Docker Compose (~60 min)</a></li>
+                                                    <li><a href="guides/ml_environment_setup.html" target="_blank" className="text-blue-600 hover:underline">ML Environment (Anaconda, PyTorch) (~60 min)</a></li>
                                                 </ul>
                                             </div>
                                             <div>
