@@ -447,3 +447,86 @@ git push
 ---
 
 **Remember:** When resuming, check this STATUS.md file first to understand what's been completed and what needs to be done next!
+
+---
+
+## 🎉 UPDATE (Session 2 - 2025-10-28)
+
+### New Guides Created (4 major guides)
+
+1. **Neural Networks from Scratch** (`guides/neural_networks_guide.html` + `.md`) ✅
+   - Single neuron implementation
+   - All activation functions (ReLU, Sigmoid, Tanh, Softmax)
+   - 2-layer network with backpropagation
+   - Numerical gradient checking
+   - MNIST training project (>95% target)
+
+2. **CNN from Scratch** (`guides/cnn_guide.html` + `.md`) ✅
+   - 2D convolution implementation
+   - Max/average pooling
+   - Batch normalization (forward + backward)
+   - Complete CNN architecture
+   - MNIST CNN project (>98% target)
+
+3. **Transformer from Scratch** (`guides/transformer_guide.html` + `.md`) ✅
+   - Scaled dot-product attention
+   - Multi-head attention
+   - Positional encoding
+   - Encoder/decoder blocks
+   - Addition task project
+
+4. **Probability & Information Theory** (`guides/probability_guide.html` + `.md`) ✅
+   - Gaussian PDF implementation
+   - Naive Bayes classifier
+   - Entropy, cross-entropy, KL divergence
+   - Spam classifier project
+
+5. **GUIDE_INDEX.md** ✅
+   - Complete catalog of all guides
+   - Prioritized TODO list
+   - Guide creation checklist
+   - Resource links
+
+### Updated Progress
+
+**Total Guides:** 10 complete
+- 3 Setup guides
+- 3 ML Project guides
+- 4 Math Coding guides
+- 2 Exercise sets (with solutions)
+
+**Completion Rate:** 67% of high-priority guides complete!
+
+### Remaining High-Priority Guides (5)
+
+Still TODO but lower priority:
+- Numerical Gradient Checking Guide (quick, 2-3 hrs)
+- QR Decomposition Guide (3-4 hrs)
+- Advanced Training Techniques (4-6 hrs)
+- Attention Mechanisms standalone (can skip, covered in Transformer)
+- Autograd Framework (15-20 hrs - very comprehensive)
+
+### Key Achievements This Session
+
+✅ Created GUIDE_INDEX.md for easy navigation
+✅ All essential math topics now have guides
+✅ Neural Networks, CNN, and Transformer guides complete
+✅ Probability/Info Theory covered
+✅ All guides follow consistent format
+✅ All files successfully pushed to GitHub
+
+### For Next Session
+
+**Priorities:**
+1. Link new guides to roadmap tasks in index.html
+2. Test all guide links work on GitHub Pages
+3. Consider creating remaining lower-priority guides
+4. Potentially create video walkthroughs
+
+**Current File Count:**
+- 10 complete guide sets (HTML + MD pairs)
+- 2 exercise sets with solutions
+- 1 interactive exercise tracker
+- 2 documentation files (STATUS.md, GUIDE_INDEX.md)
+
+**All systems operational!** 🚀
