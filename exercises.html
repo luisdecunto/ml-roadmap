@@ -8,7 +8,6 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div id="root"></div>
@@ -18,58 +17,88 @@
 
         const ExerciseTracker = () => {
             const [selectedExercise, setSelectedExercise] = useState('linear_algebra');
-            const [exerciseContent, setExerciseContent] = useState('');
-            const [solutionContent, setSolutionContent] = useState('');
             const [showSolutions, setShowSolutions] = useState(false);
             const [completedExercises, setCompletedExercises] = useState({});
 
-            const exercises = [
-                {
-                    id: 'linear_algebra',
+            const exercises = {
+                linear_algebra: {
                     title: 'Linear Algebra',
-                    file: 'guides/exercises/linear_algebra_exercises.md',
-                    solution: 'guides/solutions/linear_algebra_solutions.md',
                     time: '3-4 hours',
-                    difficulty: 'Beginner-Intermediate'
+                    difficulty: 'Beginner-Intermediate',
+                    exercisesFile: 'guides/exercises/linear_algebra_exercises.html',
+                    solutionsFile: 'guides/solutions/linear_algebra_solutions.html',
+                    problems: [
+                        'Part 1: Exercise 1.1 - Vector Operations (5 calculations)',
+                        'Part 1: Exercise 1.2 - Linear Combinations',
+                        'Part 1: Exercise 1.3 - Unit Vectors',
+                        'Part 1: Exercise 1.4 - Orthogonality',
+                        'Part 2: Exercise 2.1 - Matrix Addition',
+                        'Part 2: Exercise 2.2 - Matrix Multiplication',
+                        'Part 2: Exercise 2.3 - Matrix-Vector Multiplication',
+                        'Part 2: Exercise 2.4 - Transpose',
+                        'Part 2: Exercise 2.5 - Identity and Inverse',
+                        'Part 3: Exercise 3.1 - Understanding Eigenvectors',
+                        'Part 3: Exercise 3.2 - Finding Eigenvalues',
+                        'Part 3: Exercise 3.3 - Finding Eigenvectors',
+                        'Part 3: Exercise 3.4 - Diagonalization',
+                        'Part 4: Exercise 4.1 - Understanding SVD Concepts',
+                        'Part 4: Exercise 4.2 - SVD Components',
+                        'Part 4: Exercise 4.3 - Rank and SVD',
+                        'Part 5: Exercise 5.1 - Rotation Matrix',
+                        'Part 5: Exercise 5.2 - Projection',
+                        'Part 5: Exercise 5.3 - Linear System',
+                        'Challenge 1: Matrix Powers',
+                        'Challenge 2: Gram-Schmidt Process',
+                        'Challenge 3: Image Compression with SVD'
+                    ]
                 },
-                {
-                    id: 'calculus_gradients',
+                calculus_gradients: {
                     title: 'Calculus & Gradients',
-                    file: 'guides/exercises/calculus_gradients_exercises.md',
-                    solution: 'guides/solutions/calculus_gradients_solutions.md',
                     time: '3-4 hours',
-                    difficulty: 'Intermediate'
+                    difficulty: 'Intermediate',
+                    exercisesFile: 'guides/exercises/calculus_gradients_exercises.html',
+                    solutionsFile: 'guides/solutions/calculus_gradients_solutions.html',
+                    problems: [
+                        'Problem 1: Basic derivatives (4 functions)',
+                        'Problem 2: Rate of change at x=3',
+                        'Problem 3: Product Rule',
+                        'Problem 4: Chain Rule',
+                        'Problem 5: Compute partial derivatives',
+                        'Problem 6: Evaluate partial derivatives at (2,3)',
+                        'Problem 7: Second-order partial derivatives',
+                        'Problem 8: Compute gradient',
+                        'Problem 9: Three-variable gradient',
+                        'Problem 10: Gradient descent step',
+                        'Problem 11: Chain rule for two variables',
+                        'Problem 12: Neural network backpropagation',
+                        'Problem 13: Jacobian of vector function',
+                        'Problem 14: Three-variable Jacobian',
+                        'Problem 15: Compute Hessian',
+                        'Problem 16: Neural network curvature',
+                        'Problem 17: Mean Squared Error gradient',
+                        'Problem 18: Binary Cross-Entropy gradient',
+                        'Problem 19: Softmax gradient',
+                        'Problem 20: Two-layer network backpropagation',
+                        'Challenge 1: Implement Gradient Checker',
+                        'Challenge 2: Momentum in Gradient Descent',
+                        'Challenge 3: RMSprop Implementation'
+                    ]
                 }
-            ];
+            };
 
             useEffect(() => {
-                const saved = localStorage.getItem('completedExercises');
+                const saved = localStorage.getItem('exercise-completions');
                 if (saved) {
                     setCompletedExercises(JSON.parse(saved));
                 }
             }, []);
 
             useEffect(() => {
-                localStorage.setItem('completedExercises', JSON.stringify(completedExercises));
+                localStorage.setItem('exercise-completions', JSON.stringify(completedExercises));
             }, [completedExercises]);
 
-            useEffect(() => {
-                const exercise = exercises.find(ex => ex.id === selectedExercise);
-                if (exercise) {
-                    fetch(exercise.file)
-                        .then(res => res.text())
-                        .then(text => setExerciseContent(marked.parse(text)))
-                        .catch(err => setExerciseContent('<p class="text-red-600">Error loading exercises</p>'));
-
-                    fetch(exercise.solution)
-                        .then(res => res.text())
-                        .then(text => setSolutionContent(marked.parse(text)))
-                        .catch(err => setSolutionContent('<p class="text-red-600">Solutions not available yet</p>'));
-                }
-            }, [selectedExercise]);
-
-            const toggleExercise = (exerciseId, problemId) => {
-                const key = `${exerciseId}-${problemId}`;
+            const toggleProblem = (exerciseId, problemIdx) => {
+                const key = `${exerciseId}-${problemIdx}`;
                 setCompletedExercises(prev => ({
                     ...prev,
                     [key]: !prev[key]
@@ -77,10 +106,20 @@
             };
 
             const getProgress = (exerciseId) => {
-                const keys = Object.keys(completedExercises).filter(k => k.startsWith(exerciseId + '-'));
-                const completed = keys.filter(k => completedExercises[k]).length;
-                return { completed, total: keys.length };
+                const exercise = exercises[exerciseId];
+                if (!exercise) return { completed: 0, total: 0, percentage: 0 };
+
+                const total = exercise.problems.length;
+                const completed = exercise.problems.filter((_, idx) =>
+                    completedExercises[`${exerciseId}-${idx}`]
+                ).length;
+                const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+                return { completed, total, percentage };
             };
+
+            const currentExercise = exercises[selectedExercise];
+            const progress = getProgress(selectedExercise);
 
             return (
                 <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8">
@@ -90,7 +129,7 @@
                             <div className="flex items-center justify-between mb-4">
                                 <div>
                                     <h1 className="text-3xl font-bold text-gray-800">Exercise Tracker</h1>
-                                    <p className="text-gray-600">Practice problems with solutions</p>
+                                    <p className="text-gray-600">Track your progress on practice problems</p>
                                 </div>
                                 <a
                                     href="index.html"
@@ -105,16 +144,15 @@
                         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
                             <h2 className="text-xl font-bold text-gray-800 mb-4">Select Exercise Set</h2>
                             <div className="grid md:grid-cols-2 gap-4">
-                                {exercises.map(exercise => {
-                                    const selected = selectedExercise === exercise.id;
-                                    const progress = getProgress(exercise.id);
-                                    const percentage = progress.total > 0 ? Math.round((progress.completed / progress.total) * 100) : 0;
+                                {Object.entries(exercises).map(([id, exercise]) => {
+                                    const selected = selectedExercise === id;
+                                    const prog = getProgress(id);
 
                                     return (
                                         <button
-                                            key={exercise.id}
+                                            key={id}
                                             onClick={() => {
-                                                setSelectedExercise(exercise.id);
+                                                setSelectedExercise(id);
                                                 setShowSolutions(false);
                                             }}
                                             className={`p-4 rounded-lg border-2 transition-all text-left ${
@@ -128,20 +166,18 @@
                                                 <span>⏱️ {exercise.time}</span>
                                                 <span>📊 {exercise.difficulty}</span>
                                             </div>
-                                            {progress.total > 0 && (
-                                                <div className="mt-3">
-                                                    <div className="flex justify-between text-xs text-gray-600 mb-1">
-                                                        <span>Progress</span>
-                                                        <span>{progress.completed}/{progress.total} ({percentage}%)</span>
-                                                    </div>
-                                                    <div className="w-full bg-gray-200 rounded-full h-2">
-                                                        <div
-                                                            className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
-                                                            style={{ width: `${percentage}%` }}
-                                                        />
-                                                    </div>
+                                            <div className="mt-3">
+                                                <div className="flex justify-between text-xs text-gray-600 mb-1">
+                                                    <span>Progress</span>
+                                                    <span>{prog.completed}/{prog.total} ({prog.percentage}%)</span>
                                                 </div>
-                                            )}
+                                                <div className="w-full bg-gray-200 rounded-full h-2">
+                                                    <div
+                                                        className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                                                        style={{ width: `${prog.percentage}%` }}
+                                                    />
+                                                </div>
+                                            </div>
                                         </button>
                                     );
                                 })}
@@ -151,36 +187,71 @@
                         {/* Content Area */}
                         <div className="bg-white rounded-lg shadow-lg p-6">
                             <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-gray-800">{currentExercise.title}</h2>
                                 <div className="flex gap-4">
-                                    <button
-                                        onClick={() => setShowSolutions(false)}
-                                        className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
-                                            !showSolutions
-                                                ? 'bg-indigo-600 text-white'
-                                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                        }`}
+                                    <a
+                                        href={currentExercise.exercisesFile}
+                                        target="_blank"
+                                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-semibold text-sm"
                                     >
-                                        Exercises
-                                    </button>
-                                    <button
-                                        onClick={() => setShowSolutions(true)}
-                                        className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
-                                            showSolutions
-                                                ? 'bg-green-600 text-white'
-                                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                        }`}
+                                        📖 Open Exercises
+                                    </a>
+                                    <a
+                                        href={currentExercise.solutionsFile}
+                                        target="_blank"
+                                        className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-semibold text-sm"
                                     >
-                                        Solutions
-                                    </button>
+                                        ✓ Open Solutions
+                                    </a>
                                 </div>
                             </div>
 
-                            <div className="prose max-w-none">
-                                {!showSolutions ? (
-                                    <div dangerouslySetInnerHTML={{ __html: exerciseContent }} />
-                                ) : (
-                                    <div dangerouslySetInnerHTML={{ __html: solutionContent }} />
-                                )}
+                            {/* Progress Overview */}
+                            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="font-semibold text-indigo-900">Overall Progress</span>
+                                    <span className="text-indigo-700 font-bold">{progress.completed}/{progress.total} ({progress.percentage}%)</span>
+                                </div>
+                                <div className="w-full bg-indigo-200 rounded-full h-3">
+                                    <div
+                                        className="bg-indigo-600 h-3 rounded-full transition-all duration-300"
+                                        style={{ width: `${progress.percentage}%` }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Problem Checklist */}
+                            <div className="space-y-2">
+                                <h3 className="text-lg font-semibold text-gray-800 mb-4">Check off problems as you complete them:</h3>
+                                {currentExercise.problems.map((problem, idx) => {
+                                    const isCompleted = completedExercises[`${selectedExercise}-${idx}`];
+                                    return (
+                                        <label
+                                            key={idx}
+                                            className="flex items-start space-x-3 p-3 rounded hover:bg-gray-50 cursor-pointer group"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={isCompleted || false}
+                                                onChange={() => toggleProblem(selectedExercise, idx)}
+                                                className="mt-1 w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
+                                            />
+                                            <span className={`flex-1 transition-all ${
+                                                isCompleted ? 'line-through text-gray-400' : 'text-gray-700'
+                                            }`}>
+                                                {problem}
+                                            </span>
+                                            {isCompleted && <span className="text-green-500 font-bold">✓</span>}
+                                        </label>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Instructions */}
+                            <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <p className="text-sm text-yellow-800">
+                                    <strong>💡 Tip:</strong> Click "📖 Open Exercises" to see the full problems. Work through them on paper or in Python, then check your answers by clicking "✓ Open Solutions". Check off each problem here as you complete it!
+                                </p>
                             </div>
                         </div>
                     </div>
