@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Engineer Roadmap Tracker</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const MLRoadmapTracker = () => {
+            const roadmapData = {
+                "Month 1: SQL Mastery + Python/Docker Foundations": {
+                    "Week 1: SQL Intensive Bootcamp (45 hours)": [
+                        "Complete SQLBolt (all exercises)",
+                        "Complete Mode SQL Tutorial",
+                        "Complete Kaggle Intro to SQL + Advanced SQL",
+                        "Review W3Schools SQL for reference",
+                        "Watch freeCodeCamp SQL Tutorial (YouTube)",
+                        "Read 'Learning SQL' by Alan Beaulieu (Chapters 1-8)",
+                        "Solve 30 LeetCode SQL Easy problems",
+                        "Complete HackerRank SQL Easy + Medium sections",
+                        "Set up PostgreSQL locally",
+                        "Create practice database and test queries"
+                    ],
+                    "Week 2: Advanced SQL + Python/Pandas (46 hours)": [
+                        "Study CTEs (Common Table Expressions)",
+                        "Master Window Functions (ROW_NUMBER, RANK, LAG, LEAD)",
+                        "Learn recursive queries",
+                        "Study query optimization and EXPLAIN",
+                        "Learn about indexes and performance",
+                        "Complete DataCamp SQL courses (audit free)",
+                        "Complete Kaggle Pandas course",
+                        "Solve 20 LeetCode SQL Medium problems",
+                        "Practice on StrataScratch (real interview questions)",
+                        "Build practice database with 1M+ rows",
+                        "Optimize slow queries and document improvements",
+                        "Replicate SQL queries in Pandas",
+                        "Set up GitHub account and learn Git basics"
+                    ],
+                    "Week 3: SQL Portfolio Project + Docker (46 hours)": [
+                        "Find or create e-commerce dataset (Kaggle)",
+                        "Design database schema (customers, orders, products, reviews)",
+                        "Write query: Customer lifetime value calculation",
+                        "Write query: Cohort analysis with window functions",
+                        "Write query: Product recommendations (collaborative filtering)",
+                        "Write query: Churn prediction indicators",
+                        "Write query: Revenue trends and seasonality",
+                        "Write query: RFM segmentation",
+                        "Create 10+ more analytical queries",
+                        "Optimize slow queries and document improvements",
+                        "Add data quality checks and validation",
+                        "Create visualizations with Matplotlib/Seaborn",
+                        "Write comprehensive README with business context",
+                        "Polish GitHub repo with professional documentation",
+                        "Complete Docker Getting Started tutorial",
+                        "Containerize PostgreSQL database",
+                        "Learn Docker Compose basics",
+                        "Attempt 5 LeetCode SQL Hard problems"
+                    ],
+                    "Week 4: Python Deep Dive + Data Engineering (45 hours)": [
+                        "Review Python essentials (data structures, OOP)",
+                        "Study Pandas advanced (MultiIndex, pivot tables)",
+                        "Learn NumPy fundamentals",
+                        "Complete Data Engineering Academy SQL course",
+                        "Learn command line/bash scripting",
+                        "Build ETL pipeline: Extract from CSV/API",
+                        "Build ETL pipeline: Transform with Pandas",
+                        "Build ETL pipeline: Load to PostgreSQL",
+                        "Add scheduling with cron or Python schedule",
+                        "Complete advanced Pandas exercises (Kaggle)",
+                        "Solve 10 more LeetCode SQL problems",
+                        "Update resume with SQL skills and project",
+                        "Write LinkedIn post about SQL learning journey",
+                        "Join SQL/Data communities on Slack/Discord"
+                    ]
+                },
+                "Month 2: Deep Learning Foundations + MLOps": {
+                    "Week 5: PyTorch Fundamentals (44 hours)": [
+                        "Complete Fast.ai Lesson 1-2",
+                        "Study Learn PyTorch Chapters 1-3",
+                        "Complete PyTorch 'Learn the Basics' tutorial",
+                        "Read about neural networks fundamentals",
+                        "Complete Fast.ai Lesson 1 project (image classifier)",
+                        "Work through PyTorch tensor operations exercises",
+                        "Set up ML dev environment (Anaconda, VS Code)",
+                        "Configure Git workflows for ML projects",
+                        "Dockerize your image classifier",
+                        "Solve 15 LeetCode SQL problems (daily practice)"
+                    ],
+                    "Week 6: Deep Learning + FastAPI (46 hours)": [
+                        "Complete Fast.ai Lessons 3-4 (CNNs)",
+                        "Study Learn PyTorch Chapters 4-6",
+                        "Complete FastAPI tutorial and documentation",
+                        "Build CNN from scratch for CIFAR-10",
+                        "Create FastAPI endpoint for model serving",
+                        "Add input validation to API",
+                        "Add error handling to API",
+                        "Test API with different inputs",
+                        "Add SQL portfolio to personal website",
+                        "Write blog post: 'SQL Skills That Got Me Interviews'",
+                        "Daily: 3 SQL problems throughout week"
+                    ],
+                    "Week 7: MLflow + Portfolio Project Start (48 hours)": [
+                        "Complete Fast.ai Lesson 5",
+                        "Study MLflow documentation and tutorial",
+                        "Study Learn PyTorch Chapter 7 (Custom Datasets)",
+                        "Learn database design patterns for ML",
+                        "Build transfer learning project (ResNet/EfficientNet)",
+                        "Track 15+ experiments with MLflow",
+                        "Solve 10 SQL problems (focus on data pipelines)",
+                        "PROJECT 1: Choose problem (defect detection/medical imaging)",
+                        "PROJECT 1: Design system architecture diagram",
+                        "PROJECT 1: Set up project structure with proper folders",
+                        "PROJECT 1: Create PostgreSQL schema for predictions/metrics",
+                        "PROJECT 1: Build data ingestion pipeline (SQL + Python)",
+                        "PROJECT 1: Write comprehensive README template"
+                    ],
+                    "Week 8: Complete MLOps Project (48 hours)": [
+                        "PROJECT 1: Train model with hyperparameter tuning",
+                        "PROJECT 1: Log all experiments to MLflow",
+                        "PROJECT 1: Build FastAPI endpoint with PostgreSQL",
+                        "PROJECT 1: Store all predictions in database",
+                        "PROJECT 1: Log inference latency metrics",
+                        "PROJECT 1: Track data drift indicators",
+                        "PROJECT 1: Query PostgreSQL for dashboard metrics",
+                        "PROJECT 1: Create Streamlit/Grafana monitoring dashboard",
+                        "PROJECT 1: Show model performance trends",
+                        "PROJECT 1: Implement model versioning (MLflow Registry)",
+                        "PROJECT 1: Containerize with Docker + Docker Compose",
+                        "PROJECT 1: Deploy to Hugging Face Spaces or Cloud Run",
+                        "PROJECT 1: Polish documentation with diagrams",
+                        "PROJECT 1: Create API documentation",
+                        "Write detailed Medium article about project",
+                        "Create demo video walkthrough",
+                        "Share on LinkedIn with technical breakdown",
+                        "Update resume with this project"
+                    ]
+                },
+                "Month 3: Transformers, LLMs, and Advanced SQL": {
+                    "Week 9: Transformers & Hugging Face (44 hours)": [
+                        "Complete Hugging Face LLM Course Chapters 1-2",
+                        "Complete DeepLearning.AI Hugging Face course",
+                        "Complete Fast.ai Lesson 8 (NLP)",
+                        "Read 'Attention Is All You Need' paper",
+                        "Study SQL for text data and analytics",
+                        "Fine-tune BERT for sentiment analysis (IMDB)",
+                        "Create Gradio demo interface",
+                        "Experiment with different pre-trained models",
+                        "Practice complex text analytics SQL queries",
+                        "Learn about columnar databases",
+                        "Study data warehousing (star schema, fact tables)"
+                    ],
+                    "Week 10: LLM Fine-Tuning Project (48 hours)": [
+                        "Complete Hugging Face LLM Course Chapters 3-4",
+                        "Study LoRA/QLoRA tutorials",
+                        "PROJECT 2: Select base model (Mistral-7B/LLaMA-2)",
+                        "PROJECT 2: Choose domain (legal/medical/financial)",
+                        "PROJECT 2: Curate 5,000-10,000 examples",
+                        "PROJECT 2: Create PostgreSQL schema for datasets",
+                        "PROJECT 2: Track dataset versions in database",
+                        "PROJECT 2: Log data quality metrics",
+                        "PROJECT 2: Store fine-tuning configurations",
+                        "PROJECT 2: Implement LoRA fine-tuning with PEFT",
+                        "PROJECT 2: Set up Weights & Biases tracking",
+                        "PROJECT 2: Run initial training experiments",
+                        "PROJECT 2: Create evaluation framework"
+                    ],
+                    "Week 11: Complete LLM Project (46 hours)": [
+                        "PROJECT 2: Complete fine-tuning experiments",
+                        "PROJECT 2: Implement 4-bit quantization",
+                        "PROJECT 2: Build FastAPI serving endpoint",
+                        "PROJECT 2: Add streaming responses",
+                        "PROJECT 2: Track token usage in PostgreSQL",
+                        "PROJECT 2: Implement request logging and analytics",
+                        "PROJECT 2: Add prompt injection prevention",
+                        "PROJECT 2: Deploy to Hugging Face Spaces (GPU)",
+                        "PROJECT 2: Create comprehensive documentation",
+                        "Study feature store concepts",
+                        "Learn SQL for feature engineering at scale",
+                        "Build feature store prototype with PostgreSQL",
+                        "Write blog: 'Fine-Tuning LLMs with LoRA'",
+                        "Share project on LinkedIn and Twitter",
+                        "Update portfolio website"
+                    ],
+                    "Week 12: TensorFlow + Data Engineering (44 hours)": [
+                        "Complete DeepLearning.AI TensorFlow Weeks 1-2",
+                        "Complete Google ML Crash Course",
+                        "Study dbt (data build tool) basics",
+                        "Build image classifier in TensorFlow/Keras",
+                        "Convert PyTorch model to ONNX",
+                        "Test model in TensorFlow",
+                        "Create dbt project for data transformations",
+                        "Solve 15 SQL optimization problems",
+                        "Add dbt project to GitHub",
+                        "Document SQL → dbt transformation patterns"
+                    ]
+                },
+                "Month 4: Kubernetes, Cloud, and Job Search": {
+                    "Week 13: Kubernetes + Third Project (46 hours)": [
+                        "Complete Kubernetes interactive tutorial",
+                        "Study Kubernetes concepts (Pods, Services, Deployments)",
+                        "Study Kubernetes for ML",
+                        "Install minikube locally",
+                        "Deploy existing project to Kubernetes",
+                        "Practice kubectl commands",
+                        "Create Kubernetes YAML manifests",
+                        "PROJECT 3: Choose project (Object Detection or Recommendations)",
+                        "PROJECT 3: Set up project structure",
+                        "PROJECT 3: Design PostgreSQL schema",
+                        "PROJECT 3: Implement data pipeline",
+                        "PROJECT 3: Begin model training"
+                    ],
+                    "Week 14: Complete Third Project (48 hours)": [
+                        "PROJECT 3: Complete model training and optimization",
+                        "PROJECT 3: Build FastAPI with PostgreSQL backend",
+                        "PROJECT 3: Containerize with Docker",
+                        "PROJECT 3: Deploy to Kubernetes (GKE/EKS free tier)",
+                        "PROJECT 3: Add Prometheus monitoring",
+                        "PROJECT 3: Polish documentation and demo",
+                        "Read 'Designing ML Systems' Chapters 1-5",
+                        "Study ML system design patterns",
+                        "Practice: Design 3 ML systems on paper",
+                        "Review top 50 SQL interview questions",
+                        "Practice explaining SQL projects",
+                        "Complete mock SQL interview"
+                    ],
+                    "Week 15: Cloud Platforms + Advanced SQL (44 hours)": [
+                        "Complete AWS SageMaker tutorials (or Google Vertex AI)",
+                        "Study CI/CD for ML with GitHub Actions",
+                        "Deploy project to AWS/GCP cloud",
+                        "Set up GitHub Actions workflow",
+                        "Solve 20 hard SQL interview problems",
+                        "OPTIONAL: Build data engineering pipeline (Airflow/dbt)",
+                        "OPTIONAL: Extract from API",
+                        "OPTIONAL: Transform with dbt",
+                        "OPTIONAL: Load to data warehouse",
+                        "OPTIONAL: Document pipeline architecture"
+                    ],
+                    "Week 16: Polish & Launch Job Search (42 hours)": [
+                        "Review all GitHub READMEs for consistency",
+                        "Create demo videos for all projects",
+                        "Build portfolio website (Hugo or GitHub Pages)",
+                        "Write 2-3 Medium articles",
+                        "Optimize resume for ATS with keywords",
+                        "Update LinkedIn with all projects",
+                        "Write compelling LinkedIn about section",
+                        "Research 50 target companies",
+                        "Apply to 30 positions (mix of Data/ML Engineer)",
+                        "Write customized cover letters for top 10",
+                        "Reach out to 15 people for informational interviews",
+                        "Join data/ML communities",
+                        "Share portfolio on LinkedIn"
+                    ]
+                },
+                "Month 5: Interview Prep & Active Search (Optional)": {
+                    "Weeks 17-20: Intensive Prep (35-40 hrs/week)": [
+                        "Daily: Solve 3-5 SQL problems (LeetCode/StrataScratch)",
+                        "Daily: ML coding practice (1.5 hours)",
+                        "Daily: System design practice (1 hour)",
+                        "Weekly: 3 mock interviews (Pramp, Interviewing.io)",
+                        "Weekly: Apply to 15-20 new positions",
+                        "Weekly: Follow up on previous applications",
+                        "Weekly: 2-3 informational interviews",
+                        "Study specific topics from interviews",
+                        "Master top 100 SQL interview questions",
+                        "Practice whiteboard SQL queries",
+                        "Implement ML algorithms from scratch",
+                        "Review portfolio projects in depth",
+                        "Prepare STAR stories for each project",
+                        "Practice explaining career transition",
+                        "Continue LinkedIn engagement",
+                        "Consider AWS ML certification (optional)"
+                    ]
+                }
+            };
+
+            const [expandedMonths, setExpandedMonths] = useState({});
+            const [checkedTasks, setCheckedTasks] = useState({});
+            const [showResources, setShowResources] = useState(false);
+
+            // Load from localStorage on mount
+            useEffect(() => {
+                const savedCheckedTasks = localStorage.getItem('mlRoadmapCheckedTasks');
+                const savedExpandedMonths = localStorage.getItem('mlRoadmapExpandedMonths');
+                
+                if (savedCheckedTasks) {
+                    setCheckedTasks(JSON.parse(savedCheckedTasks));
+                }
+                if (savedExpandedMonths) {
+                    setExpandedMonths(JSON.parse(savedExpandedMonths));
+                }
+            }, []);
+
+            // Save to localStorage whenever tasks change
+            useEffect(() => {
+                localStorage.setItem('mlRoadmapCheckedTasks', JSON.stringify(checkedTasks));
+            }, [checkedTasks]);
+
+            // Save to localStorage whenever expanded months change
+            useEffect(() => {
+                localStorage.setItem('mlRoadmapExpandedMonths', JSON.stringify(expandedMonths));
+            }, [expandedMonths]);
+
+            const toggleMonth = (month) => {
+                setExpandedMonths(prev => ({
+                    ...prev,
+                    [month]: !prev[month]
+                }));
+            };
+
+            const toggleTask = (taskId) => {
+                setCheckedTasks(prev => ({
+                    ...prev,
+                    [taskId]: !prev[taskId]
+                }));
+            };
+
+            const calculateProgress = () => {
+                const totalTasks = Object.values(roadmapData).reduce((acc, month) => {
+                    return acc + Object.values(month).reduce((weekAcc, tasks) => {
+                        return weekAcc + tasks.length;
+                    }, 0);
+                }, 0);
+                
+                const completedTasks = Object.keys(checkedTasks).filter(key => checkedTasks[key]).length;
+                return Math.round((completedTasks / totalTasks) * 100);
+            };
+
+            const getMonthProgress = (monthData) => {
+                const totalTasks = Object.values(monthData).reduce((acc, tasks) => acc + tasks.length, 0);
+                const completedTasks = Object.values(monthData).reduce((acc, tasks) => {
+                    return acc + tasks.filter((_, idx) => {
+                        const taskId = `${Object.keys(monthData).find(week => monthData[week] === tasks)}-${idx}`;
+                        return checkedTasks[taskId];
+                    }).length;
+                }, 0);
+                return Math.round((completedTasks / totalTasks) * 100);
+            };
+
+            const clearProgress = () => {
+                if (confirm('Are you sure you want to clear all progress? This cannot be undone.')) {
+                    setCheckedTasks({});
+                    setExpandedMonths({});
+                    localStorage.removeItem('mlRoadmapCheckedTasks');
+                    localStorage.removeItem('mlRoadmapExpandedMonths');
+                }
+            };
+
+            const overallProgress = calculateProgress();
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8">
+                    <div className="max-w-5xl mx-auto">
+                        {/* Header */}
+                        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <div>
+                                    <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                                        SQL-First ML Engineer Roadmap
+                                    </h1>
+                                    <p className="text-gray-600">
+                                        Master SQL → Build ML Systems → Land Your Dream Job
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={clearProgress}
+                                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded-lg transition-colors"
+                                >
+                                    Reset Progress
+                                </button>
+                            </div>
+                            
+                            {/* Overall Progress */}
+                            <div className="mb-4">
+                                <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                    <span>Overall Progress</span>
+                                    <span className="font-semibold">{overallProgress}%</span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-4">
+                                    <div 
+                                        className="bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 h-4 rounded-full transition-all duration-500"
+                                        style={{ width: `${overallProgress}%` }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Key Milestones */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+                                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                                    <div className="flex items-center space-x-2 mb-1">
+                                        <span className="text-xs font-semibold text-blue-800">Week 4</span>
+                                    </div>
+                                    <p className="text-xs text-blue-700">Data Analyst Ready</p>
+                                </div>
+                                <div className="bg-green-50 p-3 rounded-lg border border-green-200">
+                                    <div className="flex items-center space-x-2 mb-1">
+                                        <span className="text-xs font-semibold text-green-800">Week 8</span>
+                                    </div>
+                                    <p className="text-xs text-green-700">Data Engineer Ready</p>
+                                </div>
+                                <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
+                                    <div className="flex items-center space-x-2 mb-1">
+                                        <span className="text-xs font-semibold text-purple-800">Week 14</span>
+                                    </div>
+                                    <p className="text-xs text-purple-700">ML Engineer Ready</p>
+                                </div>
+                                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                                    <div className="flex items-center space-x-2 mb-1">
+                                        <span className="text-xs font-semibold text-yellow-800">Week 16+</span>
+                                    </div>
+                                    <p className="text-xs text-yellow-700">Interview Pipeline</p>
+                                </div>
+                            </div>
+                            
+                            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                                <p className="text-sm text-green-800">
+                                    <strong>✅ Progress is saved automatically!</strong> Your checked tasks will persist even after closing the browser.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Roadmap Content - Same as before but simplified for space */}
+                        <div className="space-y-4">
+                            {Object.entries(roadmapData).map(([monthName, monthData]) => {
+                                const monthProgress = getMonthProgress(monthData);
+                                const isExpanded = expandedMonths[monthName];
+                                
+                                return (
+                                    <div key={monthName} className="bg-white rounded-lg shadow-md overflow-hidden">
+                                        <button
+                                            onClick={() => toggleMonth(monthName)}
+                                            className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                                        >
+                                            <div className="flex items-center space-x-3">
+                                                <span>{isExpanded ? '▼' : '▶'}</span>
+                                                <h2 className="text-xl font-semibold text-gray-800">{monthName}</h2>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <span className="text-sm font-medium text-gray-600">{monthProgress}%</span>
+                                                <div className="w-24 bg-gray-200 rounded-full h-2">
+                                                    <div 
+                                                        className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
+                                                        style={{ width: `${monthProgress}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </button>
+
+                                        {isExpanded && (
+                                            <div className="p-4 border-t border-gray-200">
+                                                {Object.entries(monthData).map(([weekName, tasks]) => (
+                                                    <div key={weekName} className="mb-6 last:mb-0">
+                                                        <h3 className="text-lg font-semibold text-indigo-700 mb-3 flex items-center">
+                                                            <span className="w-2 h-2 bg-indigo-600 rounded-full mr-2"></span>
+                                                            {weekName}
+                                                        </h3>
+                                                        <div className="space-y-2 ml-4">
+                                                            {tasks.map((task, idx) => {
+                                                                const taskId = `${weekName}-${idx}`;
+                                                                const isChecked = checkedTasks[taskId] || false;
+                                                                
+                                                                return (
+                                                                    <label
+                                                                        key={taskId}
+                                                                        className="flex items-start space-x-3 p-2 rounded hover:bg-gray-50 cursor-pointer group"
+                                                                    >
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            checked={isChecked}
+                                                                            onChange={() => toggleTask(taskId)}
+                                                                            className="mt-1 w-5 h-5 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500"
+                                                                        />
+                                                                        <span className={`flex-1 text-gray-700 transition-all ${
+                                                                            isChecked ? 'line-through text-gray-400' : ''
+                                                                        }`}>
+                                                                            {task}
+                                                                        </span>
+                                                                        {isChecked && <span className="text-green-500">✓</span>}
+                                                                    </label>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Resources Button */}
+                        <div className="mt-6">
+                            <button
+                                onClick={() => setShowResources(!showResources)}
+                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors"
+                            >
+                                {showResources ? 'Hide' : 'Show'} All Resources & Links
+                            </button>
+                        </div>
+
+                        {/* Resources Section */}
+                        {showResources && (
+                            <div className="mt-6 bg-white rounded-lg shadow-md p-6">
+                                <h2 className="text-2xl font-bold text-gray-800 mb-4">📚 Essential Resources</h2>
+                                
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2 flex items-center">
+                                            🗃️ SQL Learning (Priority!)
+                                        </h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://sqlbolt.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">SQLBolt (Interactive)</a></li>
+                                            <li><a href="https://mode.com/sql-tutorial/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Mode SQL Tutorial (Comprehensive)</a></li>
+                                            <li><a href="https://www.kaggle.com/learn/intro-to-sql" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kaggle Intro to SQL</a></li>
+                                            <li><a href="https://www.kaggle.com/learn/advanced-sql" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kaggle Advanced SQL</a></li>
+                                            <li><a href="https://leetcode.com/problemset/database/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LeetCode SQL Problems</a></li>
+                                            <li><a href="https://www.stratascratch.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">StrataScratch (Interview Qs)</a></li>
+                                            <li><a href="https://www.hackerrank.com/domains/sql" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">HackerRank SQL</a></li>
+                                            <li><a href="https://dataengineeracademy.com/courses/sql-tutorial-free/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Data Engineering Academy SQL</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🔥 PyTorch & Deep Learning</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://course.fast.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Fast.ai Practical Deep Learning</a></li>
+                                            <li><a href="https://www.learnpytorch.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Learn PyTorch (Zero to Mastery)</a></li>
+                                            <li><a href="https://pytorch.org/tutorials/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch Official Tutorials</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🤖 Transformers & LLMs</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://huggingface.co/learn/llm-course/chapter1/1" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face LLM Course</a></li>
+                                            <li><a href="https://www.deeplearning.ai/short-courses/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DeepLearning.AI Short Courses</a></li>
+                                            <li><a href="https://github.com/huggingface/peft" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PEFT Library (LoRA/QLoRA)</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🚀 MLOps & Deployment</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://madewithml.com/courses/mlops/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Made With ML MLOps Course</a></li>
+                                            <li><a href="https://github.com/DataTalksClub/mlops-zoomcamp" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MLOps Zoomcamp</a></li>
+                                            <li><a href="https://mlflow.org/docs/latest/index.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MLflow Documentation</a></li>
+                                            <li><a href="https://docs.wandb.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Weights & Biases Docs</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">⚙️ Data Engineering</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://docs.getdbt.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">dbt (data build tool)</a></li>
+                                            <li><a href="https://airflow.apache.org/docs/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Apache Airflow</a></li>
+                                            <li><a href="https://docs.prefect.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Prefect</a></li>
+                                            <li><a href="https://github.com/DataTalksClub/data-engineering-zoomcamp" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Data Engineering Zoomcamp</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🐳 Docker & Kubernetes</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Docker Getting Started</a></li>
+                                            <li><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kubernetes Tutorial</a></li>
+                                            <li><a href="https://www.youtube.com/watch?v=X48VuDVv0do" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">K8s Tutorial (TechWorld)</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🧠 TensorFlow</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google ML Crash Course</a></li>
+                                            <li><a href="https://www.coursera.org/professional-certificates/tensorflow-in-practice" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DeepLearning.AI TensorFlow</a></li>
+                                            <li><a href="https://www.tensorflow.org/tutorials" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">TensorFlow Tutorials</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">☁️ Cloud Platforms</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://aws.amazon.com/sagemaker/getting-started/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">AWS SageMaker</a></li>
+                                            <li><a href="https://cloud.google.com/vertex-ai/docs" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google Vertex AI</a></li>
+                                            <li><a href="https://huggingface.co/spaces" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face Spaces (Free)</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">💼 Interview Prep</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://stanford-cs329s.github.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Stanford ML Systems Design</a></li>
+                                            <li><a href="https://www.educative.io/courses/grokking-the-machine-learning-interview" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Grokking ML Interview</a></li>
+                                            <li><a href="https://leetcode.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LeetCode</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">💻 Practice Platforms</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://colab.research.google.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google Colab (Free GPU)</a></li>
+                                            <li><a href="https://www.kaggle.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Kaggle</a></li>
+                                            <li><a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">GitHub</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">👥 Communities</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://datatalks.club/slack.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DataTalks.Club Slack</a></li>
+                                            <li><a href="https://mlops.community/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">MLOps Community</a></li>
+                                            <li><a href="https://huggingface.co/join/discord" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face Discord</a></li>
+                                            <li><a href="https://forums.fast.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Fast.ai Forums</a></li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">📚 Books (Priority Order)</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li className="text-gray-700">1. Learning SQL (Beaulieu)</li>
+                                            <li className="text-gray-700">2. Hands-On ML (Géron)</li>
+                                            <li className="text-gray-700">3. Designing ML Systems (Huyen)</li>
+                                            <li className="text-gray-700">4. NLP with Transformers</li>
+                                            <li className="text-gray-700">5. Introducing MLOps (Treveil)</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h3 className="font-semibold text-indigo-700 mb-2">🛠️ Additional Tools</h3>
+                                        <ul className="space-y-1 text-sm">
+                                            <li><a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">FastAPI Documentation</a></li>
+                                            <li><a href="https://www.gradio.app/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Gradio (ML Demos)</a></li>
+                                            <li><a href="https://streamlit.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Streamlit (Dashboards)</a></li>
+                                            <li><a href="https://www.evidentlyai.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Evidently AI (Monitoring)</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Footer */}
+                        <div className="mt-8 bg-white rounded-lg shadow-md p-6 text-center">
+                            <p className="text-gray-600 mb-2 font-semibold">
+                                🎯 Your Mantra: SQL First → ML Skills → Deploy Everything → Apply Early
+                            </p>
+                            <p className="text-lg font-bold text-indigo-600">
+                                Start with Week 1 tomorrow. Spend 7 hours on SQL. You've got this! 🚀
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<MLRoadmapTracker />, document.getElementById('root'));
+    </script>
+</body>
+</html>

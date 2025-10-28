@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Engineer Roadmap - Progress Viewer</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const MLRoadmapViewer = () => {
+            const GITHUB_USERNAME = 'luisdecunto';
+            const GITHUB_REPO = 'ml-roadmap';
+            const PROGRESS_FILE = 'progress.json';
+            
+            const roadmapData = {
+                "Month 1: SQL Mastery + Python/Docker": {
+                    "Week 1: SQL Intensive (45h)": ["Complete SQLBolt", "Mode SQL Tutorial", "Mode Intermediate SQL", "Kaggle SQL courses", "W3Schools SQL", "freeCodeCamp SQL Tutorial", "Read 'Learning SQL' Ch1-8", "30 LeetCode SQL Easy", "HackerRank SQL", "Setup PostgreSQL", "Create practice database"],
+                    "Week 2: Advanced SQL + Pandas (46h)": ["Study CTEs", "Window Functions", "Recursive queries", "Query optimization", "Indexes & performance", "DataCamp SQL", "Kaggle Pandas", "20 LeetCode SQL Medium", "StrataScratch practice", "Build 1M+ rows DB", "Optimize queries", "SQL→Pandas", "Git basics"],
+                    "Week 3: SQL Portfolio + Docker (46h)": ["Get e-commerce dataset", "Design DB schema", "CLV query", "Cohort analysis query", "Recommendations query", "Churn indicators query", "Revenue trends query", "RFM segmentation", "10+ analytical queries", "Optimize queries", "Data quality checks", "Visualizations", "Write README", "Polish GitHub", "Docker tutorial", "Containerize PostgreSQL", "Docker Compose", "5 LeetCode Hard"],
+                    "Week 4: Python + Data Eng (45h)": ["Python essentials", "Pandas advanced", "NumPy basics", "DE Academy SQL", "Bash scripting", "Build ETL: Extract", "Build ETL: Transform", "Build ETL: Load", "Add scheduling", "Pandas exercises", "10 more SQL problems", "Update resume", "LinkedIn post", "Join communities"]
+                },
+                "Month 2: Deep Learning + MLOps": {
+                    "Week 5: PyTorch (44h)": ["Fast.ai 1-2", "Learn PyTorch Ch1-3", "PyTorch basics", "NN fundamentals", "Fast.ai project", "Tensor operations", "Setup ML environment", "Git workflows", "Dockerize classifier", "15 SQL problems"],
+                    "Week 6: DL + FastAPI (46h)": ["Fast.ai 3-4", "PyTorch Ch4-6", "FastAPI tutorial", "Build CNN/CIFAR-10", "FastAPI endpoint", "Input validation", "Error handling", "Test API", "SQL portfolio online", "Blog: SQL skills", "Daily SQL"],
+                    "Week 7: MLflow + Proj Start (48h)": ["Fast.ai 5", "MLflow docs", "PyTorch Ch7", "DB patterns for ML", "Transfer learning", "15+ MLflow experiments", "10 SQL problems", "PROJECT 1: Choose", "PROJECT 1: Architecture", "PROJECT 1: Setup", "PROJECT 1: PostgreSQL", "PROJECT 1: Pipeline", "PROJECT 1: README"],
+                    "Week 8: Complete MLOps (48h)": ["P1: Train model", "P1: Log MLflow", "P1: FastAPI+PostgreSQL", "P1: Store predictions", "P1: Log latency", "P1: Track drift", "P1: Query metrics", "P1: Dashboard", "P1: Performance trends", "P1: Versioning", "P1: Docker Compose", "P1: Deploy", "P1: Documentation", "P1: API docs", "Medium article", "Demo video", "LinkedIn share", "Update resume"]
+                },
+                "Month 3: Transformers & LLMs": {
+                    "Week 9: Transformers (44h)": ["HF Course Ch1-2", "DeepLearning.AI HF", "Fast.ai 8", "Attention paper", "SQL for text", "Fine-tune BERT", "Gradio demo", "Try models", "Text SQL queries", "Columnar DBs", "Data warehousing"],
+                    "Week 10: LLM Fine-tune (48h)": ["HF Ch3-4", "LoRA/QLoRA", "P2: Select model", "P2: Domain", "P2: 5K-10K examples", "P2: PostgreSQL", "P2: Version datasets", "P2: Quality metrics", "P2: Store configs", "P2: LoRA tuning", "P2: W&B setup", "P2: Experiments", "P2: Evaluation"],
+                    "Week 11: Complete LLM (46h)": ["P2: Finish tuning", "P2: 4-bit quant", "P2: FastAPI", "P2: Streaming", "P2: Track tokens", "P2: Request logging", "P2: Safety", "P2: Deploy GPU", "P2: Docs", "Feature stores", "SQL feature eng", "Build feature store", "Blog: LoRA", "Share", "Update portfolio"],
+                    "Week 12: TF + dbt (44h)": ["TF Weeks 1-2", "Google ML Crash", "dbt basics", "TF classifier", "PyTorch→ONNX", "Test in TF", "dbt project", "15 SQL optimization", "dbt to GitHub", "SQL→dbt docs"]
+                },
+                "Month 4: K8s, Cloud, Jobs": {
+                    "Week 13: K8s + Proj3 (46h)": ["K8s tutorial", "K8s concepts", "K8s for ML", "Install minikube", "Deploy to K8s", "kubectl practice", "K8s YAMLs", "P3: Choose", "P3: Setup", "P3: PostgreSQL", "P3: Pipeline", "P3: Start training"],
+                    "Week 14: Complete P3 (48h)": ["P3: Finish training", "P3: FastAPI+PostgreSQL", "P3: Docker", "P3: Deploy K8s", "P3: Prometheus", "P3: Docs", "Read ML Systems Ch1-5", "System design", "Design 3 systems", "50 SQL questions", "Explain projects", "Mock interview"],
+                    "Week 15: Cloud (44h)": ["AWS/GCP tutorials", "CI/CD GitHub Actions", "Deploy to cloud", "GitHub Actions", "20 SQL Hard", "Optional: DE pipeline", "Optional: Extract", "Optional: Transform", "Optional: Load", "Optional: Document"],
+                    "Week 16: Job Search (42h)": ["Review READMEs", "Demo videos", "Portfolio site", "2-3 articles", "Optimize resume", "Update LinkedIn", "LinkedIn about", "Research 50 companies", "Apply to 30", "10 cover letters", "15 informational", "Join communities", "Share portfolio"]
+                },
+                "Month 5: Interviews": {
+                    "Weeks 17-20 (140-160h)": ["Daily: 3-5 SQL", "Daily: ML coding", "Daily: System design", "12 mock interviews", "Apply 60+", "Follow-ups", "12 info interviews", "Study interview topics", "Master 100 SQL", "Whiteboard SQL", "Implement algos", "Review projects", "STAR stories", "Career transition", "LinkedIn", "Optional: Cert"]
+                }
+            };
+
+            const [checkedTasks, setCheckedTasks] = useState({});
+            const [expandedMonths, setExpandedMonths] = useState({});
+            const [lastUpdated, setLastUpdated] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(false);
+
+            useEffect(() => {
+                loadProgressFromGitHub();
+                // Auto-refresh every 30 seconds
+                const interval = setInterval(loadProgressFromGitHub, 30000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const loadProgressFromGitHub = async () => {
+                try {
+                    const url = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${PROGRESS_FILE}`;
+                    const response = await fetch(url);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        setCheckedTasks(data.checkedTasks || {});
+                        if (data.expandedMonths) {
+                            setExpandedMonths(data.expandedMonths);
+                        }
+                        setLastUpdated(data.lastUpdated ? new Date(data.lastUpdated) : null);
+                        setError(false);
+                    } else {
+                        setError(true);
+                    }
+                    setLoading(false);
+                } catch (err) {
+                    console.error('Error loading progress:', err);
+                    setError(true);
+                    setLoading(false);
+                }
+            };
+
+            const toggleMonth = (month) => {
+                setExpandedMonths(prev => ({
+                    ...prev,
+                    [month]: !prev[month]
+                }));
+            };
+
+            const calculateProgress = () => {
+                const totalTasks = Object.values(roadmapData).reduce((acc, month) => {
+                    return acc + Object.values(month).reduce((weekAcc, tasks) => weekAcc + tasks.length, 0);
+                }, 0);
+                const completedTasks = Object.keys(checkedTasks).filter(key => checkedTasks[key]).length;
+                return Math.round((completedTasks / totalTasks) * 100);
+            };
+
+            const getMonthProgress = (monthData) => {
+                const totalTasks = Object.values(monthData).reduce((acc, tasks) => acc + tasks.length, 0);
+                const completedTasks = Object.values(monthData).reduce((acc, tasks) => {
+                    return acc + tasks.filter((_, idx) => {
+                        const taskId = `${Object.keys(monthData).find(week => monthData[week] === tasks)}-${idx}`;
+                        return checkedTasks[taskId];
+                    }).length;
+                }, 0);
+                return Math.round((completedTasks / totalTasks) * 100);
+            };
+
+            const overallProgress = calculateProgress();
+
+            if (loading) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
+                        <div className="text-center">
+                            <div className="text-4xl mb-4">⏳</div>
+                            <p className="text-gray-600">Loading progress from GitHub...</p>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (error) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-lg shadow-lg p-8 max-w-md text-center">
+                            <div className="text-4xl mb-4">❌</div>
+                            <h2 className="text-xl font-bold text-gray-800 mb-2">Progress Not Found</h2>
+                            <p className="text-gray-600 mb-4">
+                                Unable to load progress from GitHub. Make sure progress.json exists in the repository.
+                            </p>
+                            <button
+                                onClick={loadProgressFromGitHub}
+                                className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
+                            >
+                                Retry
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 md:p-8">
+                    <div className="max-w-5xl mx-auto">
+                        {/* Header */}
+                        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+                            <div className="flex items-center justify-between mb-4">
+                                <div>
+                                    <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                                        ML Engineer Roadmap - Progress Viewer
+                                    </h1>
+                                    <p className="text-gray-600">
+                                        📊 Read-only view of learning progress
+                                    </p>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-sm text-green-600 font-semibold">
+                                        👁️ Viewer Mode
+                                    </div>
+                                    {lastUpdated && (
+                                        <div className="text-xs text-gray-500 mt-1">
+                                            Last updated: {lastUpdated.toLocaleString()}
+                                        </div>
+                                    )}
+                                    <button
+                                        onClick={loadProgressFromGitHub}
+                                        className="mt-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded"
+                                    >
+                                        🔄 Refresh
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {/* Overall Progress */}
+                            <div className="mb-4">
+                                <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                    <span>Overall Progress</span>
+                                    <span className="font-semibold">{overallProgress}%</span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-4">
+                                    <div 
+                                        className="bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 h-4 rounded-full transition-all duration-500"
+                                        style={{ width: `${overallProgress}%` }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Stats */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 text-center">
+                                    <div className="text-2xl font-bold text-blue-700">{Object.keys(checkedTasks).filter(k => checkedTasks[k]).length}</div>
+                                    <div className="text-xs text-blue-600">Tasks Completed</div>
+                                </div>
+                                <div className="bg-green-50 p-3 rounded-lg border border-green-200 text-center">
+                                    <div className="text-2xl font-bold text-green-700">{overallProgress}%</div>
+                                    <div className="text-xs text-green-600">Total Progress</div>
+                                </div>
+                                <div className="bg-purple-50 p-3 rounded-lg border border-purple-200 text-center">
+                                    <div className="text-2xl font-bold text-purple-700">
+                                        {Object.keys(roadmapData).reduce((acc, month) => 
+                                            acc + Object.keys(roadmapData[month]).filter(week => {
+                                                const tasks = roadmapData[month][week];
+                                                const completedInWeek = tasks.filter((_, i) => 
+                                                    checkedTasks[`${week}-${i}`]
+                                                ).length;
+                                                return completedInWeek === tasks.length;
+                                            }).length
+                                        , 0)}
+                                    </div>
+                                    <div className="text-xs text-purple-600">Weeks Done</div>
+                                </div>
+                                <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200 text-center">
+                                    <div className="text-2xl font-bold text-yellow-700">
+                                        {Math.ceil(Object.keys(checkedTasks).filter(k => checkedTasks[k]).length / 7)}
+                                    </div>
+                                    <div className="text-xs text-yellow-600">Weeks Active</div>
+                                </div>
+                            </div>
+
+                            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                                <p className="text-sm text-blue-800">
+                                    <strong>👁️ Read-only mode:</strong> This page automatically refreshes every 30 seconds. Use the main tracker to make updates.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Roadmap Content */}
+                        <div className="space-y-4">
+                            {Object.entries(roadmapData).map(([monthName, monthData]) => {
+                                const monthProgress = getMonthProgress(monthData);
+                                const isExpanded = expandedMonths[monthName];
+                                
+                                return (
+                                    <div key={monthName} className="bg-white rounded-lg shadow-md overflow-hidden">
+                                        <button
+                                            onClick={() => toggleMonth(monthName)}
+                                            className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                                        >
+                                            <div className="flex items-center space-x-3">
+                                                <span>{isExpanded ? '▼' : '▶'}</span>
+                                                <h2 className="text-xl font-semibold text-gray-800">{monthName}</h2>
+                                            </div>
+                                            <div className="flex items-center space-x-3">
+                                                <span className="text-sm font-medium text-gray-600">{monthProgress}%</span>
+                                                <div className="w-24 bg-gray-200 rounded-full h-2">
+                                                    <div 
+                                                        className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
+                                                        style={{ width: `${monthProgress}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </button>
+
+                                        {isExpanded && (
+                                            <div className="p-4 border-t border-gray-200">
+                                                {Object.entries(monthData).map(([weekName, tasks]) => {
+                                                    const weekCompleted = tasks.filter((_, idx) => 
+                                                        checkedTasks[`${weekName}-${idx}`]
+                                                    ).length;
+                                                    const weekProgress = Math.round((weekCompleted / tasks.length) * 100);
+                                                    
+                                                    return (
+                                                        <div key={weekName} className="mb-6 last:mb-0">
+                                                            <div className="flex items-center justify-between mb-3">
+                                                                <h3 className="text-lg font-semibold text-indigo-700 flex items-center">
+                                                                    <span className="w-2 h-2 bg-indigo-600 rounded-full mr-2"></span>
+                                                                    {weekName}
+                                                                </h3>
+                                                                <span className="text-sm text-gray-600">
+                                                                    {weekCompleted}/{tasks.length} ({weekProgress}%)
+                                                                </span>
+                                                            </div>
+                                                            <div className="space-y-2 ml-4">
+                                                                {tasks.map((task, idx) => {
+                                                                    const taskId = `${weekName}-${idx}`;
+                                                                    const isChecked = checkedTasks[taskId] || false;
+                                                                    
+                                                                    return (
+                                                                        <div
+                                                                            key={taskId}
+                                                                            className="flex items-start space-x-3 p-2 rounded"
+                                                                        >
+                                                                            <span className={`mt-1 w-5 h-5 flex items-center justify-center rounded border-2 flex-shrink-0 ${
+                                                                                isChecked 
+                                                                                    ? 'bg-green-500 border-green-500 text-white' 
+                                                                                    : 'bg-gray-100 border-gray-300'
+                                                                            }`}>
+                                                                                {isChecked && '✓'}
+                                                                            </span>
+                                                                            <span className={`flex-1 text-gray-700 text-sm ${
+                                                                                isChecked ? 'line-through text-gray-400' : ''
+                                                                            }`}>
+                                                                                {task}
+                                                                            </span>
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Footer */}
+                        <div className="mt-8 bg-white rounded-lg shadow-md p-6 text-center">
+                            <p className="text-gray-600 mb-2">
+                                🎯 Progress is automatically synced from GitHub
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                Want to update? Use the main tracker at: <a href="./index.html" className="text-indigo-600 hover:underline">index.html</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<MLRoadmapViewer />, document.getElementById('root'));
+    </script>
+</body>
+</html>
