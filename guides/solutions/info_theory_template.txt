@@ -1,0 +1,2 @@
+# Information Theory Solutions - Module 5
+Comprehensive solutions with detailed mathematical derivations and code.
