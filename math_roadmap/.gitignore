@@ -1,0 +1,72 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Data files (don't push large datasets)
+*.csv
+*.json
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+
+# Images and media (unless small examples)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+!example*.png  # Allow small example images
+!result*.png   # Allow result images
+
+# Datasets
+data/
+datasets/
+mnist/
+cifar/
+imagenet/
+
+# Model checkpoints
+*.pt
+*.pth
+*.ckpt
+*.weights
+checkpoints/
+models/
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# Logs
+*.log
+logs/
