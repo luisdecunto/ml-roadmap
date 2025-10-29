@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNN Exercises - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .exercise-item {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+        }
+        .exercise-item.completed {
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }
+        .exercise-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .exercise-item.completed h3 {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #10b981;
+            padding-bottom: 0.5rem;
+        }
+        .content-text {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        .content-text.completed {
+            color: #9ca3af;
+        }
+        .checkbox-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: #10b981;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 min-h-screen">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-3xl font-bold text-gray-800">CNN Exercises</h1>
+                <div class="flex space-x-2">
+                    <a href="../solutions/cnn_solutions.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold">
+                        View Solutions
+                    </a>
+                    <a href="../../index.html" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold">
+                        ← Back to Roadmap
+                    </a>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span>⏱️ Time: 4-5 hours</span>
+                    <span>📊 Difficulty: Advanced</span>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-600 mb-1">Progress: <span id="progress-text" class="font-bold text-emerald-600">0%</span></div>
+                    <div class="w-48 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="bg-emerald-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-sm text-gray-700">
+                    <strong>Instructions:</strong> Implement CNNs from scratch using NumPy.
+                    Check off each exercise as you complete it to track your progress.
+                </p>
+            </div>
+
+            <h2 class="section-header">Part 1: Convolution Basics (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="cnn-1.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-1.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.1: 2D Convolution by Hand</h3>
+                        <div class="content-text">
+                            4×4 input, 3×3 kernel (edge detector):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute convolution output (no padding, stride=1)</li>
+                                <li>What is output size? Formula: (n - k + 1)</li>
+                                <li>Calculate first output value</li>
+                                <li>Calculate all 4 output values</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-1.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-1.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.2: Padding Effects</h3>
+                        <div class="content-text">
+                            Same input and kernel:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Add zero padding (pad=1) → new size?</li>
+                                <li>Compute output with padding</li>
+                                <li>What is output size now?</li>
+                                <li>Why use padding?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-1.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-1.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.3: Stride Effects</h3>
+                        <div class="content-text">
+                            5×5 input, 3×3 kernel, stride=2:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate output size: (n - k)/stride + 1</li>
+                                <li>Perform convolution</li>
+                                <li>Compare with stride=1</li>
+                                <li>Why use larger strides?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-1.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-1.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.4: Multiple Channels</h3>
+                        <div class="content-text">
+                            Input: 3×3×2 (2 channels), Kernel: 3×3×2:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Convolve each channel with corresponding kernel</li>
+                                <li>Sum results across channels</li>
+                                <li>Output is single value</li>
+                                <li>How many multiplications?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 2: Pooling Operations (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="cnn-2.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-2.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.1: Max Pooling</h3>
+                        <div class="content-text">
+                            4×4 input, 2×2 max pooling, stride=2:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Divide into 2×2 regions</li>
+                                <li>Take max of each region</li>
+                                <li>Output size?</li>
+                                <li>Why max pooling?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-2.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-2.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.2: Average Pooling</h3>
+                        <div class="content-text">
+                            Same input, 2×2 average pooling:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Apply average pooling</li>
+                                <li>Compare with max pooling</li>
+                                <li>When to use average vs max?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-2.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-2.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.3: Global Average Pooling</h3>
+                        <div class="content-text">
+                            Input 4×4×3 (3 channels):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute mean of each channel → 3 values</li>
+                                <li>Output shape: (3,)</li>
+                                <li>Use case: replace FC at end</li>
+                                <li>Benefit: no parameters</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 3: CNN Forward Pass (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="cnn-3.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-3.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.1: Single Conv Layer</h3>
+                        <div class="content-text">
+                            Input: 5×5×1, Conv: 3×3, 2 filters:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>How many kernels? (2)</li>
+                                <li>Kernel dimensions? (3×3×1)</li>
+                                <li>Output shape?</li>
+                                <li>Parameters count?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-3.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-3.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.2: Conv + ReLU + Pool</h3>
+                        <div class="content-text">
+                            Input: 8×8×1, 2 layers:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>After Layer 1 Conv, Pool: size?</li>
+                                <li>After Layer 2 Conv, Pool: size?</li>
+                                <li>Total parameters?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-3.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-3.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.3: Receptive Field</h3>
+                        <div class="content-text">
+                            3-layer CNN: Conv 3×3 → Conv 3×3 → Conv 3×3:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>First layer: 3×3</li>
+                                <li>Second layer: ?</li>
+                                <li>Third layer: calculate receptive field</li>
+                                <li>Formula: RF = 1 + Σ(k - 1)·∏strides</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 4: CNN Backpropagation (45 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="cnn-4.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-4.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.1: Convolution Backward Pass</h3>
+                        <div class="content-text">
+                            Forward: Y = conv(X, W), given dL/dY:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>To get dL/dW: convolve X with dL/dY</li>
+                                <li>To get dL/dX: full conv of dL/dY with flipped W</li>
+                                <li>Implement for 3×3 case</li>
+                                <li>Verify with numerical gradients</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-4.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-4.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.2: Max Pooling Backward</h3>
+                        <div class="content-text">
+                            Backward given dL/dY:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Route gradient to positions that were max</li>
+                                <li>Other positions get 0</li>
+                                <li>Implement for 2×2 pooling</li>
+                                <li>Compare with average pooling</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-4.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-4.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.3: Full CNN Backward</h3>
+                        <div class="content-text">
+                            Conv → ReLU → MaxPool → FC → Softmax:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Start from softmax gradient</li>
+                                <li>Backprop through FC, unflatten</li>
+                                <li>Backprop through MaxPool, ReLU</li>
+                                <li>Backprop through Conv</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-4.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-4.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.4: Gradient Flow</h3>
+                        <div class="content-text">
+                            Deep CNN with 20 layers:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Why no vanishing gradients like FC nets?</li>
+                                <li>Role of skip connections (ResNet)</li>
+                                <li>Batch normalization effect</li>
+                                <li>Compare first vs last layer gradients</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 5: BatchNorm (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="cnn-5.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-5.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.1: BatchNorm Forward</h3>
+                        <div class="content-text">
+                            Batch of 4 samples, 3 features each:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute mean μ per feature</li>
+                                <li>Compute variance σ²</li>
+                                <li>Normalize: (X - μ) / √(σ² + ε)</li>
+                                <li>Scale and shift: γ·X_norm + β</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-5.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-5.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.2: BatchNorm Backward</h3>
+                        <div class="content-text">
+                            Given dL/dY, compute gradients:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>dL/dβ = sum of dL/dY</li>
+                                <li>dL/dγ = sum of dL/dY ⊙ X_norm</li>
+                                <li>dL/dX via chain rule</li>
+                                <li>Why is BatchNorm backward complex?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-5.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-5.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.3: Why BatchNorm Works</h3>
+                        <div class="content-text">
+                            Analyze BatchNorm benefits:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Internal covariate shift</li>
+                                <li>Smoother loss landscape</li>
+                                <li>Regularization effect</li>
+                                <li>Train vs test behavior</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 6: CNN Architectures (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="cnn-6.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-6.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.1: LeNet-5</h3>
+                        <div class="content-text">
+                            Design LeNet for 28×28 grayscale (MNIST):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Conv 5×5, 6 → Pool → Conv 5×5, 16 → Pool</li>
+                                <li>FC 120 → FC 84 → FC 10</li>
+                                <li>Calculate shapes at each layer</li>
+                                <li>Total parameters?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-6.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-6.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.2: VGG Block</h3>
+                        <div class="content-text">
+                            Multiple 3×3 convs vs larger kernels:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Stack two 3×3: receptive field?</li>
+                                <li>Compare params: two 3×3 vs one 5×5</li>
+                                <li>Why 3×3 better?</li>
+                                <li>Implement VGG block</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-6.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-6.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.3: ResNet Skip Connection</h3>
+                        <div class="content-text">
+                            Residual block: F(x) + x:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Implement: x → Conv → BN → ReLU → Conv → BN</li>
+                                <li>Add input: out = F(x) + x</li>
+                                <li>Apply ReLU</li>
+                                <li>Why does skip connection help?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Challenge Problems (Optional)</h2>
+
+            <div class="exercise-item" data-exercise-id="cnn-challenge-1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-challenge-1')">
+                    <div class="flex-1">
+                        <h3>Challenge 1: Implement Conv2D from Scratch</h3>
+                        <div class="content-text">
+                            NumPy only:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Forward: conv2d(X, W, stride, pad)</li>
+                                <li>Backward: gradients w.r.t X and W</li>
+                                <li>Handle batches and channels</li>
+                                <li>Verify with numerical gradients</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="cnn-challenge-2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('cnn-challenge-2')">
+                    <div class="flex-1">
+                        <h3>Challenge 2: Train Tiny CNN on MNIST</h3>
+                        <div class="content-text">
+                            Implement and train:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Architecture: Conv-Pool-Conv-Pool-FC</li>
+                                <li>Load MNIST or generate toy data</li>
+                                <li>Train with SGD + momentum</li>
+                                <li>Achieve >95% accuracy</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Tips for Success</h3>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                    <li><strong>Visualize convolutions</strong> - Draw receptive fields</li>
+                    <li><strong>Check shapes</strong> - Dimensional analysis prevents bugs</li>
+                    <li><strong>Padding preserves size</strong> - pad = (k-1)/2</li>
+                    <li><strong>Skip connections</strong> - Enable very deep networks</li>
+                    <li><strong>Start simple</strong> - Single conv layer first</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-gray-600 text-sm space-x-4">
+            <a href="../solutions/cnn_solutions.html" class="text-emerald-600 hover:text-emerald-700 font-semibold">
+                View Solutions →
+            </a>
+            <span>|</span>
+            <a href="../../index.html" class="text-indigo-600 hover:text-indigo-700 font-semibold">
+                ← Back to ML Roadmap
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            let completed = 0;
+            let total = 0;
+
+            document.querySelectorAll('.exercise-item').forEach(item => {
+                const id = item.getAttribute('data-exercise-id');
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                total++;
+
+                if (state[id]) {
+                    checkbox.checked = true;
+                    item.classList.add('completed');
+                    item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+                    completed++;
+                }
+            });
+
+            updateProgress(completed, total);
+        }
+
+        // Toggle exercise completion
+        function toggleExercise(exerciseId) {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            state[exerciseId] = !state[exerciseId];
+
+            if (!state[exerciseId]) {
+                delete state[exerciseId];
+            }
+
+            localStorage.setItem('exercise-completions', JSON.stringify(state));
+
+            // Notify other windows/tabs about the change
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'exercise-completions',
+                newValue: JSON.stringify(state),
+                url: window.location.href,
+                storageArea: localStorage
+            }));
+
+            // Update UI
+            const item = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+            if (state[exerciseId]) {
+                item.classList.add('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+            } else {
+                item.classList.remove('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.remove('completed'));
+            }
+
+            // Recalculate progress
+            loadCompletionState();
+        }
+
+        // Update progress bar
+        function updateProgress(completed, total) {
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadCompletionState);
+    </script>
+</body>
+</html>

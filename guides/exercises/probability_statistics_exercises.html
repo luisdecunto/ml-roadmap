@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probability & Statistics Exercises - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .exercise-item {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+        }
+        .exercise-item.completed {
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }
+        .exercise-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .exercise-item.completed h3 {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #10b981;
+            padding-bottom: 0.5rem;
+        }
+        .content-text {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        .content-text.completed {
+            color: #9ca3af;
+        }
+        pre {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+        }
+        .checkbox-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: #10b981;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 min-h-screen">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-3xl font-bold text-gray-800">Probability & Statistics Exercises</h1>
+                <div class="flex space-x-2">
+                    <a href="../solutions/probability_statistics_solutions.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold">
+                        View Solutions
+                    </a>
+                    <a href="../../index.html" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold">
+                        ← Back to Roadmap
+                    </a>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span>⏱️ Time: 3-4 hours</span>
+                    <span>📊 Difficulty: Intermediate</span>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-600 mb-1">Progress: <span id="progress-text" class="font-bold text-emerald-600">0%</span></div>
+                    <div class="w-48 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="bg-emerald-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-sm text-gray-700">
+                    <strong>Instructions:</strong> Complete these exercises by hand first, then verify with NumPy.
+                    Check off each exercise as you complete it to track your progress.
+                </p>
+            </div>
+
+            <h2 class="section-header">Part 1: Probability Basics (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="probability-1.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-1.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.1: Basic Probability Rules</h3>
+                        <div class="content-text">
+                            A bag contains 5 red, 3 blue, and 2 green marbles:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>What is P(red)?</li>
+                                <li>What is P(not red)?</li>
+                                <li>If you draw 2 marbles without replacement, what is P(both red)?</li>
+                                <li>With replacement, what is P(both red)?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-1.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-1.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.2: Conditional Probability</h3>
+                        <div class="content-text">
+                            Given: P(A) = 0.6, P(B) = 0.5, P(A ∩ B) = 0.3<br><br>
+                            Calculate:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>P(A | B)</li>
+                                <li>P(B | A)</li>
+                                <li>P(A ∪ B)</li>
+                                <li>Are A and B independent? Show your reasoning.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-1.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-1.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.3: Law of Total Probability</h3>
+                        <div class="content-text">
+                            A factory has three machines A, B, C producing 30%, 45%, 25% of items respectively.
+                            Defect rates are 2%, 3%, 4%.
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Draw a probability tree</li>
+                                <li>What is P(defective)?</li>
+                                <li>If an item is defective, what is P(from machine B)?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-1.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-1.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.4: Independence</h3>
+                        <div class="content-text">
+                            For events A and B: P(A) = 0.4, P(B) = 0.3<br>
+                            Assume A and B are independent.
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate P(A ∩ B)</li>
+                                <li>Calculate P(A ∪ B)</li>
+                                <li>Calculate P(A | B)</li>
+                                <li>Calculate P(B | A)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 2: Distributions (40 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="probability-2.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-2.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.1: Binomial Distribution</h3>
+                        <div class="content-text">
+                            A fair coin is flipped 10 times:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>What is P(exactly 6 heads)? Use formula: P(X = k) = C(n,k) · p^k · (1-p)^(n-k)</li>
+                                <li>What is P(at least 8 heads)?</li>
+                                <li>What is E[X] (expected number of heads)?</li>
+                                <li>What is Var(X)?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-2.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-2.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.2: Normal Distribution</h3>
+                        <div class="content-text">
+                            Given X ~ N(μ=100, σ²=225):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>What is the standard deviation?</li>
+                                <li>Calculate P(X < 115) using z-score</li>
+                                <li>Calculate P(85 < X < 115)</li>
+                                <li>What value of x has P(X < x) = 0.95?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-2.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-2.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.3: Uniform Distribution</h3>
+                        <div class="content-text">
+                            X ~ Uniform(0, 10):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>What is the PDF f(x)?</li>
+                                <li>Calculate P(3 < X < 7)</li>
+                                <li>What is E[X]?</li>
+                                <li>What is Var(X)?</li>
+                                <li>Plot or sketch the PDF and CDF</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-2.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-2.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.4: Exponential Distribution</h3>
+                        <div class="content-text">
+                            Time between events follows Exponential(λ=0.5):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Write the PDF f(x) = λe^(-λx)</li>
+                                <li>Calculate P(X > 2)</li>
+                                <li>What is E[X] = 1/λ?</li>
+                                <li>This models memoryless processes - what does that mean?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 3: Bayes' Theorem (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="probability-3.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-3.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.1: Medical Testing</h3>
+                        <div class="content-text">
+                            A disease affects 1% of population. A test is 95% accurate (both sensitivity and specificity):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>If you test positive, what is P(you have disease)?</li>
+                                <li>Use Bayes' theorem: P(D|+) = P(+|D)·P(D) / P(+)</li>
+                                <li>Calculate P(+) using law of total probability</li>
+                                <li>Interpret the result - surprising?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-3.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-3.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.2: Spam Filtering</h3>
+                        <div class="content-text">
+                            Email dataset:<br>
+                            P(spam) = 0.3<br>
+                            P("winner" | spam) = 0.7<br>
+                            P("winner" | not spam) = 0.05
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>If email contains "winner", what is P(spam)?</li>
+                                <li>Use Bayes' theorem</li>
+                                <li>Show all steps</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-3.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-3.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.3: Multi-class Bayesian Classification</h3>
+                        <div class="content-text">
+                            Three classes with priors: P(C₁) = 0.5, P(C₂) = 0.3, P(C₃) = 0.2<br>
+                            Likelihoods for feature x=5: P(x=5|C₁) = 0.2, P(x=5|C₂) = 0.4, P(x=5|C₃) = 0.1
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate P(C₁ | x=5)</li>
+                                <li>Calculate P(C₂ | x=5)</li>
+                                <li>Calculate P(C₃ | x=5)</li>
+                                <li>Which class would you predict?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 4: Maximum Likelihood (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="probability-4.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-4.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.1: MLE for Bernoulli</h3>
+                        <div class="content-text">
+                            You flip a coin 100 times, get 60 heads:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Write likelihood function L(p) = p^60 · (1-p)^40</li>
+                                <li>Write log-likelihood: log L(p)</li>
+                                <li>Take derivative and set to 0</li>
+                                <li>Solve for p̂ (MLE estimate)</li>
+                                <li>Verify it equals 60/100</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-4.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-4.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.2: MLE for Normal Distribution</h3>
+                        <div class="content-text">
+                            Dataset: [2, 4, 3, 5, 6]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Write likelihood for N(μ, σ²): L(μ, σ²) = ∏ᵢ (1/√(2πσ²)) · exp(-(xᵢ-μ)²/(2σ²))</li>
+                                <li>Write log-likelihood</li>
+                                <li>Find MLE for μ by taking ∂/∂μ and setting to 0</li>
+                                <li>Show μ̂ = (1/n)Σxᵢ (sample mean)</li>
+                                <li>Calculate μ̂ for the dataset</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-4.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-4.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.3: MLE for Exponential</h3>
+                        <div class="content-text">
+                            Time data: [1.2, 0.8, 2.1, 1.5, 0.9] (in hours)
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Exponential PDF: f(x|λ) = λe^(-λx)</li>
+                                <li>Write likelihood L(λ)</li>
+                                <li>Write log-likelihood</li>
+                                <li>Find MLE: λ̂ = n / Σxᵢ = 1/x̄</li>
+                                <li>Calculate λ̂ for the data</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 5: Statistical Inference (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="probability-5.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-5.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.1: Confidence Intervals</h3>
+                        <div class="content-text">
+                            Sample: [10, 12, 13, 11, 14, 12, 10, 13] (n=8)
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate sample mean x̄</li>
+                                <li>Calculate sample standard deviation s</li>
+                                <li>For 95% CI, use t-distribution with df=7: t* ≈ 2.365</li>
+                                <li>Calculate CI: x̄ ± t* · (s/√n)</li>
+                                <li>Interpret: what does this interval mean?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-5.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-5.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.2: Hypothesis Testing</h3>
+                        <div class="content-text">
+                            Test if a coin is fair. You flip 100 times, get 60 heads.<br>
+                            H₀: p = 0.5 (fair coin), H₁: p ≠ 0.5 (not fair)
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate test statistic: z = (p̂ - p₀) / √(p₀(1-p₀)/n)</li>
+                                <li>p̂ = 60/100 = 0.6</li>
+                                <li>Calculate z-value</li>
+                                <li>Find p-value (two-tailed)</li>
+                                <li>At α = 0.05, do you reject H₀?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-5.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-5.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.3: Comparing Means</h3>
+                        <div class="content-text">
+                            Group A: [23, 25, 27, 24, 26] (n₁=5)<br>
+                            Group B: [20, 22, 19, 21, 23] (n₂=5)
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate x̄₁ and x̄₂</li>
+                                <li>Calculate s₁ and s₂</li>
+                                <li>Test H₀: μ₁ = μ₂ vs H₁: μ₁ ≠ μ₂</li>
+                                <li>Use pooled variance t-test</li>
+                                <li>What do you conclude at α = 0.05?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Challenge Problems (Optional)</h2>
+
+            <div class="exercise-item" data-exercise-id="probability-challenge-1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-challenge-1')">
+                    <div class="flex-1">
+                        <h3>Challenge 1: Monte Carlo Estimation</h3>
+                        <div class="content-text">
+                            Estimate π using Monte Carlo:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Generate random points (x, y) in [0, 1]×[0, 1]</li>
+                                <li>Count how many fall inside quarter circle: x² + y² ≤ 1</li>
+                                <li>Estimate π ≈ 4 · (points inside) / (total points)</li>
+                                <li>Run with 1000, 10000, 100000 points</li>
+                                <li>How does accuracy improve?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="probability-challenge-2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('probability-challenge-2')">
+                    <div class="flex-1">
+                        <h3>Challenge 2: Central Limit Theorem</h3>
+                        <div class="content-text">
+                            Sample from Uniform(0, 1):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Take samples of size n=5, compute 1000 sample means</li>
+                                <li>Plot histogram of sample means</li>
+                                <li>Repeat for n=30</li>
+                                <li>Compare distributions - converging to normal?</li>
+                                <li>Calculate mean and variance of sampling distribution</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Tips for Success</h3>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                    <li><strong>Draw diagrams</strong> - Probability trees and Venn diagrams help</li>
+                    <li><strong>Check your denominator</strong> - P(A|B) uses P(B), not P(A)</li>
+                    <li><strong>Bayes' intuition</strong> - Update beliefs with evidence</li>
+                    <li><strong>Simulate</strong> - Use NumPy to verify tricky probability problems</li>
+                    <li><strong>Sanity checks</strong> - Probabilities must be in [0, 1]</li>
+                    <li><strong>Log-likelihood</strong> - Always use logs for products</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-gray-600 text-sm space-x-4">
+            <a href="../solutions/probability_statistics_solutions.html" class="text-emerald-600 hover:text-emerald-700 font-semibold">
+                View Solutions →
+            </a>
+            <span>|</span>
+            <a href="../../index.html" class="text-indigo-600 hover:text-indigo-700 font-semibold">
+                ← Back to ML Roadmap
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            let completed = 0;
+            let total = 0;
+
+            document.querySelectorAll('.exercise-item').forEach(item => {
+                const id = item.getAttribute('data-exercise-id');
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                total++;
+
+                if (state[id]) {
+                    checkbox.checked = true;
+                    item.classList.add('completed');
+                    item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+                    completed++;
+                }
+            });
+
+            updateProgress(completed, total);
+        }
+
+        // Toggle exercise completion
+        function toggleExercise(exerciseId) {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            state[exerciseId] = !state[exerciseId];
+
+            if (!state[exerciseId]) {
+                delete state[exerciseId];
+            }
+
+            localStorage.setItem('exercise-completions', JSON.stringify(state));
+
+            // Notify other windows/tabs about the change
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'exercise-completions',
+                newValue: JSON.stringify(state),
+                url: window.location.href,
+                storageArea: localStorage
+            }));
+
+            // Update UI
+            const item = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+            if (state[exerciseId]) {
+                item.classList.add('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+            } else {
+                item.classList.remove('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.remove('completed'));
+            }
+
+            // Recalculate progress
+            loadCompletionState();
+        }
+
+        // Update progress bar
+        function updateProgress(completed, total) {
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadCompletionState);
+    </script>
+</body>
+</html>

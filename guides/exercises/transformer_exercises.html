@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformer Exercises - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .exercise-item {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+        }
+        .exercise-item.completed {
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }
+        .exercise-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .exercise-item.completed h3 {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #10b981;
+            padding-bottom: 0.5rem;
+        }
+        .content-text {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        .content-text.completed {
+            color: #9ca3af;
+        }
+        .checkbox-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: #10b981;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 min-h-screen">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-3xl font-bold text-gray-800">Transformer Exercises</h1>
+                <div class="flex space-x-2">
+                    <a href="../solutions/transformer_solutions.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold">
+                        View Solutions
+                    </a>
+                    <a href="../../index.html" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold">
+                        ← Back to Roadmap
+                    </a>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span>⏱️ Time: 4-5 hours</span>
+                    <span>📊 Difficulty: Advanced</span>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-600 mb-1">Progress: <span id="progress-text" class="font-bold text-emerald-600">0%</span></div>
+                    <div class="w-48 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="bg-emerald-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-sm text-gray-700">
+                    <strong>Instructions:</strong> Implement Transformers from scratch using NumPy.
+                    Check off each exercise as you complete it to track your progress.
+                </p>
+            </div>
+
+            <h2 class="section-header">Part 1: Attention Mechanism (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="transformer-1.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-1.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.1: Attention Basics</h3>
+                        <div class="content-text">
+                            Query, Keys, Values given:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute attention scores: s_i = q · k_i</li>
+                                <li>Apply softmax: α = softmax(s)</li>
+                                <li>Weighted sum: output = Σ α_i · v_i</li>
+                                <li>What does high attention weight mean?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-1.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-1.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.2: Attention as Soft Lookup</h3>
+                        <div class="content-text">
+                            Database with key-value pairs:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate similarities (dot products)</li>
+                                <li>Softmax to get weights</li>
+                                <li>Retrieve weighted combination</li>
+                                <li>Why "soft" vs hard lookup?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-1.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-1.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.3: Self-Attention</h3>
+                        <div class="content-text">
+                            Sentence: "The cat sat"
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Each word is Q, K, V</li>
+                                <li>Calculate attention: "cat" attending to all</li>
+                                <li>Which words does "cat" attend to most?</li>
+                                <li>Differs from fixed window how?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-1.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-1.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.4: Attention Visualization</h3>
+                        <div class="content-text">
+                            Sentence: "I love machine learning"
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute 4×4 attention matrix</li>
+                                <li>Which words attend to which?</li>
+                                <li>Why self-attention often high?</li>
+                                <li>Draw attention heatmap</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 2: Scaled Dot-Product Attention (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="transformer-2.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-2.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.1: Scaling Factor</h3>
+                        <div class="content-text">
+                            Q, K dimensions: d_k = 64
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Without scaling: scores can be very large</li>
+                                <li>Why? Dot product grows with dimension</li>
+                                <li>Compute score for random q, k</li>
+                                <li>Scaled: dot(q, k) / √d_k - why helps?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-2.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-2.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.2: Implement Scaled Attention</h3>
+                        <div class="content-text">
+                            Q: (2, 3, 4), K: (2, 3, 4), V: (2, 3, 8)
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute scores: QK^T (shape?)</li>
+                                <li>Scale by 1/√4 = 0.5</li>
+                                <li>Apply softmax over last dimension</li>
+                                <li>Multiply by V: output shape?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-2.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-2.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.3: Attention Masking</h3>
+                        <div class="content-text">
+                            Decoder: prevent looking at future tokens
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Create causal mask: upper triangular -inf</li>
+                                <li>Add to scores before softmax</li>
+                                <li>After softmax: future weights = 0</li>
+                                <li>Why necessary for language modeling?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 3: Multi-Head Attention (40 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="transformer-3.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-3.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.1: Single Head vs Multi-Head</h3>
+                        <div class="content-text">
+                            d_model = 512, h = 8 heads:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Each head: d_k = d_v = 64</li>
+                                <li>Why split into multiple heads?</li>
+                                <li>Different heads learn different patterns</li>
+                                <li>Concatenate: 8 × 64 = 512</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-3.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-3.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.2: Implement Multi-Head Attention</h3>
+                        <div class="content-text">
+                            Input: (1, 4, 8), h = 2, d_k = 4:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Linear projections: W_Q, W_K, W_V</li>
+                                <li>Reshape: (1, 2, 4, 4) [batch, heads, seq, d_k]</li>
+                                <li>Apply scaled attention per head</li>
+                                <li>Concatenate and project with W_O</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-3.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-3.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.3: Parameter Count</h3>
+                        <div class="content-text">
+                            d_model = 512, h = 8:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>W_Q, W_K, W_V: each 512 × 512</li>
+                                <li>W_O: 512 × 512</li>
+                                <li>Total MHA parameters?</li>
+                                <li>Compare with standard attention</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-3.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-3.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.4: Cross-Attention vs Self-Attention</h3>
+                        <div class="content-text">
+                            Encoder-Decoder attention:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Q from decoder</li>
+                                <li>K, V from encoder</li>
+                                <li>Decoder attends to encoder outputs</li>
+                                <li>Use case: machine translation</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 4: Positional Encoding (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="transformer-4.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-4.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.1: Why Positional Encoding?</h3>
+                        <div class="content-text">
+                            "cat eats fish" vs "fish eats cat"
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Same words, different meaning</li>
+                                <li>Attention is permutation invariant</li>
+                                <li>Need position information</li>
+                                <li>Add positional encoding to embeddings</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-4.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-4.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.2: Sinusoidal Positional Encoding</h3>
+                        <div class="content-text">
+                            PE(pos, 2i) = sin(pos / 10000^(2i/d_model)):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate PE for position 0, 1, 2</li>
+                                <li>d_model = 4</li>
+                                <li>Why sine/cosine?</li>
+                                <li>Extrapolates to longer sequences</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-4.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-4.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.3: Learned vs Fixed Positional Encoding</h3>
+                        <div class="content-text">
+                            Compare approaches:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Fixed: sine/cosine (no parameters)</li>
+                                <li>Learned: embedding layer</li>
+                                <li>Pros/cons of each?</li>
+                                <li>Which does original Transformer use?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 5: Transformer Blocks (40 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="transformer-5.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-5.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.1: Encoder Block</h3>
+                        <div class="content-text">
+                            Components: MHA, Add&Norm, FFN, Add&Norm:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>MHA output</li>
+                                <li>Add residual: X + MHA(X)</li>
+                                <li>Layer norm, FFN</li>
+                                <li>Add & Norm again</li>
+                                <li>Final output shape?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-5.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-5.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.2: Layer Normalization</h3>
+                        <div class="content-text">
+                            X: (2, 3, 4) [batch, seq, features]:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute mean/var across features</li>
+                                <li>Normalize: (X - mean) / √var</li>
+                                <li>Scale and shift: γ * X_norm + β</li>
+                                <li>Why layer norm vs batch norm?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-5.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-5.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.3: Feed-Forward Network</h3>
+                        <div class="content-text">
+                            FFN(x) = max(0, xW_1 + b_1)W_2 + b_2:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>First linear: 512 → 2048</li>
+                                <li>ReLU activation</li>
+                                <li>Second linear: 2048 → 512</li>
+                                <li>Total parameters?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 6: Full Transformer (45 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="transformer-6.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-6.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.1: Encoder Stack</h3>
+                        <div class="content-text">
+                            6 encoder layers, d_model = 512:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Token embedding + positional</li>
+                                <li>Pass through layers 1-6</li>
+                                <li>Final encoder output shape?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-6.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-6.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.2: Decoder Stack</h3>
+                        <div class="content-text">
+                            6 decoder layers:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Masked self-attention (causal)</li>
+                                <li>Cross-attention (encoder outputs)</li>
+                                <li>FFN, Add & Norm</li>
+                                <li>Why masked self-attention?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-6.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-6.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.3: Full Transformer Forward Pass</h3>
+                        <div class="content-text">
+                            Translation: "Hello" → "Bonjour":
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Encoder: embed "Hello", 6 layers</li>
+                                <li>Decoder: embed "<BOS> Bonjour"</li>
+                                <li>Masked self-attn, cross-attn</li>
+                                <li>Linear + softmax → probabilities</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-6.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-6.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.4: Parameter Count</h3>
+                        <div class="content-text">
+                            L=6, d_model=512, h=8, d_ff=2048:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Per encoder: MHA + FFN params</li>
+                                <li>Total encoder: 6 × per_layer</li>
+                                <li>Decoder similar + cross-attention</li>
+                                <li>Calculate total parameters</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Challenge Problems (Optional)</h2>
+
+            <div class="exercise-item" data-exercise-id="transformer-challenge-1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-challenge-1')">
+                    <div class="flex-1">
+                        <h3>Challenge 1: Implement Transformer from Scratch</h3>
+                        <div class="content-text">
+                            NumPy only:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Multi-head attention</li>
+                                <li>Positional encoding</li>
+                                <li>Encoder and decoder blocks</li>
+                                <li>Full transformer</li>
+                                <li>Train on tiny seq2seq task</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="transformer-challenge-2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('transformer-challenge-2')">
+                    <div class="flex-1">
+                        <h3>Challenge 2: Attention Patterns</h3>
+                        <div class="content-text">
+                            Analyze trained model:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Extract attention weights from layers</li>
+                                <li>Visualize attention patterns</li>
+                                <li>Do different heads learn different patterns?</li>
+                                <li>Do later layers attend differently?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Tips for Success</h3>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                    <li><strong>Understand attention first</strong> - Core mechanism</li>
+                    <li><strong>Track shapes</strong> - Dimensions through every operation</li>
+                    <li><strong>Residual connections</strong> - Enable deep networks</li>
+                    <li><strong>Multi-head = perspectives</strong> - Different patterns</li>
+                    <li><strong>Masking is critical</strong> - For autoregressive generation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-gray-600 text-sm space-x-4">
+            <a href="../solutions/transformer_solutions.html" class="text-emerald-600 hover:text-emerald-700 font-semibold">
+                View Solutions →
+            </a>
+            <span>|</span>
+            <a href="../../index.html" class="text-indigo-600 hover:text-indigo-700 font-semibold">
+                ← Back to ML Roadmap
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            let completed = 0;
+            let total = 0;
+
+            document.querySelectorAll('.exercise-item').forEach(item => {
+                const id = item.getAttribute('data-exercise-id');
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                total++;
+
+                if (state[id]) {
+                    checkbox.checked = true;
+                    item.classList.add('completed');
+                    item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+                    completed++;
+                }
+            });
+
+            updateProgress(completed, total);
+        }
+
+        // Toggle exercise completion
+        function toggleExercise(exerciseId) {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            state[exerciseId] = !state[exerciseId];
+
+            if (!state[exerciseId]) {
+                delete state[exerciseId];
+            }
+
+            localStorage.setItem('exercise-completions', JSON.stringify(state));
+
+            // Notify other windows/tabs about the change
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'exercise-completions',
+                newValue: JSON.stringify(state),
+                url: window.location.href,
+                storageArea: localStorage
+            }));
+
+            // Update UI
+            const item = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+            if (state[exerciseId]) {
+                item.classList.add('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+            } else {
+                item.classList.remove('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.remove('completed'));
+            }
+
+            // Recalculate progress
+            loadCompletionState();
+        }
+
+        // Update progress bar
+        function updateProgress(completed, total) {
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadCompletionState);
+    </script>
+</body>
+</html>

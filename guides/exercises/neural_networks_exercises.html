@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Networks Exercises - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .exercise-item {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+        }
+        .exercise-item.completed {
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }
+        .exercise-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .exercise-item.completed h3 {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #10b981;
+            padding-bottom: 0.5rem;
+        }
+        .content-text {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        .content-text.completed {
+            color: #9ca3af;
+        }
+        .checkbox-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: #10b981;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 min-h-screen">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-3xl font-bold text-gray-800">Neural Networks Exercises</h1>
+                <div class="flex space-x-2">
+                    <a href="../solutions/neural_networks_solutions.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold">
+                        View Solutions
+                    </a>
+                    <a href="../../index.html" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold">
+                        ← Back to Roadmap
+                    </a>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span>⏱️ Time: 4-5 hours</span>
+                    <span>📊 Difficulty: Intermediate-Advanced</span>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-600 mb-1">Progress: <span id="progress-text" class="font-bold text-emerald-600">0%</span></div>
+                    <div class="w-48 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="bg-emerald-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-sm text-gray-700">
+                    <strong>Instructions:</strong> Complete these exercises by hand first, then implement in NumPy.
+                    Check off each exercise as you complete it to track your progress.
+                </p>
+            </div>
+
+            <h2 class="section-header">Part 1: Single Neuron (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="nn-1.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-1.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.1: Linear Neuron</h3>
+                        <div class="content-text">
+                            Single neuron: w = [0.5, -0.3, 0.2], b = 0.1, x = [1.0, 2.0, 3.0]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate z = w·x + b</li>
+                                <li>For linear activation (f(z) = z), what is the output?</li>
+                                <li>How many parameters?</li>
+                                <li>Implement in NumPy</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-1.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-1.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.2: Sigmoid Neuron</h3>
+                        <div class="content-text">
+                            Same neuron with sigmoid activation σ(z) = 1/(1 + e^(-z)):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate z = w·x + b</li>
+                                <li>Calculate output a = σ(z)</li>
+                                <li>Calculate derivative σ'(z) = σ(z)(1 - σ(z))</li>
+                                <li>Why is this derivative useful for backpropagation?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-1.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-1.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.3: ReLU Neuron</h3>
+                        <div class="content-text">
+                            Same weights, ReLU activation f(z) = max(0, z):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate output for x = [1, 2, 3]</li>
+                                <li>Calculate output for x = [-1, -2, -3]</li>
+                                <li>What is the derivative of ReLU?</li>
+                                <li>What happens when z < 0? (dead neuron)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 2: Activation Functions (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="nn-2.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-2.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.1: Comparing Activations</h3>
+                        <div class="content-text">
+                            For z = [-2, -1, 0, 1, 2], calculate:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Sigmoid, Tanh, ReLU, Leaky ReLU</li>
+                                <li>Plot or sketch each</li>
+                                <li>What are the ranges?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-2.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-2.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.2: Activation Derivatives</h3>
+                        <div class="content-text">
+                            Calculate derivatives at z = 1:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>d/dz sigmoid(z)</li>
+                                <li>d/dz tanh(z) = 1 - tanh²(z)</li>
+                                <li>d/dz ReLU(z)</li>
+                                <li>Which has vanishing gradient problem?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-2.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-2.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.3: Softmax</h3>
+                        <div class="content-text">
+                            Logits z = [2.0, 1.0, 0.1]:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate softmax: p(i) = exp(z_i) / Σexp(z_j)</li>
+                                <li>Verify outputs sum to 1</li>
+                                <li>Which class has highest probability?</li>
+                                <li>What happens if you add constant to all logits?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-2.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-2.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.4: Why Non-linearity?</h3>
+                        <div class="content-text">
+                            Two-layer network with linear activations:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute output for x = [1, 1]</li>
+                                <li>Show this equals single layer: W₂W₁x</li>
+                                <li>Why do we need non-linear activations?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 3: Forward Pass (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="nn-3.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-3.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.1: Two-Layer Network</h3>
+                        <div class="content-text">
+                            2 → 3 → 1 architecture with given weights, x = [1.0, 2.0]:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate z₁ = W₁x + b₁</li>
+                                <li>Calculate a₁ = σ(z₁)</li>
+                                <li>Calculate z₂ = W₂a₁ + b₂</li>
+                                <li>Calculate a₂ = σ(z₂)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-3.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-3.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.2: Batch Processing</h3>
+                        <div class="content-text">
+                            Same network, batch X = [[1.0, 2.0], [0.5, 1.5]]:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate Z₁ = XW₁ᵀ + b₁ (shape?)</li>
+                                <li>Calculate A₁ = σ(Z₁)</li>
+                                <li>Calculate final outputs</li>
+                                <li>Why is batching useful?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-3.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-3.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.3: Deep Network</h3>
+                        <div class="content-text">
+                            3-layer network: 2 → 4 → 3 → 1:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>How many weight matrices?</li>
+                                <li>What are the dimensions of each?</li>
+                                <li>Total number of parameters?</li>
+                                <li>Write forward pass equations</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 4: Backpropagation (45 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="nn-4.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-4.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.1: Single Neuron Gradient</h3>
+                        <div class="content-text">
+                            y = σ(wx + b), L = ½(y - t)², w=0.5, b=0.1, x=2.0, t=1.0:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Forward pass: calculate y and loss L</li>
+                                <li>Calculate ∂L/∂y, ∂y/∂z, ∂z/∂w</li>
+                                <li>Chain rule: ∂L/∂w = ∂L/∂y · ∂y/∂z · ∂z/∂w</li>
+                                <li>Calculate ∂L/∂b similarly</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-4.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-4.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.2: Two-Layer Backprop</h3>
+                        <div class="content-text">
+                            x → h (2 neurons) → y, all sigmoid:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Forward: z₁ = W₁x, a₁ = σ(z₁), z₂ = W₂a₁, y = σ(z₂)</li>
+                                <li>Backward: δ₂ = (y - t) · σ'(z₂)</li>
+                                <li>Calculate ∂L/∂W₂ = δ₂ · a₁ᵀ</li>
+                                <li>Calculate δ₁ = (W₂ᵀδ₂) ⊙ σ'(z₁)</li>
+                                <li>Calculate ∂L/∂W₁ = δ₁ · xᵀ</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-4.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-4.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.3: Backprop with ReLU</h3>
+                        <div class="content-text">
+                            Replace sigmoid with ReLU in Exercise 4.2:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Forward pass with ReLU</li>
+                                <li>ReLU derivative: 1 if z > 0, else 0</li>
+                                <li>Backward pass</li>
+                                <li>Compare gradients with sigmoid version</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-4.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-4.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.4: Vanishing Gradient</h3>
+                        <div class="content-text">
+                            Deep network with 10 sigmoid layers:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Each layer's gradient ≈ 0.25 (sigmoid derivative max)</li>
+                                <li>What is gradient at first layer? (0.25)^10</li>
+                                <li>Why is this problematic?</li>
+                                <li>How do ReLU and skip connections help?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 5: Training (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="nn-5.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-5.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.1: Gradient Descent Update</h3>
+                        <div class="content-text">
+                            Gradients: ∂L/∂w = 0.3, ∂L/∂b = 0.2, w = 0.5, b = 0.1, α = 0.1:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Update rule: w_new = w - α · ∂L/∂w</li>
+                                <li>Calculate new w and b</li>
+                                <li>Perform 5 iterations</li>
+                                <li>Does loss decrease?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-5.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-5.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.2: Mini-batch Training</h3>
+                        <div class="content-text">
+                            Dataset: 100 samples, batch size 10:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>How many batches per epoch?</li>
+                                <li>Weight updates per epoch?</li>
+                                <li>Compare with batch GD (1 update/epoch)</li>
+                                <li>Compare with SGD (100 updates/epoch)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-5.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-5.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.3: Learning Rate Effects</h3>
+                        <div class="content-text">
+                            Initial weights near optimum, gradient ≈ 0.1:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Update with α = 0.01</li>
+                                <li>Update with α = 1.0</li>
+                                <li>Update with α = 10.0</li>
+                                <li>Which learning rate works best? Why?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 6: Debugging NNs (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="nn-6.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-6.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.1: Gradient Checking</h3>
+                        <div class="content-text">
+                            Network with w = 0.5:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute analytical gradient: ∂L/∂w = 0.3</li>
+                                <li>Compute numerical: (L(w+ε) - L(w-ε))/(2ε), ε = 1e-5</li>
+                                <li>Calculate relative error</li>
+                                <li>If error < 1e-7, gradients correct!</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-6.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-6.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.2: Detecting Bugs</h3>
+                        <div class="content-text">
+                            Diagnose issues:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Loss is NaN → What's wrong?</li>
+                                <li>Loss doesn't decrease → Check?</li>
+                                <li>Training 99%, val 60% → Problem?</li>
+                                <li>Loss oscillates wildly → Fix?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-6.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-6.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.3: Sanity Checks</h3>
+                        <div class="content-text">
+                            Before training:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Overfit single batch (10 samples) - should reach ~0 loss</li>
+                                <li>Check loss on random predictions</li>
+                                <li>Disable regularization - loss should decrease</li>
+                                <li>Try tiny dataset - should memorize perfectly</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Challenge Problems (Optional)</h2>
+
+            <div class="exercise-item" data-exercise-id="nn-challenge-1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-challenge-1')">
+                    <div class="flex-1">
+                        <h3>Challenge 1: XOR Problem</h3>
+                        <div class="content-text">
+                            XOR: [0,0]→0, [0,1]→1, [1,0]→1, [1,1]→0:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Show single layer can't solve XOR</li>
+                                <li>Design 2-layer network that solves it</li>
+                                <li>Initialize weights and run forward pass</li>
+                                <li>Verify outputs match truth table</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="nn-challenge-2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('nn-challenge-2')">
+                    <div class="flex-1">
+                        <h3>Challenge 2: Implement Full Network</h3>
+                        <div class="content-text">
+                            Implement from scratch (NumPy only):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Forward pass for arbitrary layers</li>
+                                <li>Backward pass (backpropagation)</li>
+                                <li>Train on make_moons or make_circles</li>
+                                <li>Achieve >90% accuracy</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Tips for Success</h3>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                    <li><strong>Work through by hand first</strong> - Understanding beats memorization</li>
+                    <li><strong>Check dimensions</strong> - Matrix multiplication shapes must match</li>
+                    <li><strong>Use chain rule systematically</strong> - Write out each derivative</li>
+                    <li><strong>Numerical gradient checking</strong> - Verify backprop implementation</li>
+                    <li><strong>Vectorize</strong> - Batch operations much faster</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-gray-600 text-sm space-x-4">
+            <a href="../solutions/neural_networks_solutions.html" class="text-emerald-600 hover:text-emerald-700 font-semibold">
+                View Solutions →
+            </a>
+            <span>|</span>
+            <a href="../../index.html" class="text-indigo-600 hover:text-indigo-700 font-semibold">
+                ← Back to ML Roadmap
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            let completed = 0;
+            let total = 0;
+
+            document.querySelectorAll('.exercise-item').forEach(item => {
+                const id = item.getAttribute('data-exercise-id');
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                total++;
+
+                if (state[id]) {
+                    checkbox.checked = true;
+                    item.classList.add('completed');
+                    item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+                    completed++;
+                }
+            });
+
+            updateProgress(completed, total);
+        }
+
+        // Toggle exercise completion
+        function toggleExercise(exerciseId) {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            state[exerciseId] = !state[exerciseId];
+
+            if (!state[exerciseId]) {
+                delete state[exerciseId];
+            }
+
+            localStorage.setItem('exercise-completions', JSON.stringify(state));
+
+            // Notify other windows/tabs about the change
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'exercise-completions',
+                newValue: JSON.stringify(state),
+                url: window.location.href,
+                storageArea: localStorage
+            }));
+
+            // Update UI
+            const item = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+            if (state[exerciseId]) {
+                item.classList.add('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+            } else {
+                item.classList.remove('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.remove('completed'));
+            }
+
+            // Recalculate progress
+            loadCompletionState();
+        }
+
+        // Update progress bar
+        function updateProgress(completed, total) {
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadCompletionState);
+    </script>
+</body>
+</html>

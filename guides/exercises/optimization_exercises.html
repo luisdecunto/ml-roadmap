@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimization Exercises - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .exercise-item {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+        }
+        .exercise-item.completed {
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }
+        .exercise-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .exercise-item.completed h3 {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #10b981;
+            padding-bottom: 0.5rem;
+        }
+        .content-text {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        .content-text.completed {
+            color: #9ca3af;
+        }
+        pre {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+        }
+        .checkbox-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: #10b981;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 min-h-screen">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-3xl font-bold text-gray-800">Optimization Exercises</h1>
+                <div class="flex space-x-2">
+                    <a href="../solutions/optimization_solutions.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold">
+                        View Solutions
+                    </a>
+                    <a href="../../index.html" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold">
+                        ← Back to Roadmap
+                    </a>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span>⏱️ Time: 2-3 hours</span>
+                    <span>📊 Difficulty: Intermediate</span>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-600 mb-1">Progress: <span id="progress-text" class="font-bold text-emerald-600">0%</span></div>
+                    <div class="w-48 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="bg-emerald-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-sm text-gray-700">
+                    <strong>Instructions:</strong> Complete these exercises by hand first, then verify with NumPy.
+                    Check off each exercise as you complete it to track your progress.
+                </p>
+            </div>
+
+            <h2 class="section-header">Part 1: Gradient Descent Basics (25 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="optimization-1.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-1.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.1: Computing Gradients</h3>
+                        <div class="content-text">
+                            Given the function f(x, y) = x² + 2y² + 3xy:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute ∂f/∂x by hand</li>
+                                <li>Compute ∂f/∂y by hand</li>
+                                <li>Write the gradient vector ∇f(x, y)</li>
+                                <li>Evaluate the gradient at point (1, 2)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-1.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-1.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.2: Gradient Descent Step</h3>
+                        <div class="content-text">
+                            Given f(x) = x² - 4x + 5 starting at x₀ = 0:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute f'(x)</li>
+                                <li>Perform one gradient descent step with learning rate α = 0.1</li>
+                                <li>Calculate the new position x₁</li>
+                                <li>Compare f(x₀) and f(x₁) - did we decrease the loss?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-1.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-1.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.3: Multi-dimensional Gradient Descent</h3>
+                        <div class="content-text">
+                            For f(x, y) = (x - 2)² + (y + 1)²:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute the gradient ∇f</li>
+                                <li>Starting from (0, 0), perform 3 gradient descent steps with α = 0.5</li>
+                                <li>Track the path: list positions after each step</li>
+                                <li>What is the true minimum? How close did you get?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 2: Convergence Analysis (25 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="optimization-2.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-2.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.1: Learning Rate Effects</h3>
+                        <div class="content-text">
+                            Given f(x) = x² starting at x₀ = 10:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Perform 5 GD steps with α = 0.1 and record positions</li>
+                                <li>Repeat with α = 0.5</li>
+                                <li>Repeat with α = 1.1</li>
+                                <li>Which learning rate converges fastest? Which diverges?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-2.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-2.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.2: Convergence Conditions</h3>
+                        <div class="content-text">
+                            For the quadratic f(x) = ½x²:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>The gradient is f'(x) = x. What is the Lipschitz constant L?</li>
+                                <li>What is the maximum learning rate for guaranteed convergence? (α < 2/L)</li>
+                                <li>Test your answer: try α = 1.9/L and α = 2.1/L from x₀ = 5</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-2.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-2.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.3: Iteration Count Estimation</h3>
+                        <div class="content-text">
+                            Given f(x) = x² with target accuracy ε = 0.01:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Starting from x₀ = 10 with α = 0.1, estimate iterations needed</li>
+                                <li>Use formula: approximately log(ε/||x₀||) / log(1 - α)</li>
+                                <li>Verify by actually running the iterations</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 3: SGD and Mini-Batches (25 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="optimization-3.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-3.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.1: Batch vs Mini-batch</h3>
+                        <div class="content-text">
+                            Given dataset with 8 samples, loss function L = (1/n)Σᵢ(xᵢ - θ)²:<br>
+                            Data: [2, 4, 6, 8, 10, 12, 14, 16]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute full batch gradient at θ = 0</li>
+                                <li>Compute mini-batch gradient using samples [2, 4, 6, 8] at θ = 0</li>
+                                <li>Compute mini-batch gradient using samples [10, 12, 14, 16] at θ = 0</li>
+                                <li>Compare the three gradients</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-3.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-3.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.2: Stochastic Gradient Descent</h3>
+                        <div class="content-text">
+                            Using same data as 3.1, implement SGD:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Start at θ = 0, use α = 0.01</li>
+                                <li>Perform one SGD epoch (8 updates, one per sample)</li>
+                                <li>Record θ after each update</li>
+                                <li>Compare final θ with batch GD result</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-3.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-3.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.3: Mini-batch Size Effects</h3>
+                        <div class="content-text">
+                            For function f(θ) = θ² with noisy gradients:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Simulate gradient: true gradient ± random noise N(0, σ²)</li>
+                                <li>Compare variance of gradient estimate for batch sizes: 1, 4, 16</li>
+                                <li>How does variance scale with batch size?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 4: Momentum Optimization (25 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="optimization-4.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-4.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.1: Momentum Basics</h3>
+                        <div class="content-text">
+                            Given f(x) = x² starting at x₀ = 10:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Implement momentum GD: vₜ = βvₜ₋₁ + ∇f, xₜ = xₜ₋₁ - αvₜ</li>
+                                <li>Use α = 0.1, β = 0.9, v₀ = 0</li>
+                                <li>Perform 5 steps and compare with vanilla GD</li>
+                                <li>Plot or list the positions</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-4.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-4.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.2: Momentum vs Vanilla GD</h3>
+                        <div class="content-text">
+                            For f(x, y) = 0.5x² + 4.5y² (elongated bowl):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Start at (10, 10), use α = 0.1</li>
+                                <li>Run 10 steps of vanilla GD</li>
+                                <li>Run 10 steps of momentum GD with β = 0.9</li>
+                                <li>Which reaches closer to (0, 0)?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-4.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-4.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.3: Nesterov Momentum</h3>
+                        <div class="content-text">
+                            Implement Nesterov momentum for f(x) = x²:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Formula: vₜ = βvₜ₋₁ + ∇f(xₜ₋₁ - αβvₜ₋₁), xₜ = xₜ₋₁ - αvₜ</li>
+                                <li>Start at x₀ = 10, use α = 0.1, β = 0.9</li>
+                                <li>Compare convergence with standard momentum</li>
+                                <li>Count iterations to reach |x| < 0.1</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 5: Adaptive Learning Rates (25 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="optimization-5.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-5.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.1: AdaGrad Implementation</h3>
+                        <div class="content-text">
+                            For f(x, y) = x² + 10y² starting at (5, 5):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Implement AdaGrad: θₜ = θₜ₋₁ - α/(√Gₜ + ε) · ∇f where Gₜ = Gₜ₋₁ + (∇f)²</li>
+                                <li>Use α = 1.0, ε = 1e-8</li>
+                                <li>Run 10 iterations</li>
+                                <li>Observe how step sizes adapt differently for x and y</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-5.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-5.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.2: RMSprop</h3>
+                        <div class="content-text">
+                            Implement RMSprop for same function:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Formula: Eₜ = βEₜ₋₁ + (1-β)(∇f)², θₜ = θₜ₋₁ - α/√(Eₜ + ε) · ∇f</li>
+                                <li>Use α = 0.1, β = 0.9, ε = 1e-8</li>
+                                <li>Compare with AdaGrad - does it avoid the shrinking learning rate problem?</li>
+                                <li>Run 20 iterations and compare</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-5.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-5.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.3: Learning Rate Schedules</h3>
+                        <div class="content-text">
+                            For f(x) = x²:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Implement step decay: α = α₀ · 0.5^(epoch/10)</li>
+                                <li>Implement exponential decay: α = α₀ · e^(-kt)</li>
+                                <li>Start at x₀ = 100, α₀ = 1.0</li>
+                                <li>Compare convergence speed (iterations to reach |x| < 0.01)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 6: Adam and Advanced Optimizers (25 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="optimization-6.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-6.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.1: Adam Optimizer</h3>
+                        <div class="content-text">
+                            Implement Adam for f(x, y) = x² + 10y²:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>First moment: mₜ = β₁mₜ₋₁ + (1-β₁)∇f</li>
+                                <li>Second moment: vₜ = β₂vₜ₋₁ + (1-β₂)(∇f)²</li>
+                                <li>Bias correction: m̂ₜ = mₜ/(1-β₁ᵗ), v̂ₜ = vₜ/(1-β₂ᵗ)</li>
+                                <li>Update: θₜ = θₜ₋₁ - α · m̂ₜ/√(v̂ₜ + ε)</li>
+                                <li>Use α = 0.1, β₁ = 0.9, β₂ = 0.999, ε = 1e-8</li>
+                                <li>Run 10 iterations from (5, 5)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-6.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-6.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.2: Optimizer Comparison</h3>
+                        <div class="content-text">
+                            For Rosenbrock function f(x, y) = (1-x)² + 100(y-x²)²:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Run 50 iterations of SGD (α = 0.001)</li>
+                                <li>Run 50 iterations of Momentum (α = 0.001, β = 0.9)</li>
+                                <li>Run 50 iterations of Adam (default params)</li>
+                                <li>Start all at (-1, 1), compare final losses</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-6.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-6.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.3: Hyperparameter Sensitivity</h3>
+                        <div class="content-text">
+                            For f(x) = x², analyze Adam's β₁:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Run Adam with β₁ = 0.5, 0.9, 0.99 (keep β₂ = 0.999)</li>
+                                <li>Start at x₀ = 10, run 20 iterations each</li>
+                                <li>How does β₁ affect convergence speed?</li>
+                                <li>Which value works best for this problem?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Challenge Problems (Optional)</h2>
+
+            <div class="exercise-item" data-exercise-id="optimization-challenge-1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-challenge-1')">
+                    <div class="flex-1">
+                        <h3>Challenge 1: Line Search</h3>
+                        <div class="content-text">
+                            Implement backtracking line search for f(x, y) = x² + 4y²:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Start with α = 1.0</li>
+                                <li>While f(xₜ - α∇f) > f(xₜ) - c·α·||∇f||², reduce α ← τα</li>
+                                <li>Use c = 0.5, τ = 0.8</li>
+                                <li>Compare with fixed learning rate over 10 iterations</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="optimization-challenge-2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('optimization-challenge-2')">
+                    <div class="flex-1">
+                        <h3>Challenge 2: Newton's Method</h3>
+                        <div class="content-text">
+                            For f(x, y) = x² + 2y² + xy:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Compute Hessian matrix H (matrix of second derivatives)</li>
+                                <li>Implement Newton's method: xₜ = xₜ₋₁ - H⁻¹∇f</li>
+                                <li>Start at (5, 5), perform 5 iterations</li>
+                                <li>Compare with gradient descent (how many fewer iterations?)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Tips for Success</h3>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                    <li><strong>Start simple</strong> - Understand vanilla GD before advanced optimizers</li>
+                    <li><strong>Visualize</strong> - Plot loss curves and optimization paths</li>
+                    <li><strong>Check gradients</strong> - Use numerical differentiation to verify</li>
+                    <li><strong>Tune hyperparameters</strong> - Small changes can have big effects</li>
+                    <li><strong>Compare methods</strong> - Same problem, different optimizers</li>
+                    <li><strong>Watch for divergence</strong> - If loss increases, learning rate too high</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-gray-600 text-sm space-x-4">
+            <a href="../solutions/optimization_solutions.html" class="text-emerald-600 hover:text-emerald-700 font-semibold">
+                View Solutions →
+            </a>
+            <span>|</span>
+            <a href="../../index.html" class="text-indigo-600 hover:text-indigo-700 font-semibold">
+                ← Back to ML Roadmap
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            let completed = 0;
+            let total = 0;
+
+            document.querySelectorAll('.exercise-item').forEach(item => {
+                const id = item.getAttribute('data-exercise-id');
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                total++;
+
+                if (state[id]) {
+                    checkbox.checked = true;
+                    item.classList.add('completed');
+                    item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+                    completed++;
+                }
+            });
+
+            updateProgress(completed, total);
+        }
+
+        // Toggle exercise completion
+        function toggleExercise(exerciseId) {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            state[exerciseId] = !state[exerciseId];
+
+            if (!state[exerciseId]) {
+                delete state[exerciseId];
+            }
+
+            localStorage.setItem('exercise-completions', JSON.stringify(state));
+
+            // Notify other windows/tabs about the change
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'exercise-completions',
+                newValue: JSON.stringify(state),
+                url: window.location.href,
+                storageArea: localStorage
+            }));
+
+            // Update UI
+            const item = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+            if (state[exerciseId]) {
+                item.classList.add('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+            } else {
+                item.classList.remove('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.remove('completed'));
+            }
+
+            // Recalculate progress
+            loadCompletionState();
+        }
+
+        // Update progress bar
+        function updateProgress(completed, total) {
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadCompletionState);
+    </script>
+</body>
+</html>

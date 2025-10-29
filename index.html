@@ -309,6 +309,24 @@
                     ],
                     "Calculus & Gradients Exercises": [
                         "<a href='guides/exercises/calculus_gradients_exercises.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📝 Open Calculus & Gradients Exercises</a> - 23 exercises on derivatives, partial derivatives, gradients, Jacobians, Hessians, and backpropagation (~3-4 hours)"
+                    ],
+                    "Optimization Exercises": [
+                        "<a href='guides/exercises/optimization_exercises.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📝 Open Optimization Exercises</a> - 20 exercises on gradient descent, SGD, momentum, Adam, and convergence analysis (~2-3 hours)"
+                    ],
+                    "Probability & Statistics Exercises": [
+                        "<a href='guides/exercises/probability_statistics_exercises.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📝 Open Probability & Statistics Exercises</a> - 19 exercises on probability, distributions, Bayes' theorem, MLE, and statistical inference (~3-4 hours)"
+                    ],
+                    "Information Theory Exercises": [
+                        "<a href='guides/exercises/information_theory_exercises.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📝 Open Information Theory Exercises</a> - 18 exercises on entropy, mutual information, cross-entropy, KL divergence, and ML applications (~2-3 hours)"
+                    ],
+                    "Neural Networks Exercises": [
+                        "<a href='guides/exercises/neural_networks_exercises.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📝 Open Neural Networks Exercises</a> - 22 exercises on neurons, activations, forward/backward passes, training, and debugging (~4-5 hours)"
+                    ],
+                    "CNN Exercises": [
+                        "<a href='guides/exercises/cnn_exercises.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📝 Open CNN Exercises</a> - 22 exercises on convolution, pooling, CNN backprop, batch normalization, and architectures (~4-5 hours)"
+                    ],
+                    "Transformer Exercises": [
+                        "<a href='guides/exercises/transformer_exercises.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📝 Open Transformer Exercises</a> - 22 exercises on attention mechanisms, multi-head attention, positional encoding, and full transformers (~4-5 hours)"
                     ]
                 },
                 "Foundations: Linear Algebra & Calculus": {
@@ -740,17 +758,23 @@
 
             const getWeekProgress = (weekName, tasks) => {
                 // Special handling for exercise modules - read from exercise-completions localStorage
-                if (weekName === "Linear Algebra Exercises") {
-                    const exerciseCompletions = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
-                    const linearAlgebraExercises = Object.keys(exerciseCompletions).filter(key => key.startsWith('linear-algebra-'));
-                    const totalLinearAlgebra = 22; // Total linear algebra exercises
-                    return Math.round((linearAlgebraExercises.length / totalLinearAlgebra) * 100);
-                }
-                if (weekName === "Calculus & Gradients Exercises") {
-                    const exerciseCompletions = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
-                    const calculusExercises = Object.keys(exerciseCompletions).filter(key => key.startsWith('calculus-gradients-'));
-                    const totalCalculus = 23; // Total calculus exercises
-                    return Math.round((calculusExercises.length / totalCalculus) * 100);
+                const exerciseCompletions = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+
+                const exerciseModules = {
+                    "Linear Algebra Exercises": { prefix: 'linear-algebra-', total: 22 },
+                    "Calculus & Gradients Exercises": { prefix: 'calculus-gradients-', total: 23 },
+                    "Optimization Exercises": { prefix: 'optimization-', total: 20 },
+                    "Probability & Statistics Exercises": { prefix: 'probability-', total: 19 },
+                    "Information Theory Exercises": { prefix: 'information-theory-', total: 18 },
+                    "Neural Networks Exercises": { prefix: 'neural-networks-', total: 22 },
+                    "CNN Exercises": { prefix: 'cnn-', total: 22 },
+                    "Transformer Exercises": { prefix: 'transformer-', total: 22 }
+                };
+
+                if (exerciseModules[weekName]) {
+                    const { prefix, total } = exerciseModules[weekName];
+                    const completed = Object.keys(exerciseCompletions).filter(key => key.startsWith(prefix));
+                    return Math.round((completed.length / total) * 100);
                 }
 
                 // Normal handling for other modules

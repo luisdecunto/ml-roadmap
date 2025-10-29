@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Theory Exercises - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .exercise-item {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
+        }
+        .exercise-item.completed {
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }
+        .exercise-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .exercise-item.completed h3 {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #10b981;
+            padding-bottom: 0.5rem;
+        }
+        .content-text {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        .content-text.completed {
+            color: #9ca3af;
+        }
+        .checkbox-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: #10b981;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 min-h-screen">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-3xl font-bold text-gray-800">Information Theory Exercises</h1>
+                <div class="flex space-x-2">
+                    <a href="../solutions/information_theory_solutions.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold">
+                        View Solutions
+                    </a>
+                    <a href="../../index.html" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold">
+                        ← Back to Roadmap
+                    </a>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span>⏱️ Time: 2-3 hours</span>
+                    <span>📊 Difficulty: Intermediate-Advanced</span>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-600 mb-1">Progress: <span id="progress-text" class="font-bold text-emerald-600">0%</span></div>
+                    <div class="w-48 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="bg-emerald-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-sm text-gray-700">
+                    <strong>Instructions:</strong> Complete these exercises by hand first, then verify with NumPy.
+                    Check off each exercise as you complete it to track your progress.
+                </p>
+            </div>
+
+            <h2 class="section-header">Part 1: Entropy Basics (25 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="info-theory-1.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-1.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.1: Binary Entropy</h3>
+                        <div class="content-text">
+                            A biased coin has P(H) = 0.7, P(T) = 0.3:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate entropy H(X) = -Σ p(x) log₂ p(x)</li>
+                                <li>What are the units? (bits)</li>
+                                <li>Compare with fair coin (P(H) = 0.5)</li>
+                                <li>Which has more entropy/uncertainty?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-1.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-1.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.2: Discrete Distribution Entropy</h3>
+                        <div class="content-text">
+                            Random variable X: P(X=1) = 0.5, P(X=2) = 0.25, P(X=3) = 0.125, P(X=4) = 0.125
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate H(X)</li>
+                                <li>What is the maximum possible entropy for 4 outcomes?</li>
+                                <li>How close is this distribution to maximum entropy?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-1.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-1.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.3: Uniform vs Non-uniform</h3>
+                        <div class="content-text">
+                            Compare: A: P(a) = 0.25 for all 4 outcomes, B: P(b) = [0.7, 0.1, 0.1, 0.1]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate H(A)</li>
+                                <li>Calculate H(B)</li>
+                                <li>Which distribution is more "surprising"?</li>
+                                <li>Explain the relationship between entropy and predictability</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 2: Joint and Conditional Entropy (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="info-theory-2.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-2.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.1: Joint Entropy</h3>
+                        <div class="content-text">
+                            Joint distribution: P(X=0,Y=0)=0.3, P(X=0,Y=1)=0.2, P(X=1,Y=0)=0.1, P(X=1,Y=1)=0.4
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate H(X, Y) = -ΣΣ p(x,y) log p(x,y)</li>
+                                <li>Calculate marginal H(X)</li>
+                                <li>Calculate marginal H(Y)</li>
+                                <li>Verify: H(X, Y) ≤ H(X) + H(Y)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-2.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-2.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.2: Conditional Entropy</h3>
+                        <div class="content-text">
+                            Using same joint distribution as 2.1:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate P(Y|X=0) and P(Y|X=1)</li>
+                                <li>Calculate H(Y|X=0) and H(Y|X=1)</li>
+                                <li>Calculate H(Y|X) = Σ P(x) H(Y|X=x)</li>
+                                <li>Verify: H(X, Y) = H(X) + H(Y|X)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-2.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-2.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.3: Chain Rule</h3>
+                        <div class="content-text">
+                            For three variables:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Write the chain rule: H(X,Y,Z) = H(X) + H(Y|X) + H(Z|X,Y)</li>
+                                <li>Given: H(X) = 2, H(Y|X) = 1.5, H(Z|X,Y) = 1</li>
+                                <li>Calculate H(X, Y, Z)</li>
+                                <li>Why is this useful for modeling sequential data?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 3: Mutual Information (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="info-theory-3.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-3.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.1: Computing Mutual Information</h3>
+                        <div class="content-text">
+                            Using joint distribution from Exercise 2.1:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate I(X; Y) = H(X) + H(Y) - H(X, Y)</li>
+                                <li>Alternative: I(X; Y) = H(X) - H(X|Y)</li>
+                                <li>Verify both give same result</li>
+                                <li>Are X and Y independent? (Check if I(X; Y) = 0)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-3.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-3.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.2: Independence Test</h3>
+                        <div class="content-text">
+                            Test independence: P(X=0,Y=0)=0.3, P(X=0,Y=1)=0.3, P(X=1,Y=0)=0.2, P(X=1,Y=1)=0.2
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate I(X; Y)</li>
+                                <li>Are X and Y independent?</li>
+                                <li>Verify: P(X,Y) = P(X)P(Y) for all x,y</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-3.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-3.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.3: Mutual Information Properties</h3>
+                        <div class="content-text">
+                            Given: I(X; Y) = 0.5 bits, H(X) = 2 bits, H(Y) = 1.5 bits
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate H(X|Y)</li>
+                                <li>Calculate H(Y|X)</li>
+                                <li>Calculate H(X, Y)</li>
+                                <li>Draw the entropy Venn diagram</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 4: Cross-Entropy and KL Divergence (35 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="info-theory-4.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-4.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.1: Cross-Entropy</h3>
+                        <div class="content-text">
+                            True P: [0.5, 0.3, 0.2], Model Q: [0.4, 0.4, 0.2]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate H(P, Q) = -Σ p(x) log q(x)</li>
+                                <li>Calculate H(P) (entropy of true distribution)</li>
+                                <li>Which is larger: H(P, Q) or H(P)? Why?</li>
+                                <li>What does this tell us about using Q to encode data from P?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-4.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-4.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.2: KL Divergence</h3>
+                        <div class="content-text">
+                            Same distributions as 4.1:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate D_KL(P || Q) = Σ p(x) log(p(x)/q(x))</li>
+                                <li>Verify: D_KL(P || Q) = H(P, Q) - H(P)</li>
+                                <li>Calculate D_KL(Q || P)</li>
+                                <li>Is KL divergence symmetric?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-4.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-4.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.3: KL Divergence Properties</h3>
+                        <div class="content-text">
+                            P = [0.8, 0.2], Q = [0.6, 0.4], R = [0.5, 0.5]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate D_KL(P || Q)</li>
+                                <li>Calculate D_KL(P || R)</li>
+                                <li>Calculate D_KL(Q || R)</li>
+                                <li>Which model (Q or R) is "closer" to P?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-4.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-4.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.4: Cross-Entropy in Classification</h3>
+                        <div class="content-text">
+                            Binary classification: True [1, 0, 1, 1], Predictions [0.9, 0.2, 0.8, 0.7]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate cross-entropy loss: L = -(1/n)Σ[y log(ŷ) + (1-y)log(1-ŷ)]</li>
+                                <li>Calculate for each sample</li>
+                                <li>Take average</li>
+                                <li>What happens if prediction is wrong but confident?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 5: Applications to ML (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="info-theory-5.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-5.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.1: Optimal Code Length</h3>
+                        <div class="content-text">
+                            Symbols: P(A)=0.5, P(B)=0.25, P(C)=0.125, P(D)=0.125
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate entropy H (minimum average bits needed)</li>
+                                <li>Design Huffman code</li>
+                                <li>Calculate average code length</li>
+                                <li>How close is it to entropy?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-5.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-5.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.2: Decision Tree Splitting</h3>
+                        <div class="content-text">
+                            Parent: [6Y, 4N], Split A: Left [4Y, 1N], Right [2Y, 3N]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate entropy of parent node</li>
+                                <li>Calculate entropy of left and right children</li>
+                                <li>Calculate information gain: IG = H(parent) - Σ (nᵢ/n)H(childᵢ)</li>
+                                <li>Is this a good split?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-5.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-5.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.3: Softmax and Cross-Entropy</h3>
+                        <div class="content-text">
+                            Logits: z = [2.0, 1.0, 0.1], True label: class 0 (one-hot: [1, 0, 0])
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate softmax: p(i) = exp(zᵢ) / Σ exp(zⱼ)</li>
+                                <li>Calculate cross-entropy: -Σ yᵢ log(p(i))</li>
+                                <li>What if true label was class 2?</li>
+                                <li>Why do we use log in the loss?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Challenge Problems (Optional)</h2>
+
+            <div class="exercise-item" data-exercise-id="info-theory-challenge-1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-challenge-1')">
+                    <div class="flex-1">
+                        <h3>Challenge 1: Entropy Rate of Markov Chain</h3>
+                        <div class="content-text">
+                            2-state Markov chain: P = [[0.7, 0.3], [0.4, 0.6]]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Find stationary distribution π (solve πP = π)</li>
+                                <li>Calculate entropy rate: H = -ΣᵢΣⱼ πᵢ pᵢⱼ log pᵢⱼ</li>
+                                <li>Compare with entropy of stationary distribution</li>
+                                <li>Interpret: what does entropy rate measure?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="info-theory-challenge-2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('info-theory-challenge-2')">
+                    <div class="flex-1">
+                        <h3>Challenge 2: Differential Entropy</h3>
+                        <div class="content-text">
+                            Continuous uniform X ~ Uniform(0, a):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>PDF: f(x) = 1/a for x ∈ [0, a]</li>
+                                <li>Differential entropy: h(X) = -∫ f(x) log f(x) dx</li>
+                                <li>Calculate h(X) in terms of a</li>
+                                <li>How does it differ from discrete entropy?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Tips for Success</h3>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                    <li><strong>Use log₂</strong> - Information theory typically uses bits</li>
+                    <li><strong>Handle zeros</strong> - Add small epsilon to avoid log(0)</li>
+                    <li><strong>Venn diagrams</strong> - Visualize entropy relationships</li>
+                    <li><strong>Cross-entropy ≥ Entropy</strong> - Model can't beat true distribution</li>
+                    <li><strong>KL is not symmetric</strong> - D_KL(P||Q) ≠ D_KL(Q||P)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-6 text-center text-gray-600 text-sm space-x-4">
+            <a href="../solutions/information_theory_solutions.html" class="text-emerald-600 hover:text-emerald-700 font-semibold">
+                View Solutions →
+            </a>
+            <span>|</span>
+            <a href="../../index.html" class="text-indigo-600 hover:text-indigo-700 font-semibold">
+                ← Back to ML Roadmap
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            let completed = 0;
+            let total = 0;
+
+            document.querySelectorAll('.exercise-item').forEach(item => {
+                const id = item.getAttribute('data-exercise-id');
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                total++;
+
+                if (state[id]) {
+                    checkbox.checked = true;
+                    item.classList.add('completed');
+                    item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+                    completed++;
+                }
+            });
+
+            updateProgress(completed, total);
+        }
+
+        // Toggle exercise completion
+        function toggleExercise(exerciseId) {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            state[exerciseId] = !state[exerciseId];
+
+            if (!state[exerciseId]) {
+                delete state[exerciseId];
+            }
+
+            localStorage.setItem('exercise-completions', JSON.stringify(state));
+
+            // Notify other windows/tabs about the change
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'exercise-completions',
+                newValue: JSON.stringify(state),
+                url: window.location.href,
+                storageArea: localStorage
+            }));
+
+            // Update UI
+            const item = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+            if (state[exerciseId]) {
+                item.classList.add('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+            } else {
+                item.classList.remove('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.remove('completed'));
+            }
+
+            // Recalculate progress
+            loadCompletionState();
+        }
+
+        // Update progress bar
+        function updateProgress(completed, total) {
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadCompletionState);
+    </script>
+</body>
+</html>
