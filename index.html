@@ -592,6 +592,19 @@
                 localStorage.setItem('mlRoadmapExpandedWeeks', JSON.stringify(expandedWeeks));
             }, [expandedWeeks]);
 
+            // Listen for exercise completion changes from other tabs/windows
+            useEffect(() => {
+                const handleStorageChange = (e) => {
+                    if (e.key === 'exercise-completions') {
+                        // Force re-render by updating a dummy state
+                        setCheckedTasks(prev => ({...prev}));
+                    }
+                };
+
+                window.addEventListener('storage', handleStorageChange);
+                return () => window.removeEventListener('storage', handleStorageChange);
+            }, []);
+
             const loadProgressFromGitHub = async (token = githubToken) => {
                 try {
                     setSyncStatus('loading');

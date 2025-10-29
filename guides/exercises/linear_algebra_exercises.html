@@ -554,6 +554,14 @@
 
             localStorage.setItem('exercise-completions', JSON.stringify(state));
 
+            // Notify other windows/tabs about the change
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'exercise-completions',
+                newValue: JSON.stringify(state),
+                url: window.location.href,
+                storageArea: localStorage
+            }));
+
             // Update UI
             const item = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
             if (state[exerciseId]) {
