@@ -5,94 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Linear Algebra Exercises - ML Roadmap</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        .markdown-body {
-            line-height: 1.6;
+        .exercise-item {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
         }
-        .markdown-body h1 {
-            font-size: 2.5rem;
+        .exercise-item.completed {
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }
+        .exercise-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .exercise-item.completed h3 {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+        .section-header {
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
             color: #1f2937;
-            border-bottom: 3px solid #10b981;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #10b981;
             padding-bottom: 0.5rem;
         }
-        .markdown-body h2 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-            color: #374151;
-        }
-        .markdown-body h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
+        .content-text {
             color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
         }
-        .markdown-body p {
-            margin-bottom: 1rem;
-            color: #374151;
+        .content-text.completed {
+            color: #9ca3af;
         }
-        .markdown-body ul, .markdown-body ol {
-            margin-bottom: 1rem;
-            margin-left: 1.5rem;
-        }
-        .markdown-body li {
-            margin-bottom: 0.5rem;
-            color: #374151;
-        }
-        .markdown-body code {
-            background-color: #f3f4f6;
-            padding: 0.125rem 0.375rem;
-            border-radius: 0.25rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.875rem;
-            color: #dc2626;
-        }
-        .markdown-body pre {
+        pre {
             background-color: #1f2937;
             color: #f3f4f6;
             padding: 1rem;
             border-radius: 0.5rem;
             overflow-x: auto;
-            margin-bottom: 1rem;
-        }
-        .markdown-body pre code {
-            background-color: transparent;
-            padding: 0;
-            color: #f3f4f6;
-        }
-        .markdown-body a {
-            color: #2563eb;
-            text-decoration: underline;
-        }
-        .markdown-body a:hover {
-            color: #1d4ed8;
-        }
-        .markdown-body hr {
-            margin: 2rem 0;
-            border: 0;
-            border-top: 2px solid #e5e7eb;
-        }
-        .markdown-body blockquote {
-            border-left: 4px solid #10b981;
-            padding-left: 1rem;
-            color: #6b7280;
-            font-style: italic;
             margin: 1rem 0;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+        }
+        .checkbox-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: #10b981;
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 min-h-screen">
-    <div class="max-w-4xl mx-auto p-4 md:p-8">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
         <!-- Header -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
-                <h1 class="text-2xl font-bold text-gray-800">Linear Algebra Exercises</h1>
+                <h1 class="text-3xl font-bold text-gray-800">Linear Algebra Exercises</h1>
                 <div class="flex space-x-2">
                     <a href="../solutions/linear_algebra_solutions.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold">
                         View Solutions
@@ -102,15 +77,435 @@
                     </a>
                 </div>
             </div>
-            <div class="flex items-center space-x-4 text-sm text-gray-600">
-                <span>⏱️ Time: 3-4 hours</span>
-                <span>📊 Difficulty: Beginner-Intermediate</span>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span>⏱️ Time: 3-4 hours</span>
+                    <span>📊 Difficulty: Beginner-Intermediate</span>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-600 mb-1">Progress: <span id="progress-text" class="font-bold text-emerald-600">0%</span></div>
+                    <div class="w-48 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="bg-emerald-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Content -->
         <div class="bg-white rounded-lg shadow-lg p-8">
-            <div id="content" class="markdown-body"></div>
+            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-sm text-gray-700">
+                    <strong>Instructions:</strong> Complete these exercises by hand first, then verify with NumPy.
+                    Check off each exercise as you complete it to track your progress.
+                </p>
+            </div>
+
+            <h2 class="section-header">Part 1: Vectors and Vector Spaces (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-1.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-1.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.1: Vector Operations</h3>
+                        <div class="content-text">
+                            Given vectors:
+                            <ul class="list-disc ml-6 my-2">
+                                <li><strong>a</strong> = [2, 3, -1]</li>
+                                <li><strong>b</strong> = [1, -2, 4]</li>
+                                <li><strong>c</strong> = [-3, 0, 2]</li>
+                            </ul>
+                            Calculate by hand:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li><strong>a</strong> + <strong>b</strong></li>
+                                <li>2<strong>a</strong> - 3<strong>b</strong></li>
+                                <li><strong>a</strong> · <strong>b</strong> (dot product)</li>
+                                <li>||<strong>a</strong>|| (L2 norm/magnitude)</li>
+                                <li>||<strong>b</strong>||₁ (L1 norm)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-1.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-1.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.2: Linear Combinations</h3>
+                        <div class="content-text">
+                            Can you express <strong>c</strong> = [-3, 0, 2] as a linear combination of <strong>a</strong> and <strong>b</strong>?<br>
+                            Find scalars α and β such that: <strong>c</strong> = α<strong>a</strong> + β<strong>b</strong><br>
+                            Show your work.
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-1.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-1.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.3: Unit Vectors</h3>
+                        <div class="content-text">
+                            <ol class="list-decimal ml-6">
+                                <li>Calculate the unit vector in the direction of <strong>a</strong> = [3, 4]</li>
+                                <li>Verify that its magnitude is 1</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-1.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-1.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.4: Orthogonality</h3>
+                        <div class="content-text">
+                            Given vectors <strong>u</strong> = [1, 2, -1] and <strong>v</strong> = [2, -1, 0]:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate <strong>u</strong> · <strong>v</strong></li>
+                                <li>Are these vectors orthogonal? Why or why not?</li>
+                                <li>If not, find a vector <strong>w</strong> that is orthogonal to <strong>u</strong></li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 2: Matrix Operations (45 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-2.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-2.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.1: Matrix Addition and Scalar Multiplication</h3>
+                        <div class="content-text">
+                            Given matrices:<br>
+                            A = [[2, -1, 3], [0, 4, -2]]<br>
+                            B = [[1, 2, -1], [3, -1, 0]]<br><br>
+                            Calculate by hand:
+                            <ol class="list-decimal ml-6">
+                                <li>A + B</li>
+                                <li>3A - 2B</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-2.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-2.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.2: Matrix Multiplication</h3>
+                        <div class="content-text">
+                            Given:<br>
+                            A = [[1, 2, 3], [4, 5, 6]]<br>
+                            B = [[2, 1], [0, -1], [3, 2]]<br><br>
+                            Calculate by hand:
+                            <ol class="list-decimal ml-6">
+                                <li>AB (show work for each element)</li>
+                                <li>What is the dimension of AB?</li>
+                                <li>Can you compute BA? Why or why not?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-2.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-2.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.3: Matrix-Vector Multiplication</h3>
+                        <div class="content-text">
+                            Given:<br>
+                            A = [[2, -1, 3], [1, 0, -2], [0, 4, 1]]<br>
+                            x = [[1], [2], [-1]]<br><br>
+                            Calculate Ax by hand.
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-2.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-2.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.4: Transpose</h3>
+                        <div class="content-text">
+                            Given A = [[1, 2, 3], [4, 5, 6]]:
+                            <ol class="list-decimal ml-6">
+                                <li>Calculate Aᵀ</li>
+                                <li>Calculate (Aᵀ)ᵀ</li>
+                                <li>Verify that (AB)ᵀ = BᵀAᵀ using matrices from Exercise 2.2</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-2.5">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-2.5')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.5: Identity and Inverse</h3>
+                        <div class="content-text">
+                            <ol class="list-decimal ml-6">
+                                <li>Write the 3×3 identity matrix I₃</li>
+                                <li>Verify that AI = A for any 3×3 matrix A (use an example)</li>
+                                <li>Given A = [[2, 1], [1, 1]], find A⁻¹ by solving AA⁻¹ = I</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 3: Eigenvalues and Eigenvectors (60 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-3.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-3.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.1: Understanding Eigenvectors</h3>
+                        <div class="content-text">
+                            Given matrix A = [[3, 1], [0, 2]] and vector <strong>v</strong> = [[1], [0]]:
+                            <ol class="list-decimal ml-6">
+                                <li>Calculate A<strong>v</strong></li>
+                                <li>Is <strong>v</strong> an eigenvector of A? If so, what is its eigenvalue?</li>
+                                <li>Try <strong>w</strong> = [[1], [1]]. Is it an eigenvector?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-3.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-3.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.2: Finding Eigenvalues</h3>
+                        <div class="content-text">
+                            Find the eigenvalues of A = [[4, 2], [1, 3]]:<br><br>
+                            Steps:
+                            <ol class="list-decimal ml-6">
+                                <li>Set up characteristic equation: det(A - λI) = 0</li>
+                                <li>Solve for λ</li>
+                                <li>Show all your work</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-3.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-3.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.3: Finding Eigenvectors</h3>
+                        <div class="content-text">
+                            For the matrix A and eigenvalues from Exercise 3.2:
+                            <ol class="list-decimal ml-6">
+                                <li>For each eigenvalue λ, solve (A - λI)<strong>v</strong> = <strong>0</strong></li>
+                                <li>Find the corresponding eigenvectors</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-3.4">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-3.4')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.4: Diagonalization</h3>
+                        <div class="content-text">
+                            Given A = [[3, 1], [0, 2]]:
+                            <ol class="list-decimal ml-6">
+                                <li>Find eigenvalues</li>
+                                <li>Find corresponding eigenvectors</li>
+                                <li>Form matrix P with eigenvectors as columns</li>
+                                <li>Form diagonal matrix D with eigenvalues on diagonal</li>
+                                <li>Verify that A = PDP⁻¹</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 4: Singular Value Decomposition (SVD) (45 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-4.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-4.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.1: Understanding SVD Concepts</h3>
+                        <div class="content-text">
+                            For matrix A = [[3, 0], [4, 5]]:
+                            <ol class="list-decimal ml-6">
+                                <li>Calculate AᵀA</li>
+                                <li>Calculate AAᵀ</li>
+                                <li>Find eigenvalues of AᵀA (these are σ²ᵢ)</li>
+                                <li>The singular values σᵢ are the square roots - calculate them</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-4.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-4.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.2: SVD Components</h3>
+                        <div class="content-text">
+                            Given that A has SVD: A = UΣVᵀ<br><br>
+                            For a 3×2 matrix A:
+                            <ol class="list-decimal ml-6">
+                                <li>What are the dimensions of U?</li>
+                                <li>What are the dimensions of Σ?</li>
+                                <li>What are the dimensions of V?</li>
+                                <li>What properties do U and V have? (orthogonal? orthonormal?)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-4.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-4.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.3: Rank and SVD</h3>
+                        <div class="content-text">
+                            Given singular values σ₁ = 5, σ₂ = 3, σ₃ = 0, σ₄ = 0:
+                            <ol class="list-decimal ml-6">
+                                <li>What is the rank of the matrix?</li>
+                                <li>How many non-zero singular values determine the rank?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 5: Practical Applications (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-5.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-5.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.1: Rotation Matrix</h3>
+                        <div class="content-text">
+                            The 2D rotation matrix for angle θ is:<br>
+                            R(θ) = [[cos(θ), -sin(θ)], [sin(θ), cos(θ)]]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Write the rotation matrix for θ = 90° (π/2 radians)</li>
+                                <li>Apply it to vector [1, 0]</li>
+                                <li>Apply it to vector [0, 1]</li>
+                                <li>Verify that R(90°) rotates vectors counterclockwise by 90°</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-5.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-5.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.2: Projection</h3>
+                        <div class="content-text">
+                            Given vector <strong>a</strong> = [3, 4] and <strong>b</strong> = [1, 0]:<br><br>
+                            Calculate the projection of <strong>a</strong> onto <strong>b</strong> using:<br>
+                            proj_b(a) = (a·b / b·b) * b
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate by hand</li>
+                                <li>Draw a sketch showing <strong>a</strong>, <strong>b</strong>, and proj_b(a)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-5.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-5.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.3: Linear System</h3>
+                        <div class="content-text">
+                            Solve by hand using matrix form Ax = b:<br>
+                            2x + y = 5<br>
+                            x - y = 1
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Write in matrix form</li>
+                                <li>Solve using inverse matrix method: x = A⁻¹b</li>
+                                <li>Verify your solution</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Challenge Problems (Optional)</h2>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-challenge-1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-challenge-1')">
+                    <div class="flex-1">
+                        <h3>Challenge 1: Matrix Powers</h3>
+                        <div class="content-text">
+                            Given A = [[1, 1], [0, 1]]:
+                            <ol class="list-decimal ml-6">
+                                <li>Calculate A², A³, A⁴ by hand</li>
+                                <li>Find a pattern for Aⁿ</li>
+                                <li>Verify with NumPy for n=10</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-challenge-2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-challenge-2')">
+                    <div class="flex-1">
+                        <h3>Challenge 2: Gram-Schmidt Process</h3>
+                        <div class="content-text">
+                            Given vectors: <strong>v₁</strong> = [1, 1, 0], <strong>v₂</strong> = [1, 0, 1], <strong>v₃</strong> = [0, 1, 1]<br><br>
+                            Apply Gram-Schmidt orthogonalization by hand to create orthonormal basis {<strong>u₁</strong>, <strong>u₂</strong>, <strong>u₃</strong>}
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="linear-algebra-challenge-3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('linear-algebra-challenge-3')">
+                    <div class="flex-1">
+                        <h3>Challenge 3: Image Compression with SVD</h3>
+                        <div class="content-text">
+                            Create a simple 4×4 grayscale image matrix (values 0-255):
+                            <ol class="list-decimal ml-6">
+                                <li>Perform SVD by hand (use calculator for arithmetic)</li>
+                                <li>Reconstruct using only largest singular value</li>
+                                <li>Compare with original</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Tips for Success</h3>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                    <li><strong>Show your work</strong> - Don't just write the answer</li>
+                    <li><strong>Check dimensions</strong> - Make sure matrix operations are valid</li>
+                    <li><strong>Verify with NumPy</strong> - Catch arithmetic errors</li>
+                    <li><strong>Draw diagrams</strong> - Visualize vectors and transformations</li>
+                    <li><strong>Ask "why"</strong> - Understand the geometry behind the algebra</li>
+                </ul>
+            </div>
         </div>
 
         <!-- Footer -->
@@ -126,16 +521,62 @@
     </div>
 
     <script>
-        // Read markdown content from the .md file
-        fetch('linear_algebra_exercises.md')
-            .then(response => response.text())
-            .then(markdown => {
-                document.getElementById('content').innerHTML = marked.parse(markdown);
-            })
-            .catch(error => {
-                console.error('Error loading markdown:', error);
-                document.getElementById('content').innerHTML = '<p class="text-red-600">Error loading content. Please check that linear_algebra_exercises.md exists.</p>';
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            let completed = 0;
+            let total = 0;
+
+            document.querySelectorAll('.exercise-item').forEach(item => {
+                const id = item.getAttribute('data-exercise-id');
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                total++;
+
+                if (state[id]) {
+                    checkbox.checked = true;
+                    item.classList.add('completed');
+                    item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+                    completed++;
+                }
             });
+
+            updateProgress(completed, total);
+        }
+
+        // Toggle exercise completion
+        function toggleExercise(exerciseId) {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            state[exerciseId] = !state[exerciseId];
+
+            if (!state[exerciseId]) {
+                delete state[exerciseId];
+            }
+
+            localStorage.setItem('exercise-completions', JSON.stringify(state));
+
+            // Update UI
+            const item = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+            if (state[exerciseId]) {
+                item.classList.add('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+            } else {
+                item.classList.remove('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.remove('completed'));
+            }
+
+            // Recalculate progress
+            loadCompletionState();
+        }
+
+        // Update progress bar
+        function updateProgress(completed, total) {
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadCompletionState);
     </script>
 </body>
 </html>

@@ -3,96 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculus & Gradients Exercises - ML Roadmap</title>
+    <title>Matrix Calculus & Gradients Exercises - ML Roadmap</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        .markdown-body {
-            line-height: 1.6;
+        .exercise-item {
+            border-left: 4px solid #e5e7eb;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s;
         }
-        .markdown-body h1 {
-            font-size: 2.5rem;
+        .exercise-item.completed {
+            border-left-color: #10b981;
+            opacity: 0.7;
+        }
+        .exercise-item h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        .exercise-item.completed h3 {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+        .section-header {
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
             color: #1f2937;
-            border-bottom: 3px solid #10b981;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #10b981;
             padding-bottom: 0.5rem;
         }
-        .markdown-body h2 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-            color: #374151;
-        }
-        .markdown-body h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
+        .content-text {
             color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
         }
-        .markdown-body p {
-            margin-bottom: 1rem;
-            color: #374151;
+        .content-text.completed {
+            color: #9ca3af;
         }
-        .markdown-body ul, .markdown-body ol {
-            margin-bottom: 1rem;
-            margin-left: 1.5rem;
-        }
-        .markdown-body li {
-            margin-bottom: 0.5rem;
-            color: #374151;
-        }
-        .markdown-body code {
-            background-color: #f3f4f6;
-            padding: 0.125rem 0.375rem;
-            border-radius: 0.25rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.875rem;
-            color: #dc2626;
-        }
-        .markdown-body pre {
+        pre {
             background-color: #1f2937;
             color: #f3f4f6;
             padding: 1rem;
             border-radius: 0.5rem;
             overflow-x: auto;
-            margin-bottom: 1rem;
-        }
-        .markdown-body pre code {
-            background-color: transparent;
-            padding: 0;
-            color: #f3f4f6;
-        }
-        .markdown-body a {
-            color: #2563eb;
-            text-decoration: underline;
-        }
-        .markdown-body a:hover {
-            color: #1d4ed8;
-        }
-        .markdown-body hr {
-            margin: 2rem 0;
-            border: 0;
-            border-top: 2px solid #e5e7eb;
-        }
-        .markdown-body blockquote {
-            border-left: 4px solid #10b981;
-            padding-left: 1rem;
-            color: #6b7280;
-            font-style: italic;
             margin: 1rem 0;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+        }
+        .checkbox-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+            accent-color: #10b981;
         }
     </style>
 </head>
 <body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 min-h-screen">
-    <div class="max-w-4xl mx-auto p-4 md:p-8">
+    <div class="max-w-5xl mx-auto p-4 md:p-8">
         <!-- Header -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
-                <h1 class="text-2xl font-bold text-gray-800">Calculus & Gradients Exercises</h1>
+                <h1 class="text-3xl font-bold text-gray-800">Matrix Calculus & Gradients Exercises</h1>
                 <div class="flex space-x-2">
                     <a href="../solutions/calculus_gradients_solutions.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold">
                         View Solutions
@@ -102,15 +77,485 @@
                     </a>
                 </div>
             </div>
-            <div class="flex items-center space-x-4 text-sm text-gray-600">
-                <span>⏱️ Time: 3-4 hours</span>
-                <span>📊 Difficulty: Intermediate</span>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span>⏱️ Time: 3-4 hours</span>
+                    <span>📊 Difficulty: Intermediate</span>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-gray-600 mb-1">Progress: <span id="progress-text" class="font-bold text-emerald-600">0%</span></div>
+                    <div class="w-48 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="bg-emerald-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Content -->
         <div class="bg-white rounded-lg shadow-lg p-8">
-            <div id="content" class="markdown-body"></div>
+            <div class="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded">
+                <p class="text-sm text-gray-700">
+                    <strong>Instructions:</strong> Complete these exercises by hand to build intuition for backpropagation.
+                    Check off each exercise as you complete it to track your progress.
+                </p>
+            </div>
+
+            <h2 class="section-header">Part 1: Scalar Derivatives Review (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-1.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-1.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.1: Basic Derivatives</h3>
+                        <div class="content-text">
+                            Calculate derivatives by hand (show your work):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>f(x) = 3x² + 2x - 5, find f'(x)</li>
+                                <li>f(x) = x³ - 4x² + x, find f'(x)</li>
+                                <li>f(x) = 1/x², find f'(x)</li>
+                                <li>f(x) = e^(2x), find f'(x)</li>
+                                <li>f(x) = ln(x²), find f'(x)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-1.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-1.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.2: Chain Rule</h3>
+                        <div class="content-text">
+                            Calculate using chain rule:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>f(x) = (3x + 2)⁴, find f'(x)</li>
+                                <li>f(x) = e^(x²), find f'(x)</li>
+                                <li>f(x) = ln(2x + 1), find f'(x)</li>
+                                <li>f(x) = sin(3x²), find f'(x)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-1.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-1.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 1.3: Product and Quotient Rules</h3>
+                        <div class="content-text">
+                            <ol class="list-decimal ml-6">
+                                <li>f(x) = x² · e^x, find f'(x) using product rule</li>
+                                <li>f(x) = x³ · ln(x), find f'(x)</li>
+                                <li>f(x) = (x² + 1)/(x - 1), find f'(x) using quotient rule</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 2: Partial Derivatives (45 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-2.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-2.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.1: Basic Partial Derivatives</h3>
+                        <div class="content-text">
+                            For f(x, y) = x²y + 3xy² - 2x + y<br><br>
+                            Calculate:
+                            <ol class="list-decimal ml-6">
+                                <li>∂f/∂x (treat y as constant)</li>
+                                <li>∂f/∂y (treat x as constant)</li>
+                                <li>Evaluate both at point (x, y) = (1, 2)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-2.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-2.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.2: More Partial Derivatives</h3>
+                        <div class="content-text">
+                            For f(x, y) = e^(xy) + x²y³<br><br>
+                            Calculate:
+                            <ol class="list-decimal ml-6">
+                                <li>∂f/∂x</li>
+                                <li>∂f/∂y</li>
+                                <li>Evaluate at (x, y) = (0, 1)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-2.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-2.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 2.3: Second-Order Partial Derivatives</h3>
+                        <div class="content-text">
+                            For f(x, y) = x³y² - 2xy + 5<br><br>
+                            Calculate all second-order partials:
+                            <ol class="list-decimal ml-6">
+                                <li>∂²f/∂x²</li>
+                                <li>∂²f/∂y²</li>
+                                <li>∂²f/∂x∂y</li>
+                                <li>∂²f/∂y∂x</li>
+                                <li>Verify that ∂²f/∂x∂y = ∂²f/∂y∂x (Clairaut's theorem)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 3: Gradients (60 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-3.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-3.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.1: Computing Gradients</h3>
+                        <div class="content-text">
+                            For f(x, y) = x² + y² - 2x - 4y + 5
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate gradient: ∇f = [∂f/∂x, ∂f/∂y]ᵀ</li>
+                                <li>Find the gradient at point (1, 2)</li>
+                                <li>Find critical points (where ∇f = 0)</li>
+                                <li>Is the critical point a minimum, maximum, or saddle point?</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-3.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-3.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.2: Gradient of Quadratic Form</h3>
+                        <div class="content-text">
+                            For f(x) = xᵀAx where x = [x₁, x₂]ᵀ and A = [[2, 1], [1, 3]]
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Expand f(x) in terms of x₁, x₂</li>
+                                <li>Calculate ∂f/∂x₁</li>
+                                <li>Calculate ∂f/∂x₂</li>
+                                <li>Write the gradient ∇f(x)</li>
+                                <li>Verify the formula: ∇f(x) = (A + Aᵀ)x</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-3.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-3.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 3.3: Gradient Descent Step</h3>
+                        <div class="content-text">
+                            Given f(x, y) = x² + 4y² and starting point (x₀, y₀) = (4, 2):
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate gradient at (4, 2)</li>
+                                <li>Using learning rate α = 0.1, calculate one gradient descent step: (x₁, y₁) = (x₀, y₀) - α∇f(x₀, y₀)</li>
+                                <li>Calculate f(x₀, y₀) and f(x₁, y₁) - did we reduce the function?</li>
+                                <li>Calculate the gradient at the new point (x₁, y₁)</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 4: Chain Rule for Multivariable Functions (60 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-4.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-4.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.1: Simple Chain Rule</h3>
+                        <div class="content-text">
+                            Let z = f(x, y) = x² + y² where x = 2t and y = 3t<br><br>
+                            Find dz/dt using chain rule:<br>
+                            dz/dt = (∂f/∂x)(dx/dt) + (∂f/∂y)(dy/dt)
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-4.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-4.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.2: Backpropagation Example</h3>
+                        <div class="content-text">
+                            Consider a simple neural network computation:
+                            <pre>Input: x
+Hidden: h = σ(wx + b)  where σ(z) = 1/(1 + e^(-z))
+Output: y = h²
+Loss: L = (y - t)²  where t is target</pre>
+                            Given x = 2, w = 0.5, b = 1, t = 0.8:
+                            <ol class="list-decimal ml-6 my-2">
+                                <li><strong>Forward pass:</strong> Calculate h, y, L (show all steps)</li>
+                                <li><strong>Backward pass:</strong> Calculate gradients using chain rule:
+                                    <ul class="list-disc ml-6 my-1">
+                                        <li>∂L/∂y</li>
+                                        <li>∂y/∂h</li>
+                                        <li>∂h/∂w</li>
+                                        <li>∂h/∂b</li>
+                                        <li>∂L/∂w = (∂L/∂y)(∂y/∂h)(∂h/∂w)</li>
+                                        <li>∂L/∂b = (∂L/∂y)(∂y/∂h)(∂h/∂b)</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                            Note: σ'(z) = σ(z)(1 - σ(z))
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-4.3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-4.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 4.3: Vector Chain Rule</h3>
+                        <div class="content-text">
+                            Given:
+                            <ul class="list-disc ml-6 my-2">
+                                <li>z = f(y) = y₁² + y₂²</li>
+                                <li>y = g(x) = [2x₁ + x₂, x₁ - x₂]ᵀ</li>
+                            </ul>
+                            Find ∂z/∂x₁ and ∂z/∂x₂ using chain rule:<br>
+                            ∂z/∂xᵢ = Σⱼ (∂z/∂yⱼ)(∂yⱼ/∂xᵢ)
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 5: Jacobian Matrices (45 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-5.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-5.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.1: Computing Jacobian</h3>
+                        <div class="content-text">
+                            For function f: ℝ² → ℝ³ defined by:
+                            <ul class="list-disc ml-6 my-2">
+                                <li>f₁(x₁, x₂) = x₁² + x₂</li>
+                                <li>f₂(x₁, x₂) = x₁x₂</li>
+                                <li>f₃(x₁, x₂) = x₁ + 2x₂²</li>
+                            </ul>
+                            Calculate the Jacobian matrix:
+                            <pre>J = [[∂f₁/∂x₁, ∂f₁/∂x₂],
+     [∂f₂/∂x₁, ∂f₂/∂x₂],
+     [∂f₃/∂x₁, ∂f₃/∂x₂]]</pre>
+                            Evaluate at point (1, 2).
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-5.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-5.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 5.2: Chain Rule with Jacobians</h3>
+                        <div class="content-text">
+                            Given:
+                            <ul class="list-disc ml-6 my-2">
+                                <li>z = f(y): ℝ² → ℝ where f(y₁, y₂) = y₁² + 2y₂²</li>
+                                <li>y = g(x): ℝ³ → ℝ² where g(x₁, x₂, x₃) = [x₁ + x₂, x₂x₃]ᵀ</li>
+                            </ul>
+                            <ol class="list-decimal ml-6">
+                                <li>Calculate ∇f (gradient of f)</li>
+                                <li>Calculate Jacobian of g: Jg (2×3 matrix)</li>
+                                <li>Calculate gradient of z with respect to x using: ∇ₓz = Jgᵀ∇f</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 6: Hessian Matrices (30 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-6.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-6.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.1: Computing Hessian</h3>
+                        <div class="content-text">
+                            For f(x, y) = x³ + y³ - 3xy<br><br>
+                            Calculate the Hessian matrix:
+                            <pre>H = [[∂²f/∂x², ∂²f/∂x∂y],
+     [∂²f/∂y∂x, ∂²f/∂y²]]</pre>
+                            Evaluate at point (1, 1).
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-6.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-6.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 6.2: Analyzing Critical Points</h3>
+                        <div class="content-text">
+                            For f(x, y) = x² - xy + y² + 2x - y
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Find critical points (solve ∇f = 0)</li>
+                                <li>Calculate Hessian at each critical point</li>
+                                <li>Determine nature of each critical point using second derivative test:
+                                    <ul class="list-disc ml-6 my-1">
+                                        <li>If det(H) > 0 and ∂²f/∂x² > 0: local minimum</li>
+                                        <li>If det(H) > 0 and ∂²f/∂x² < 0: local maximum</li>
+                                        <li>If det(H) < 0: saddle point</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Part 7: ML-Specific Gradients (60 min)</h2>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-7.1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-7.1')">
+                    <div class="flex-1">
+                        <h3>Exercise 7.1: Linear Regression Gradient</h3>
+                        <div class="content-text">
+                            For linear regression: ŷ = wx + b<br>
+                            Loss: L = (y - ŷ)² = (y - wx - b)²<br><br>
+                            Given data point: x = 3, y = 7<br>
+                            Current parameters: w = 1.5, b = 2
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate predicted value ŷ</li>
+                                <li>Calculate loss L</li>
+                                <li>Calculate ∂L/∂w (show chain rule steps)</li>
+                                <li>Calculate ∂L/∂b</li>
+                                <li>Update parameters using α = 0.1:
+                                    <ul class="list-disc ml-6 my-1">
+                                        <li>w_new = w - α(∂L/∂w)</li>
+                                        <li>b_new = b - α(∂L/∂b)</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-7.2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-7.2')">
+                    <div class="flex-1">
+                        <h3>Exercise 7.2: Logistic Regression Gradient</h3>
+                        <div class="content-text">
+                            For binary classification:
+                            <ul class="list-disc ml-6 my-2">
+                                <li>Prediction: ŷ = σ(wx + b) where σ(z) = 1/(1 + e^(-z))</li>
+                                <li>Binary cross-entropy loss: L = -[y log(ŷ) + (1-y) log(1-ŷ)]</li>
+                            </ul>
+                            Given: x = 2, y = 1 (true class), w = 0.5, b = 0.5
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate z = wx + b</li>
+                                <li>Calculate ŷ = σ(z)</li>
+                                <li>Calculate loss L</li>
+                                <li>Calculate ∂L/∂ŷ</li>
+                                <li>Calculate ∂ŷ/∂z (remember: σ'(z) = σ(z)(1-σ(z)))</li>
+                                <li>Calculate ∂z/∂w and ∂z/∂b</li>
+                                <li>Use chain rule: ∂L/∂w = (∂L/∂ŷ)(∂ŷ/∂z)(∂z/∂w)</li>
+                                <li>Calculate ∂L/∂b similarly</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-7.3">
+                <label class="flex items-start space-x-3 3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-7.3')">
+                    <div class="flex-1">
+                        <h3>Exercise 7.3: Softmax Gradient (Challenging)</h3>
+                        <div class="content-text">
+                            For multi-class classification with 3 classes:
+                            <pre>Logits: z = [z₁, z₂, z₃]ᵀ
+Softmax: ŷᵢ = e^(zᵢ) / Σⱼe^(zⱼ)
+Cross-entropy: L = -Σᵢ yᵢ log(ŷᵢ)</pre>
+                            Given: z = [2, 1, 0.5], y = [1, 0, 0] (one-hot encoded, class 0 is correct)
+                            <ol class="list-decimal ml-6 my-2">
+                                <li>Calculate softmax outputs ŷ₁, ŷ₂, ŷ₃</li>
+                                <li>Calculate loss L</li>
+                                <li>Show that ∂L/∂zᵢ = ŷᵢ - yᵢ (this is a remarkable simplification!)</li>
+                                <li>Calculate gradients ∂L/∂z₁, ∂L/∂z₂, ∂L/∂z₃</li>
+                            </ol>
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <h2 class="section-header">Challenge Problems (Optional)</h2>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-challenge-1">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-challenge-1')">
+                    <div class="flex-1">
+                        <h3>Challenge 1: Newton's Method</h3>
+                        <div class="content-text">
+                            Implement one step of Newton's method for minimizing f(x, y) = x² + 4y²<br><br>
+                            Formula: x_new = x - H⁻¹∇f<br><br>
+                            Starting from (4, 2), calculate the next point.
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-challenge-2">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-challenge-2')">
+                    <div class="flex-1">
+                        <h3>Challenge 2: Batch Gradient</h3>
+                        <div class="content-text">
+                            Extend Exercise 7.1 to mini-batch of 3 points:
+                            <ul class="list-disc ml-6 my-2">
+                                <li>(x₁, y₁) = (1, 3)</li>
+                                <li>(x₂, y₂) = (2, 5)</li>
+                                <li>(x₃, y₃) = (3, 7)</li>
+                            </ul>
+                            Calculate average gradient over the batch.
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="exercise-item" data-exercise-id="calculus-gradients-challenge-3">
+                <label class="flex items-start space-x-3 cursor-pointer">
+                    <input type="checkbox" class="checkbox-custom mt-1" onchange="toggleExercise('calculus-gradients-challenge-3')">
+                    <div class="flex-1">
+                        <h3>Challenge 3: Derive Backprop for 2-Layer Network</h3>
+                        <div class="content-text">
+                            <pre>x → h₁ = σ(W₁x + b₁) → h₂ = σ(W₂h₁ + b₂) → L = (h₂ - y)²</pre>
+                            Derive ∂L/∂W₁, ∂L/∂b₁, ∂L/∂W₂, ∂L/∂b₂ using chain rule.
+                        </div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h3 class="font-semibold text-gray-800 mb-2">Tips for Success</h3>
+                <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+                    <li><strong>Show your work</strong> - Write out each step of the chain rule</li>
+                    <li><strong>Verify numerically</strong> - Use numerical gradients to check your answers</li>
+                    <li><strong>Draw computation graphs</strong> - Visualize the forward and backward pass</li>
+                    <li><strong>Practice chain rule</strong> - It's the foundation of backpropagation</li>
+                    <li><strong>Understand shapes</strong> - Keep track of matrix/vector dimensions</li>
+                </ul>
+            </div>
         </div>
 
         <!-- Footer -->
@@ -126,16 +571,62 @@
     </div>
 
     <script>
-        // Read markdown content from the .md file
-        fetch('calculus_gradients_exercises.md')
-            .then(response => response.text())
-            .then(markdown => {
-                document.getElementById('content').innerHTML = marked.parse(markdown);
-            })
-            .catch(error => {
-                console.error('Error loading markdown:', error);
-                document.getElementById('content').innerHTML = '<p class="text-red-600">Error loading content. Please check that calculus_gradients_exercises.md exists.</p>';
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            let completed = 0;
+            let total = 0;
+
+            document.querySelectorAll('.exercise-item').forEach(item => {
+                const id = item.getAttribute('data-exercise-id');
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                total++;
+
+                if (state[id]) {
+                    checkbox.checked = true;
+                    item.classList.add('completed');
+                    item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+                    completed++;
+                }
             });
+
+            updateProgress(completed, total);
+        }
+
+        // Toggle exercise completion
+        function toggleExercise(exerciseId) {
+            const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+            state[exerciseId] = !state[exerciseId];
+
+            if (!state[exerciseId]) {
+                delete state[exerciseId];
+            }
+
+            localStorage.setItem('exercise-completions', JSON.stringify(state));
+
+            // Update UI
+            const item = document.querySelector(`[data-exercise-id="${exerciseId}"]`);
+            if (state[exerciseId]) {
+                item.classList.add('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.add('completed'));
+            } else {
+                item.classList.remove('completed');
+                item.querySelectorAll('.content-text').forEach(el => el.classList.remove('completed'));
+            }
+
+            // Recalculate progress
+            loadCompletionState();
+        }
+
+        // Update progress bar
+        function updateProgress(completed, total) {
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadCompletionState);
     </script>
 </body>
 </html>

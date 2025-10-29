@@ -303,6 +303,14 @@
             };
 
             const mathRoadmapData = {
+                "Practice Exercises": {
+                    "Linear Algebra Exercises": [
+                        "<a href='guides/exercises/linear_algebra_exercises.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📝 Open Linear Algebra Exercises</a> - 22 exercises covering vectors, matrices, eigenvalues, SVD, and applications (~3-4 hours)"
+                    ],
+                    "Calculus & Gradients Exercises": [
+                        "<a href='guides/exercises/calculus_gradients_exercises.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📝 Open Calculus & Gradients Exercises</a> - 23 exercises on derivatives, partial derivatives, gradients, Jacobians, Hessians, and backpropagation (~3-4 hours)"
+                    ]
+                },
                 "Foundations: Linear Algebra & Calculus": {
                     "Module 1: Linear Algebra Fundamentals (15-20 hours)": [
                         "Watch 3Blue1Brown Essence of Linear Algebra (all 16 videos)",
@@ -718,6 +726,21 @@
             };
 
             const getWeekProgress = (weekName, tasks) => {
+                // Special handling for exercise modules - read from exercise-completions localStorage
+                if (weekName === "Linear Algebra Exercises") {
+                    const exerciseCompletions = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+                    const linearAlgebraExercises = Object.keys(exerciseCompletions).filter(key => key.startsWith('linear-algebra-'));
+                    const totalLinearAlgebra = 22; // Total linear algebra exercises
+                    return Math.round((linearAlgebraExercises.length / totalLinearAlgebra) * 100);
+                }
+                if (weekName === "Calculus & Gradients Exercises") {
+                    const exerciseCompletions = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+                    const calculusExercises = Object.keys(exerciseCompletions).filter(key => key.startsWith('calculus-gradients-'));
+                    const totalCalculus = 23; // Total calculus exercises
+                    return Math.round((calculusExercises.length / totalCalculus) * 100);
+                }
+
+                // Normal handling for other modules
                 const completedTasks = tasks.filter((_, idx) => checkedTasks[`${weekName}-${idx}`]).length;
                 return Math.round((completedTasks / tasks.length) * 100);
             };
