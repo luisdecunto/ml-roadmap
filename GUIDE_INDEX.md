@@ -1,6 +1,6 @@
 # ML Roadmap - Complete Guide Index
 
-**Last Updated:** 2025-10-29
+**Last Updated:** 2025-10-30
 
 This document lists all available guides and guides that need to be created.
 
@@ -18,22 +18,28 @@ This document lists all available guides and guides that need to be created.
 
 ### Math Coding Guides
 5. **[Linear Algebra Coding](guides/linear_algebra_coding_guide.html)** - Matrix ops, SVD, image compression (8-12 hrs)
-6. **[Matrix Calculus Coding](guides/matrix_calculus_coding_guide.html)** - Gradient checking, Jacobians, QR decomposition (6-8 hrs) **NEW!**
+6. **[Matrix Calculus Coding](guides/matrix_calculus_coding_guide.html)** - Gradient checking, Jacobians, QR decomposition (6-8 hrs)
 7. **[Optimization Algorithms](guides/optimization_coding_guide.html)** - GD, SGD, Momentum, RMSprop, Adam (6-8 hrs)
 8. **[Neural Networks from Scratch](guides/neural_networks_guide.html)** - Neurons, backprop, MNIST (12-16 hrs)
 9. **[CNNs from Scratch](guides/cnn_guide.html)** - Convolution, pooling, complete CNN (15-20 hrs)
 10. **[Transformers from Scratch](guides/transformer_guide.html)** - Attention, multi-head, encoder/decoder (20-25 hrs)
 11. **[Probability & Information Theory](guides/probability_guide.html)** - Distributions, entropy, KL divergence (6-8 hrs)
 
+### Advanced Deep Learning Guides
+12. **[LLM Mathematics](guides/llm_mathematics_guide.html)** - Micrograd, Bigram, GPT, Sampling strategies (25-30 hrs) **NEW!**
+13. **[Optimization Deep Dive](guides/optimization_deep_dive_guide.html)** - LR schedules, warmup, loss landscapes, gradient clipping (15-20 hrs) **NEW!**
+14. **[Regularization & Generalization](guides/regularization_guide.html)** - L1/L2/Elastic Net, data augmentation, bias-variance (15-20 hrs) **NEW!**
+15. **[Modern Architectures](guides/modern_architectures_guide.html)** - ViT, VAE, GAN, Diffusion Models (20-25 hrs) **NEW!**
+
 ### Exercise Sets (with Solutions)
-12. **[Linear Algebra Exercises](guides/exercises/linear_algebra_exercises.html)** - 22 exercises (3-4 hrs)
-13. **[Calculus & Gradients Exercises](guides/exercises/calculus_gradients_exercises.html)** - 23 exercises (3-4 hrs)
-14. **[Optimization Exercises](guides/exercises/optimization_exercises.html)** - 20 exercises (2-3 hrs)
-15. **[Probability & Statistics Exercises](guides/exercises/probability_statistics_exercises.html)** - 19 exercises (3-4 hrs)
-16. **[Information Theory Exercises](guides/exercises/information_theory_exercises.html)** - 18 exercises (2-3 hrs)
-17. **[Neural Networks Exercises](guides/exercises/neural_networks_exercises.html)** - 22 exercises (4-5 hrs)
-18. **[CNN Exercises](guides/exercises/cnn_exercises.html)** - 22 exercises (4-5 hrs)
-19. **[Transformer Exercises](guides/exercises/transformer_exercises.html)** - 22 exercises (4-5 hrs)
+16. **[Linear Algebra Exercises](guides/exercises/linear_algebra_exercises.html)** - 22 exercises (3-4 hrs)
+17. **[Calculus & Gradients Exercises](guides/exercises/calculus_gradients_exercises.html)** - 23 exercises (3-4 hrs)
+18. **[Optimization Exercises](guides/exercises/optimization_exercises.html)** - 20 exercises (2-3 hrs)
+19. **[Probability & Statistics Exercises](guides/exercises/probability_statistics_exercises.html)** - 19 exercises (3-4 hrs)
+20. **[Information Theory Exercises](guides/exercises/information_theory_exercises.html)** - 18 exercises (2-3 hrs)
+21. **[Neural Networks Exercises](guides/exercises/neural_networks_exercises.html)** - 22 exercises (4-5 hrs)
+22. **[CNN Exercises](guides/exercises/cnn_exercises.html)** - 22 exercises (4-5 hrs)
+23. **[Transformer Exercises](guides/exercises/transformer_exercises.html)** - 22 exercises (4-5 hrs)
 
 ---
 
@@ -152,14 +158,14 @@ When creating a new guide:
 
 ## 📊 Progress Tracking
 
-**Coding Guides:** 11 complete (Linear Algebra, Matrix Calculus, Optimization, Neural Networks, CNNs, Transformers, Probability)
+**Coding Guides:** 15 complete (Linear Algebra, Matrix Calculus, Optimization, Neural Networks, CNNs, Transformers, Probability, LLM Math, Optimization Deep Dive, Regularization, Modern Architectures)
 **Exercise Sets:** 8 complete (all with solutions)
 **Setup Guides:** 3 complete
 
-**Total Complete:** 22 guides
-**Still TODO:** ~5 guides (Advanced CNN Techniques, Attention standalone, Language Models, Training Techniques, Autograd)
+**Total Complete:** 26 guides
+**Still TODO:** ~2 guides (Advanced CNN Techniques, Autograd Framework)
 
-**Core Coverage:** ✅ 100% (Modules 1-3, 6-7, 10 fully covered)
+**Core Coverage:** ✅ 100% (Modules 1-14 fully covered)
 
 ---
 
