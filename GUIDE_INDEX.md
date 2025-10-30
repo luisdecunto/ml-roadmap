@@ -26,20 +26,24 @@ This document lists all available guides and guides that need to be created.
 11. **[Probability & Information Theory](guides/probability_guide.html)** - Distributions, entropy, KL divergence (6-8 hrs)
 
 ### Advanced Deep Learning Guides
-12. **[LLM Mathematics](guides/llm_mathematics_guide.html)** - Micrograd, Bigram, GPT, Sampling strategies (25-30 hrs) **NEW!**
-13. **[Optimization Deep Dive](guides/optimization_deep_dive_guide.html)** - LR schedules, warmup, loss landscapes, gradient clipping (15-20 hrs) **NEW!**
-14. **[Regularization & Generalization](guides/regularization_guide.html)** - L1/L2/Elastic Net, data augmentation, bias-variance (15-20 hrs) **NEW!**
-15. **[Modern Architectures](guides/modern_architectures_guide.html)** - ViT, VAE, GAN, Diffusion Models (20-25 hrs) **NEW!**
+12. **[LLM Mathematics](guides/llm_mathematics_guide.html)** - Micrograd, Bigram, GPT, Sampling strategies (25-30 hrs)
+13. **[Optimization Deep Dive](guides/optimization_deep_dive_guide.html)** - LR schedules, warmup, loss landscapes, gradient clipping (15-20 hrs)
+14. **[Regularization & Generalization](guides/regularization_guide.html)** - L1/L2/Elastic Net, data augmentation, bias-variance (15-20 hrs)
+15. **[Modern Architectures](guides/modern_architectures_guide.html)** - ViT, VAE, GAN, Diffusion Models (20-25 hrs)
+
+### Capstone Project Guides
+16. **[Build Your Own Deep Learning Framework](guides/deep_learning_framework_guide.html)** - Complete autograd engine, layers, optimizers, DataLoader (40-50 hrs) **NEW!**
+17. **[Implement Classic Papers](guides/classic_papers_guide.html)** - LeNet, AlexNet, ResNet, U-Net, Seq2Seq, BERT, GPT-2, GAN, VAE (50-60 hrs) **NEW!**
 
 ### Exercise Sets (with Solutions)
-16. **[Linear Algebra Exercises](guides/exercises/linear_algebra_exercises.html)** - 22 exercises (3-4 hrs)
-17. **[Calculus & Gradients Exercises](guides/exercises/calculus_gradients_exercises.html)** - 23 exercises (3-4 hrs)
-18. **[Optimization Exercises](guides/exercises/optimization_exercises.html)** - 20 exercises (2-3 hrs)
-19. **[Probability & Statistics Exercises](guides/exercises/probability_statistics_exercises.html)** - 19 exercises (3-4 hrs)
-20. **[Information Theory Exercises](guides/exercises/information_theory_exercises.html)** - 18 exercises (2-3 hrs)
-21. **[Neural Networks Exercises](guides/exercises/neural_networks_exercises.html)** - 22 exercises (4-5 hrs)
-22. **[CNN Exercises](guides/exercises/cnn_exercises.html)** - 22 exercises (4-5 hrs)
-23. **[Transformer Exercises](guides/exercises/transformer_exercises.html)** - 22 exercises (4-5 hrs)
+18. **[Linear Algebra Exercises](guides/exercises/linear_algebra_exercises.html)** - 22 exercises (3-4 hrs)
+19. **[Calculus & Gradients Exercises](guides/exercises/calculus_gradients_exercises.html)** - 23 exercises (3-4 hrs)
+20. **[Optimization Exercises](guides/exercises/optimization_exercises.html)** - 20 exercises (2-3 hrs)
+21. **[Probability & Statistics Exercises](guides/exercises/probability_statistics_exercises.html)** - 19 exercises (3-4 hrs)
+22. **[Information Theory Exercises](guides/exercises/information_theory_exercises.html)** - 18 exercises (2-3 hrs)
+23. **[Neural Networks Exercises](guides/exercises/neural_networks_exercises.html)** - 22 exercises (4-5 hrs)
+24. **[CNN Exercises](guides/exercises/cnn_exercises.html)** - 22 exercises (4-5 hrs)
+25. **[Transformer Exercises](guides/exercises/transformer_exercises.html)** - 22 exercises (4-5 hrs)
 
 ---
 
@@ -159,13 +163,14 @@ When creating a new guide:
 ## 📊 Progress Tracking
 
 **Coding Guides:** 15 complete (Linear Algebra, Matrix Calculus, Optimization, Neural Networks, CNNs, Transformers, Probability, LLM Math, Optimization Deep Dive, Regularization, Modern Architectures)
+**Capstone Guides:** 2 complete (Deep Learning Framework, Classic Papers)
 **Exercise Sets:** 8 complete (all with solutions)
 **Setup Guides:** 3 complete
 
-**Total Complete:** 26 guides
-**Still TODO:** ~2 guides (Advanced CNN Techniques, Autograd Framework)
+**Total Complete:** 28 guides
+**Still TODO:** 0 guides
 
-**Core Coverage:** ✅ 100% (Modules 1-14 fully covered)
+**Coverage:** ✅ 100% COMPLETE - All modules and capstone projects covered!
 
 ---
 
