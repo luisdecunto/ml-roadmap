@@ -1,6 +1,6 @@
 # ML Roadmap - Complete Guide Index
 
-**Last Updated:** 2025-10-28
+**Last Updated:** 2025-10-29
 
 This document lists all available guides and guides that need to be created.
 
@@ -18,11 +18,22 @@ This document lists all available guides and guides that need to be created.
 
 ### Math Coding Guides
 5. **[Linear Algebra Coding](guides/linear_algebra_coding_guide.html)** - Matrix ops, SVD, image compression (8-12 hrs)
-6. **[Optimization Algorithms](guides/optimization_coding_guide.html)** - GD, SGD, Momentum, RMSprop, Adam (6-8 hrs)
+6. **[Matrix Calculus Coding](guides/matrix_calculus_coding_guide.html)** - Gradient checking, Jacobians, QR decomposition (6-8 hrs) **NEW!**
+7. **[Optimization Algorithms](guides/optimization_coding_guide.html)** - GD, SGD, Momentum, RMSprop, Adam (6-8 hrs)
+8. **[Neural Networks from Scratch](guides/neural_networks_guide.html)** - Neurons, backprop, MNIST (12-16 hrs)
+9. **[CNNs from Scratch](guides/cnn_guide.html)** - Convolution, pooling, complete CNN (15-20 hrs)
+10. **[Transformers from Scratch](guides/transformer_guide.html)** - Attention, multi-head, encoder/decoder (20-25 hrs)
+11. **[Probability & Information Theory](guides/probability_guide.html)** - Distributions, entropy, KL divergence (6-8 hrs)
 
 ### Exercise Sets (with Solutions)
-7. **[Linear Algebra Exercises](guides/exercises/linear_algebra_exercises.html)** - 40+ problems (3-4 hrs)
-8. **[Calculus & Gradients Exercises](guides/exercises/calculus_gradients_exercises.html)** - ML-focused calculus (3-4 hrs)
+12. **[Linear Algebra Exercises](guides/exercises/linear_algebra_exercises.html)** - 22 exercises (3-4 hrs)
+13. **[Calculus & Gradients Exercises](guides/exercises/calculus_gradients_exercises.html)** - 23 exercises (3-4 hrs)
+14. **[Optimization Exercises](guides/exercises/optimization_exercises.html)** - 20 exercises (2-3 hrs)
+15. **[Probability & Statistics Exercises](guides/exercises/probability_statistics_exercises.html)** - 19 exercises (3-4 hrs)
+16. **[Information Theory Exercises](guides/exercises/information_theory_exercises.html)** - 18 exercises (2-3 hrs)
+17. **[Neural Networks Exercises](guides/exercises/neural_networks_exercises.html)** - 22 exercises (4-5 hrs)
+18. **[CNN Exercises](guides/exercises/cnn_exercises.html)** - 22 exercises (4-5 hrs)
+19. **[Transformer Exercises](guides/exercises/transformer_exercises.html)** - 22 exercises (4-5 hrs)
 
 ---
 
@@ -30,91 +41,19 @@ This document lists all available guides and guides that need to be created.
 
 ### High Priority - Core ML Skills
 
-#### Neural Networks from Scratch
+#### Advanced CNN Techniques
 **Status:** Not started
 **Tasks covered:**
-- Code: Implement single neuron with sigmoid
-- Code: Implement ReLU, Tanh, Softmax activations
-- Code: Build 2-layer network forward pass
-- Code: Implement full backprop
-- Project: Train on MNIST (>95% accuracy)
+- Code: Detailed BatchNorm implementation
+- Code: Residual blocks
+- Code: Dropout implementation
 
 **Content needed:**
-- Single neuron implementation
-- Activation functions (ReLU, Sigmoid, Tanh, Softmax) with derivatives
-- Forward propagation (matrix operations)
-- Backpropagation (chain rule implementation)
-- Gradient checking (numerical vs analytical)
-- MNIST training loop
-- Comparison with PyTorch
+- In-depth BatchNorm (forward, backward, running stats)
+- Skip connections and residual blocks
+- Dropout regularization
 
-**Estimated:** 8-10 hours
-
-#### CNN from Scratch
-**Status:** Not started
-**Tasks covered:**
-- Code: Implement 2D convolution
-- Code: Implement max/average pooling
-- Code: Build CNN (Conv→ReLU→MaxPool→FC)
-- Code: Implement batch normalization
-- Code: Implement dropout
-- Project: MNIST CNN (>98% accuracy)
-
-**Content needed:**
-- 2D convolution (im2col method)
-- Pooling layers (forward + backward)
-- Complete CNN architecture
-- Batch normalization (forward + backward + running stats)
-- Dropout implementation
-- Training on MNIST/CIFAR-10
-
-**Estimated:** 10-12 hours
-
-#### Transformer from Scratch
-**Status:** Not started
-**Tasks covered:**
-- Code: Implement basic attention
-- Code: Scaled dot-product attention
-- Code: Positional encoding
-- Code: Transformer encoder/decoder blocks
-- Project: Train on addition task
-
-**Content needed:**
-- Attention mechanism (score, softmax, weighted sum)
-- Scaled dot-product attention
-- Multi-head attention
-- Positional encoding (sinusoidal)
-- Layer normalization
-- Encoder block (self-attention + FFN)
-- Decoder block (masked attention + cross-attention)
-- Complete transformer
-- Training example (addition or translation)
-
-**Estimated:** 12-15 hours
-
-### Medium Priority - Theory Implementation
-
-#### Probability & Information Theory
-**Status:** Not started
-**Tasks covered:**
-- Code: Implement Gaussian PDF
-- Code: Implement Naive Bayes classifier
-- Code: Implement entropy H(X)
-- Code: Calculate mutual information I(X;Y)
-- Code: Implement cross-entropy and KL divergence
-- Project: Spam classifier (MLE vs MAP)
-
-**Content needed:**
-- Gaussian distribution implementation
-- Naive Bayes (multinomial, Gaussian)
-- MLE vs MAP estimation
-- Entropy calculations
-- Mutual information
-- Cross-entropy loss
-- KL divergence
-- Applications to ML
-
-**Estimated:** 6-8 hours
+**Estimated:** 4-6 hours
 
 #### Advanced Training Techniques
 **Status:** Not started
@@ -213,12 +152,14 @@ When creating a new guide:
 
 ## 📊 Progress Tracking
 
-**Total Guides Needed:** ~15
-**Completed:** 6
-**In Progress:** 0
-**TODO:** 9 (high/medium priority)
+**Coding Guides:** 11 complete (Linear Algebra, Matrix Calculus, Optimization, Neural Networks, CNNs, Transformers, Probability)
+**Exercise Sets:** 8 complete (all with solutions)
+**Setup Guides:** 3 complete
 
-**Completion:** 40%
+**Total Complete:** 22 guides
+**Still TODO:** ~5 guides (Advanced CNN Techniques, Attention standalone, Language Models, Training Techniques, Autograd)
+
+**Core Coverage:** ✅ 100% (Modules 1-3, 6-7, 10 fully covered)
 
 ---
 
