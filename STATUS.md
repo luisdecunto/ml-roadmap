@@ -70,12 +70,18 @@ Building a comprehensive ML Engineer career roadmap with:
    - Image compression project
    - 8-12 hours
 
-3. **Optimization Algorithms** (`guides/optimization_coding_guide.md` - JUST CREATED)
+3. **Matrix Calculus Coding** (`guides/matrix_calculus_coding_guide.html` + `.md`) **NEW!**
+   - Numerical gradient checking
+   - Jacobian computation
+   - QR decomposition (Gram-Schmidt)
+   - Network gradient verification
+   - 6-8 hours
+
+4. **Optimization Algorithms** (`guides/optimization_coding_guide.html` + `.md`)
    - Gradient Descent, SGD, Mini-batch
    - Momentum, RMSprop, Adam
    - MNIST comparison project
    - 6-8 hours
-   - ⚠️ **TODO:** Create HTML version
 
 #### ✅ Exercise System (8/8 complete - ALL DONE!)
 
