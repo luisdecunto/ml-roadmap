@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-10-29T18:12:26.952Z",
+  "lastUpdated": "2025-10-30T08:57:55.130Z",
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-3": true,
@@ -27,23 +27,6 @@
     "Module 1: Linear Algebra Fundamentals (15-20 hours)-9": true,
     "Module 1: Linear Algebra Fundamentals (15-20 hours)-10": true
   },
-  "expandedMonths": {
-    "Practice Exercises": false,
-    "Foundations: Linear Algebra & Calculus": true,
-    "Core Theory: Probability & Information": false,
-    "Month 1: SQL Mastery + Python/Docker Foundations": true,
-    "Month 2: Deep Learning Foundations + MLOps": true,
-    "Neural Networks: From Scratch": false
-  },
-  "expandedWeeks": {
-    "Practice Exercises-Linear Algebra Exercises": false,
-    "Practice Exercises-Optimization Exercises": false,
-    "Foundations: Linear Algebra & Calculus-Module 1: Linear Algebra Fundamentals (15-20 hours)": true,
-    "Core Theory: Probability & Information-Module 4: Probability & Statistics (15-20 hours)": false,
-    "Foundations: Linear Algebra & Calculus-Module 2: Matrix Calculus for ML (15-20 hours)": true,
-    "Foundations: Linear Algebra & Calculus-Module 3: Optimization Foundations (12-15 hours)": false,
-    "Month 2: Deep Learning Foundations + MLOps-Week 5: PyTorch Fundamentals (44 hours)": false,
-    "Neural Networks: From Scratch-Module 6: Feedforward Networks from Scratch (20-25 hours)": false,
-    "Practice Exercises-Calculus & Gradients Exercises": false
-  }
+  "expandedMonths": {},
+  "expandedWeeks": {}
 }
