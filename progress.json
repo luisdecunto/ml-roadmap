@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-02T13:15:54.138Z",
+  "lastUpdated": "2025-11-02T13:15:55.310Z",
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-3": true,
@@ -29,7 +29,9 @@
     "Module 2: Matrix Calculus for ML (15-20 hours)-7": false,
     "Week 1: SQL Intensive Bootcamp (45 hours)-10": true,
     "Week 2: Advanced SQL + Python/Pandas (46 hours)-2": true,
-    "Module 2: Matrix Calculus for ML (15-20 hours)-0": true
+    "Module 2: Matrix Calculus for ML (15-20 hours)-0": true,
+    "Module 2: Matrix Calculus for ML (15-20 hours)-1": true,
+    "Module 2: Matrix Calculus for ML (15-20 hours)-2": true
   },
   "expandedMonths": {
     "Month 1: SQL Mastery + Python/Docker Foundations": true,
