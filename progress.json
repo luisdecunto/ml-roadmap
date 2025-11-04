@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-04T12:50:31.604Z",
+  "lastUpdated": "2025-11-04T13:19:55.607Z",
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-3": true,
@@ -39,10 +39,14 @@
   "expandedMonths": {
     "Month 1: SQL Mastery + Python/Docker Foundations": true,
     "Foundations: Linear Algebra & Calculus": true,
-    "Practice Exercises": true
+    "Practice Exercises": false,
+    "Core Theory: Probability & Information": false
   },
   "expandedWeeks": {
     "Month 1: SQL Mastery + Python/Docker Foundations-Week 2: Advanced SQL + Python/Pandas (46 hours)": true,
-    "Practice Exercises-Calculus & Gradients Exercises": true
+    "Practice Exercises-Calculus & Gradients Exercises": true,
+    "Practice Exercises-Optimization Exercises": false,
+    "Foundations: Linear Algebra & Calculus-Module 1: Linear Algebra Fundamentals (15-20 hours)": false,
+    "Foundations: Linear Algebra & Calculus-Module 2: Matrix Calculus for ML (15-20 hours)": true
   }
 }
