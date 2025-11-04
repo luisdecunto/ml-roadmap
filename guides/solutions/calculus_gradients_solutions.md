@@ -1,740 +1,946 @@
-# Calculus & Gradients - Solutions
+# Matrix Calculus & Gradients - Solutions (Module 2)
 
 **Time:** Reference for 3-4 hours of exercises
 **Difficulty:** Intermediate
 
+Complete solutions to exercises in `guides/exercises/calculus_gradients_exercises.md`
+
 ---
 
-## Part 1: Scalar Derivatives - Solutions
+## Part 1: Scalar Derivatives Review - Solutions
 
-### Problem 1: Basic derivatives
+### Exercise 1.1: Basic Derivatives
 
-**a) f(x) = 3x² + 2x - 5**
+**1. f(x) = 3x² + 2x - 5**
 
 f'(x) = d/dx(3x²) + d/dx(2x) - d/dx(5)
-      = 3(2x) + 2 - 0
-      = 6x + 2
+     = 3(2x) + 2 - 0
+     = **6x + 2**
 
-**b) f(x) = x³ - 4x² + 7**
+**2. f(x) = x³ - 4x² + x**
 
-f'(x) = d/dx(x³) - d/dx(4x²) + d/dx(7)
-      = 3x² - 4(2x) + 0
-      = 3x² - 8x
+f'(x) = d/dx(x³) - d/dx(4x²) + d/dx(x)
+     = 3x² - 4(2x) + 1
+     = **3x² - 8x + 1**
 
-**c) f(x) = 1/x = x⁻¹**
+**3. f(x) = 1/x² = x⁻²**
 
-f'(x) = d/dx(x⁻¹)
-      = -1·x⁻²
-      = -1/x²
+f'(x) = d/dx(x⁻²)
+     = -2x⁻³
+     = **-2/x³**
 
-**d) f(x) = √x = x^(1/2)**
+**4. f(x) = e^(2x)**
 
-f'(x) = d/dx(x^(1/2))
-      = (1/2)x^(-1/2)
-      = 1/(2√x)
+Using chain rule:
+f'(x) = e^(2x) · d/dx(2x)
+     = e^(2x) · 2
+     = **2e^(2x)**
 
-### Problem 2: At what rate is f(x) = x² changing at x = 3?
+**5. f(x) = ln(x²)**
 
-f'(x) = 2x
-f'(3) = 2(3) = 6
+Using chain rule:
+f'(x) = (1/x²) · d/dx(x²)
+     = (1/x²) · 2x
+     = **2/x**
 
-**Answer:** The function is changing at a rate of 6 units per unit of x at x = 3.
+Alternatively: ln(x²) = 2ln(x), so f'(x) = 2/x ✓
 
-### Problem 3: Product Rule
+---
 
-**f(x) = (2x + 1)(x² - 3)**
+### Exercise 1.2: Chain Rule
 
-Using product rule: (uv)' = u'v + uv'
+**1. f(x) = (3x + 2)⁴**
 
-Let u = 2x + 1,  u' = 2
-Let v = x² - 3,  v' = 2x
+Let u = 3x + 2, then f = u⁴
+
+f'(x) = d/du(u⁴) · du/dx
+     = 4u³ · 3
+     = **12(3x + 2)³**
+
+**2. f(x) = e^(x²)**
+
+Let u = x², then f = e^u
+
+f'(x) = e^u · du/dx
+     = e^(x²) · 2x
+     = **2x · e^(x²)**
+
+**3. f(x) = ln(2x + 1)**
+
+Let u = 2x + 1, then f = ln(u)
+
+f'(x) = (1/u) · du/dx
+     = 1/(2x + 1) · 2
+     = **2/(2x + 1)**
+
+**4. f(x) = sin(3x²)**
+
+Let u = 3x², then f = sin(u)
+
+f'(x) = cos(u) · du/dx
+     = cos(3x²) · 6x
+     = **6x · cos(3x²)**
+
+---
+
+### Exercise 1.3: Product and Quotient Rules
+
+**1. f(x) = x² · e^x** (Product rule)
+
+u = x², u' = 2x
+v = e^x, v' = e^x
 
 f'(x) = u'v + uv'
-      = 2(x² - 3) + (2x + 1)(2x)
-      = 2x² - 6 + 4x² + 2x
-      = 6x² + 2x - 6
+     = 2x · e^x + x² · e^x
+     = **e^x(2x + x²)**
+     = **e^x · x(x + 2)**
 
-### Problem 4: Chain Rule
+**2. f(x) = x³ · ln(x)** (Product rule)
 
-**f(x) = (3x² + 1)⁵**
+u = x³, u' = 3x²
+v = ln(x), v' = 1/x
 
-Using chain rule: d/dx[g(h(x))] = g'(h(x))·h'(x)
+f'(x) = u'v + uv'
+     = 3x² · ln(x) + x³ · (1/x)
+     = 3x² ln(x) + x²
+     = **x²(3ln(x) + 1)**
 
-Let u = 3x² + 1,  u' = 6x
+**3. f(x) = (x² + 1)/(x - 1)** (Quotient rule)
 
-f'(x) = 5u⁴ · u'
-      = 5(3x² + 1)⁴ · 6x
-      = 30x(3x² + 1)⁴
+u = x² + 1, u' = 2x
+v = x - 1, v' = 1
+
+f'(x) = (u'v - uv')/v²
+     = [2x(x - 1) - (x² + 1)(1)]/(x - 1)²
+     = [2x² - 2x - x² - 1]/(x - 1)²
+     = **(x² - 2x - 1)/(x - 1)²**
 
 ---
 
 ## Part 2: Partial Derivatives - Solutions
 
-### Problem 5: Compute partial derivatives
+### Exercise 2.1: Basic Partial Derivatives
 
-**f(x, y) = x²y + 3xy² - 2x + 5**
+**f(x, y) = x²y + 3xy² - 2x + y**
 
-**∂f/∂x** (treat y as constant):
+**1. ∂f/∂x** (treat y as constant):
 ∂f/∂x = 2xy + 3y² - 2
 
-**∂f/∂y** (treat x as constant):
-∂f/∂y = x² + 6xy
+**2. ∂f/∂y** (treat x as constant):
+∂f/∂y = x² + 6xy + 1
 
-### Problem 6: Evaluate partial derivatives at (2, 3)
+**3. Evaluate at (1, 2):**
 
-From Problem 5:
+∂f/∂x|(1,2) = 2(1)(2) + 3(2)² - 2
+            = 4 + 12 - 2
+            = **14**
 
-**∂f/∂x|(2,3)** = 2(2)(3) + 3(3)² - 2
-                = 12 + 27 - 2
-                = 37
+∂f/∂y|(1,2) = (1)² + 6(1)(2) + 1
+            = 1 + 12 + 1
+            = **14**
 
-**∂f/∂y|(2,3)** = (2)² + 6(2)(3)
-                = 4 + 36
-                = 40
+---
 
-**Interpretation:** At point (2, 3):
-- If x increases by 1 unit (y constant), f increases by ~37 units
-- If y increases by 1 unit (x constant), f increases by ~40 units
+### Exercise 2.2: More Partial Derivatives
 
-### Problem 7: Second-order partial derivatives
+**f(x, y) = e^(xy) + x²y³**
 
-**f(x, y) = x³y² + 2xy**
+**1. ∂f/∂x:**
+∂f/∂x = e^(xy) · y + 2xy³
+     = **ye^(xy) + 2xy³**
+
+**2. ∂f/∂y:**
+∂f/∂y = e^(xy) · x + 3x²y²
+     = **xe^(xy) + 3x²y²**
+
+**3. Evaluate at (0, 1):**
+
+∂f/∂x|(0,1) = 1 · e^(0·1) + 2(0)(1)³
+            = 1 · 1 + 0
+            = **1**
+
+∂f/∂y|(0,1) = 0 · e^(0·1) + 3(0)²(1)²
+            = 0 + 0
+            = **0**
+
+---
+
+### Exercise 2.3: Second-Order Partial Derivatives
+
+**f(x, y) = x³y² - 2xy + 5**
 
 **First-order partials:**
-∂f/∂x = 3x²y² + 2y
-∂f/∂y = 2x³y + 2x
+∂f/∂x = 3x²y² - 2y
+∂f/∂y = 2x³y - 2x
 
-**Second-order partials:**
+**1. ∂²f/∂x²:**
+∂²f/∂x² = ∂/∂x(3x²y² - 2y)
+        = **6xy²**
 
-**∂²f/∂x²:**
-∂²f/∂x² = ∂/∂x(3x²y² + 2y)
-        = 6xy²
+**2. ∂²f/∂y²:**
+∂²f/∂y² = ∂/∂y(2x³y - 2x)
+        = **2x³**
 
-**∂²f/∂y²:**
-∂²f/∂y² = ∂/∂y(2x³y + 2x)
-        = 2x³
+**3. ∂²f/∂x∂y** (differentiate ∂f/∂x with respect to y):
+∂²f/∂x∂y = ∂/∂y(3x²y² - 2y)
+          = 6x²y - 2
+          = **6x²y - 2**
 
-**∂²f/∂x∂y (mixed partial):**
-∂²f/∂x∂y = ∂/∂x(2x³y + 2x)
-          = 6x²y + 2
+**4. ∂²f/∂y∂x** (differentiate ∂f/∂y with respect to x):
+∂²f/∂y∂x = ∂/∂x(2x³y - 2x)
+          = 6x²y - 2
+          = **6x²y - 2**
 
-**Verify ∂²f/∂y∂x = ∂²f/∂x∂y:**
-∂²f/∂y∂x = ∂/∂y(3x²y² + 2y)
-          = 6x²y + 2 ✓
+**5. Verification:**
+∂²f/∂x∂y = ∂²f/∂y∂x = 6x²y - 2 ✓
 
-(Schwarz's theorem: mixed partials are equal for continuous functions)
+This confirms Clairaut's theorem (mixed partials are equal for continuous functions).
 
 ---
 
 ## Part 3: Gradients - Solutions
 
-### Problem 8: Compute gradient
+### Exercise 3.1: Computing Gradients
 
-**f(x, y) = x² + 2xy + y²**
+**f(x, y) = x² + y² - 2x - 4y + 5**
 
-∂f/∂x = 2x + 2y
-∂f/∂y = 2x + 2y
+**1. Calculate gradient:**
 
-**∇f = [∂f/∂x, ∂f/∂y] = [2x + 2y, 2x + 2y]**
+∂f/∂x = 2x - 2
+∂f/∂y = 2y - 4
 
-**At (1, 2):**
-∇f(1, 2) = [2(1) + 2(2), 2(1) + 2(2)]
-         = [6, 6]
+**∇f = [2x - 2, 2y - 4]ᵀ**
 
-**Interpretation:** At point (1, 2), the direction of steepest ascent is [6, 6], meaning moving equally in x and y directions. The magnitude √(6² + 6²) = 6√2 ≈ 8.49 indicates how steep it is.
+**2. Gradient at (1, 2):**
 
-### Problem 9: Three-variable gradient
+∇f(1, 2) = [2(1) - 2, 2(2) - 4]
+         = **[0, 0]ᵀ**
 
-**f(x, y, z) = x²y + yz² - 3z**
+**3. Critical points (where ∇f = 0):**
 
-∂f/∂x = 2xy
-∂f/∂y = x² + z²
-∂f/∂z = 2yz - 3
+2x - 2 = 0  ⟹  x = 1
+2y - 4 = 0  ⟹  y = 2
 
-**∇f = [2xy, x² + z², 2yz - 3]**
+**Critical point: (1, 2)**
 
-**At (1, 2, 1):**
-∇f(1, 2, 1) = [2(1)(2), (1)² + (1)², 2(2)(1) - 3]
-            = [4, 2, 1]
+**4. Classify critical point:**
 
-### Problem 10: Gradient descent step
+Hessian matrix:
+H = [∂²f/∂x²    ∂²f/∂x∂y]   [2  0]
+    [∂²f/∂y∂x   ∂²f/∂y²  ] = [0  2]
 
-**Current:** w = 3
-**∇L(w) = 2w** at w = 3 means ∇L(3) = 6
-**Learning rate:** α = 0.1
+Both eigenvalues are 2 > 0 (or simply: det(H) = 4 > 0 and ∂²f/∂x² = 2 > 0)
 
-**Gradient descent update:**
-w_new = w_old - α·∇L(w_old)
-      = 3 - 0.1(6)
-      = 3 - 0.6
-      = 2.4
+**Answer: Local minimum at (1, 2)**
 
-**Next step:**
-w_new = 2.4 - 0.1(2·2.4)
-      = 2.4 - 0.48
-      = 1.92
+Function value: f(1, 2) = 1 + 4 - 2 - 8 + 5 = 0
 
 ---
 
-## Part 4: Chain Rule (Multivariate) - Solutions
+### Exercise 3.2: Gradient of Quadratic Form
 
-### Problem 11: Chain rule for two variables
+**f(x) = xᵀAx where x = [x₁, x₂]ᵀ and A = [[2, 1], [1, 3]]**
 
-**z = x² + y²**
+**1. Expand f(x):**
+
+f(x) = [x₁ x₂] [2  1] [x₁]
+                [1  3] [x₂]
+
+     = [x₁ x₂] [2x₁ + x₂ ]
+                [x₁ + 3x₂]
+
+     = x₁(2x₁ + x₂) + x₂(x₁ + 3x₂)
+     = 2x₁² + x₁x₂ + x₁x₂ + 3x₂²
+     = **2x₁² + 2x₁x₂ + 3x₂²**
+
+**2. ∂f/∂x₁:**
+∂f/∂x₁ = 4x₁ + 2x₂
+
+**3. ∂f/∂x₂:**
+∂f/∂x₂ = 2x₁ + 6x₂
+
+**4. Gradient:**
+**∇f(x) = [4x₁ + 2x₂, 2x₁ + 6x₂]ᵀ**
+
+**5. Verify formula ∇f(x) = (A + Aᵀ)x:**
+
+A + Aᵀ = [2  1] + [2  1] = [4  2]
+         [1  3]   [1  3]   [2  6]
+
+(A + Aᵀ)x = [4  2] [x₁] = [4x₁ + 2x₂]
+            [2  6] [x₂]   [2x₁ + 6x₂]
+
+**Verified! ✓**
+
+Note: For symmetric matrices (A = Aᵀ), this simplifies to ∇f(x) = 2Ax
+
+---
+
+### Exercise 3.3: Gradient Descent Step
+
+**f(x, y) = x² + 4y²**
+**Starting point: (x₀, y₀) = (4, 2)**
+**Learning rate: α = 0.1**
+
+**1. Gradient at (4, 2):**
+
+∂f/∂x = 2x
+∂f/∂y = 8y
+
+∇f(4, 2) = [2(4), 8(2)]
+         = **[8, 16]ᵀ**
+
+**2. Gradient descent update:**
+
+[x₁]   [x₀]       [∂f/∂x]
+[y₁] = [y₀] - α · [∂f/∂y]
+
+     = [4] - 0.1 · [8 ]
+       [2]         [16]
+
+     = [4] - [0.8]
+       [2]   [1.6]
+
+     = **[3.2, 0.4]ᵀ**
+
+**3. Function values:**
+
+f(4, 2) = (4)² + 4(2)² = 16 + 16 = **32**
+
+f(3.2, 0.4) = (3.2)² + 4(0.4)² = 10.24 + 0.64 = **10.88**
+
+**Yes, function decreased from 32 to 10.88! ✓**
+
+**4. Gradient at new point (3.2, 0.4):**
+
+∇f(3.2, 0.4) = [2(3.2), 8(0.4)]
+             = **[6.4, 3.2]ᵀ**
+
+Gradient magnitude decreased from √(8² + 16²) = 17.89 to √(6.4² + 3.2²) = 7.16
+
+---
+
+## Part 4: Chain Rule for Multivariable Functions - Solutions
+
+### Exercise 4.1: Simple Chain Rule
+
+**z = f(x, y) = x² + y²**
 **x = 2t, y = 3t**
 
-**dz/dt = (∂z/∂x)(dx/dt) + (∂z/∂y)(dy/dt)**
+**Find dz/dt:**
 
-∂z/∂x = 2x
-∂z/∂y = 2y
+dz/dt = (∂f/∂x)(dx/dt) + (∂f/∂y)(dy/dt)
+
+∂f/∂x = 2x
+∂f/∂y = 2y
 dx/dt = 2
 dy/dt = 3
 
-**dz/dt = 2x·2 + 2y·3**
-       = 4x + 6y
-       = 4(2t) + 6(3t)
-       = 8t + 18t
-       = 26t
+dz/dt = 2x · 2 + 2y · 3
+      = 4x + 6y
+      = 4(2t) + 6(3t)
+      = 8t + 18t
+      = **26t**
 
-**At t = 1:**
-dz/dt = 26(1) = 26
+**Verification:** z = (2t)² + (3t)² = 4t² + 9t² = 13t²
+So dz/dt = 26t ✓
 
-### Problem 12: Neural network backpropagation
+---
 
-**Network:** x → z = wx → a = σ(z) → L = (a - y)²
+### Exercise 4.2: Backpropagation Example
 
-**Given:**
-- w = 0.5
-- x = 2
-- y = 1 (target)
-- σ(z) = 1/(1 + e^(-z))
-- σ'(z) = σ(z)(1 - σ(z))
+**Network:**
+```
+x → h = σ(wx + b)  where σ(z) = 1/(1 + e^(-z))
+h → y = h²
+y → L = (y - t)²  where t is target
+```
 
-**Forward pass:**
+**Given:** x = 2, w = 0.5, b = 1, t = 0.8
 
-z = wx = 0.5 × 2 = 1
+**1. Forward pass:**
 
-a = σ(1) = 1/(1 + e^(-1)) = 1/(1 + 0.368) ≈ 0.731
+**z = wx + b**
+z = 0.5(2) + 1 = 2
 
-L = (a - y)² = (0.731 - 1)² = (-0.269)² ≈ 0.072
+**h = σ(z) = 1/(1 + e^(-z))**
+h = 1/(1 + e^(-2))
+h = 1/(1 + 0.1353)
+h ≈ **0.8808**
 
-**Backward pass (chain rule):**
+**y = h²**
+y = (0.8808)²
+y ≈ **0.7758**
 
-**∂L/∂w = (∂L/∂a)(∂a/∂z)(∂z/∂w)**
+**L = (y - t)²**
+L = (0.7758 - 0.8)²
+L = (-0.0242)²
+L ≈ **0.000586**
 
-**∂L/∂a:**
-∂L/∂a = 2(a - y) = 2(0.731 - 1) = -0.538
+**2. Backward pass:**
 
-**∂a/∂z:**
-∂a/∂z = σ'(z) = σ(z)(1 - σ(z))
-      = 0.731(1 - 0.731)
-      = 0.731 × 0.269
-      ≈ 0.197
+**∂L/∂y:**
+∂L/∂y = 2(y - t)
+      = 2(0.7758 - 0.8)
+      = 2(-0.0242)
+      = **-0.0484**
 
-**∂z/∂w:**
+**∂y/∂h:**
+∂y/∂h = 2h
+      = 2(0.8808)
+      = **1.7616**
+
+**∂h/∂w:**
+∂h/∂z = σ'(z) = σ(z)(1 - σ(z))
+      = 0.8808(1 - 0.8808)
+      = 0.8808 × 0.1192
+      = **0.1050**
+
 ∂z/∂w = x = 2
 
-**Combine:**
-∂L/∂w = (-0.538)(0.197)(2)
-      ≈ -0.212
+∂h/∂w = (∂h/∂z)(∂z/∂w)
+      = 0.1050 × 2
+      = **0.2100**
 
-**Interpretation:** The gradient is negative, meaning to reduce loss, we should increase w.
+**∂h/∂b:**
+∂z/∂b = 1
+
+∂h/∂b = (∂h/∂z)(∂z/∂b)
+      = 0.1050 × 1
+      = **0.1050**
+
+**Chain rule - ∂L/∂w:**
+∂L/∂w = (∂L/∂y)(∂y/∂h)(∂h/∂w)
+      = (-0.0484)(1.7616)(0.2100)
+      = **-0.0179**
+
+**Chain rule - ∂L/∂b:**
+∂L/∂b = (∂L/∂y)(∂y/∂h)(∂h/∂b)
+      = (-0.0484)(1.7616)(0.1050)
+      = **-0.0090**
+
+**Interpretation:** Both gradients are negative, so to reduce loss, we should *increase* both w and b.
+
+---
+
+### Exercise 4.3: Vector Chain Rule
+
+**Given:**
+- z = f(y) = y₁² + y₂²
+- y = g(x) = [2x₁ + x₂, x₁ - x₂]ᵀ
+
+**Find ∂z/∂x₁ and ∂z/∂x₂:**
+
+**Chain rule:** ∂z/∂xᵢ = Σⱼ (∂z/∂yⱼ)(∂yⱼ/∂xᵢ)
+
+**Compute gradients:**
+
+∂z/∂y₁ = 2y₁
+∂z/∂y₂ = 2y₂
+
+∂y₁/∂x₁ = 2,  ∂y₁/∂x₂ = 1
+∂y₂/∂x₁ = 1,  ∂y₂/∂x₂ = -1
+
+**∂z/∂x₁:**
+∂z/∂x₁ = (∂z/∂y₁)(∂y₁/∂x₁) + (∂z/∂y₂)(∂y₂/∂x₁)
+       = 2y₁ · 2 + 2y₂ · 1
+       = 4y₁ + 2y₂
+       = 4(2x₁ + x₂) + 2(x₁ - x₂)
+       = 8x₁ + 4x₂ + 2x₁ - 2x₂
+       = **10x₁ + 2x₂**
+
+**∂z/∂x₂:**
+∂z/∂x₂ = (∂z/∂y₁)(∂y₁/∂x₂) + (∂z/∂y₂)(∂y₂/∂x₂)
+       = 2y₁ · 1 + 2y₂ · (-1)
+       = 2y₁ - 2y₂
+       = 2(2x₁ + x₂) - 2(x₁ - x₂)
+       = 4x₁ + 2x₂ - 2x₁ + 2x₂
+       = **2x₁ + 4x₂**
 
 ---
 
 ## Part 5: Jacobian Matrices - Solutions
 
-### Problem 13: Jacobian of vector function
+### Exercise 5.1: Computing Jacobian
 
-**f: ℝ² → ℝ²**
-**f(x, y) = [x² + y, xy]**
+**f: ℝ² → ℝ³ defined by:**
+```
+f₁(x₁, x₂) = x₁² + x₂
+f₂(x₁, x₂) = x₁x₂
+f₃(x₁, x₂) = x₁ + 2x₂²
+```
 
-Let f₁(x, y) = x² + y
-Let f₂(x, y) = xy
+**Jacobian matrix:**
 
-**Jacobian J:**
+J = [∂f₁/∂x₁  ∂f₁/∂x₂]   [2x₁    1  ]
+    [∂f₂/∂x₁  ∂f₂/∂x₂] = [x₂     x₁ ]
+    [∂f₃/∂x₁  ∂f₃/∂x₂]   [1      4x₂]
 
-J = [∂f₁/∂x  ∂f₁/∂y]
-    [∂f₂/∂x  ∂f₂/∂y]
+**Evaluate at (1, 2):**
 
-∂f₁/∂x = 2x,  ∂f₁/∂y = 1
-∂f₂/∂x = y,   ∂f₂/∂y = x
+**J(1, 2) = [2(1)   1  ]   [2  1]**
+          **[2      1  ] = [2  1]**
+          **[1    4(2)]   [1  8]**
 
-**J = [2x  1]**
-    **[y   x]**
+---
 
-**At (1, 2):**
+### Exercise 5.2: Chain Rule with Jacobians
 
-**J(1, 2) = [2(1)  1] = [2  1]**
-          **[2     1]   [2  1]**
+**Given:**
+- z = f(y): ℝ² → ℝ where f(y₁, y₂) = y₁² + 2y₂²
+- y = g(x): ℝ³ → ℝ² where g(x₁, x₂, x₃) = [x₁ + x₂, x₂x₃]ᵀ
 
-### Problem 14: Three-variable Jacobian
+**1. Calculate ∇f (gradient of f):**
 
-**f(x, y, z) = [xy, yz, xz]**
+∂f/∂y₁ = 2y₁
+∂f/∂y₂ = 4y₂
 
-Let f₁ = xy, f₂ = yz, f₃ = xz
+**∇f = [2y₁, 4y₂]ᵀ** (2×1 vector)
 
-**J = [∂f₁/∂x  ∂f₁/∂y  ∂f₁/∂z]   [y  x  0]**
-    **[∂f₂/∂x  ∂f₂/∂y  ∂f₂/∂z] = [0  z  y]**
-    **[∂f₃/∂x  ∂f₃/∂y  ∂f₃/∂z]   [z  0  x]**
+**2. Calculate Jacobian of g:**
+
+y₁ = x₁ + x₂
+y₂ = x₂x₃
+
+Jg = [∂y₁/∂x₁  ∂y₁/∂x₂  ∂y₁/∂x₃]   [1   1   0 ]
+     [∂y₂/∂x₁  ∂y₂/∂x₂  ∂y₂/∂x₃] = [0   x₃  x₂]
+
+**Jg is 2×3 matrix**
+
+**3. Calculate ∇ₓz = Jgᵀ∇f:**
+
+Jgᵀ = [1    0 ]
+      [1    x₃]
+      [0    x₂]
+
+∇ₓz = [1    0 ] [2y₁]   [2y₁        ]
+      [1    x₃] [4y₂] = [2y₁ + 4x₃y₂]
+      [0    x₂]         [4x₂y₂      ]
+
+Substituting y₁ = x₁ + x₂ and y₂ = x₂x₃:
+
+**∇ₓz = [2(x₁ + x₂), 2(x₁ + x₂) + 4x₃(x₂x₃), 4x₂(x₂x₃)]ᵀ**
+     **= [2x₁ + 2x₂, 2x₁ + 2x₂ + 4x₂x₃², 4x₂²x₃]ᵀ**
 
 ---
 
 ## Part 6: Hessian Matrices - Solutions
 
-### Problem 15: Compute Hessian
+### Exercise 6.1: Computing Hessian
 
-**f(x, y) = x³ + y³ + 3xy**
+**f(x, y) = x³ + y³ - 3xy**
 
 **First-order partials:**
-∂f/∂x = 3x² + 3y
-∂f/∂y = 3y² + 3x
+∂f/∂x = 3x² - 3y
+∂f/∂y = 3y² - 3x
 
 **Second-order partials:**
 ∂²f/∂x² = 6x
 ∂²f/∂y² = 6y
-∂²f/∂x∂y = 3
-∂²f/∂y∂x = 3
+∂²f/∂x∂y = -3
+∂²f/∂y∂x = -3
 
-**Hessian H:**
+**Hessian matrix:**
 
-**H = [∂²f/∂x²    ∂²f/∂x∂y]   [6x  3]**
-    **[∂²f/∂y∂x   ∂²f/∂y²  ] = [3   6y]**
+**H = [6x   -3]**
+    **[-3   6y]**
 
-**At (1, 1):**
+**Evaluate at (1, 1):**
 
-**H(1, 1) = [6(1)  3 ] = [6  3]**
-          **[3     6(1)]   [3  6]**
-
-**Eigenvalues:**
-det(H - λI) = 0
-det([6-λ   3  ]) = 0
-   ([3     6-λ])
-
-(6-λ)² - 9 = 0
-36 - 12λ + λ² - 9 = 0
-λ² - 12λ + 27 = 0
-
-λ = (12 ± √(144-108))/2 = (12 ± 6)/2
-
-**λ₁ = 9, λ₂ = 3**
-
-Both eigenvalues are positive → **local minimum** at (1, 1)
-
-### Problem 16: Neural network curvature
-
-**L(w) = w⁴ - 4w³ + 6w²**
-
-**First derivative:**
-dL/dw = 4w³ - 12w² + 12w
-
-**Second derivative (Hessian for 1D):**
-d²L/dw² = 12w² - 24w + 12
-
-**At w = 1:**
-d²L/dw²|_{w=1} = 12(1)² - 24(1) + 12
-                = 12 - 24 + 12
-                = 0
-
-**Interpretation:** The Hessian is zero at w = 1, indicating an inflection point. Neither convex nor concave at this point. Gradient descent may be slow here.
+**H(1, 1) = [6(1)  -3]   [6  -3]**
+          **[-3    6(1)] = [-3  6]**
 
 ---
 
-## Part 7: ML-Specific Applications - Solutions
+### Exercise 6.2: Analyzing Critical Points
 
-### Problem 17: Mean Squared Error gradient
+**f(x, y) = x² - xy + y² + 2x - y**
 
-**MSE(w, b) = (1/3)[(wx₁ + b - y₁)² + (wx₂ + b - y₂)² + (wx₃ + b - y₃)²]**
+**1. Find critical points:**
 
-**Dataset:**
-(x₁, y₁) = (1, 2)
-(x₂, y₂) = (2, 4)
-(x₃, y₃) = (3, 5)
+∂f/∂x = 2x - y + 2 = 0
+∂f/∂y = -x + 2y - 1 = 0
 
-**Current parameters:** w = 1, b = 0
+From second equation: x = 2y - 1
 
-**Predictions:**
-ŷ₁ = 1(1) + 0 = 1
-ŷ₂ = 1(2) + 0 = 2
-ŷ₃ = 1(3) + 0 = 3
+Substitute into first:
+2(2y - 1) - y + 2 = 0
+4y - 2 - y + 2 = 0
+3y = 0
+y = 0
 
-**Errors:**
-e₁ = ŷ₁ - y₁ = 1 - 2 = -1
-e₂ = ŷ₂ - y₂ = 2 - 4 = -2
-e₃ = ŷ₃ - y₃ = 3 - 5 = -2
+Then: x = 2(0) - 1 = -1
 
-**∂MSE/∂w = (2/3)[e₁·x₁ + e₂·x₂ + e₃·x₃]**
-          = (2/3)[(-1)(1) + (-2)(2) + (-2)(3)]
-          = (2/3)[-1 - 4 - 6]
-          = (2/3)(-11)
-          = -22/3
-          ≈ -7.33
+**Critical point: (-1, 0)**
 
-**∂MSE/∂b = (2/3)[e₁ + e₂ + e₃]**
-          = (2/3)[-1 - 2 - 2]
-          = (2/3)(-5)
-          = -10/3
-          ≈ -3.33
+**2. Calculate Hessian:**
 
-**Gradient descent update (α = 0.1):**
+∂²f/∂x² = 2
+∂²f/∂y² = 2
+∂²f/∂x∂y = -1
+∂²f/∂y∂x = -1
 
-w_new = w - α(∂MSE/∂w)
-      = 1 - 0.1(-7.33)
-      = 1 + 0.733
-      = 1.733
+**H = [2   -1]**
+    **[-1   2]**
 
-b_new = b - α(∂MSE/∂b)
-      = 0 - 0.1(-3.33)
-      = 0 + 0.333
-      = 0.333
+**3. Classify critical point:**
 
-### Problem 18: Binary Cross-Entropy gradient
+det(H) = (2)(2) - (-1)(-1) = 4 - 1 = 3 > 0
+∂²f/∂x² = 2 > 0
 
-**BCE = -[y log(ŷ) + (1 - y) log(1 - ŷ)]**
+Since det(H) > 0 and ∂²f/∂x² > 0:
 
-**Prediction:** ŷ = σ(z) = 1/(1 + e^(-z))
-**Where:** z = wx
-**Given:** w = 0.5, x = 2, y = 1
+**Answer: Local minimum at (-1, 0)**
 
-**Forward pass:**
-z = 0.5 × 2 = 1
-ŷ = σ(1) = 1/(1 + e^(-1)) ≈ 0.731
-
-**∂BCE/∂ŷ:**
-∂BCE/∂ŷ = -[y/ŷ - (1-y)/(1-ŷ)]
-        = -[1/0.731 - 0/0.269]
-        = -1.368
-
-**∂ŷ/∂z:**
-∂ŷ/∂z = ŷ(1 - ŷ)
-      = 0.731(0.269)
-      ≈ 0.197
-
-**∂z/∂w:**
-∂z/∂w = x = 2
-
-**Chain rule:**
-∂BCE/∂w = (∂BCE/∂ŷ)(∂ŷ/∂z)(∂z/∂w)
-        = (-1.368)(0.197)(2)
-        ≈ -0.539
-
-**Simplified form:**
-∂BCE/∂w = (ŷ - y)·x = (0.731 - 1)(2) = -0.538 ✓
-
-### Problem 19: Softmax gradient
-
-**Softmax:** p_i = e^(z_i) / Σ_j e^(z_j)
-
-**Given:** z = [1, 2, 0.5]
-
-**Compute softmax:**
-e^1 = 2.718
-e^2 = 7.389
-e^0.5 = 1.649
-
-Sum = 2.718 + 7.389 + 1.649 = 11.756
-
-p₁ = 2.718/11.756 ≈ 0.231
-p₂ = 7.389/11.756 ≈ 0.629
-p₃ = 1.649/11.756 ≈ 0.140
-
-**∂p₂/∂z₁:**
-For i ≠ j: ∂p_i/∂z_j = -p_i·p_j
-
-∂p₂/∂z₁ = -p₂·p₁
-        = -(0.629)(0.231)
-        ≈ -0.145
-
-**Interpretation:** Increasing z₁ decreases p₂ because softmax is a probability distribution (sum = 1).
-
-### Problem 20: Two-layer network backpropagation
-
-**Architecture:**
-x → h = σ(w₁x + b₁) → ŷ = σ(w₂h + b₂) → L = (ŷ - y)²
-
-**Given:**
-- w₁ = 0.5, b₁ = 0.1
-- w₂ = 0.8, b₂ = 0.2
-- x = 1, y = 1
-- σ(z) = 1/(1 + e^(-z))
-
-**Forward pass:**
-
-z₁ = w₁x + b₁ = 0.5(1) + 0.1 = 0.6
-h = σ(0.6) = 1/(1 + e^(-0.6)) ≈ 0.646
-
-z₂ = w₂h + b₂ = 0.8(0.646) + 0.2 ≈ 0.717
-ŷ = σ(0.717) ≈ 0.672
-
-L = (0.672 - 1)² ≈ 0.108
-
-**Backward pass:**
-
-**∂L/∂ŷ:**
-∂L/∂ŷ = 2(ŷ - y) = 2(0.672 - 1) = -0.656
-
-**∂ŷ/∂z₂:**
-∂ŷ/∂z₂ = ŷ(1 - ŷ) = 0.672(0.328) ≈ 0.220
-
-**∂z₂/∂w₂:**
-∂z₂/∂w₂ = h = 0.646
-
-**∂L/∂w₂:**
-∂L/∂w₂ = (∂L/∂ŷ)(∂ŷ/∂z₂)(∂z₂/∂w₂)
-       = (-0.656)(0.220)(0.646)
-       ≈ -0.093
-
-**∂z₂/∂h:**
-∂z₂/∂h = w₂ = 0.8
-
-**∂h/∂z₁:**
-∂h/∂z₁ = h(1 - h) = 0.646(0.354) ≈ 0.229
-
-**∂z₁/∂w₁:**
-∂z₁/∂w₁ = x = 1
-
-**∂L/∂w₁:**
-∂L/∂w₁ = (∂L/∂ŷ)(∂ŷ/∂z₂)(∂z₂/∂h)(∂h/∂z₁)(∂z₁/∂w₁)
-       = (-0.656)(0.220)(0.8)(0.229)(1)
-       ≈ -0.026
-
-**Summary:**
-- ∂L/∂w₂ ≈ -0.093
-- ∂L/∂w₁ ≈ -0.026
-
-Both gradients are negative, indicating we should increase both weights to reduce loss.
+Function value: f(-1, 0) = 1 - 0 + 0 - 2 - 0 = -1
 
 ---
 
-## Challenge Problems - Solutions
+## Part 7: ML-Specific Gradients - Solutions
 
-### Challenge 1: Implement Gradient Checker
+### Exercise 7.1: Linear Regression Gradient
+
+**Model:** ŷ = wx + b
+**Loss:** L = (y - ŷ)²
+**Data:** x = 3, y = 7
+**Parameters:** w = 1.5, b = 2
+**Learning rate:** α = 0.1
+
+**1. Calculate predicted value:**
+ŷ = wx + b = 1.5(3) + 2 = 4.5 + 2 = **6.5**
+
+**2. Calculate loss:**
+L = (y - ŷ)² = (7 - 6.5)² = (0.5)² = **0.25**
+
+**3. Calculate ∂L/∂w:**
+
+L = (y - wx - b)²
+
+Let u = y - wx - b, then L = u²
+
+∂L/∂u = 2u
+∂u/∂w = -x
+
+**∂L/∂w = (∂L/∂u)(∂u/∂w)**
+       = 2(y - wx - b)(-x)
+       = -2x(y - wx - b)
+
+At current values:
+∂L/∂w = -2(3)(7 - 1.5(3) - 2)
+      = -6(7 - 4.5 - 2)
+      = -6(0.5)
+      = **-3**
+
+**4. Calculate ∂L/∂b:**
+
+∂u/∂b = -1
+
+**∂L/∂b = (∂L/∂u)(∂u/∂b)**
+       = 2(y - wx - b)(-1)
+       = -2(y - wx - b)
+
+At current values:
+∂L/∂b = -2(0.5)
+      = **-1**
+
+**5. Update parameters:**
+
+w_new = w - α(∂L/∂w)
+      = 1.5 - 0.1(-3)
+      = 1.5 + 0.3
+      = **1.8**
+
+b_new = b - α(∂L/∂b)
+      = 2 - 0.1(-1)
+      = 2 + 0.1
+      = **2.1**
+
+**Verification:** New prediction: ŷ = 1.8(3) + 2.1 = 5.4 + 2.1 = 7.5 (closer to target 7!) ✓
+
+---
+
+### Exercise 7.2: Logistic Regression Gradient
+
+**Model:** ŷ = σ(z) where z = wx + b and σ(z) = 1/(1 + e^(-z))
+**Loss:** L = -[y log(ŷ) + (1-y) log(1-ŷ)]
+**Given:** x = 2, y = 1, w = 0.5, b = 0.5
+
+**1. Calculate z:**
+z = wx + b = 0.5(2) + 0.5 = 1 + 0.5 = **1.5**
+
+**2. Calculate ŷ:**
+ŷ = σ(1.5) = 1/(1 + e^(-1.5))
+  = 1/(1 + 0.2231)
+  ≈ **0.8176**
+
+**3. Calculate loss:**
+L = -[y log(ŷ) + (1-y) log(1-ŷ)]
+  = -[1 · log(0.8176) + 0 · log(0.1824)]
+  = -log(0.8176)
+  ≈ **0.2014**
+
+**4. Calculate ∂L/∂ŷ:**
+∂L/∂ŷ = -[y/ŷ - (1-y)/(1-ŷ)]
+      = -[1/0.8176 - 0/0.1824]
+      = -1.2231
+      ≈ **-1.223**
+
+**5. Calculate ∂ŷ/∂z:**
+σ'(z) = σ(z)(1 - σ(z))
+      = 0.8176(1 - 0.8176)
+      = 0.8176 × 0.1824
+      ≈ **0.1491**
+
+**6. Calculate ∂z/∂w and ∂z/∂b:**
+∂z/∂w = x = **2**
+∂z/∂b = **1**
+
+**7. Chain rule - ∂L/∂w:**
+∂L/∂w = (∂L/∂ŷ)(∂ŷ/∂z)(∂z/∂w)
+      = (-1.223)(0.1491)(2)
+      ≈ **-0.3648**
+
+**8. Chain rule - ∂L/∂b:**
+∂L/∂b = (∂L/∂ŷ)(∂ŷ/∂z)(∂z/∂b)
+      = (-1.223)(0.1491)(1)
+      ≈ **-0.1824**
+
+**Simplified form (bonus):**
+∂L/∂w = (ŷ - y) · x = (0.8176 - 1) · 2 = -0.3648 ✓
+∂L/∂b = (ŷ - y) = 0.8176 - 1 = -0.1824 ✓
+
+---
+
+### Exercise 7.3: Softmax Gradient
+
+**Given:** z = [2, 1, 0.5], y = [1, 0, 0] (class 0 is correct)
+
+**1. Calculate softmax outputs:**
+
+e^(z₁) = e^2 ≈ 7.389
+e^(z₂) = e^1 ≈ 2.718
+e^(z₃) = e^0.5 ≈ 1.649
+
+Sum = 7.389 + 2.718 + 1.649 = 11.756
+
+ŷ₁ = 7.389/11.756 ≈ **0.6285**
+ŷ₂ = 2.718/11.756 ≈ **0.2312**
+ŷ₃ = 1.649/11.756 ≈ **0.1403**
+
+Verification: 0.6285 + 0.2312 + 0.1403 = 1.0000 ✓
+
+**2. Calculate loss:**
+L = -Σᵢ yᵢ log(ŷᵢ)
+  = -(1 · log(0.6285) + 0 · log(0.2312) + 0 · log(0.1403))
+  = -log(0.6285)
+  ≈ **0.4644**
+
+**3. Show that ∂L/∂zᵢ = ŷᵢ - yᵢ:**
+
+For softmax + cross-entropy, the gradient simplifies beautifully:
+
+∂L/∂zᵢ = ŷᵢ - yᵢ
+
+This is a well-known result! The derivation involves:
+- ∂L/∂ŷᵢ = -yᵢ/ŷᵢ
+- ∂ŷᵢ/∂zⱼ = ŷᵢ(δᵢⱼ - ŷⱼ) where δᵢⱼ is Kronecker delta
+- Chain rule over all outputs
+
+The terms magically cancel to give the simple form!
+
+**4. Calculate gradients:**
+
+∂L/∂z₁ = ŷ₁ - y₁ = 0.6285 - 1 = **-0.3715**
+∂L/∂z₂ = ŷ₂ - y₂ = 0.2312 - 0 = **0.2312**
+∂L/∂z₃ = ŷ₃ - y₃ = 0.1403 - 0 = **0.1403**
+
+**Interpretation:**
+- Class 0 gradient is negative (we want to increase logit for correct class)
+- Classes 1, 2 gradients are positive (we want to decrease logits for wrong classes)
+
+---
+
+## NumPy Verification
 
 ```python
 import numpy as np
 
-def gradient_check(f, grad_f, x, epsilon=1e-7):
-    """
-    f: function that takes x and returns scalar
-    grad_f: function that computes gradient analytically
-    x: point to check gradient at
-    epsilon: small perturbation
-    """
-    # Compute analytical gradient
-    analytical_grad = grad_f(x)
-
-    # Compute numerical gradient
-    numerical_grad = np.zeros_like(x)
-
-    for i in range(len(x)):
-        x_plus = x.copy()
-        x_plus[i] += epsilon
-
-        x_minus = x.copy()
-        x_minus[i] -= epsilon
-
-        # Finite difference approximation
-        numerical_grad[i] = (f(x_plus) - f(x_minus)) / (2 * epsilon)
-
-    # Compute relative error
-    numerator = np.linalg.norm(analytical_grad - numerical_grad)
-    denominator = np.linalg.norm(analytical_grad) + np.linalg.norm(numerical_grad)
-    relative_error = numerator / denominator
-
-    print(f"Analytical gradient: {analytical_grad}")
-    print(f"Numerical gradient:  {numerical_grad}")
-    print(f"Relative error:      {relative_error:.2e}")
-
-    # If relative error < 1e-7, gradients are likely correct
-    if relative_error < 1e-7:
-        print("✓ Gradient check PASSED")
-    else:
-        print("✗ Gradient check FAILED")
-
-    return relative_error
-
-# Example usage
-def f(x):
-    """f(x1, x2) = x1^2 + x1*x2 + x2^2"""
-    return x[0]**2 + x[0]*x[1] + x[1]**2
-
-def grad_f(x):
-    """Gradient of f"""
-    return np.array([2*x[0] + x[1], x[0] + 2*x[1]])
-
-x = np.array([1.0, 2.0])
-gradient_check(f, grad_f, x)
-
-# Output:
-# Analytical gradient: [4. 5.]
-# Numerical gradient:  [4. 5.]
-# Relative error:      1.57e-10
-# ✓ Gradient check PASSED
-```
-
-### Challenge 2: Momentum in Gradient Descent
-
-**Gradient descent with momentum:**
-
-v_t = β·v_{t-1} + (1 - β)·∇L(w_t)
-w_{t+1} = w_t - α·v_t
-
-**Given:**
-- f(w) = w² - 4w + 3
-- w₀ = 5
-- α = 0.1
-- β = 0.9
-- v₀ = 0
-
-**Gradient:** ∇f(w) = 2w - 4
-
-**Step 1:**
-∇f(5) = 2(5) - 4 = 6
-v₁ = 0.9(0) + 0.1(6) = 0.6
-w₁ = 5 - 0.1(0.6) = 5 - 0.06 = 4.94
-
-**Step 2:**
-∇f(4.94) = 2(4.94) - 4 = 5.88
-v₂ = 0.9(0.6) + 0.1(5.88) = 0.54 + 0.588 = 1.128
-w₂ = 4.94 - 0.1(1.128) = 4.94 - 0.1128 = 4.827
-
-**Step 3:**
-∇f(4.827) = 2(4.827) - 4 = 5.654
-v₃ = 0.9(1.128) + 0.1(5.654) = 1.0152 + 0.5654 = 1.581
-w₃ = 4.827 - 0.1(1.581) = 4.827 - 0.1581 = 4.669
-
-**Step 4:**
-∇f(4.669) = 2(4.669) - 4 = 5.338
-v₄ = 0.9(1.581) + 0.1(5.338) = 1.423 + 0.534 = 1.957
-w₄ = 4.669 - 0.1(1.957) = 4.669 - 0.1957 = 4.473
-
-**Step 5:**
-∇f(4.473) = 2(4.473) - 4 = 4.946
-v₅ = 0.9(1.957) + 0.1(4.946) = 1.761 + 0.495 = 2.256
-w₅ = 4.473 - 0.1(2.256) = 4.473 - 0.2256 = 4.247
-
-**Comparison with regular gradient descent:**
-
-Regular GD without momentum:
-- w₁ = 5 - 0.1(6) = 4.4
-- w₂ = 4.4 - 0.1(4.8) = 3.92
-- w₃ = 3.92 - 0.1(3.84) = 3.536
-- w₄ = 3.536 - 0.1(3.072) = 3.229
-- w₅ = 3.229 - 0.1(2.458) = 2.983
-
-**Observations:**
-- Regular GD reaches closer to optimum (w* = 2) faster in this case
-- Momentum builds up velocity, causing larger steps
-- For this simple convex function, momentum overshoots
-- Momentum shines in problems with noisy gradients or ravines
-
-### Challenge 3: RMSprop Implementation
-
-```python
-import numpy as np
-
-def rmsprop(f, grad_f, w_init, alpha=0.01, beta=0.9, epsilon=1e-8, n_iterations=100):
-    """
-    RMSprop optimizer
-
-    f: objective function
-    grad_f: gradient function
-    w_init: initial parameters
-    alpha: learning rate
-    beta: decay rate for moving average
-    epsilon: small constant to prevent division by zero
-    """
-    w = w_init.copy()
-    s = np.zeros_like(w)  # Running average of squared gradients
-
-    history_w = [w.copy()]
-    history_loss = [f(w)]
-
-    for t in range(n_iterations):
-        # Compute gradient
-        g = grad_f(w)
-
-        # Update moving average of squared gradient
-        s = beta * s + (1 - beta) * (g ** 2)
-
-        # Update parameters
-        w = w - alpha * g / (np.sqrt(s) + epsilon)
-
-        # Record history
-        history_w.append(w.copy())
-        history_loss.append(f(w))
-
-        if t % 10 == 0:
-            print(f"Iteration {t}: w = {w}, loss = {f(w):.6f}")
-
-    return w, history_w, history_loss
-
-# Example: Minimize f(w1, w2) = w1^2 + 10*w2^2
-def f(w):
-    return w[0]**2 + 10*w[1]**2
-
-def grad_f(w):
-    return np.array([2*w[0], 20*w[1]])
-
-w_init = np.array([5.0, 5.0])
-w_final, history_w, history_loss = rmsprop(f, grad_f, w_init, alpha=0.1, n_iterations=50)
-
-print(f"\nFinal w: {w_final}")
-print(f"Final loss: {f(w_final):.6f}")
-
-# Output shows RMSprop adapts learning rate per parameter,
-# allowing faster convergence in w2 direction (steeper) while
-# being more conservative in w1 direction (flatter)
-```
-
----
-
-## Verification with NumPy
-
-```python
-import numpy as np
-
-# Verify Problem 11: Chain rule
+# Verify Exercise 4.1: Chain rule
 def z_func(t):
     x = 2*t
     y = 3*t
     return x**2 + y**2
 
-t_val = 1.0
+t = 1.0
 h = 1e-7
-numerical_derivative = (z_func(t_val + h) - z_func(t_val - h)) / (2*h)
-analytical_derivative = 26 * t_val
+numerical = (z_func(t + h) - z_func(t - h)) / (2*h)
+analytical = 26 * t
+print(f"Ex 4.1 - Numerical: {numerical:.6f}, Analytical: {analytical:.6f}")
+# Output: 26.000000, 26.000000 ✓
 
-print(f"Problem 11 verification:")
-print(f"Numerical: {numerical_derivative:.6f}")
-print(f"Analytical: {analytical_derivative:.6f}")
-print(f"Match: {np.isclose(numerical_derivative, analytical_derivative)}\n")
+# Verify Exercise 7.3: Softmax gradient
+z = np.array([2.0, 1.0, 0.5])
+y = np.array([1, 0, 0])
 
-# Verify Problem 15: Hessian eigenvalues
-H = np.array([[6, 3], [3, 6]])
-eigenvalues = np.linalg.eigvals(H)
-print(f"Problem 15 verification:")
-print(f"Eigenvalues: {eigenvalues}")
-print(f"Both positive: {np.all(eigenvalues > 0)} (local minimum)\n")
+# Forward pass
+exp_z = np.exp(z)
+softmax = exp_z / np.sum(exp_z)
+loss = -np.sum(y * np.log(softmax))
 
-# Verify Problem 18: BCE gradient
-y = 1
-y_hat = 0.731
-x = 2
-analytical_grad = (y_hat - y) * x
-print(f"Problem 18 verification:")
-print(f"Simplified BCE gradient: {analytical_grad:.3f}")
+# Gradient
+grad = softmax - y
+
+print(f"Ex 7.3 - Softmax: {softmax}")
+print(f"Ex 7.3 - Loss: {loss:.4f}")
+print(f"Ex 7.3 - Gradient: {grad}")
+# Output matches our hand calculations ✓
 ```
+
+---
+
+## Challenge Problems - Solutions
+
+### Challenge 1: Newton's Method
+
+**f(x, y) = x² + 4y²**
+**Starting point:** (4, 2)
+
+**Formula:** x_new = x - H⁻¹∇f
+
+**Gradient:**
+∇f = [2x, 8y]ᵀ
+
+At (4, 2):
+∇f(4, 2) = [8, 16]ᵀ
+
+**Hessian:**
+H = [∂²f/∂x²    ∂²f/∂x∂y]   [2  0]
+    [∂²f/∂y∂x   ∂²f/∂y²  ] = [0  8]
+
+**Inverse Hessian:**
+H⁻¹ = [1/2   0  ]
+      [0     1/8]
+
+**Newton step:**
+[x_new]   [4]       [1/2   0  ] [8 ]
+[y_new] = [2] - [0     1/8] [16]
+
+        = [4] - [4]
+          [2]   [2]
+
+        = **[0, 0]ᵀ**
+
+**Answer: Newton's method finds the global minimum (0, 0) in one step!**
+
+This is because f is quadratic, and Newton's method is exact for quadratic functions.
+
+---
+
+### Challenge 2: Batch Gradient
+
+**Data:**
+- (x₁, y₁) = (1, 3)
+- (x₂, y₂) = (2, 5)
+- (x₃, y₃) = (3, 7)
+
+**Model:** ŷ = wx + b
+**Loss for single point:** Lᵢ = (yᵢ - wxᵢ - b)²
+
+**Current parameters:** w = 1.5, b = 2 (from Exercise 7.1)
+
+**Gradient for each point:**
+
+For point i:
+∂Lᵢ/∂w = -2xᵢ(yᵢ - wxᵢ - b)
+∂Lᵢ/∂b = -2(yᵢ - wxᵢ - b)
+
+**Point 1:** (1, 3)
+ŷ₁ = 1.5(1) + 2 = 3.5
+∂L₁/∂w = -2(1)(3 - 3.5) = -2(1)(-0.5) = 1
+∂L₁/∂b = -2(-0.5) = 1
+
+**Point 2:** (2, 5)
+ŷ₂ = 1.5(2) + 2 = 5
+∂L₂/∂w = -2(2)(5 - 5) = 0
+∂L₂/∂b = -2(0) = 0
+
+**Point 3:** (3, 7)
+ŷ₃ = 1.5(3) + 2 = 6.5
+∂L₃/∂w = -2(3)(7 - 6.5) = -6(0.5) = -3
+∂L₃/∂b = -2(0.5) = -1
+
+**Average gradient (mini-batch):**
+
+∂L/∂w = (1 + 0 + (-3))/3 = -2/3 ≈ **-0.667**
+∂L/∂b = (1 + 0 + (-1))/3 = 0/3 = **0**
+
+**Update (α = 0.1):**
+
+w_new = 1.5 - 0.1(-0.667) = 1.5 + 0.0667 = **1.567**
+b_new = 2 - 0.1(0) = **2**
+
+---
+
+### Challenge 3: Derive Backprop for 2-Layer Network
+
+**Network:**
+```
+x → z₁ = W₁x + b₁ → h₁ = σ(z₁) → z₂ = W₂h₁ + b₂ → h₂ = σ(z₂) → L = (h₂ - y)²
+```
+
+**Notation:**
+- σ'(z) = σ(z)(1 - σ(z))
+- δ₂ = ∂L/∂z₂
+- δ₁ = ∂L/∂z₁
+
+**Backward pass:**
+
+**1. ∂L/∂h₂:**
+∂L/∂h₂ = 2(h₂ - y)
+
+**2. ∂L/∂z₂ = δ₂:**
+δ₂ = (∂L/∂h₂)(∂h₂/∂z₂)
+   = 2(h₂ - y) · σ'(z₂)
+   = 2(h₂ - y) · h₂(1 - h₂)
+
+**3. ∂L/∂W₂:**
+∂L/∂W₂ = δ₂ · h₁ᵀ
+
+**4. ∂L/∂b₂:**
+∂L/∂b₂ = δ₂
+
+**5. ∂L/∂h₁:**
+∂L/∂h₁ = W₂ᵀ · δ₂
+
+**6. ∂L/∂z₁ = δ₁:**
+δ₁ = (∂L/∂h₁) ⊙ σ'(z₁)
+   = (W₂ᵀδ₂) ⊙ [h₁ ⊙ (1 - h₁)]
+
+(⊙ denotes element-wise multiplication)
+
+**7. ∂L/∂W₁:**
+∂L/∂W₁ = δ₁ · xᵀ
+
+**8. ∂L/∂b₁:**
+∂L/∂b₁ = δ₁
+
+**Summary:**
+```
+Forward: x → z₁ → h₁ → z₂ → h₂ → L
+Backward: ∂L/∂W₁, ∂L/∂b₁ ← δ₁ ← δ₂ ← ∂L/∂h₂
+```
+
+This is the essence of backpropagation! 🧠
 
 ---
 
 ## Key Takeaways
 
-1. **Chain rule is fundamental** - All backpropagation relies on it
-2. **Gradient = direction of steepest ascent** - Negative gradient descends
-3. **Second derivatives (Hessian) tell us about curvature** - Useful for optimization
-4. **Always verify gradients numerically** when implementing new models
-5. **Momentum and adaptive methods** (RMSprop, Adam) improve training
-6. **For ML: ∂Loss/∂weight = (prediction - target) × input** is the most common pattern
+1. **Chain rule** is fundamental - all backpropagation uses it
+2. **Gradient** points in direction of steepest ascent; negative gradient descends
+3. **For ML:** Most common pattern is ∂Loss/∂weight = (prediction - target) × input
+4. **Jacobians** generalize gradients to vector-valued functions
+5. **Hessians** describe curvature (convexity) of loss surface
+6. **Always verify gradients numerically** when implementing new architectures!
 
-Practice these concepts until computing gradients becomes second nature!
+Practice until computing gradients becomes second nature! 🚀
