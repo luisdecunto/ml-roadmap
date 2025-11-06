@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-06T13:34:35.142Z",
+  "lastUpdated": "2025-11-06T13:37:16.149Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -50,7 +50,8 @@
     "micrograd-1.3": true,
     "micrograd-2.1": true,
     "micrograd-2.2": true,
-    "micrograd-2.3": true
+    "micrograd-2.3": true,
+    "micrograd-2.4": true
   },
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
