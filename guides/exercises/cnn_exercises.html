@@ -522,6 +522,88 @@
     </div>
 
     <script>
+        // GitHub sync configuration
+        const GITHUB_USERNAME = 'luisdecunto';
+        const GITHUB_REPO = 'ml-roadmap';
+        const PROGRESS_FILE = 'progress.json';
+
+        let fileSha = null;
+
+        // Sync exercise completions from GitHub on page load
+        async function syncFromGitHub() {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${PROGRESS_FILE}`, {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    fileSha = data.sha; // Store SHA for updates
+                    const content = JSON.parse(atob(data.content));
+
+                    if (content.exerciseCompletions) {
+                        // Merge with existing localStorage (prefer GitHub data)
+                        localStorage.setItem('exercise-completions', JSON.stringify(content.exerciseCompletions));
+                    }
+                }
+            } catch (error) {
+                console.log('Could not sync from GitHub, using local data:', error);
+            }
+        }
+
+        // Save exercise completions to GitHub
+        async function saveToGitHub() {
+            const token = localStorage.getItem('githubToken');
+            if (!token || !fileSha) return;
+
+            try {
+                // Get current progress data
+                const getCurrentProgress = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${PROGRESS_FILE}`, {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Authorization': `token ${token}`
+                    }
+                });
+
+                if (getCurrentProgress.ok) {
+                    const currentData = await getCurrentProgress.json();
+                    const currentContent = JSON.parse(atob(currentData.content));
+                    fileSha = currentData.sha; // Update SHA
+
+                    // Update only exerciseCompletions
+                    const exerciseCompletions = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+                    currentContent.exerciseCompletions = exerciseCompletions;
+                    currentContent.lastUpdated = new Date().toISOString();
+
+                    // Save back to GitHub
+                    const content = btoa(JSON.stringify(currentContent, null, 2));
+                    const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${PROGRESS_FILE}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Accept': 'application/vnd.github.v3+json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: 'Update exercise progress',
+                            content: content,
+                            sha: fileSha
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        fileSha = data.content.sha;
+                        console.log('Progress saved to GitHub');
+                    }
+                }
+            } catch (error) {
+                console.error('Error saving to GitHub:', error);
+            }
+        }
+
         // Load completion state from localStorage
         function loadCompletionState() {
             const state = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
@@ -555,6 +637,9 @@
 
             localStorage.setItem('exercise-completions', JSON.stringify(state));
 
+            // Save to GitHub
+            saveToGitHub();
+
             // Notify other windows/tabs about the change
             window.dispatchEvent(new StorageEvent('storage', {
                 key: 'exercise-completions',
@@ -585,7 +670,10 @@
         }
 
         // Initialize on page load
-        document.addEventListener('DOMContentLoaded', loadCompletionState);
+        document.addEventListener('DOMContentLoaded', async () => {
+            await syncFromGitHub();
+            loadCompletionState();
+        });
     </script>
 </body>
 </html>

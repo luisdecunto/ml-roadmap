@@ -617,12 +617,16 @@
                     if (e.key === 'exercise-completions') {
                         // Force re-render by updating a dummy state
                         setCheckedTasks(prev => ({...prev}));
+                        // Save to GitHub if in edit mode
+                        if (githubToken) {
+                            saveProgressToGitHub();
+                        }
                     }
                 };
 
                 window.addEventListener('storage', handleStorageChange);
                 return () => window.removeEventListener('storage', handleStorageChange);
-            }, []);
+            }, [githubToken]);
 
             const loadProgressFromGitHub = async (token = githubToken) => {
                 try {
@@ -645,6 +649,10 @@
                         setCheckedTasks(content.checkedTasks || {});
                         if (content.expandedMonths) setExpandedMonths(content.expandedMonths);
                         if (content.expandedWeeks) setExpandedWeeks(content.expandedWeeks);
+                        // Sync exercise completions to localStorage
+                        if (content.exerciseCompletions) {
+                            localStorage.setItem('exercise-completions', JSON.stringify(content.exerciseCompletions));
+                        }
                         setLastSyncTime(new Date().toLocaleTimeString());
                         setSyncStatus(token ? 'synced' : 'view-only');
                     } else if (response.status === 404 && token) {
@@ -663,9 +671,13 @@
                 
                 try {
                     setSyncStatus('saving');
-                    
+
+                    // Get exercise completions from localStorage
+                    const exerciseCompletions = JSON.parse(localStorage.getItem('exercise-completions') || '{}');
+
                     const progressData = {
                         lastUpdated: new Date().toISOString(),
+                        exerciseCompletions: exerciseCompletions,
                         checkedTasks: checkedTasks,
                         expandedMonths: expandedMonths,
                         expandedWeeks: expandedWeeks
