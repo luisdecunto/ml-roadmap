@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-06T09:42:05.248Z",
+  "lastUpdated": "2025-11-06T09:42:23.595Z",
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
     "Week 1: SQL Intensive Bootcamp (45 hours)-3": true,
@@ -38,7 +38,7 @@
     "Module 2: Matrix Calculus for ML (15-20 hours)-5": true,
     "Module 2: Matrix Calculus for ML (15-20 hours)-9": true,
     "Module 2: Matrix Calculus for ML (15-20 hours)-12": true,
-    "Calculus & Gradients Exercises-0": true
+    "Calculus & Gradients Exercises-0": false
   },
   "expandedMonths": {
     "Practice Exercises": true
