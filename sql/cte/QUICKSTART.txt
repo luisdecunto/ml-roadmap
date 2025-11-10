@@ -1,0 +1,170 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    SQL CTE PRACTICE - QUICK START GUIDE                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📁 FILES IN THIS FOLDER:
+  • setup.sql         → Create all sample tables and data
+  • PRACTICE_GUIDE.md → Complete guide with examples and tips
+  • EXERCISES.md      → Exercise prompts and solution template
+  • QUICKSTART.txt    → This file
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🚀 GETTING STARTED (5 MINUTES):
+
+1. Copy entire contents of setup.sql
+
+2. Paste into your SQL client:
+   • PostgreSQL: PgAdmin, psql, DBeaver
+   • MySQL: MySQL Workbench, phpMyAdmin
+   • SQLite: DB Browser for SQLite
+   • Any SQL tool works!
+
+3. Run the script (execute all at once)
+
+4. Verify success by running:
+   SELECT COUNT(*) FROM employees;  -- Should return 10
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📚 LEARNING PATH (2-3 HOURS):
+
+Step 1: Read PRACTICE_GUIDE.md (30 min)
+  ✓ Learn CTE syntax
+  ✓ Understand when to use CTEs
+  ✓ See examples of simple CTEs
+
+Step 2: Try Easy Exercises (30 min)
+  ✓ Exercise 1: High Earners
+  ✓ Exercise 2: Customer Orders
+  ✓ Write your SQL in EXERCISES.md
+
+Step 3: Try Medium Exercises (30 min)
+  ✓ Exercise 3: Department Analysis
+  ✓ Exercise 4: Regional Sales
+  ✓ Use multiple CTEs
+
+Step 4: Try Hard Exercises (30 min)
+  ✓ Exercise 5: Project Hierarchy (recursive!)
+  ✓ Exercise 6: Management Chain
+  ✓ Challenge exercises
+
+═══════════════════════════════════════════════════════════════════════════════
+
+💡 BEST PRACTICES:
+
+✅ DO:
+  • Start with simple single CTEs
+  • Test each CTE independently first
+  • Use meaningful CTE names
+  • Add comments to explain logic
+  • Write the query WITHOUT CTE first, then convert
+
+❌ DON'T:
+  • Jump straight to recursive CTEs
+  • Try complex queries on first attempt
+  • Use generic names like "temp" or "data"
+  • Forget the comma between multiple CTEs
+  • Forget WHERE clause in recursive CTEs
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📊 SAMPLE DATA TABLES:
+
+EMPLOYEES (10 rows)
+  → Salary, department, manager info
+  → Great for: Comparisons, aggregations
+
+DEPARTMENTS (3 rows)
+  → Department info with budgets
+  → Great for: Grouping, JOINs
+
+ORDERS (15 rows)
+  → Customer orders with amounts
+  → Great for: Aggregations, filtering
+
+PRODUCTS (4 rows)
+  → Product catalog
+  → Great for: Reference data
+
+PROJECTS (6 rows) ⭐ FOR RECURSIVE CTEs
+  → Hierarchical project structure
+  → Parent/child relationships
+  → Perfect for learning recursive CTEs!
+
+PROJECT_ASSIGNMENTS (9 rows)
+  → Links employees to projects
+  → Great for: Many-to-many relationships
+
+SALES_RECORDS (10 rows)
+  → Sales by employee and region
+  → Great for: Aggregations by region
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 FIRST CTE (COPY-PASTE TEMPLATE):
+
+WITH high_earners AS (
+    -- Step 1: Your first CTE logic here
+    SELECT employee_id, name, salary
+    FROM employees
+    WHERE salary > 75000
+)
+-- Step 2: Use the CTE in main query
+SELECT * FROM high_earners;
+
+═══════════════════════════════════════════════════════════════════════════════
+
+❓ COMMON QUESTIONS:
+
+Q: What SQL dialect do I need?
+A: Any! CTEs work in PostgreSQL, MySQL, SQL Server, SQLite, etc.
+
+Q: Can I run this in Excel or Google Sheets?
+A: No, you need actual SQL database. Use:
+   • PostgreSQL (free, recommended)
+   • SQLite (simplest, built-in)
+   • MySQL (free, popular)
+
+Q: How long does this take?
+A: 2-3 hours for all exercises
+
+Q: What if I get stuck?
+A: Check PRACTICE_GUIDE.md for detailed explanations
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ COMPLETION CHECKLIST:
+
+□ Downloaded and read all files
+□ Ran setup.sql successfully
+□ Verified all tables were created
+□ Completed Exercise 1
+□ Completed Exercise 2
+□ Completed Exercise 3
+□ Completed Exercise 4
+□ Completed Exercise 5 (recursive CTE!)
+□ Completed Exercise 6
+□ Attempted at least 1 challenge
+□ Understand when to use CTEs vs subqueries
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🚀 NEXT STEPS:
+
+After completing these exercises:
+1. Practice with your own database
+2. Convert old subqueries to CTEs
+3. Learn window functions (next topic!)
+4. Learn optimization techniques
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Need help? Check:
+  • PRACTICE_GUIDE.md → For detailed explanations
+  • EXERCISES.md      → For exercise prompts
+  • setup.sql         → To recreate tables
+
+Good luck! You've got this! 🎯
+
+═══════════════════════════════════════════════════════════════════════════════
