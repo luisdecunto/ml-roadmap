@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-10T14:33:26.238Z",
+  "lastUpdated": "2025-11-10T14:33:33.878Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -107,12 +107,15 @@
     "Module 2: Matrix Calculus for ML (15-20 hours)-9": true,
     "Module 2: Matrix Calculus for ML (15-20 hours)-12": true,
     "Calculus & Gradients Exercises-0": true,
-    "Micrograd (Autograd Engine) Exercises-0": true
+    "Micrograd (Autograd Engine) Exercises-0": true,
+    "Module 2: Matrix Calculus for ML (15-20 hours)-8": true
   },
   "expandedMonths": {
-    "Practice Exercises": true
+    "Practice Exercises": false,
+    "Foundations: Linear Algebra & Calculus": true
   },
   "expandedWeeks": {
-    "Practice Exercises-Micrograd (Autograd Engine) Exercises": true
+    "Practice Exercises-Micrograd (Autograd Engine) Exercises": true,
+    "Foundations: Linear Algebra & Calculus-Module 2: Matrix Calculus for ML (15-20 hours)": true
   }
 }
