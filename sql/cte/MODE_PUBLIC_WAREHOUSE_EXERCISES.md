@@ -368,4 +368,15 @@ In Mode, you can:
 
 ---
 
+## 💡 Need Help?
+
+Check out the **[Solutions](MODE_PUBLIC_WAREHOUSE_SOLUTIONS.md)** file for:
+- Complete query answers
+- Step-by-step explanations
+- Key concepts highlighted
+- Common mistakes to avoid
+- Tips for understanding each pattern
+
+---
+
 Good luck! Start with Exercise 1 and build up your CTE skills. 🎯
