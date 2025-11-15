@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-15T15:20:06.122Z",
+  "lastUpdated": "2025-11-15T15:20:08.124Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -110,7 +110,7 @@
     "Micrograd (Autograd Engine) Exercises-0": true,
     "Module 2: Matrix Calculus for ML (15-20 hours)-8": true,
     "Module 2: Matrix Calculus for ML (15-20 hours)-11": true,
-    "Module 3: Optimization Foundations (12-15 hours)-0": true
+    "Module 3: Optimization Foundations (12-15 hours)-0": false
   },
   "expandedMonths": {
     "Practice Exercises": false,
