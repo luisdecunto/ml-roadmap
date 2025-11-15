@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-15T15:57:49.858Z",
+  "lastUpdated": "2025-11-15T16:00:06.957Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -66,7 +66,8 @@
     "micrograd-6.3": true,
     "micrograd-challenge-2": true,
     "micrograd-challenge-3": true,
-    "micrograd-challenge-4": true
+    "micrograd-challenge-4": true,
+    "optimization-1.1": true
   },
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
@@ -114,7 +115,7 @@
     "Module 3: Optimization Foundations (12-15 hours)-2": true
   },
   "expandedMonths": {
-    "Practice Exercises": false,
+    "Practice Exercises": true,
     "Core Theory: Probability & Information": false,
     "Foundations: Linear Algebra & Calculus": true,
     "Month 1: SQL Mastery + Python/Docker Foundations": true
@@ -123,6 +124,7 @@
     "Practice Exercises-Micrograd (Autograd Engine) Exercises": false,
     "Foundations: Linear Algebra & Calculus-Module 2: Matrix Calculus for ML (15-20 hours)": false,
     "Foundations: Linear Algebra & Calculus-Module 3: Optimization Foundations (12-15 hours)": true,
-    "Month 1: SQL Mastery + Python/Docker Foundations-Week 2: Advanced SQL + Python/Pandas (46 hours)": true
+    "Month 1: SQL Mastery + Python/Docker Foundations-Week 2: Advanced SQL + Python/Pandas (46 hours)": true,
+    "Practice Exercises-Optimization Exercises": true
   }
 }
