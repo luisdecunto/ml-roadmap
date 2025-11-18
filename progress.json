@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-18T11:49:54.208Z",
+  "lastUpdated": "2025-11-18T17:35:05.842Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -119,7 +119,8 @@
     "Module 3: Optimization Foundations (12-15 hours)-0": true,
     "Module 3: Optimization Foundations (12-15 hours)-2": true,
     "Module 3: Optimization Foundations (12-15 hours)-1": true,
-    "Module 3: Optimization Foundations (12-15 hours)-3": true
+    "Module 3: Optimization Foundations (12-15 hours)-3": true,
+    "Module 3: Optimization Foundations (12-15 hours)-4": true
   },
   "expandedMonths": {
     "Practice Exercises": false,
