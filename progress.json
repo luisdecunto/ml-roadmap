@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-18T09:59:42.681Z",
+  "lastUpdated": "2025-11-18T10:08:18.225Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -116,8 +116,20 @@
     "Module 2: Matrix Calculus for ML (15-20 hours)-11": true,
     "Module 3: Optimization Foundations (12-15 hours)-0": true,
     "Module 3: Optimization Foundations (12-15 hours)-2": true,
-    "Module 3: Optimization Foundations (12-15 hours)-1": true
+    "Module 3: Optimization Foundations (12-15 hours)-1": true,
+    "Module 3: Optimization Foundations (12-15 hours)-3": true
   },
-  "expandedMonths": {},
-  "expandedWeeks": {}
+  "expandedMonths": {
+    "Practice Exercises": false,
+    "Core Theory: Probability & Information": false,
+    "Foundations: Linear Algebra & Calculus": true,
+    "Month 1: SQL Mastery + Python/Docker Foundations": true
+  },
+  "expandedWeeks": {
+    "Practice Exercises-Micrograd (Autograd Engine) Exercises": false,
+    "Foundations: Linear Algebra & Calculus-Module 2: Matrix Calculus for ML (15-20 hours)": false,
+    "Foundations: Linear Algebra & Calculus-Module 3: Optimization Foundations (12-15 hours)": true,
+    "Month 1: SQL Mastery + Python/Docker Foundations-Week 2: Advanced SQL + Python/Pandas (46 hours)": true,
+    "Practice Exercises-Optimization Exercises": true
+  }
 }
