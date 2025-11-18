@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-18T11:36:10.915Z",
+  "lastUpdated": "2025-11-18T11:36:15.202Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -71,7 +71,6 @@
     "optimization-1.2": true,
     "optimization-1.3": true,
     "optimization-2.1": true,
-    "optimization-3.1": true,
     "optimization-2.2": true
   },
   "checkedTasks": {
