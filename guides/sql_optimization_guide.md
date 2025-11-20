@@ -6,6 +6,43 @@
 
 Learn to analyze, optimize, and tune SQL queries for better performance using EXPLAIN ANALYZE, indexes, and best practices.
 
+📝 **Solutions and examples included inline** - Practical optimization techniques with before/after comparisons!
+
+---
+
+## 📋 Progress Tracker
+
+Track your progress through optimization techniques:
+
+### Part 1: EXPLAIN and Analysis
+- [ ] Understanding EXPLAIN output
+- [ ] Using EXPLAIN ANALYZE
+- [ ] Reading query plans
+- [ ] Exercise 1: Analyze slow query
+
+### Part 2: Indexes
+- [ ] B-tree indexes
+- [ ] Composite indexes
+- [ ] Partial indexes
+- [ ] Exercise 2: Add appropriate indexes
+- [ ] Exercise 3: Index selectivity
+
+### Part 3: Query Rewriting
+- [ ] Avoiding SELECT *
+- [ ] Efficient JOINs
+- [ ] Subquery vs JOIN
+- [ ] Exercise 4: Rewrite inefficient query
+
+### Part 4: Advanced Techniques
+- [ ] Materialized views
+- [ ] Query caching
+- [ ] Partition pruning
+- [ ] Exercise 5: Optimize complex analytics query
+
+### Challenge Problems
+- [ ] Challenge 1: Debug slow production query
+- [ ] Challenge 2: Design optimal index strategy
+
 ---
 
 ## 📚 Understanding Query Performance

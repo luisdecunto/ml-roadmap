@@ -6,6 +6,33 @@
 
 This guide will help you master CTEs (Common Table Expressions) with the WITH clause through practical examples and exercises.
 
+📝 **[Quick Solutions Reference](../practice/SQL_CTE_SOLUTIONS.md)** - Check your answers here!
+
+---
+
+## 📋 Progress Tracker
+
+Track your progress through the exercises:
+
+### Part 1: Basic CTEs
+- [ ] Example 1: Simple CTE
+- [ ] Example 2: Multiple CTEs
+- [ ] Exercise 1.1: Customer Totals
+
+### Part 2: Multi-Step Calculations
+- [ ] Example 3: Sales Ranking
+- [ ] Example 4: Customer Cohort Analysis
+- [ ] Exercise 2.1: Revenue by Category
+
+### Part 3: Recursive CTEs
+- [ ] Example 5: Employee Hierarchy
+- [ ] Example 6: Graph Traversal
+- [ ] Exercise 3.1: Region Hierarchy
+
+### Challenge Problems
+- [ ] Challenge 1: Running Totals with CTEs
+- [ ] Challenge 2: Complex Recursive Query
+
 ---
 
 ## 📚 What are CTEs?

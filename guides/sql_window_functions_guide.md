@@ -6,6 +6,42 @@
 
 Master SQL window functions (ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD, and more) through practical examples.
 
+📝 **Solutions included inline** - Each exercise has a solution directly below it!
+
+---
+
+## 📋 Progress Tracker
+
+Track your progress through the exercises:
+
+### Part 1: Ranking Functions
+- [ ] ROW_NUMBER() basics
+- [ ] RANK() vs DENSE_RANK()
+- [ ] Exercise 1: Employee rankings
+- [ ] Exercise 2: Top N per group
+
+### Part 2: Value Functions
+- [ ] LAG() and LEAD()
+- [ ] FIRST_VALUE() and LAST_VALUE()
+- [ ] Exercise 3: Period-over-period comparison
+- [ ] Exercise 4: Running differences
+
+### Part 3: Aggregate Window Functions
+- [ ] SUM() OVER
+- [ ] AVG() OVER with moving windows
+- [ ] Exercise 5: Running totals
+- [ ] Exercise 6: Moving averages
+
+### Part 4: Frame Clauses
+- [ ] ROWS vs RANGE
+- [ ] UNBOUNDED PRECEDING/FOLLOWING
+- [ ] Exercise 7: Custom window frames
+- [ ] Exercise 8: Centered moving average
+
+### Challenge Problems
+- [ ] Challenge 1: Gaps and Islands
+- [ ] Challenge 2: Median calculation with windows
+
 ---
 
 ## 📚 What are Window Functions?
