@@ -6,7 +6,7 @@
 
 This guide will help you master CTEs (Common Table Expressions) with the WITH clause through practical examples and exercises.
 
-📝 **[Quick Solutions Reference](../practice/SQL_CTE_SOLUTIONS.md)** - Check your answers here!
+💡 **Solutions are included** - Click "Click to see solution" under each exercise to expand!
 
 ---
 
@@ -124,7 +124,9 @@ Write a CTE to:
 1. Calculate total sales per customer
 2. Filter customers with total sales > $400
 
-**Solution:**
+<details>
+<summary><b>💡 Click to see solution</b></summary>
+
 ```sql
 WITH customer_totals AS (
     SELECT
@@ -141,6 +143,8 @@ SELECT
 FROM customer_totals
 WHERE total_sales > 400;
 ```
+
+</details>
 
 ---
 
@@ -244,7 +248,9 @@ Write CTEs to calculate:
 2. Percentage of total revenue for each category
 3. Categories contributing > 30% of revenue
 
-**Solution:**
+<details>
+<summary><b>💡 Click to see solution</b></summary>
+
 ```sql
 WITH
     -- Calculate revenue per category
@@ -271,6 +277,8 @@ CROSS JOIN total_revenue tr
 WHERE cr.revenue / tr.total > 0.30
 ORDER BY revenue_percentage DESC;
 ```
+
+</details>
 
 ---
 
@@ -405,7 +413,9 @@ Given a `regions` table representing geographical hierarchy:
 
 Write a recursive CTE to find all descendants of "North America" (region_id = 2).
 
-**Solution:**
+<details>
+<summary><b>💡 Click to see solution</b></summary>
+
 ```sql
 WITH RECURSIVE region_descendants AS (
     -- Base case: Start with North America
@@ -435,6 +445,8 @@ SELECT
 FROM region_descendants
 ORDER BY level, name;
 ```
+
+</details>
 
 ---
 
