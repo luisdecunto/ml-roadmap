@@ -140,7 +140,7 @@
         }
 
         // Load and render markdown
-        fetch('../sql/cte/MODE_FLIGHTS_EXERCISES.md')
+        fetch('../sql/cte/MODE_FLIGHTS_EXERCISES_WITH_SOLUTIONS.md')
             .then(response => response.text())
             .then(text => {
                 document.getElementById('guide').innerHTML = marked.parse(text);
