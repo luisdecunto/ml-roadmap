@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-20T10:01:01.963Z",
+  "lastUpdated": "2025-11-20T11:53:40.515Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -77,7 +77,8 @@
     "optimization-3.2": true,
     "optimization-3.3": true,
     "optimization-4.1": true,
-    "optimization-4.2": true
+    "optimization-4.2": true,
+    "optimization-4.3": true
   },
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
