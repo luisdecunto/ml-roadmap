@@ -102,10 +102,49 @@
     </div>
 
     <script>
+        const STORAGE_KEY = 'sql-cte-progress';
+
+        // Load progress from localStorage
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        // Save progress to localStorage
+        function saveProgress(progress) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        }
+
+        // Make checkboxes interactive
+        function setupCheckboxes() {
+            const progress = loadProgress();
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+            checkboxes.forEach((checkbox, index) => {
+                const key = `checkbox-${index}`;
+
+                // Restore saved state
+                if (progress[key]) {
+                    checkbox.checked = true;
+                }
+
+                // Make clickable and save state
+                checkbox.addEventListener('change', function() {
+                    progress[key] = this.checked;
+                    saveProgress(progress);
+                });
+
+                // Remove disabled attribute
+                checkbox.removeAttribute('disabled');
+            });
+        }
+
+        // Load and render markdown
         fetch('sql_cte_practice_guide.md')
             .then(response => response.text())
             .then(text => {
                 document.getElementById('guide').innerHTML = marked.parse(text);
+                setupCheckboxes();
             });
     </script>
 </body>
