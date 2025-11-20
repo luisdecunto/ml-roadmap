@@ -140,7 +140,7 @@
         }
 
         // Load and render markdown
-        fetch('sql_cte_practice_guide.md')
+        fetch('../sql/cte/MODE_FLIGHTS_EXERCISES.md')
             .then(response => response.text())
             .then(text => {
                 document.getElementById('guide').innerHTML = marked.parse(text);
