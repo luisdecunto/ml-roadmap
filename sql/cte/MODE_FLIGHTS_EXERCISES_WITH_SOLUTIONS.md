@@ -25,12 +25,23 @@ These exercises use Mode's real flight datasets: `tutorial.us_flights` and `tuto
 - `actual_elapsed_time` - Actual flight duration
 
 ### `tutorial.flights` Table
-- Similar fields plus additional details
-- `airline_name` - Full airline name
-- `day_of_week` - Day of week
-- `origin_city`, `origin_state` - Departure city/state
-- `destination_city`, `destination_state` - Arrival city/state
+**Complete schema:**
+- `airline_code` - Airline code (string)
+- `airline_name` - Full airline name (string)
+- `flight_number` - Flight number (float)
+- `day` - Flight date (timestamp)
+- `day_of_week` - Day of week (string)
+- `origin_airport`, `origin_city`, `origin_state` - Departure details
+- `destination_airport`, `destination_city`, `destination_state` - Arrival details
+- `scheduled_departure_time`, `acutal_departure_time` - Departure times
+- `scheduled_arrival_time`, `actual_arrival_time` - Arrival times
+- `departure_delay`, `arrival_delay` - Delay in minutes (float)
+- `scheduled_flight_time`, `actual_flight_time`, `air_time` - Duration measures
+- `distance` - Flight distance (float)
 - `was_cancelled` - Boolean cancellation flag
+- `cancellation_reason` - Reason for cancellation (string)
+- `carrier_delay`, `weather_delay`, `late_aircraft_delay`, `air_traffic_delay`, `security_delay` - Delay breakdown (float)
+- `wheels_off_time`, `wheels_on_time` - Takeoff/landing times
 
 ---
 
