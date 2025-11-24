@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-24T14:51:34.127Z",
+  "lastUpdated": "2025-11-24T15:06:30.574Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -134,10 +134,6 @@
     "Week 2: Advanced SQL + Python/Pandas (46 hours)-0": true,
     "Week 2: Advanced SQL + Python/Pandas (46 hours)-1": true
   },
-  "expandedMonths": {
-    "Month 1: SQL Mastery + Python/Docker Foundations": true
-  },
-  "expandedWeeks": {
-    "Month 1: SQL Mastery + Python/Docker Foundations-Week 2: Advanced SQL + Python/Pandas (46 hours)": true
-  }
+  "expandedMonths": {},
+  "expandedWeeks": {}
 }
