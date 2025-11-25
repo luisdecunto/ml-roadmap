@@ -140,7 +140,7 @@
         }
 
         // Load and render markdown
-        fetch('sql_window_functions_guide.md')
+        fetch('../sql/window_functions/MODE_FLIGHTS_WINDOW_FUNCTIONS_EXERCISES.md')
             .then(response => response.text())
             .then(text => {
                 document.getElementById('guide').innerHTML = marked.parse(text);
