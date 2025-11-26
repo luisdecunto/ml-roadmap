@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-11-26T16:30:50.074Z",
+  "lastUpdated": "2025-11-26T16:30:52.209Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -141,7 +141,7 @@
     "Week 2: Advanced SQL + Python/Pandas (46 hours)-3": true,
     "Week 2: Advanced SQL + Python/Pandas (46 hours)-4": false,
     "Optimization Exercises-0": true,
-    "Module 3: Optimization Foundations (12-15 hours)-7": true
+    "Module 3: Optimization Foundations (12-15 hours)-7": false
   },
   "expandedMonths": {
     "Month 1: SQL Mastery + Python/Docker Foundations": true,
