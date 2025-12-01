@@ -541,6 +541,100 @@
                         "Browse: Latest papers on Papers with Code (computer vision + NLP sections)"
                     ]
                 },
+                "Physics-Informed Neural Networks (PINNs)": {
+                    "Module 15: PDE Foundations & Numerical Methods (15-20 hours)": [
+                        "Read: <a href='https://tutorial.math.lamar.edu/classes/de/de.aspx' target='_blank' style='color: #2563eb;'>Paul's Online Notes - Differential Equations</a> (review ODEs and intro to PDEs)",
+                        "Watch: <a href='https://www.youtube.com/playlist?list=PLMrJAkhIeNNTYaOnVI3QpH7jgULnAmvPA' target='_blank' style='color: #2563eb;'>Steve Brunton: Differential Equations & Dynamical Systems</a> (lectures 1-5)",
+                        "Read: <a href='https://math.libretexts.org/Bookshelves/Differential_Equations/Introduction_to_Partial_Differential_Equations_(Herman)/01%3A_Introduction' target='_blank' style='color: #2563eb;'>LibreTexts: Introduction to PDEs</a> (heat, wave, Laplace equations)",
+                        "Practice: Solve simple ODEs analytically (exponential growth/decay, harmonic oscillator)",
+                        "Code: Implement Euler method for solving ODEs (test on dy/dt = -y) (<a href='guides/pde_foundations_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Code: Implement Runge-Kutta 4th order (RK4) method, compare with Euler (<a href='guides/pde_foundations_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Read: Finite Difference Methods - <a href='https://en.wikipedia.org/wiki/Finite_difference_method' target='_blank' style='color: #2563eb;'>Wikipedia intro</a> + forward/backward/central differences",
+                        "Code: Solve 1D heat equation using finite differences (explicit method) (<a href='guides/pde_foundations_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Watch: <a href='https://www.youtube.com/watch?v=ToIXSwZ1pJU' target='_blank' style='color: #2563eb;'>Computational Physics: Finite Difference for PDEs</a>",
+                        "Code: Solve 1D wave equation using finite differences, visualize solution (<a href='guides/pde_foundations_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Read: <a href='https://cs.toronto.edu/~rgrosse/courses/csc2541_2022/tutorials/tut01.pdf' target='_blank' style='color: #2563eb;'>Backpropagation & Automatic Differentiation Tutorial</a> (University of Toronto)",
+                        "Review: Revisit your autograd implementation (Module 6-7) - understand computational graphs",
+                        "Practice: Compute gradients manually for composite functions, verify with autograd"
+                    ],
+                    "Module 16: PINNs Theory & Fundamentals (20-25 hours)": [
+                        "Read: <a href='https://maziarraissi.github.io/PINNs/' target='_blank' style='color: #2563eb;'>Original PINNs website by Raissi et al.</a> - explore all examples and visualizations",
+                        "Read: <a href='https://www.sciencedirect.com/science/article/abs/pii/S0021999118307125' target='_blank' style='color: #2563eb;'>Foundational PINNs paper (Raissi et al. 2019)</a> - 'Physics-informed neural networks: A deep learning framework' (Journal of Computational Physics)",
+                        "Watch: <a href='https://www.youtube.com/watch?v=G_hIppUWcsc' target='_blank' style='color: #2563eb;'>Steve Brunton: Physics Informed Neural Networks (PINNs)</a> - Introduction and Applications (35 min)",
+                        "Read: <a href='https://towardsdatascience.com/physics-informed-neural-networks-pinns-an-intuitive-guide-fff138069563' target='_blank' style='color: #2563eb;'>Towards Data Science: PINNs - An Intuitive Guide</a>",
+                        "Read: <a href='https://benmoseley.blog/my-research/so-what-is-a-physics-informed-neural-network/' target='_blank' style='color: #2563eb;'>Ben Moseley: 'So, what is a physics-informed neural network?'</a>",
+                        "Watch: <a href='https://www.youtube.com/playlist?list=PLoEMreTa9CNmuxQeIKWaz7AVFd_ZeAcy4' target='_blank' style='color: #2563eb;'>ETH Zürich Deep Learning in Scientific Computing</a> (lectures 1-3)",
+                        "Read: <a href='https://arxiv.org/abs/2201.05624' target='_blank' style='color: #2563eb;'>Review paper: 'Scientific Machine Learning through PINNs: Where we are and What's Next'</a> (2022)",
+                        "Read: <a href='https://www.mdpi.com/2673-2688/5/3/74' target='_blank' style='color: #2563eb;'>Survey: 'Understanding PINNs: Techniques, Applications, Trends, and Challenges'</a> (2024)",
+                        "Understand: Loss function structure (data loss + physics loss + boundary/initial conditions)",
+                        "Study: Residual formulation of PDEs in PINN loss functions",
+                        "Read: <a href='https://arxiv.org/abs/2308.08468' target='_blank' style='color: #2563eb;'>\"An Expert's Guide to Training Physics-informed Neural Networks\"</a> (training tips and tricks)",
+                        "Note: Common challenges - stiffness, multi-scale problems, optimization difficulties"
+                    ],
+                    "Module 17: PINNs Implementation - Forward Problems (25-30 hours)": [
+                        "Setup: Install <a href='https://deepxde.readthedocs.io/' target='_blank' style='color: #2563eb;'>DeepXDE library</a> (pip install deepxde) - read documentation overview",
+                        "Tutorial: Follow <a href='https://github.com/alirezaafzalaghaei/PINN-tutorial' target='_blank' style='color: #2563eb;'>Minimal PINNs Tutorial in PyTorch</a> (GitHub)",
+                        "Code: Implement simple PINN from scratch - solve dy/dx = y with y(0)=1 (exponential function) (<a href='guides/pinns_implementation_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Verify: Compare PINN solution with analytical solution y = e^x",
+                        "Code: Solve harmonic oscillator ODE using PINN (d²y/dt² + ω²y = 0) (<a href='guides/pinns_implementation_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Visualize: Plot PINN solution vs analytical solution, show error over time",
+                        "Code: Implement PINN for 1D heat equation (∂u/∂t = α∂²u/∂x²) (<a href='guides/pinns_implementation_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Tutorial: Follow <a href='https://medium.com/data-science/solving-differential-equations-with-neural-networks-afdcf7b8bcc4' target='_blank' style='color: #2563eb;'>Mario Dagrada tutorial on Medium</a> (updated Dec 2024)",
+                        "Code: Solve 1D Burgers equation (ut + u·ux = ν·uxx) with PINNs (<a href='guides/pinns_implementation_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Study: <a href='https://github.com/jayroxis/PINNs' target='_blank' style='color: #2563eb;'>PyTorch PINNs implementation examples</a> (analyze code structure)",
+                        "Code: Implement 2D Poisson equation solver with PINNs (∇²u = f) (<a href='guides/pinns_implementation_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Experiment: Test different network architectures (depth, width, activations)",
+                        "Experiment: Compare different loss weighting strategies for physics vs data terms",
+                        "Debug: Implement gradient monitoring to detect vanishing/exploding gradients",
+                        "Optimize: Use L-BFGS optimizer for final refinement after Adam training"
+                    ],
+                    "Module 18: PINNs for Inverse Problems (20-25 hours)": [
+                        "Read: <a href='https://towardsdatascience.com/inverse-physics-informed-neural-net-3b636efeb37e' target='_blank' style='color: #2563eb;'>Towards Data Science: 'Inverse Physics-Informed Neural Net'</a>",
+                        "Read: <a href='https://arxiv.org/abs/2509.07245' target='_blank' style='color: #2563eb;'>\"IP-Basis PINNs: Efficient Multi-Query Inverse Parameter Estimation\"</a> (2025)",
+                        "Understand: Parameter identification problem formulation (learn PDE coefficients from data)",
+                        "Code: Solve inverse problem - identify diffusion coefficient α in heat equation from measurements (<a href='guides/pinns_inverse_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Tutorial: Follow <a href='https://github.com/matlab-deep-learning/Inverse-Problems-using-Physics-Informed-Neural-Networks-PINNs' target='_blank' style='color: #2563eb;'>MATLAB PINNs inverse problem example</a> (adapt to PyTorch)",
+                        "Code: Identify unknown viscosity in Burgers equation from noisy observations (<a href='guides/pinns_inverse_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Experiment: Test robustness to noise (add Gaussian noise to observations)",
+                        "Read: <a href='https://docs.nvidia.com/deeplearning/physicsnemo/physicsnemo-sym/user_guide/foundational/inverse_problem.html' target='_blank' style='color: #2563eb;'>NVIDIA PhysicsNeMo: Inverse Problem Tutorial</a>",
+                        "Code: Multi-parameter identification - learn both diffusion and reaction coefficients (<a href='guides/pinns_inverse_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
+                        "Analyze: Study parameter identifiability and uniqueness issues",
+                        "Visualize: Create uncertainty quantification plots for identified parameters",
+                        "Project: Damped harmonic oscillator - identify damping coefficient and natural frequency from trajectory"
+                    ],
+                    "Module 19: Paper Replication & Advanced Techniques (30-40 hours)": [
+                        "Replicate: <a href='https://maziarraissi.github.io/PINNs/' target='_blank' style='color: #2563eb;'>Raissi et al. Burgers Equation example</a> - match paper results (<a href='guides/pinns_papers_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Replication Guide</a>)",
+                        "Replicate: <a href='https://maziarraissi.github.io/PINNs/' target='_blank' style='color: #2563eb;'>Cylinder flow (Navier-Stokes at Re=100)</a> - reproduce pressure/velocity fields (<a href='guides/pinns_papers_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Replication Guide</a>)",
+                        "Read: <a href='https://arxiv.org/abs/2107.07871' target='_blank' style='color: #2563eb;'>\"Finite Basis PINNs (FBPINNs)\"</a> - Ben Moseley's scalable domain decomposition (2021)",
+                        "Study: <a href='https://github.com/benmoseley/FBPINNs' target='_blank' style='color: #2563eb;'>FBPINNs GitHub repository</a> - understand domain decomposition approach",
+                        "Read: <a href='https://link.springer.com/article/10.1007/s10462-025-11322-7' target='_blank' style='color: #2563eb;'>\"PINNs for PDE problems: A comprehensive review\"</a> (Springer, 2024)",
+                        "Implement: Adaptive sampling strategies (sample more collocation points in high-error regions)",
+                        "Implement: Curriculum learning for PINNs (start simple, gradually increase complexity)",
+                        "Read: Multi-scale PINNs paper + implement Fourier feature embeddings for high-frequency problems",
+                        "Experiment: Conservative PINNs (enforce conservation laws explicitly in architecture)",
+                        "Advanced: Implement hard constraint enforcement (using neural network architecture)",
+                        "Study: <a href='https://proceedings.neurips.cc/paper_files/paper/2024/file/8c63299fb2820ef41cb05e2ff11836f5-Paper-Datasets_and_Benchmarks_Track.pdf' target='_blank' style='color: #2563eb;'>PINNacle benchmark</a> (NeurIPS 2024) - test your implementations",
+                        "Optional: Explore <a href='https://github.com/rezaakb/pinns-torch' target='_blank' style='color: #2563eb;'>CUDA Graphs and JIT compilation for PINNs</a> (9x speedup)"
+                    ],
+                    "Module 20: Application Projects (40-50 hours)": [
+                        "Project 1: Heat Transfer Simulation - Model heat diffusion in 2D domain with complex boundary conditions (<a href='guides/pinns_projects_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📘 Project Guide</a>)",
+                        "Add: Non-uniform thermal conductivity, heat sources, time-varying boundaries",
+                        "Validate: Compare PINN solution with finite element method (FEM) results",
+                        "Project 2: Fluid Dynamics - Solve 2D lid-driven cavity flow (Navier-Stokes) (<a href='guides/pinns_projects_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📘 Project Guide</a>)",
+                        "Implement: Incompressibility constraint (∇·u = 0) in loss function",
+                        "Visualize: Create streamlines, velocity profiles, pressure contours",
+                        "Test: Different Reynolds numbers (Re = 100, 400, 1000) - analyze solution quality",
+                        "Project 3: Wave Propagation - Model 2D acoustic wave equation (<a href='guides/pinns_projects_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📘 Project Guide</a>)",
+                        "Add: Obstacles in domain, absorbing boundary conditions",
+                        "Create: Animated visualization of wave propagation over time",
+                        "Project 4: Inverse Problem Application - Parameter identification in real-world scenario",
+                        "Example: Identify material properties from experimental measurements",
+                        "Include: Uncertainty quantification using ensemble of PINNs or Bayesian PINNs",
+                        "Documentation: Write comprehensive report with theory, methods, results, and code",
+                        "Optional: Combine PINNs with physics simulator (hybrid approach)",
+                        "Optional: Explore <a href='https://link.springer.com/article/10.1007/s42493-024-00106-w' target='_blank' style='color: #2563eb;'>PINNs for multiscale problems</a> in your domain"
+                    ]
+                },
                 "Capstone Projects": {
                     "Project 1: Build Your Own Deep Learning Framework (40-50 hours) - <a href='guides/deep_learning_framework_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>📘 Complete Guide</a>": [
                         "Planning: Design framework API (similar to PyTorch/JAX) - sketch on paper",
@@ -1311,6 +1405,66 @@
                                         <p className="text-sm text-emerald-800">
                                             <strong>Recommended Approach:</strong> Work through 1-2 modules per week (~10 hours/week) alongside your main ML roadmap.
                                             Focus on understanding over speed. Implement everything from scratch in NumPy before using PyTorch - this builds deep intuition.
+                                        </p>
+                                    </div>
+
+                                    <div className="md:col-span-2 bg-purple-50 p-4 rounded-lg border border-purple-300">
+                                        <h3 className="font-semibold text-purple-900 mb-3">🌊 Physics-Informed Neural Networks (PINNs) Resources</h3>
+                                        <div className="grid md:grid-cols-3 gap-4">
+                                            <div>
+                                                <h4 className="font-semibold text-purple-800 text-sm mb-2">Foundational Papers & Tutorials</h4>
+                                                <ul className="space-y-1 text-xs">
+                                                    <li><a href="https://maziarraissi.github.io/PINNs/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Raissi et al. - Original PINNs Website</a></li>
+                                                    <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S0021999118307125" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PINNs Paper (JCP 2019)</a></li>
+                                                    <li><a href="https://benmoseley.blog/my-research/so-what-is-a-physics-informed-neural-network/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Ben Moseley - PINNs Intro</a></li>
+                                                    <li><a href="https://towardsdatascience.com/physics-informed-neural-networks-pinns-an-intuitive-guide-fff138069563" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">TDS - Intuitive Guide</a></li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-purple-800 text-sm mb-2">Video Courses & Lectures</h4>
+                                                <ul className="space-y-1 text-xs">
+                                                    <li><a href="https://www.youtube.com/watch?v=G_hIppUWcsc" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Steve Brunton - PINNs Intro (35 min)</a></li>
+                                                    <li><a href="https://www.youtube.com/playlist?list=PLoEMreTa9CNmuxQeIKWaz7AVFd_ZeAcy4" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">ETH Zürich - Deep Learning in SciML</a></li>
+                                                    <li><a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNTYaOnVI3QpH7jgULnAmvPA" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Steve Brunton - Diff Eqs & Dynamical Systems</a></li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-purple-800 text-sm mb-2">Implementation & Code</h4>
+                                                <ul className="space-y-1 text-xs">
+                                                    <li><a href="https://deepxde.readthedocs.io/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">DeepXDE Library (Multi-backend)</a></li>
+                                                    <li><a href="https://github.com/alirezaafzalaghaei/PINN-tutorial" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Minimal PINNs Tutorial (PyTorch)</a></li>
+                                                    <li><a href="https://github.com/jayroxis/PINNs" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PyTorch PINNs Examples</a></li>
+                                                    <li><a href="https://github.com/benmoseley/FBPINNs" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">FBPINNs - Scalable Domain Decomposition</a></li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-purple-800 text-sm mb-2">Review Papers & Advanced Topics</h4>
+                                                <ul className="space-y-1 text-xs">
+                                                    <li><a href="https://arxiv.org/abs/2201.05624" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PINNs: Where we are and What's Next (2022)</a></li>
+                                                    <li><a href="https://www.mdpi.com/2673-2688/5/3/74" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Understanding PINNs Survey (2024)</a></li>
+                                                    <li><a href="https://arxiv.org/abs/2308.08468" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Expert's Guide to Training PINNs</a></li>
+                                                    <li><a href="https://link.springer.com/article/10.1007/s10462-025-11322-7" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Comprehensive Review (Springer 2024)</a></li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-purple-800 text-sm mb-2">Applications & Papers to Replicate</h4>
+                                                <ul className="space-y-1 text-xs">
+                                                    <li><a href="https://arxiv.org/abs/2105.09506" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PINNs for Fluid Mechanics Review</a></li>
+                                                    <li><a href="https://asmedigitalcollection.asme.org/heattransfer/article/143/6/060801/1104439/Physics-Informed-Neural-Networks-for-Heat-Transfer" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PINNs for Heat Transfer</a></li>
+                                                    <li><a href="https://proceedings.neurips.cc/paper_files/paper/2024/file/8c63299fb2820ef41cb05e2ff11836f5-Paper-Datasets_and_Benchmarks_Track.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">PINNacle Benchmark (NeurIPS 2024)</a></li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-purple-800 text-sm mb-2">Inverse Problems</h4>
+                                                <ul className="space-y-1 text-xs">
+                                                    <li><a href="https://towardsdatascience.com/inverse-physics-informed-neural-net-3b636efeb37e" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Inverse PINNs Tutorial</a></li>
+                                                    <li><a href="https://arxiv.org/abs/2509.07245" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">IP-Basis PINNs (2025)</a></li>
+                                                    <li><a href="https://docs.nvidia.com/deeplearning/physicsnemo/physicsnemo-sym/user_guide/foundational/inverse_problem.html" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">NVIDIA PhysicsNeMo Tutorial</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <p className="text-xs text-purple-700 mt-3">
+                                            💡 <strong>Prerequisites:</strong> Complete Modules 1-3 (Linear Algebra, Calculus, Optimization) before starting PINNs. Strong understanding of PDEs and numerical methods is essential.
                                         </p>
                                     </div>
 
