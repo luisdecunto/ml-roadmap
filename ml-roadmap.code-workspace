@@ -4,5 +4,17 @@
 			"path": ".."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"notebook.output.textLineLimit": 1000000000,
+		"jupyter.widgetScriptSources": [
+
+		],
+		"notebook.find.filters": {
+
+			"markupSource": true,
+			"markupPreview": true,
+			"codeSource": true,
+			"codeOutput": true
+		}
+	}
 }
