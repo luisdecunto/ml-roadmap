@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1-2 Mini-Project: Image Compression Engine - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-body {
+            line-height: 1.6;
+        }
+        .markdown-body h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            border-bottom: 3px solid #10b981;
+            padding-bottom: 0.5rem;
+        }
+        .markdown-body h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+        .markdown-body h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+        .markdown-body p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1rem;
+            margin-left: 1.5rem;
+        }
+        .markdown-body li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .markdown-body code {
+            background-color: #f3f4f6;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #dc2626;
+        }
+        .markdown-body pre {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #f3f4f6;
+        }
+        .markdown-body a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .markdown-body a:hover {
+            color: #1d4ed8;
+        }
+        .markdown-body hr {
+            margin: 2rem 0;
+            border: 0;
+            border-top: 2px solid #e5e7eb;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #10b981;
+            padding-left: 1rem;
+            color: #6b7280;
+            font-style: italic;
+            margin: 1rem 0;
+        }
+        .markdown-body details {
+            background-color: #f0fdf4;
+            border: 2px solid #86efac;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .markdown-body summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: #059669;
+            user-select: none;
+        }
+        .markdown-body summary:hover {
+            color: #047857;
+        }
+        .research-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        .milestone-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 min-h-screen">
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">📦 Mini-Project: Image Compression Engine</h1>
+                <a href="../index.html" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold">
+                    ← Back to Roadmap
+                </a>
+            </div>
+            <p class="text-gray-600">
+                <strong>Modules 1-2:</strong> Linear Algebra & Matrix Calculus | <strong>Estimated Time:</strong> 20-30 hours
+            </p>
+        </div>
+
+        <!-- Content Container -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 markdown-body">
+            <div id="guide-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const markdown = \`
+# Image Compression Engine using SVD
+
+## 🎯 Project Overview
+
+**Challenge:** Build an image compression system from scratch using Singular Value Decomposition (SVD) and understand the fundamental tradeoffs between compression ratio and image quality.
+
+**Why This Matters:** This project forces you to deeply understand:
+- How matrices represent real-world data (images)
+- What SVD actually *does* geometrically
+- How rank reduction affects information loss
+- Performance optimization and algorithm efficiency
+- The mathematical foundations of JPEG-like compression
+
+You are **NOT** building a tutorial project. You are building a **research tool** to explore compression mathematics.
+
+---
+
+## 📚 Learning Objectives
+
+By completing this project, you will be able to:
+
+1. **Explain** why SVD is effective for compression (not just "it works")
+2. **Design** your own compression algorithm with tunable parameters
+3. **Analyze** the relationship between rank, compression ratio, and quality
+4. **Compare** your approach with real-world compression (JPEG, PNG)
+5. **Optimize** matrix operations for performance
+6. **Visualize** singular values and understand their meaning
+7. **Implement** gradient-based optimization for automatic rank selection
+
+---
+
+## 🔬 Problem Statement
+
+### Core Challenge
+
+Design and implement an image compression system that:
+
+1. **Takes as input:** Any color image (RGB)
+2. **Compresses using:** SVD-based dimensionality reduction
+3. **Produces:** Compressed representation with controllable quality
+4. **Can reconstruct:** Decompressed image from compressed data
+5. **Provides metrics:** Compression ratio, quality (PSNR, SSIM), storage savings
+
+### Technical Constraints
+
+- Must implement SVD yourself OR use NumPy's SVD with full understanding
+- Must handle color images (think: how do you apply SVD to RGB?)
+- Must achieve at least 10x compression while maintaining recognizable images
+- Must run efficiently on 1920x1080 images (< 5 seconds for compression)
+- Must provide interactive visualization of singular value spectrum
+
+---
+
+## 🤔 Research Questions
+
+These questions should guide your design. **Answer them before coding:**
+
+### Fundamental Questions
+
+1. **What does each singular value represent?**
+   - Why do the first few singular values contain most information?
+   - Can you visualize what each singular vector captures?
+
+2. **How should you handle color images?**
+   - Apply SVD to each channel separately?
+   - Convert to different color space first (YCbCr, LAB)?
+   - What are the tradeoffs?
+
+3. **How do you choose the rank k?**
+   - Fixed k for all images?
+   - Adaptive based on image complexity?
+   - Energy threshold (e.g., retain 95% of energy)?
+   - Can you use gradient descent to find optimal k?
+
+4. **How do you measure quality?**
+   - Visual quality vs mathematical metrics
+   - PSNR (Peak Signal-to-Noise Ratio)
+   - SSIM (Structural Similarity Index)
+   - Which metric best reflects human perception?
+
+### Advanced Questions
+
+5. **Can you beat naive SVD compression?**
+   - Block-based SVD (like JPEG)?
+   - Different ranks for different regions?
+   - Combine with other techniques (quantization, entropy coding)?
+
+6. **What's the optimal image representation?**
+   - Raw pixel values?
+   - Frequency domain (DCT)?
+   - Wavelet transform?
+
+7. **How does this compare to JPEG?**
+   - When does SVD win?
+   - When does JPEG win?
+   - Can you combine both approaches?
+
+---
+
+## 📋 Requirements & Specifications
+
+### Phase 1: Basic SVD Compressor (Required)
+
+**Functionality:**
+- Load image, convert to grayscale
+- Compute SVD: $A = U\\Sigma V^T$
+- Compress by keeping top k singular values
+- Reconstruct: $A_k = U_k\\Sigma_k V_k^T$
+- Display original vs compressed side-by-side
+- Report compression ratio and PSNR
+
+**Deliverables:**
+- \`compress_image(img, k)\` function
+- \`decompress_image(compressed_data)\` function
+- Visualization of singular value decay
+- Comparison plot: k vs PSNR vs compression ratio
+
+### Phase 2: Color Image Support (Required)
+
+**Research Challenge:**
+How do you extend SVD to RGB images? Multiple approaches possible:
+
+- **Approach A:** Apply SVD to each channel independently
+- **Approach B:** Convert to YCbCr, compress Y more than CbCr
+- **Approach C:** Reshape to 2D matrix differently
+
+**You must:**
+- Try at least 2 different approaches
+- Compare their performance
+- Justify your choice with data
+
+### Phase 3: Adaptive Rank Selection (Required)
+
+**Challenge:** Don't hardcode k - find it automatically.
+
+**Options to explore:**
+1. **Energy threshold:** Keep k values that capture 95% of total energy
+   - Energy = $\\sum_{i=1}^{k} \\sigma_i^2 / \\sum_{i=1}^{r} \\sigma_i^2$
+
+2. **Quality constraint:** Find smallest k that achieves target PSNR
+
+3. **Hybrid:** Balance compression ratio and quality using weighted objective
+
+**Deliverable:**
+- \`auto_select_rank(image, strategy, params)\` function
+- Comparison of different strategies
+- Justify which strategy works best and why
+
+### Phase 4: Performance Optimization (Optional)
+
+**Challenge:** Make it fast.
+
+**Optimization opportunities:**
+- Use truncated SVD (only compute top k components)
+- Implement block-based compression
+- Parallelize channel processing
+- Use efficient storage format
+
+**Benchmark target:**
+- Compress 1920x1080 image in < 5 seconds
+- Memory efficient (don't store full matrices)
+
+### Phase 5: Advanced Extensions (Optional)
+
+Pick one or more:
+
+1. **Block-based SVD:** Divide image into blocks, compress each separately
+2. **Region-adaptive compression:** Use different k for different regions
+3. **Progressive compression:** Allow gradual quality improvement
+4. **Combine with JPEG:** Use SVD in frequency domain
+5. **Video compression:** Extend to video frames
+
+---
+
+## 🎯 Milestones & Validation
+
+<div class="milestone-box">
+
+### Milestone 1: Grayscale Compression Working
+
+**Success Criteria:**
+- Can compress/decompress grayscale images
+- Visually reasonable results at k=50 for 512x512 image
+- PSNR > 30 dB for k=50
+- Compression ratio > 5x
+
+**Validation:**
+- Test on multiple images (faces, landscapes, text)
+- Does it work better on some types of images? Why?
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 2: Color Images Supported
+
+**Success Criteria:**
+- Color images compress/decompress correctly
+- No color distortion or artifacts
+- Reasonable compression ratios
+
+**Validation:**
+- Compare your approaches quantitatively
+- Which color space works best? Why?
+- Show visual comparison of different approaches
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 3: Adaptive Rank Selection Working
+
+**Success Criteria:**
+- System automatically chooses k
+- Different k for different images (based on complexity)
+- Meets quality targets consistently
+
+**Validation:**
+- Test on diverse image set
+- Show k vs image complexity relationship
+- Prove your strategy is better than fixed k
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 4: Complete Analysis & Visualization
+
+**Success Criteria:**
+- Interactive tool to explore compression tradeoffs
+- Clear visualizations of singular value spectrum
+- Comprehensive comparison with JPEG
+
+**Validation:**
+- Can explain SVD compression to non-technical person
+- Dashboard shows all relevant metrics
+- Insights documented in final report
+
+</div>
+
+---
+
+## 💡 Hints & Resources
+
+<div class="research-box">
+
+### Hint 1: Understanding SVD Geometrically
+
+Before implementing, understand what SVD does:
+- $U$: Orthonormal basis for column space (image basis)
+- $\\Sigma$: Scaling factors (importance of each basis)
+- $V^T$: Orthonormal basis for row space
+
+**Visualization idea:** Plot first 10 singular vectors as images - what do they look like?
+
+</div>
+
+<div class="research-box">
+
+### Hint 2: Compression Ratio Calculation
+
+Compression ratio = Original size / Compressed size
+
+**Original:** $m \\times n$ matrix = $m \\cdot n$ values
+
+**Compressed:**
+- $U_k$: $m \\times k$
+- $\\Sigma_k$: $k$ values
+- $V_k^T$: $k \\times n$
+- Total: $m \\cdot k + k + k \\cdot n = k(m + n + 1)$
+
+Ratio: $\\frac{m \\cdot n}{k(m + n + 1)}$
+
+</div>
+
+<div class="research-box">
+
+### Hint 3: Quality Metrics
+
+**PSNR (Peak Signal-to-Noise Ratio):**
+$$\\text{PSNR} = 10 \\log_{10}\\left(\\frac{\\text{MAX}^2}{\\text{MSE}}\\right)$$
+
+Where MSE = Mean Squared Error between original and compressed
+
+**Rule of thumb:**
+- PSNR > 40 dB: Excellent quality
+- PSNR 30-40 dB: Good quality
+- PSNR 20-30 dB: Acceptable
+- PSNR < 20 dB: Poor quality
+
+</div>
+
+<div class="research-box">
+
+### Hint 4: Color Space Considerations
+
+**RGB:** Simple but not optimal
+- Human eye more sensitive to luminance than chrominance
+- Equal compression on all channels wastes opportunity
+
+**YCbCr:** Better for compression
+- Y: Luminance (keep more detail)
+- Cb, Cr: Chrominance (can compress more)
+- JPEG uses this approach
+
+**Conversion:** Look up RGB ↔ YCbCr formulas
+
+</div>
+
+---
+
+## 📊 Suggested Experiments
+
+Run these experiments to build intuition:
+
+### Experiment 1: Singular Value Decay
+
+**Question:** How quickly do singular values decay?
+
+**Procedure:**
+1. Load test image
+2. Compute SVD
+3. Plot singular values $\\sigma_i$ (log scale)
+4. Plot cumulative energy: $\\sum_{i=1}^{k} \\sigma_i^2 / \\sum \\sigma_i^2$
+
+**What to observe:**
+- How many singular values to capture 90% energy?
+- Does this differ for different image types?
+
+### Experiment 2: Rank vs Quality
+
+**Question:** How does quality degrade with compression?
+
+**Procedure:**
+1. Vary k from 1 to full rank
+2. For each k, compute PSNR and compression ratio
+3. Plot Pareto frontier: compression ratio vs PSNR
+
+**What to observe:**
+- Diminishing returns (elbow point)
+- Which k values give best tradeoff?
+
+### Experiment 3: Image Type Comparison
+
+**Question:** Does SVD work equally well on all images?
+
+**Test images:**
+- Smooth gradient
+- Detailed texture
+- Sharp edges
+- Face photo
+- Text/line art
+
+**What to observe:**
+- Which images compress best?
+- Why? (Think: rank = complexity)
+
+### Experiment 4: Block-based vs Full Image
+
+**Question:** Is block-based compression better?
+
+**Procedure:**
+1. Full image SVD with rank k
+2. Divide into 8x8 blocks, SVD each with rank k'
+3. Compare quality and compression
+
+**What to observe:**
+- Block artifacts vs blur
+- Compression ratio differences
+- When is each approach better?
+
+---
+
+## 🎨 Visualization Ideas
+
+Build an **interactive dashboard** showing:
+
+1. **Side-by-side comparison**
+   - Original | Compressed | Difference (amplified)
+   - Zoom capability to see details
+
+2. **Singular value spectrum**
+   - Bar plot of $\\sigma_i$
+   - Cumulative energy curve
+   - Slider to select k and see effect
+
+3. **Compression tradeoff plot**
+   - X-axis: Compression ratio
+   - Y-axis: PSNR
+   - Points for different k values
+   - Mark optimal operating points
+
+4. **Basis visualization**
+   - Show first 16 singular vectors as images
+   - See what patterns they capture
+
+5. **Comparison matrix**
+   - Multiple images, multiple k values
+   - Grid showing all combinations
+
+---
+
+## 📝 Documentation Requirements
+
+Your project should include:
+
+### 1. Technical Report
+
+**Sections:**
+- **Introduction:** Problem statement and approach
+- **Theory:** SVD mathematics and why it works for compression
+- **Methodology:** Design decisions and tradeoffs
+- **Experiments:** Results from your experiments
+- **Analysis:** Insights and discoveries
+- **Comparison:** SVD vs JPEG analysis
+- **Conclusion:** What you learned
+
+### 2. Code Documentation
+
+- Clear docstrings for all functions
+- Type hints (Python 3.8+)
+- Usage examples in README
+- Requirements.txt with dependencies
+
+### 3. Presentation (Optional)
+
+Create a 5-minute presentation explaining:
+- The math behind SVD compression
+- Your implementation approach
+- Most interesting findings
+- Demo of your tool
+
+---
+
+## 🎓 Assessment Criteria
+
+**Does your project demonstrate:**
+
+✅ **Mathematical Understanding**
+- Can explain why SVD works for compression
+- Understands singular values geometrically
+- Can derive compression ratio formula
+
+✅ **Engineering Skills**
+- Clean, modular code
+- Efficient implementation
+- Good software design
+
+✅ **Scientific Thinking**
+- Hypothesis-driven experiments
+- Data-driven decisions
+- Honest analysis of limitations
+
+✅ **Communication**
+- Clear visualizations
+- Well-written report
+- Reproducible results
+
+---
+
+## 🚀 Getting Started
+
+### Week 1: Foundation
+- [ ] Implement basic SVD compression for grayscale
+- [ ] Understand singular value decay
+- [ ] Create basic visualization
+
+### Week 2: Color & Adaptation
+- [ ] Extend to color images
+- [ ] Implement adaptive rank selection
+- [ ] Run comparison experiments
+
+### Week 3: Optimization & Analysis
+- [ ] Optimize performance
+- [ ] Compare with JPEG
+- [ ] Write comprehensive report
+
+### Week 4 (Optional): Extensions
+- [ ] Implement advanced feature
+- [ ] Create polished dashboard
+- [ ] Prepare presentation
+
+---
+
+## 🎁 Bonus Challenges
+
+If you finish early and want to go deeper:
+
+1. **Implement Progressive SVD**
+   - Stream singular values from most to least important
+   - Allow gradual quality improvement
+
+2. **Build Web Interface**
+   - Upload image in browser
+   - Adjust compression slider
+   - Download compressed result
+
+3. **Compare Multiple Methods**
+   - SVD vs PCA vs NMF
+   - Which works best for images?
+
+4. **Theoretical Analysis**
+   - Derive optimal k formula
+   - Prove compression ratio bounds
+   - Analyze computational complexity
+
+5. **Create Video Compression**
+   - Extend to temporal dimension
+   - Apply SVD across frames
+   - Compare with modern video codecs
+
+---
+
+<details>
+<summary>💡 Click for Solution Guide (Try on your own first!)</summary>
+
+# Solution Guide
+
+## Basic Implementation Structure
+
+\`\`\`python
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+
+class SVDImageCompressor:
+    """
+    SVD-based image compression engine.
+
+    Design decisions to consider:
+    - How to handle color channels
+    - How to store compressed data efficiently
+    - How to choose optimal rank
+    """
+
+    def __init__(self, rank_selection='fixed', target_quality=None):
+        """
+        Parameters:
+        - rank_selection: 'fixed', 'energy', 'quality'
+        - target_quality: target PSNR if using quality-based selection
+        """
+        self.rank_selection = rank_selection
+        self.target_quality = target_quality
+
+    def compress(self, image, k=None):
+        """
+        Compress image using SVD.
+
+        Your implementation should:
+        1. Handle RGB images (convert to appropriate color space)
+        2. Compute SVD for each channel
+        3. Select rank k (if not provided)
+        4. Store compressed representation efficiently
+
+        Returns:
+        - compressed_data: dict with U_k, sigma_k, Vt_k for each channel
+        """
+        raise NotImplementedError("Implement this!")
+
+    def decompress(self, compressed_data):
+        """
+        Reconstruct image from compressed representation.
+
+        Returns:
+        - reconstructed_image: numpy array
+        """
+        raise NotImplementedError("Implement this!")
+
+    def calculate_metrics(self, original, compressed):
+        """
+        Calculate quality and compression metrics.
+
+        Returns:
+        - metrics: dict with PSNR, SSIM, compression_ratio
+        """
+        raise NotImplementedError("Implement this!")
+
+    def auto_select_rank(self, image, strategy='energy', threshold=0.95):
+        """
+        Automatically select optimal rank.
+
+        Strategies:
+        - 'energy': Keep k that retains threshold% of energy
+        - 'quality': Binary search for k that achieves target PSNR
+        - 'adaptive': Different k per channel based on content
+
+        Returns:
+        - k: selected rank (can be different per channel)
+        """
+        raise NotImplementedError("Implement this!")
+\`\`\`
+
+## Key Implementation Details
+
+### 1. Grayscale Compression
+
+\`\`\`python
+def compress_grayscale(image, k):
+    """
+    Simplest case: grayscale image compression.
+    """
+    # Normalize to [0, 1]
+    img_normalized = image.astype(float) / 255.0
+
+    # Compute SVD: A = U @ diag(sigma) @ Vt
+    U, sigma, Vt = np.linalg.svd(img_normalized, full_matrices=False)
+
+    # Keep only top k components
+    U_k = U[:, :k]
+    sigma_k = sigma[:k]
+    Vt_k = Vt[:k, :]
+
+    # Compressed representation
+    compressed = {
+        'U_k': U_k,
+        'sigma_k': sigma_k,
+        'Vt_k': Vt_k,
+        'shape': image.shape
+    }
+
+    return compressed
+
+def decompress_grayscale(compressed):
+    """
+    Reconstruct from compressed representation.
+    """
+    U_k = compressed['U_k']
+    sigma_k = compressed['sigma_k']
+    Vt_k = compressed['Vt_k']
+
+    # Reconstruct: A_k = U_k @ diag(sigma_k) @ Vt_k
+    img_reconstructed = U_k @ np.diag(sigma_k) @ Vt_k
+
+    # Denormalize and clip
+    img_reconstructed = np.clip(img_reconstructed * 255, 0, 255).astype(np.uint8)
+
+    return img_reconstructed
+\`\`\`
+
+### 2. Color Image Handling
+
+\`\`\`python
+def compress_rgb_approach_a(image, k):
+    """
+    Approach A: Compress each channel independently with same k.
+    Simple but not optimal.
+    """
+    compressed_channels = []
+    for channel in range(3):
+        compressed_channels.append(
+            compress_grayscale(image[:, :, channel], k)
+        )
+    return compressed_channels
+
+def compress_rgb_approach_b(image, k_luma, k_chroma):
+    """
+    Approach B: Convert to YCbCr, use different k for Y vs CbCr.
+    More efficient - exploits human vision properties.
+    """
+    # RGB to YCbCr conversion
+    # Y = 0.299*R + 0.587*G + 0.114*B
+    # Cb = -0.169*R - 0.331*G + 0.5*B + 128
+    # Cr = 0.5*R - 0.419*G - 0.081*B + 128
+
+    R, G, B = image[:, :, 0], image[:, :, 1], image[:, :, 2]
+
+    Y = 0.299*R + 0.587*G + 0.114*B
+    Cb = -0.169*R - 0.331*G + 0.5*B + 128
+    Cr = 0.5*R - 0.419*G - 0.081*B + 128
+
+    # Compress with different ranks
+    Y_compressed = compress_grayscale(Y.astype(np.uint8), k_luma)
+    Cb_compressed = compress_grayscale(Cb.astype(np.uint8), k_chroma)
+    Cr_compressed = compress_grayscale(Cr.astype(np.uint8), k_chroma)
+
+    return {
+        'Y': Y_compressed,
+        'Cb': Cb_compressed,
+        'Cr': Cr_compressed
+    }
+\`\`\`
+
+### 3. Adaptive Rank Selection
+
+\`\`\`python
+def select_rank_by_energy(sigma, threshold=0.95):
+    """
+    Select k that retains threshold% of total energy.
+
+    Energy = sum of squared singular values
+    """
+    total_energy = np.sum(sigma ** 2)
+    cumulative_energy = np.cumsum(sigma ** 2)
+
+    # Find smallest k where cumulative_energy >= threshold * total_energy
+    k = np.searchsorted(cumulative_energy, threshold * total_energy) + 1
+
+    return k
+
+def select_rank_by_quality(image, target_psnr):
+    """
+    Binary search for k that achieves target PSNR.
+    """
+    # Compute full SVD once
+    U, sigma, Vt = np.linalg.svd(image.astype(float) / 255.0, full_matrices=False)
+
+    # Binary search
+    k_min, k_max = 1, len(sigma)
+    best_k = k_max
+
+    while k_min <= k_max:
+        k = (k_min + k_max) // 2
+
+        # Reconstruct with this k
+        reconstructed = U[:, :k] @ np.diag(sigma[:k]) @ Vt[:k, :]
+        reconstructed = np.clip(reconstructed * 255, 0, 255)
+
+        # Calculate PSNR
+        mse = np.mean((image - reconstructed) ** 2)
+        psnr = 10 * np.log10(255**2 / mse) if mse > 0 else float('inf')
+
+        if psnr >= target_psnr:
+            best_k = k
+            k_max = k - 1  # Try smaller k
+        else:
+            k_min = k + 1  # Need larger k
+
+    return best_k
+\`\`\`
+
+### 4. Quality Metrics
+
+\`\`\`python
+def calculate_psnr(original, compressed):
+    """
+    Peak Signal-to-Noise Ratio.
+    Higher is better (typically 20-50 dB).
+    """
+    mse = np.mean((original.astype(float) - compressed.astype(float)) ** 2)
+    if mse == 0:
+        return float('inf')
+    max_pixel = 255.0
+    psnr = 20 * np.log10(max_pixel / np.sqrt(mse))
+    return psnr
+
+def calculate_compression_ratio(original_shape, k):
+    """
+    Compression ratio = original_size / compressed_size
+    """
+    m, n = original_shape[:2]
+    channels = 1 if len(original_shape) == 2 else original_shape[2]
+
+    original_size = m * n * channels
+    compressed_size = channels * (m * k + k + k * n)  # U_k + sigma_k + Vt_k
+
+    ratio = original_size / compressed_size
+    return ratio
+\`\`\`
+
+### 5. Visualization
+
+\`\`\`python
+def visualize_compression(original, compressed, sigma, k):
+    """
+    Create comprehensive visualization.
+    """
+    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+
+    # Original image
+    axes[0, 0].imshow(original, cmap='gray' if len(original.shape)==2 else None)
+    axes[0, 0].set_title('Original')
+    axes[0, 0].axis('off')
+
+    # Compressed image
+    axes[0, 1].imshow(compressed, cmap='gray' if len(compressed.shape)==2 else None)
+    axes[0, 1].set_title(f'Compressed (k={k})')
+    axes[0, 1].axis('off')
+
+    # Difference (amplified)
+    diff = np.abs(original.astype(float) - compressed.astype(float))
+    axes[0, 2].imshow(diff * 5, cmap='hot')
+    axes[0, 2].set_title('Difference (5x amplified)')
+    axes[0, 2].axis('off')
+
+    # Singular value spectrum
+    axes[1, 0].semilogy(sigma, 'b-', linewidth=2)
+    axes[1, 0].axvline(k, color='r', linestyle='--', label=f'k={k}')
+    axes[1, 0].set_xlabel('Index i')
+    axes[1, 0].set_ylabel('Singular value $\\\\sigma_i$')
+    axes[1, 0].set_title('Singular Value Decay')
+    axes[1, 0].grid(True, alpha=0.3)
+    axes[1, 0].legend()
+
+    # Cumulative energy
+    energy = np.cumsum(sigma**2) / np.sum(sigma**2) * 100
+    axes[1, 1].plot(energy, 'g-', linewidth=2)
+    axes[1, 1].axvline(k, color='r', linestyle='--', label=f'k={k}')
+    axes[1, 1].axhline(95, color='orange', linestyle=':', label='95% energy')
+    axes[1, 1].set_xlabel('Rank k')
+    axes[1, 1].set_ylabel('Cumulative Energy (%)')
+    axes[1, 1].set_title('Energy Retention')
+    axes[1, 1].grid(True, alpha=0.3)
+    axes[1, 1].legend()
+
+    # Compression metrics
+    psnr = calculate_psnr(original, compressed)
+    ratio = calculate_compression_ratio(original.shape, k)
+    metrics_text = f"PSNR: {psnr:.2f} dB\\nCompression: {ratio:.2f}x\\nRank: {k}/{len(sigma)}"
+    axes[1, 2].text(0.5, 0.5, metrics_text, ha='center', va='center',
+                   fontsize=14, bbox=dict(boxstyle='round', facecolor='wheat'))
+    axes[1, 2].axis('off')
+    axes[1, 2].set_title('Metrics')
+
+    plt.tight_layout()
+    return fig
+\`\`\`
+
+## Example Usage
+
+\`\`\`python
+# Load image
+image = np.array(Image.open('test_image.jpg'))
+
+# Initialize compressor
+compressor = SVDImageCompressor(rank_selection='energy')
+
+# Compress
+compressed_data = compressor.compress(image, k=50)
+
+# Decompress
+reconstructed = compressor.decompress(compressed_data)
+
+# Calculate metrics
+metrics = compressor.calculate_metrics(image, reconstructed)
+print(f"PSNR: {metrics['psnr']:.2f} dB")
+print(f"Compression: {metrics['compression_ratio']:.2f}x")
+
+# Visualize
+visualize_compression(image, reconstructed, compressed_data['sigma'], k=50)
+plt.savefig('compression_result.png', dpi=150)
+\`\`\`
+
+## Expected Results
+
+For a 512x512 RGB image with k=50:
+- **Compression Ratio:** ~15-20x
+- **PSNR:** ~35-40 dB (good quality)
+- **Storage:** ~200 KB instead of 3 MB
+
+The reconstructed image should be visually very similar to original, with slight blurring in high-frequency details.
+
+</details>
+
+---
+
+## 📚 Additional Resources
+
+- [3Blue1Brown: Essence of Linear Algebra](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) - Watch the SVD video
+- [MIT OCW: Linear Algebra](https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/) - Gilbert Strang's lectures
+- [Image Compression Using SVD (Paper)](https://www.researchgate.net/publication/220481547_Image_Compression_Using_Singular_Value_Decomposition)
+- [JPEG Compression Explained](https://www.youtube.com/watch?v=Kv1Hiv3ox8I)
+
+---
+
+## ✅ Final Checklist
+
+Before considering this project complete:
+
+- [ ] Grayscale compression working correctly
+- [ ] Color image support implemented
+- [ ] Adaptive rank selection functional
+- [ ] Comprehensive visualizations created
+- [ ] All experiments documented
+- [ ] Comparison with JPEG performed
+- [ ] Code is clean and well-documented
+- [ ] Technical report written
+- [ ] Can explain SVD compression to others
+
+**Most importantly:**
+- [ ] You **understand** why SVD works for compression
+- [ ] You can **explain** the tradeoffs you discovered
+- [ ] You have **intuition** for singular values and their meaning
+
+---
+
+Good luck! Remember: this is about **understanding**, not just getting code to run. Take your time, experiment, and build intuition. 🚀
+\`;
+
+        // Render markdown
+        document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+    </script>
+</body>
+</html>
