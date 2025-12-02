@@ -1,0 +1,2175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 6 Mini-Project: Medical Image Classifier with Uncertainty Quantification - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-body {
+            line-height: 1.6;
+        }
+        .markdown-body h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            border-bottom: 3px solid #f97316;
+            padding-bottom: 0.5rem;
+        }
+        .markdown-body h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+        .markdown-body h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+        .markdown-body p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1rem;
+            margin-left: 1.5rem;
+        }
+        .markdown-body li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .markdown-body code {
+            background-color: #f3f4f6;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #dc2626;
+        }
+        .markdown-body pre {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #f3f4f6;
+        }
+        .markdown-body a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .markdown-body a:hover {
+            color: #1d4ed8;
+        }
+        .markdown-body hr {
+            margin: 2rem 0;
+            border: 0;
+            border-top: 2px solid #e5e7eb;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #f97316;
+            padding-left: 1rem;
+            color: #6b7280;
+            font-style: italic;
+            margin: 1rem 0;
+        }
+        .markdown-body details {
+            background-color: #ffedd5;
+            border: 2px solid #fb923c;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .markdown-body details[open] {
+            background-color: #fff7ed;
+        }
+        .markdown-body summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: #ea580c;
+            user-select: none;
+            padding: 0.5rem;
+            margin: -1rem;
+            margin-bottom: 1rem;
+            background-color: #fed7aa;
+            border-radius: 0.375rem;
+        }
+        .markdown-body summary:hover {
+            background-color: #fdba74;
+            color: #c2410c;
+        }
+        .research-box {
+            background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+            border-left: 4px solid #f97316;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        .milestone-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 min-h-screen">
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">📦 Mini-Project: Medical Image Classifier with Uncertainty Quantification</h1>
+                <a href="../index.html" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm font-semibold">
+                    ← Back to Roadmap
+                </a>
+            </div>
+            <p class="text-gray-600">
+                <strong>Module 6:</strong> Neural Networks Foundations | <strong>Estimated Time:</strong> 30-35 hours
+            </p>
+        </div>
+
+        <!-- Content Container -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 markdown-body">
+            <div id="guide-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const markdown = `# Medical Image Classifier with Uncertainty Quantification
+
+## 🎯 Project Overview
+
+**Challenge:** Build a convolutional neural network from scratch (no frameworks) to classify medical images, with uncertainty quantification to know when the model is confident vs uncertain about its predictions.
+
+**Why This Matters:** This project forces you to deeply understand:
+- How convolutions preserve spatial structure in images
+- Why CNNs are fundamentally different from fully-connected networks
+- How backpropagation works through convolutional layers
+- Why pooling layers reduce spatial dimensions
+- How dropout provides uncertainty estimates (Monte Carlo Dropout)
+- Why batch normalization accelerates training and stabilizes learning
+
+You are **NOT** just stacking layers. You are building a **medical diagnostic tool** that knows when it needs a human expert's second opinion.
+
+---
+
+## 📚 Learning Objectives
+
+By completing this project, you will be able to:
+
+1. **Implement** convolutional layers from scratch (forward and backward pass)
+2. **Understand** why convolutions detect local patterns (edges, textures)
+3. **Build** a full CNN architecture (Conv → Pool → FC → Softmax)
+4. **Derive** and implement backpropagation for convolutional layers
+5. **Apply** batch normalization and understand its effects
+6. **Quantify** prediction uncertainty using Monte Carlo Dropout
+7. **Visualize** learned filters and activation maps
+8. **Evaluate** confidence calibration for medical diagnosis
+
+---
+
+## 🔬 Problem Statement
+
+### Core Challenge
+
+Design and implement a medical image classifier that:
+
+1. **Processes medical images:** Chest X-rays, skin lesion images, or similar
+2. **Implements CNN from scratch:** Conv2D, MaxPool, BatchNorm, Dropout layers
+3. **Provides predictions:** Multi-class classification with softmax
+4. **Quantifies uncertainty:** Uses MC Dropout to estimate confidence
+5. **Visualizes understanding:** Shows learned filters and activation maps
+6. **Calibrates confidence:** Ensures predicted probabilities match actual accuracy
+
+### Technical Constraints
+
+- Must implement Conv2D forward/backward pass from scratch (no TensorFlow/PyTorch convolutions)
+- Must implement pooling, batch normalization, and dropout from scratch
+- Must use only NumPy for core operations (matplotlib for visualization)
+- Must achieve >85% accuracy on test set
+- Must provide calibrated uncertainty estimates
+- Must visualize what the network learns (filters, activations)
+
+---
+
+## 🤔 Research Questions
+
+These questions should guide your design. **Answer them through experiments:**
+
+### Fundamental Questions
+
+1. **Why do convolutions preserve spatial structure?**
+   - How is this different from flattening an image and using FC layers?
+   - What happens if you shuffle pixel positions?
+   - Why do nearby pixels matter more than distant pixels?
+
+2. **How do convolutional filters learn to detect features?**
+   - What do first-layer filters learn? (edges, colors)
+   - What do deeper layers learn? (textures, patterns, objects)
+   - Can you visualize this progression?
+
+3. **Why does pooling help?**
+   - What does max pooling preserve?
+   - Why does it make the network more robust to translations?
+   - What's the tradeoff (information loss)?
+
+4. **How does backpropagation work through convolutions?**
+   - How do you compute gradients for shared filter weights?
+   - Why do you need to flip the kernel during backprop?
+   - How does the chain rule extend to convolutions?
+
+<details>
+<summary>💡 Stuck? Click for hints on these fundamentals</summary>
+
+### Understanding Convolutions
+
+**What they do:**
+\`\`\`python
+# Instead of this (fully connected):
+output = W @ input.flatten()  # Loses spatial structure
+
+# CNNs do this (convolution):
+for i in range(output_h):
+    for j in range(output_w):
+        output[i,j] = np.sum(input[i:i+k, j:j+k] * filter)
+\`\`\`
+
+**Why they preserve spatial structure:**
+- Each output pixel depends only on a local neighborhood
+- Same filter applied everywhere → translation equivariance
+- Nearby pixels share more information than distant pixels
+- Natural for images where locality matters
+
+**Experiment to try:**
+\`\`\`python
+# Create a simple edge detection filter
+vertical_edge = np.array([[-1, 0, 1],
+                          [-1, 0, 1],
+                          [-1, 0, 1]])
+
+# Apply to image - see vertical edges highlighted
+# This is what the first layer learns automatically!
+\`\`\`
+
+---
+
+### How Filters Learn Hierarchically
+
+**Layer progression:**
+1. **Layer 1:** Learns basic features (edges, colors, gradients)
+2. **Layer 2-3:** Learns textures and patterns (combining edges)
+3. **Layer 4-5:** Learns parts of objects (eyes, wheels, corners)
+4. **Final layers:** Learns full objects (faces, cars, animals)
+
+**Why this happens:**
+- Early layers have small receptive fields → see small regions → learn simple features
+- Deeper layers combine outputs from previous layers → see larger regions → learn complex features
+- Pooling increases receptive field size progressively
+
+**Visualization:**
+\`\`\`python
+# Visualize first layer filters (3x3 or 5x5)
+# Should see edge detectors in various orientations
+# Like Gabor filters or Sobel operators
+
+# Visualize activation maps
+# Shows what each filter "fires on" in the input image
+\`\`\`
+
+---
+
+### Pooling and Translation Invariance
+
+**Max Pooling:**
+\`\`\`python
+# Takes 2x2 region, outputs maximum value
+pool_output[i,j] = np.max(input[2*i:2*i+2, 2*j:2*j+2])
+\`\`\`
+
+**Why it helps:**
+- Reduces spatial dimensions → fewer parameters
+- Provides local translation invariance
+  - If edge moves 1 pixel, pooling output might stay same
+- Keeps strongest activations (most important features)
+- Acts as feature selector
+
+**Tradeoff:**
+- Loses spatial information (where exactly was that feature?)
+- Can't reconstruct original image (information loss)
+- But: for classification, exact position often doesn't matter
+
+---
+
+### Convolution Backpropagation
+
+**Forward pass:**
+\`\`\`python
+# Output[i,j] = sum over kernel of Input[i+ki, j+kj] * Filter[ki, kj]
+\`\`\`
+
+**Backward pass (gradient flow):**
+\`\`\`python
+# Gradient w.r.t input: convolve dL/dOutput with flipped filter
+dL_dinput = convolve(dL_doutput, np.flip(filter))
+
+# Gradient w.r.t filter: convolve input with dL/dOutput
+dL_dfilter = convolve(input, dL_doutput)
+\`\`\`
+
+**Why flipping?**
+- Mathematics of the chain rule in convolutional form
+- Ensures gradient flows to correct spatial locations
+- Same operation as correlation vs convolution distinction
+
+**Key insight:** Backprop through convolution is itself a convolution!
+
+</details>
+
+### Advanced Questions
+
+5. **How does batch normalization work?**
+   - Why does normalizing activations help training?
+   - What are the learnable parameters (gamma, beta)?
+   - Why different behavior in train vs test mode?
+
+6. **How does MC Dropout quantify uncertainty?**
+   - Why does dropout during inference provide uncertainty?
+   - How many forward passes do you need?
+   - What does high variance in predictions mean?
+
+7. **Why are CNNs better than FC networks for images?**
+   - Parameter efficiency: how many fewer parameters?
+   - Inductive bias: what assumptions do CNNs make?
+   - Can FC networks learn similar features?
+
+8. **How do you interpret confidence calibration?**
+   - If model says 90% confident, is it right 90% of the time?
+   - What does it mean if probabilities are overconfident?
+   - How do you fix miscalibration?
+
+<details>
+<summary>💡 Stuck? Click for hints on advanced topics</summary>
+
+### Batch Normalization
+
+**What it does:**
+\`\`\`python
+# During training:
+mean = np.mean(x, axis=0)
+var = np.var(x, axis=0)
+x_normalized = (x - mean) / np.sqrt(var + epsilon)
+output = gamma * x_normalized + beta  # Learnable parameters
+
+# During inference:
+# Use running averages from training (not batch statistics)
+\`\`\`
+
+**Why it helps:**
+- Normalizes internal activations → stable distributions
+- Reduces internal covariate shift
+- Allows higher learning rates
+- Acts as regularizer (slight noise from batch statistics)
+- Gradients flow better (less vanishing/exploding)
+
+**Key parameters:**
+- \`gamma\`, \`beta\`: Learned parameters (let network undo normalization if needed)
+- Running mean/var: Computed during training, used during inference
+
+---
+
+### Monte Carlo Dropout for Uncertainty
+
+**Standard dropout:**
+\`\`\`python
+# Training: randomly set neurons to 0
+if training:
+    mask = np.random.binomial(1, keep_prob, size=x.shape)
+    output = x * mask / keep_prob
+else:
+    output = x  # No dropout during inference
+\`\`\`
+
+**MC Dropout (different!):**
+\`\`\`python
+# Keep dropout ON during inference
+# Run multiple forward passes
+predictions = []
+for _ in range(n_samples):  # e.g., 50-100 samples
+    pred = model.forward(x, training=True)  # Dropout enabled!
+    predictions.append(pred)
+
+# Uncertainty from variance
+mean_pred = np.mean(predictions, axis=0)
+uncertainty = np.std(predictions, axis=0)
+\`\`\`
+
+**Why it works:**
+- Dropout masks = different subnetworks
+- Sampling from implicit ensemble
+- High variance = model uncertain (different subnetworks disagree)
+- Low variance = model confident (all subnetworks agree)
+
+**Application:**
+\`\`\`python
+if uncertainty > threshold:
+    print("Low confidence - recommend human review")
+else:
+    print(f"High confidence prediction: {predicted_class}")
+\`\`\`
+
+---
+
+### CNNs vs Fully Connected Networks
+
+**Parameter count comparison:**
+\`\`\`python
+# Fully connected on 32x32 image:
+fc_params = 32*32*3 * 1000 = 3,072,000 params (just first layer!)
+
+# Convolutional approach:
+conv_params = 3*3*3 * 64 = 1,728 params (64 filters, 3x3 size, 3 channels)
+\`\`\`
+
+**Why CNNs win:**
+1. **Parameter sharing:** Same filter used across entire image
+2. **Local connectivity:** Each neuron connected to small region only
+3. **Translation equivariance:** If input shifts, output shifts same amount
+4. **Hierarchical features:** Automatically learns feature hierarchy
+
+**Inductive bias:**
+- Assumes nearby pixels are related (locality)
+- Assumes same features useful everywhere (translation equivariance)
+- These assumptions match image structure!
+
+---
+
+### Confidence Calibration
+
+**What is calibration?**
+- If model predicts 80% probability, it should be correct 80% of the time
+- Reliability diagram: plot predicted confidence vs actual accuracy
+
+**Measuring calibration:**
+\`\`\`python
+# Expected Calibration Error (ECE)
+# Bin predictions by confidence, compare to accuracy in each bin
+bins = np.linspace(0, 1, 10)
+ece = 0
+for b in range(len(bins)-1):
+    mask = (confidence >= bins[b]) & (confidence < bins[b+1])
+    if np.sum(mask) > 0:
+        avg_confidence = np.mean(confidence[mask])
+        accuracy = np.mean(correct[mask])
+        ece += np.abs(avg_confidence - accuracy) * np.sum(mask)
+ece /= len(confidence)
+\`\`\`
+
+**Fixing miscalibration:**
+1. **Temperature scaling:** Scale logits before softmax
+2. **Platt scaling:** Learn logistic regression on outputs
+3. **MC Dropout:** Often improves calibration
+4. **Ensemble methods:** Average multiple models
+
+**For medical diagnosis:**
+- Calibration is CRITICAL
+- Overconfident predictions → dangerous false negatives
+- Underconfident → too many unnecessary human reviews
+- Want: model uncertainty matches actual error rate
+
+</details>
+
+---
+
+## 📋 Requirements & Specifications
+
+### Phase 1: Basic Feedforward Network on MNIST (Required)
+
+**Functionality:**
+- Implement fully-connected network from scratch
+- Train on MNIST digit classification
+- Achieve >95% accuracy
+- Implement cross-entropy loss and softmax
+
+**Purpose:**
+- Baseline to compare against CNN
+- Practice backpropagation
+- Understand why images need special treatment
+
+<details>
+<summary>💡 Stuck? Click for basic network implementation</summary>
+
+### Fully Connected Network
+
+\`\`\`python
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+class FullyConnectedLayer:
+    """Dense layer with ReLU activation."""
+
+    def __init__(self, input_size, output_size):
+        # He initialization
+        self.W = np.random.randn(input_size, output_size) * np.sqrt(2.0 / input_size)
+        self.b = np.zeros((1, output_size))
+
+        # For gradient updates
+        self.dW = None
+        self.db = None
+
+        # Cache for backprop
+        self.cache = {}
+
+    def forward(self, X, training=True):
+        """
+        Forward pass: Z = XW + b, A = ReLU(Z)
+
+        Args:
+            X: Input of shape (batch_size, input_size)
+
+        Returns:
+            A: Activated output of shape (batch_size, output_size)
+        """
+        self.cache['X'] = X
+        Z = X @ self.W + self.b
+        self.cache['Z'] = Z
+        A = np.maximum(0, Z)  # ReLU
+        return A
+
+    def backward(self, dA):
+        """
+        Backward pass through layer.
+
+        Args:
+            dA: Gradient of loss w.r.t. output (batch_size, output_size)
+
+        Returns:
+            dX: Gradient of loss w.r.t. input (batch_size, input_size)
+        """
+        # ReLU gradient
+        dZ = dA * (self.cache['Z'] > 0)
+
+        # Compute gradients
+        batch_size = self.cache['X'].shape[0]
+        self.dW = self.cache['X'].T @ dZ / batch_size
+        self.db = np.sum(dZ, axis=0, keepdims=True) / batch_size
+
+        # Gradient w.r.t. input
+        dX = dZ @ self.W.T
+
+        return dX
+
+class SoftmaxLayer:
+    """Softmax output layer with cross-entropy loss."""
+
+    def __init__(self):
+        self.cache = {}
+
+    def forward(self, X, y=None):
+        """
+        Softmax activation + cross-entropy loss.
+
+        Args:
+            X: Logits of shape (batch_size, num_classes)
+            y: True labels of shape (batch_size,) or None
+
+        Returns:
+            probs: Softmax probabilities
+            loss: Cross-entropy loss (if y provided)
+        """
+        # Numerical stability: subtract max
+        exp_X = np.exp(X - np.max(X, axis=1, keepdims=True))
+        probs = exp_X / np.sum(exp_X, axis=1, keepdims=True)
+
+        self.cache['probs'] = probs
+        self.cache['y'] = y
+
+        if y is not None:
+            # Cross-entropy loss
+            batch_size = X.shape[0]
+            log_probs = -np.log(probs[np.arange(batch_size), y] + 1e-8)
+            loss = np.mean(log_probs)
+            return probs, loss
+
+        return probs, None
+
+    def backward(self):
+        """Compute gradient of loss w.r.t. logits."""
+        probs = self.cache['probs']
+        y = self.cache['y']
+        batch_size = probs.shape[0]
+
+        # Gradient of cross-entropy + softmax
+        dX = probs.copy()
+        dX[np.arange(batch_size), y] -= 1
+        dX /= batch_size
+
+        return dX
+
+class SimpleNN:
+    """Two-layer fully connected network."""
+
+    def __init__(self, input_size, hidden_size, num_classes):
+        self.fc1 = FullyConnectedLayer(input_size, hidden_size)
+        self.fc2 = FullyConnectedLayer(hidden_size, num_classes)
+        self.softmax = SoftmaxLayer()
+
+    def forward(self, X, y=None, training=True):
+        """Forward pass through network."""
+        h = self.fc1.forward(X, training)
+        logits = self.fc2.forward(h, training)
+        probs, loss = self.softmax.forward(logits, y)
+        return probs, loss
+
+    def backward(self):
+        """Backward pass through network."""
+        dlogits = self.softmax.backward()
+        dh = self.fc2.backward(dlogits)
+        dX = self.fc1.backward(dh)
+        return dX
+
+    def update(self, learning_rate):
+        """Update parameters using computed gradients."""
+        self.fc1.W -= learning_rate * self.fc1.dW
+        self.fc1.b -= learning_rate * self.fc1.db
+        self.fc2.W -= learning_rate * self.fc2.dW
+        self.fc2.b -= learning_rate * self.fc2.db
+
+# Load MNIST
+print("Loading MNIST...")
+mnist = fetch_openml('mnist_784', version=1, parser='auto')
+X, y = mnist.data.to_numpy(), mnist.target.to_numpy().astype(int)
+
+# Normalize
+X = X / 255.0
+
+# Train/test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print(f"Training set: {X_train.shape}, Test set: {X_test.shape}")
+
+# Create model
+model = SimpleNN(input_size=784, hidden_size=128, num_classes=10)
+
+# Training loop
+batch_size = 128
+epochs = 10
+learning_rate = 0.1
+
+history = {'train_loss': [], 'train_acc': [], 'test_acc': []}
+
+for epoch in range(epochs):
+    # Shuffle training data
+    indices = np.random.permutation(len(X_train))
+    X_train_shuffled = X_train[indices]
+    y_train_shuffled = y_train[indices]
+
+    epoch_loss = 0
+    num_batches = 0
+
+    # Mini-batch training
+    for i in range(0, len(X_train), batch_size):
+        X_batch = X_train_shuffled[i:i+batch_size]
+        y_batch = y_train_shuffled[i:i+batch_size]
+
+        # Forward pass
+        probs, loss = model.forward(X_batch, y_batch, training=True)
+
+        # Backward pass
+        model.backward()
+
+        # Update weights
+        model.update(learning_rate)
+
+        epoch_loss += loss
+        num_batches += 1
+
+    # Evaluate
+    train_probs, _ = model.forward(X_train, training=False)
+    train_acc = np.mean(np.argmax(train_probs, axis=1) == y_train)
+
+    test_probs, _ = model.forward(X_test, training=False)
+    test_acc = np.mean(np.argmax(test_probs, axis=1) == y_test)
+
+    avg_loss = epoch_loss / num_batches
+    history['train_loss'].append(avg_loss)
+    history['train_acc'].append(train_acc)
+    history['test_acc'].append(test_acc)
+
+    print(f"Epoch {epoch+1}/{epochs}: Loss={avg_loss:.4f}, "
+          f"Train Acc={train_acc:.4f}, Test Acc={test_acc:.4f}")
+
+# Plot results
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+
+ax1.plot(history['train_loss'])
+ax1.set_xlabel('Epoch')
+ax1.set_ylabel('Loss')
+ax1.set_title('Training Loss')
+ax1.grid(True)
+
+ax2.plot(history['train_acc'], label='Train')
+ax2.plot(history['test_acc'], label='Test')
+ax2.set_xlabel('Epoch')
+ax2.set_ylabel('Accuracy')
+ax2.set_title('Accuracy')
+ax2.legend()
+ax2.grid(True)
+
+plt.tight_layout()
+plt.savefig('mnist_baseline.png', dpi=150)
+plt.show()
+
+print(f"\\nFinal Test Accuracy: {history['test_acc'][-1]:.4f}")
+\`\`\`
+
+**What this teaches:**
+- Basic neural network architecture
+- Backpropagation implementation
+- Why we need better approaches for images (many parameters!)
+
+</details>
+
+### Phase 2: Convolution Layer Implementation (Required)
+
+**Deliverables:**
+Implement from scratch:
+1. Conv2D forward pass (with stride, padding)
+2. Conv2D backward pass (gradients for inputs and filters)
+3. MaxPooling forward and backward
+4. Verify gradients numerically
+
+**Must handle:**
+- Multiple input channels
+- Multiple output filters
+- Batch processing
+- Padding (same/valid)
+- Strided convolutions
+
+<details>
+<summary>💡 Stuck? Click for convolution implementation</summary>
+
+### Conv2D Layer Implementation
+
+\`\`\`python
+import numpy as np
+
+class Conv2D:
+    """
+    2D Convolutional layer.
+
+    Implements convolution operation with:
+    - Multiple input channels
+    - Multiple output filters
+    - Padding and stride support
+    - Backpropagation
+    """
+
+    def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0):
+        """
+        Args:
+            in_channels: Number of input channels
+            out_channels: Number of filters (output channels)
+            kernel_size: Size of square filter (e.g., 3 for 3x3)
+            stride: Stride for convolution
+            padding: Padding to add to input
+        """
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.kernel_size = kernel_size
+        self.stride = stride
+        self.padding = padding
+
+        # Initialize filters: He initialization
+        self.filters = np.random.randn(
+            out_channels, in_channels, kernel_size, kernel_size
+        ) * np.sqrt(2.0 / (in_channels * kernel_size * kernel_size))
+
+        # Bias: one per output channel
+        self.bias = np.zeros(out_channels)
+
+        # Gradients
+        self.dfilters = None
+        self.dbias = None
+
+        # Cache for backward pass
+        self.cache = {}
+
+    def forward(self, X):
+        """
+        Forward pass of convolution.
+
+        Args:
+            X: Input of shape (batch_size, in_channels, height, width)
+
+        Returns:
+            Output of shape (batch_size, out_channels, out_height, out_width)
+        """
+        batch_size, _, H, W = X.shape
+
+        # Apply padding
+        if self.padding > 0:
+            X_padded = np.pad(
+                X,
+                ((0, 0), (0, 0), (self.padding, self.padding), (self.padding, self.padding)),
+                mode='constant'
+            )
+        else:
+            X_padded = X
+
+        # Calculate output dimensions
+        out_H = (H + 2*self.padding - self.kernel_size) // self.stride + 1
+        out_W = (W + 2*self.padding - self.kernel_size) // self.stride + 1
+
+        # Initialize output
+        output = np.zeros((batch_size, self.out_channels, out_H, out_W))
+
+        # Perform convolution
+        for b in range(batch_size):
+            for f in range(self.out_channels):
+                for i in range(out_H):
+                    for j in range(out_W):
+                        # Extract region
+                        h_start = i * self.stride
+                        h_end = h_start + self.kernel_size
+                        w_start = j * self.stride
+                        w_end = w_start + self.kernel_size
+
+                        region = X_padded[b, :, h_start:h_end, w_start:w_end]
+
+                        # Convolve: element-wise multiply and sum
+                        output[b, f, i, j] = np.sum(region * self.filters[f]) + self.bias[f]
+
+        # Cache for backward
+        self.cache['X'] = X
+        self.cache['X_padded'] = X_padded
+
+        return output
+
+    def backward(self, dout):
+        """
+        Backward pass of convolution.
+
+        Args:
+            dout: Gradient from next layer, shape (batch_size, out_channels, out_H, out_W)
+
+        Returns:
+            dX: Gradient w.r.t. input, shape (batch_size, in_channels, H, W)
+        """
+        X = self.cache['X']
+        X_padded = self.cache['X_padded']
+
+        batch_size, _, H, W = X.shape
+        _, _, out_H, out_W = dout.shape
+
+        # Initialize gradients
+        dX_padded = np.zeros_like(X_padded)
+        self.dfilters = np.zeros_like(self.filters)
+        self.dbias = np.zeros_like(self.bias)
+
+        # Compute gradients
+        for b in range(batch_size):
+            for f in range(self.out_channels):
+                for i in range(out_H):
+                    for j in range(out_W):
+                        h_start = i * self.stride
+                        h_end = h_start + self.kernel_size
+                        w_start = j * self.stride
+                        w_end = w_start + self.kernel_size
+
+                        # Gradient w.r.t. filter
+                        region = X_padded[b, :, h_start:h_end, w_start:w_end]
+                        self.dfilters[f] += region * dout[b, f, i, j]
+
+                        # Gradient w.r.t. input
+                        dX_padded[b, :, h_start:h_end, w_start:w_end] += (
+                            self.filters[f] * dout[b, f, i, j]
+                        )
+
+                # Gradient w.r.t. bias
+                self.dbias[f] += np.sum(dout[:, f, :, :])
+
+        # Average over batch
+        self.dfilters /= batch_size
+        self.dbias /= batch_size
+
+        # Remove padding from gradient
+        if self.padding > 0:
+            dX = dX_padded[:, :, self.padding:-self.padding, self.padding:-self.padding]
+        else:
+            dX = dX_padded
+
+        return dX
+
+class MaxPool2D:
+    """2D Max Pooling layer."""
+
+    def __init__(self, pool_size=2, stride=2):
+        """
+        Args:
+            pool_size: Size of pooling window
+            stride: Stride for pooling
+        """
+        self.pool_size = pool_size
+        self.stride = stride
+        self.cache = {}
+
+    def forward(self, X):
+        """
+        Forward pass of max pooling.
+
+        Args:
+            X: Input of shape (batch_size, channels, height, width)
+
+        Returns:
+            Output of shape (batch_size, channels, out_height, out_width)
+        """
+        batch_size, channels, H, W = X.shape
+
+        out_H = (H - self.pool_size) // self.stride + 1
+        out_W = (W - self.pool_size) // self.stride + 1
+
+        output = np.zeros((batch_size, channels, out_H, out_W))
+
+        # Store mask of max locations for backward pass
+        self.cache['X_shape'] = X.shape
+        self.cache['max_indices'] = np.zeros((batch_size, channels, out_H, out_W, 2), dtype=int)
+
+        for b in range(batch_size):
+            for c in range(channels):
+                for i in range(out_H):
+                    for j in range(out_W):
+                        h_start = i * self.stride
+                        h_end = h_start + self.pool_size
+                        w_start = j * self.stride
+                        w_end = w_start + self.pool_size
+
+                        region = X[b, c, h_start:h_end, w_start:w_end]
+                        output[b, c, i, j] = np.max(region)
+
+                        # Store location of max for backprop
+                        max_idx = np.unravel_index(np.argmax(region), region.shape)
+                        self.cache['max_indices'][b, c, i, j] = [
+                            h_start + max_idx[0],
+                            w_start + max_idx[1]
+                        ]
+
+        return output
+
+    def backward(self, dout):
+        """
+        Backward pass of max pooling.
+
+        Args:
+            dout: Gradient from next layer
+
+        Returns:
+            dX: Gradient w.r.t. input
+        """
+        X_shape = self.cache['X_shape']
+        max_indices = self.cache['max_indices']
+
+        batch_size, channels, out_H, out_W = dout.shape
+        dX = np.zeros(X_shape)
+
+        # Route gradient to max locations
+        for b in range(batch_size):
+            for c in range(channels):
+                for i in range(out_H):
+                    for j in range(out_W):
+                        h_idx, w_idx = max_indices[b, c, i, j]
+                        dX[b, c, h_idx, w_idx] += dout[b, c, i, j]
+
+        return dX
+
+def numerical_gradient_check(layer, X, epsilon=1e-5):
+    """
+    Verify gradient computation using numerical gradients.
+
+    Args:
+        layer: Layer to test (Conv2D or MaxPool2D)
+        X: Input tensor
+        epsilon: Perturbation size
+
+    Returns:
+        relative_error: Relative error between analytical and numerical gradients
+    """
+    # Forward pass
+    output = layer.forward(X)
+
+    # Fake upstream gradient (all ones)
+    dout = np.ones_like(output)
+
+    # Analytical gradient
+    dX_analytical = layer.backward(dout)
+
+    # Numerical gradient
+    dX_numerical = np.zeros_like(X)
+
+    it = np.nditer(X, flags=['multi_index'], op_flags=['readwrite'])
+    while not it.finished:
+        idx = it.multi_index
+
+        old_value = X[idx]
+
+        # f(x + epsilon)
+        X[idx] = old_value + epsilon
+        output_plus = layer.forward(X)
+        loss_plus = np.sum(output_plus * dout)
+
+        # f(x - epsilon)
+        X[idx] = old_value - epsilon
+        output_minus = layer.forward(X)
+        loss_minus = np.sum(output_minus * dout)
+
+        # Numerical gradient
+        dX_numerical[idx] = (loss_plus - loss_minus) / (2 * epsilon)
+
+        # Restore
+        X[idx] = old_value
+        it.iternext()
+
+    # Compute relative error
+    numerator = np.linalg.norm(dX_analytical - dX_numerical)
+    denominator = np.linalg.norm(dX_analytical) + np.linalg.norm(dX_numerical)
+    relative_error = numerator / (denominator + 1e-8)
+
+    return relative_error
+
+# Test convolution layer
+print("Testing Conv2D layer...")
+conv = Conv2D(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1)
+X_test = np.random.randn(2, 3, 8, 8)
+
+output = conv.forward(X_test)
+print(f"Input shape: {X_test.shape}")
+print(f"Output shape: {output.shape}")
+
+# Gradient check
+error = numerical_gradient_check(conv, X_test.copy())
+print(f"Conv2D gradient check - Relative error: {error:.2e}")
+if error < 1e-6:
+    print("✓ Gradient check PASSED")
+else:
+    print("✗ Gradient check FAILED")
+
+# Test max pooling
+print("\\nTesting MaxPool2D layer...")
+pool = MaxPool2D(pool_size=2, stride=2)
+X_test_pool = np.random.randn(2, 16, 8, 8)
+
+output_pool = pool.forward(X_test_pool)
+print(f"Input shape: {X_test_pool.shape}")
+print(f"Output shape: {output_pool.shape}")
+
+# Gradient check
+error_pool = numerical_gradient_check(pool, X_test_pool.copy())
+print(f"MaxPool2D gradient check - Relative error: {error_pool:.2e}")
+if error_pool < 1e-6:
+    print("✓ Gradient check PASSED")
+else:
+    print("✗ Gradient check FAILED")
+\`\`\`
+
+**What this teaches:**
+- How convolution actually works (not just calling a library)
+- Why backprop through convolution requires flipped kernels
+- How max pooling routes gradients
+- Importance of numerical gradient checking
+
+</details>
+
+### Phase 3: CNN Architecture for Medical Images (Required)
+
+**Challenge:** Build complete CNN for medical image classification.
+
+**Architecture:**
+\`\`\`
+Input (1 or 3 channels, 64x64 or 128x128)
+  ↓
+Conv2D (32 filters, 3x3) → BatchNorm → ReLU → MaxPool(2x2)
+  ↓
+Conv2D (64 filters, 3x3) → BatchNorm → ReLU → MaxPool(2x2)
+  ↓
+Conv2D (128 filters, 3x3) → BatchNorm → ReLU → MaxPool(2x2)
+  ↓
+Flatten
+  ↓
+FC (256) → BatchNorm → ReLU → Dropout(0.5)
+  ↓
+FC (num_classes) → Softmax
+\`\`\`
+
+**Datasets to try:**
+- Chest X-ray classification (COVID vs Normal vs Pneumonia)
+- Skin lesion classification (ISIC dataset)
+- Brain tumor MRI classification
+- Or: CIFAR-10 as proof-of-concept
+
+<details>
+<summary>💡 Stuck? Click for full CNN implementation</summary>
+
+### Complete CNN with Batch Normalization
+
+\`\`\`python
+class BatchNorm2D:
+    """Batch normalization for 2D conv layers."""
+
+    def __init__(self, num_features, epsilon=1e-5, momentum=0.1):
+        """
+        Args:
+            num_features: Number of channels
+            epsilon: Small constant for numerical stability
+            momentum: Momentum for running statistics
+        """
+        self.num_features = num_features
+        self.epsilon = epsilon
+        self.momentum = momentum
+
+        # Learnable parameters
+        self.gamma = np.ones((1, num_features, 1, 1))
+        self.beta = np.zeros((1, num_features, 1, 1))
+
+        # Running statistics (for inference)
+        self.running_mean = np.zeros((1, num_features, 1, 1))
+        self.running_var = np.ones((1, num_features, 1, 1))
+
+        # Gradients
+        self.dgamma = None
+        self.dbeta = None
+
+        self.cache = {}
+
+    def forward(self, X, training=True):
+        """
+        Forward pass of batch normalization.
+
+        Args:
+            X: Input of shape (batch_size, channels, height, width)
+            training: Whether in training mode
+
+        Returns:
+            Normalized and scaled output
+        """
+        if training:
+            # Compute batch statistics
+            mean = np.mean(X, axis=(0, 2, 3), keepdims=True)
+            var = np.var(X, axis=(0, 2, 3), keepdims=True)
+
+            # Update running statistics
+            self.running_mean = (
+                (1 - self.momentum) * self.running_mean +
+                self.momentum * mean
+            )
+            self.running_var = (
+                (1 - self.momentum) * self.running_var +
+                self.momentum * var
+            )
+
+            # Normalize
+            X_normalized = (X - mean) / np.sqrt(var + self.epsilon)
+
+            # Cache for backward
+            self.cache['X'] = X
+            self.cache['mean'] = mean
+            self.cache['var'] = var
+            self.cache['X_normalized'] = X_normalized
+        else:
+            # Use running statistics
+            X_normalized = (X - self.running_mean) / np.sqrt(
+                self.running_var + self.epsilon
+            )
+
+        # Scale and shift
+        output = self.gamma * X_normalized + self.beta
+
+        return output
+
+    def backward(self, dout):
+        """Backward pass of batch normalization."""
+        X = self.cache['X']
+        mean = self.cache['mean']
+        var = self.cache['var']
+        X_normalized = self.cache['X_normalized']
+
+        batch_size = X.shape[0]
+        spatial_size = X.shape[2] * X.shape[3]
+        N = batch_size * spatial_size
+
+        # Gradients of scale and shift
+        self.dgamma = np.sum(dout * X_normalized, axis=(0, 2, 3), keepdims=True)
+        self.dbeta = np.sum(dout, axis=(0, 2, 3), keepdims=True)
+
+        # Gradient of normalized input
+        dX_normalized = dout * self.gamma
+
+        # Gradient of variance
+        dvar = np.sum(
+            dX_normalized * (X - mean) * -0.5 * (var + self.epsilon)**(-1.5),
+            axis=(0, 2, 3), keepdims=True
+        )
+
+        # Gradient of mean
+        dmean = (
+            np.sum(dX_normalized * -1.0 / np.sqrt(var + self.epsilon),
+                   axis=(0, 2, 3), keepdims=True) +
+            dvar * np.sum(-2.0 * (X - mean), axis=(0, 2, 3), keepdims=True) / N
+        )
+
+        # Gradient of input
+        dX = (
+            dX_normalized / np.sqrt(var + self.epsilon) +
+            dvar * 2.0 * (X - mean) / N +
+            dmean / N
+        )
+
+        return dX
+
+class Dropout:
+    """Dropout layer for regularization."""
+
+    def __init__(self, keep_prob=0.5):
+        """
+        Args:
+            keep_prob: Probability of keeping a neuron active
+        """
+        self.keep_prob = keep_prob
+        self.cache = {}
+
+    def forward(self, X, training=True):
+        """
+        Forward pass of dropout.
+
+        Args:
+            X: Input
+            training: Whether in training mode
+
+        Returns:
+            Output with dropout applied (if training)
+        """
+        if training:
+            # Create dropout mask
+            mask = (np.random.rand(*X.shape) < self.keep_prob) / self.keep_prob
+            self.cache['mask'] = mask
+            return X * mask
+        else:
+            # No dropout during inference
+            return X
+
+    def backward(self, dout):
+        """Backward pass of dropout."""
+        mask = self.cache['mask']
+        return dout * mask
+
+class ReLU:
+    """ReLU activation function."""
+
+    def __init__(self):
+        self.cache = {}
+
+    def forward(self, X):
+        self.cache['X'] = X
+        return np.maximum(0, X)
+
+    def backward(self, dout):
+        X = self.cache['X']
+        return dout * (X > 0)
+
+class Flatten:
+    """Flatten spatial dimensions."""
+
+    def __init__(self):
+        self.cache = {}
+
+    def forward(self, X):
+        self.cache['input_shape'] = X.shape
+        batch_size = X.shape[0]
+        return X.reshape(batch_size, -1)
+
+    def backward(self, dout):
+        return dout.reshape(self.cache['input_shape'])
+
+class SimpleCNN:
+    """Simple CNN for medical image classification."""
+
+    def __init__(self, input_channels, num_classes, input_size):
+        """
+        Args:
+            input_channels: Number of input channels (1 for grayscale, 3 for RGB)
+            num_classes: Number of output classes
+            input_size: Input image size (assumes square images)
+        """
+        # Conv block 1
+        self.conv1 = Conv2D(input_channels, 32, kernel_size=3, stride=1, padding=1)
+        self.bn1 = BatchNorm2D(32)
+        self.relu1 = ReLU()
+        self.pool1 = MaxPool2D(pool_size=2, stride=2)
+
+        # Conv block 2
+        self.conv2 = Conv2D(32, 64, kernel_size=3, stride=1, padding=1)
+        self.bn2 = BatchNorm2D(64)
+        self.relu2 = ReLU()
+        self.pool2 = MaxPool2D(pool_size=2, stride=2)
+
+        # Conv block 3
+        self.conv3 = Conv2D(64, 128, kernel_size=3, stride=1, padding=1)
+        self.bn3 = BatchNorm2D(128)
+        self.relu3 = ReLU()
+        self.pool3 = MaxPool2D(pool_size=2, stride=2)
+
+        # Fully connected layers
+        self.flatten = Flatten()
+
+        # Calculate flattened size
+        feature_size = input_size // 8  # 3 pooling layers with stride 2
+        fc_input_size = 128 * feature_size * feature_size
+
+        self.fc1 = FullyConnectedLayer(fc_input_size, 256)
+        self.bn4 = BatchNorm1D(256)  # Batch norm for FC layer
+        self.relu4 = ReLU()
+        self.dropout = Dropout(keep_prob=0.5)
+
+        self.fc2 = FullyConnectedLayer(256, num_classes)
+        self.softmax = SoftmaxLayer()
+
+        # Store layers for easy iteration
+        self.layers = [
+            self.conv1, self.bn1, self.relu1, self.pool1,
+            self.conv2, self.bn2, self.relu2, self.pool2,
+            self.conv3, self.bn3, self.relu3, self.pool3,
+            self.flatten,
+            self.fc1, self.bn4, self.relu4, self.dropout,
+            self.fc2, self.softmax
+        ]
+
+    def forward(self, X, y=None, training=True):
+        """Forward pass through CNN."""
+        # Conv block 1
+        out = self.conv1.forward(X)
+        out = self.bn1.forward(out, training)
+        out = self.relu1.forward(out)
+        out = self.pool1.forward(out)
+
+        # Conv block 2
+        out = self.conv2.forward(out)
+        out = self.bn2.forward(out, training)
+        out = self.relu2.forward(out)
+        out = self.pool2.forward(out)
+
+        # Conv block 3
+        out = self.conv3.forward(out)
+        out = self.bn3.forward(out, training)
+        out = self.relu3.forward(out)
+        out = self.pool3.forward(out)
+
+        # Flatten
+        out = self.flatten.forward(out)
+
+        # FC layers
+        out = self.fc1.forward(out, training)
+        out = self.bn4.forward(out, training)
+        out = self.relu4.forward(out)
+        out = self.dropout.forward(out, training)
+
+        # Output
+        out = self.fc2.forward(out, training)
+        probs, loss = self.softmax.forward(out, y)
+
+        return probs, loss
+
+    def backward(self):
+        """Backward pass through CNN."""
+        # Softmax + FC2
+        dout = self.softmax.backward()
+        dout = self.fc2.backward(dout)
+
+        # Dropout + ReLU + BN + FC1
+        dout = self.dropout.backward(dout)
+        dout = self.relu4.backward(dout)
+        dout = self.bn4.backward(dout)
+        dout = self.fc1.backward(dout)
+
+        # Flatten
+        dout = self.flatten.backward(dout)
+
+        # Conv block 3
+        dout = self.pool3.backward(dout)
+        dout = self.relu3.backward(dout)
+        dout = self.bn3.backward(dout)
+        dout = self.conv3.backward(dout)
+
+        # Conv block 2
+        dout = self.pool2.backward(dout)
+        dout = self.relu2.backward(dout)
+        dout = self.bn2.backward(dout)
+        dout = self.conv2.backward(dout)
+
+        # Conv block 1
+        dout = self.pool1.backward(dout)
+        dout = self.relu1.backward(dout)
+        dout = self.bn1.backward(dout)
+        dout = self.conv1.backward(dout)
+
+        return dout
+
+    def update(self, learning_rate):
+        """Update all parameters."""
+        # Update conv layers
+        for conv in [self.conv1, self.conv2, self.conv3]:
+            conv.filters -= learning_rate * conv.dfilters
+            conv.bias -= learning_rate * conv.dbias
+
+        # Update batch norm layers
+        for bn in [self.bn1, self.bn2, self.bn3, self.bn4]:
+            bn.gamma -= learning_rate * bn.dgamma
+            bn.beta -= learning_rate * bn.dbeta
+
+        # Update FC layers
+        for fc in [self.fc1, self.fc2]:
+            fc.W -= learning_rate * fc.dW
+            fc.b -= learning_rate * fc.db
+
+# Note: Need to implement BatchNorm1D for FC layers
+class BatchNorm1D:
+    """Batch normalization for fully connected layers."""
+
+    def __init__(self, num_features, epsilon=1e-5, momentum=0.1):
+        self.num_features = num_features
+        self.epsilon = epsilon
+        self.momentum = momentum
+
+        self.gamma = np.ones((1, num_features))
+        self.beta = np.zeros((1, num_features))
+
+        self.running_mean = np.zeros((1, num_features))
+        self.running_var = np.ones((1, num_features))
+
+        self.dgamma = None
+        self.dbeta = None
+        self.cache = {}
+
+    def forward(self, X, training=True):
+        if training:
+            mean = np.mean(X, axis=0, keepdims=True)
+            var = np.var(X, axis=0, keepdims=True)
+
+            self.running_mean = (1 - self.momentum) * self.running_mean + self.momentum * mean
+            self.running_var = (1 - self.momentum) * self.running_var + self.momentum * var
+
+            X_normalized = (X - mean) / np.sqrt(var + self.epsilon)
+
+            self.cache['X'] = X
+            self.cache['mean'] = mean
+            self.cache['var'] = var
+            self.cache['X_normalized'] = X_normalized
+        else:
+            X_normalized = (X - self.running_mean) / np.sqrt(self.running_var + self.epsilon)
+
+        output = self.gamma * X_normalized + self.beta
+        return output
+
+    def backward(self, dout):
+        X = self.cache['X']
+        mean = self.cache['mean']
+        var = self.cache['var']
+        X_normalized = self.cache['X_normalized']
+
+        N = X.shape[0]
+
+        self.dgamma = np.sum(dout * X_normalized, axis=0, keepdims=True)
+        self.dbeta = np.sum(dout, axis=0, keepdims=True)
+
+        dX_normalized = dout * self.gamma
+
+        dvar = np.sum(dX_normalized * (X - mean) * -0.5 * (var + self.epsilon)**(-1.5), axis=0, keepdims=True)
+        dmean = np.sum(dX_normalized * -1.0 / np.sqrt(var + self.epsilon), axis=0, keepdims=True) + dvar * np.sum(-2.0 * (X - mean), axis=0, keepdims=True) / N
+
+        dX = dX_normalized / np.sqrt(var + self.epsilon) + dvar * 2.0 * (X - mean) / N + dmean / N
+
+        return dX
+
+print("SimpleCNN architecture defined successfully!")
+\`\`\`
+
+**Training the CNN:**
+
+\`\`\`python
+# Example: Training on CIFAR-10 (or medical dataset)
+from sklearn.datasets import fetch_openml
+
+# Load dataset (replace with medical images)
+# For demo, using CIFAR-10
+print("Loading dataset...")
+# X_train: (N, 3, 32, 32), y_train: (N,)
+# X_test: (M, 3, 32, 32), y_test: (M,)
+
+# Create model
+model = SimpleCNN(input_channels=3, num_classes=10, input_size=32)
+
+# Training loop
+batch_size = 64
+epochs = 20
+learning_rate = 0.001
+
+history = {'train_loss': [], 'train_acc': [], 'test_acc': []}
+
+for epoch in range(epochs):
+    # Training
+    epoch_loss = 0
+    num_batches = 0
+
+    for i in range(0, len(X_train), batch_size):
+        X_batch = X_train[i:i+batch_size]
+        y_batch = y_train[i:i+batch_size]
+
+        # Forward
+        probs, loss = model.forward(X_batch, y_batch, training=True)
+
+        # Backward
+        model.backward()
+
+        # Update
+        model.update(learning_rate)
+
+        epoch_loss += loss
+        num_batches += 1
+
+    # Evaluate
+    train_probs, _ = model.forward(X_train_sample, training=False)
+    train_acc = np.mean(np.argmax(train_probs, axis=1) == y_train_sample)
+
+    test_probs, _ = model.forward(X_test, training=False)
+    test_acc = np.mean(np.argmax(test_probs, axis=1) == y_test)
+
+    avg_loss = epoch_loss / num_batches
+    history['train_loss'].append(avg_loss)
+    history['train_acc'].append(train_acc)
+    history['test_acc'].append(test_acc)
+
+    print(f"Epoch {epoch+1}/{epochs}: Loss={avg_loss:.4f}, "
+          f"Train Acc={train_acc:.4f}, Test Acc={test_acc:.4f}")
+
+    # Learning rate decay
+    if (epoch + 1) % 5 == 0:
+        learning_rate *= 0.5
+        print(f"Learning rate reduced to {learning_rate}")
+
+print(f"\\nFinal Test Accuracy: {history['test_acc'][-1]:.4f}")
+\`\`\`
+
+</details>
+
+### Phase 4: Uncertainty Quantification with MC Dropout (Required)
+
+**Challenge:** Implement Monte Carlo Dropout for uncertainty estimation.
+
+**Deliverables:**
+1. MC Dropout inference (multiple forward passes with dropout enabled)
+2. Confidence estimation from prediction variance
+3. Calibration plots (reliability diagrams)
+4. Decision threshold tuning (when to defer to human expert)
+
+**Medical context:**
+- High confidence + correct = safe to use
+- Low confidence = recommend human review
+- High confidence + wrong = dangerous! (need calibration)
+
+<details>
+<summary>💡 Stuck? Click for MC Dropout and uncertainty quantification</summary>
+
+### Monte Carlo Dropout Implementation
+
+\`\`\`python
+class MCDropoutCNN:
+    """CNN with Monte Carlo Dropout for uncertainty quantification."""
+
+    def __init__(self, base_model):
+        """
+        Args:
+            base_model: Trained SimpleCNN model
+        """
+        self.model = base_model
+
+    def predict_with_uncertainty(self, X, n_samples=50):
+        """
+        Make predictions with uncertainty estimates.
+
+        Args:
+            X: Input images (batch_size, channels, height, width)
+            n_samples: Number of MC samples
+
+        Returns:
+            mean_probs: Mean predicted probabilities
+            std_probs: Standard deviation (uncertainty)
+            predictions: Most likely class
+            confidence: Confidence in prediction
+        """
+        batch_size = X.shape[0]
+        num_classes = self.model.fc2.W.shape[1]
+
+        # Collect predictions from multiple forward passes
+        all_probs = np.zeros((n_samples, batch_size, num_classes))
+
+        for i in range(n_samples):
+            # Forward pass with dropout ENABLED
+            probs, _ = self.model.forward(X, y=None, training=True)
+            all_probs[i] = probs
+
+        # Compute statistics
+        mean_probs = np.mean(all_probs, axis=0)  # (batch_size, num_classes)
+        std_probs = np.std(all_probs, axis=0)    # (batch_size, num_classes)
+
+        # Predictions and confidence
+        predictions = np.argmax(mean_probs, axis=1)
+        confidence = mean_probs[np.arange(batch_size), predictions]
+
+        # Total uncertainty (entropy)
+        epsilon = 1e-10
+        entropy = -np.sum(mean_probs * np.log(mean_probs + epsilon), axis=1)
+
+        return {
+            'predictions': predictions,
+            'confidence': confidence,
+            'mean_probs': mean_probs,
+            'std_probs': std_probs,
+            'entropy': entropy,
+            'all_samples': all_probs
+        }
+
+    def visualize_uncertainty(self, X, y_true, indices=None, n_samples=50):
+        """
+        Visualize predictions with uncertainty.
+
+        Args:
+            X: Input images
+            y_true: True labels
+            indices: Which samples to visualize (default: random 6)
+            n_samples: Number of MC samples
+        """
+        if indices is None:
+            indices = np.random.choice(len(X), size=6, replace=False)
+
+        X_sample = X[indices]
+        y_sample = y_true[indices]
+
+        # Get predictions with uncertainty
+        results = self.predict_with_uncertainty(X_sample, n_samples)
+
+        # Plot
+        fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+        axes = axes.ravel()
+
+        for i, ax in enumerate(axes):
+            # Show image
+            img = X_sample[i]
+            if img.shape[0] == 1:  # Grayscale
+                ax.imshow(img[0], cmap='gray')
+            else:  # RGB
+                ax.imshow(img.transpose(1, 2, 0))
+
+            pred = results['predictions'][i]
+            conf = results['confidence'][i]
+            entropy = results['entropy'][i]
+            correct = (pred == y_sample[i])
+
+            # Title with prediction info
+            color = 'green' if correct else 'red'
+            ax.set_title(
+                f"True: {y_sample[i]}, Pred: {pred}\\n"
+                f"Confidence: {conf:.3f}, Entropy: {entropy:.3f}",
+                color=color, fontweight='bold'
+            )
+            ax.axis('off')
+
+            # Add colored border
+            for spine in ax.spines.values():
+                spine.set_edgecolor(color)
+                spine.set_linewidth(3)
+
+        plt.tight_layout()
+        return fig
+
+    def plot_confidence_histogram(self, X, y_true, n_samples=50):
+        """Plot histogram of confidences for correct vs incorrect predictions."""
+        results = self.predict_with_uncertainty(X, n_samples)
+
+        predictions = results['predictions']
+        confidences = results['confidence']
+        correct = (predictions == y_true)
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+        # Histogram of confidences
+        ax1.hist(confidences[correct], bins=20, alpha=0.6, label='Correct', color='green')
+        ax1.hist(confidences[~correct], bins=20, alpha=0.6, label='Incorrect', color='red')
+        ax1.set_xlabel('Confidence')
+        ax1.set_ylabel('Count')
+        ax1.set_title('Confidence Distribution')
+        ax1.legend()
+        ax1.grid(True, alpha=0.3)
+
+        # Entropy distribution
+        entropy = results['entropy']
+        ax2.hist(entropy[correct], bins=20, alpha=0.6, label='Correct', color='green')
+        ax2.hist(entropy[~correct], bins=20, alpha=0.6, label='Incorrect', color='red')
+        ax2.set_xlabel('Entropy')
+        ax2.set_ylabel('Count')
+        ax2.set_title('Uncertainty Distribution')
+        ax2.legend()
+        ax2.grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        return fig
+
+def calibration_curve(y_true, y_pred_probs, n_bins=10):
+    """
+    Compute calibration curve (reliability diagram).
+
+    Args:
+        y_true: True labels
+        y_pred_probs: Predicted probabilities for each class
+        n_bins: Number of bins for calibration
+
+    Returns:
+        bin_confidences: Average confidence in each bin
+        bin_accuracies: Actual accuracy in each bin
+        bin_counts: Number of samples in each bin
+    """
+    predictions = np.argmax(y_pred_probs, axis=1)
+    confidences = np.max(y_pred_probs, axis=1)
+    correct = (predictions == y_true)
+
+    # Create bins
+    bins = np.linspace(0, 1, n_bins + 1)
+    bin_confidences = []
+    bin_accuracies = []
+    bin_counts = []
+
+    for i in range(n_bins):
+        # Find samples in this bin
+        mask = (confidences >= bins[i]) & (confidences < bins[i+1])
+
+        if np.sum(mask) > 0:
+            bin_conf = np.mean(confidences[mask])
+            bin_acc = np.mean(correct[mask])
+            bin_count = np.sum(mask)
+        else:
+            bin_conf = 0
+            bin_acc = 0
+            bin_count = 0
+
+        bin_confidences.append(bin_conf)
+        bin_accuracies.append(bin_acc)
+        bin_counts.append(bin_count)
+
+    return np.array(bin_confidences), np.array(bin_accuracies), np.array(bin_counts)
+
+def plot_calibration(y_true, y_pred_probs, title="Calibration Curve"):
+    """Plot calibration (reliability) diagram."""
+    bin_confs, bin_accs, bin_counts = calibration_curve(y_true, y_pred_probs)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+
+    # Reliability diagram
+    ax1.plot([0, 1], [0, 1], 'k--', label='Perfect calibration')
+    ax1.plot(bin_confs, bin_accs, 'o-', linewidth=2, markersize=8, label='Model')
+    ax1.set_xlabel('Confidence')
+    ax1.set_ylabel('Accuracy')
+    ax1.set_title(title)
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    ax1.set_xlim([0, 1])
+    ax1.set_ylim([0, 1])
+
+    # Bar chart of bin counts
+    ax2.bar(bin_confs, bin_counts, width=0.08, alpha=0.6)
+    ax2.set_xlabel('Confidence')
+    ax2.set_ylabel('Number of Samples')
+    ax2.set_title('Sample Distribution')
+    ax2.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    return fig
+
+def expected_calibration_error(y_true, y_pred_probs, n_bins=10):
+    """
+    Compute Expected Calibration Error (ECE).
+
+    Lower is better. ECE = 0 means perfect calibration.
+    """
+    bin_confs, bin_accs, bin_counts = calibration_curve(y_true, y_pred_probs, n_bins)
+
+    # Weighted average of absolute difference
+    ece = np.sum(bin_counts * np.abs(bin_confs - bin_accs)) / np.sum(bin_counts)
+
+    return ece
+
+# Example usage
+print("Creating MC Dropout model...")
+mc_model = MCDropoutCNN(model)  # Assuming 'model' is trained SimpleCNN
+
+print("\\nEvaluating with uncertainty quantification...")
+results = mc_model.predict_with_uncertainty(X_test[:100], n_samples=50)
+
+print(f"Mean confidence: {np.mean(results['confidence']):.3f}")
+print(f"Mean entropy: {np.mean(results['entropy']):.3f}")
+
+# Visualize predictions
+fig1 = mc_model.visualize_uncertainty(X_test, y_test, n_samples=50)
+plt.savefig('mc_dropout_predictions.png', dpi=150)
+
+# Plot confidence distribution
+fig2 = mc_model.plot_confidence_histogram(X_test, y_test, n_samples=50)
+plt.savefig('confidence_distribution.png', dpi=150)
+
+# Calibration analysis
+print("\\nComputing calibration...")
+test_results = mc_model.predict_with_uncertainty(X_test, n_samples=50)
+ece = expected_calibration_error(y_test, test_results['mean_probs'])
+print(f"Expected Calibration Error: {ece:.4f}")
+
+fig3 = plot_calibration(y_test, test_results['mean_probs'])
+plt.savefig('calibration_curve.png', dpi=150)
+
+# Decision threshold analysis
+print("\\nDecision threshold analysis:")
+for threshold in [0.7, 0.8, 0.9, 0.95]:
+    high_conf = results['confidence'] >= threshold
+    if np.sum(high_conf) > 0:
+        accuracy = np.mean(
+            results['predictions'][high_conf] == y_test[:100][high_conf]
+        )
+        coverage = np.mean(high_conf)
+        print(f"Threshold {threshold}: Accuracy={accuracy:.3f}, Coverage={coverage:.3f}")
+\`\`\`
+
+**What this teaches:**
+- How to quantify prediction uncertainty
+- Why uncertainty matters in medical applications
+- How to calibrate model confidence
+- When to defer to human experts
+
+</details>
+
+---
+
+## 🎯 Milestones & Validation
+
+<div class="milestone-box">
+
+### Milestone 1: Basic Network Working
+
+**Success Criteria:**
+- FC network achieves >95% on MNIST
+- Understands forward/backward pass
+- Can explain why flattening loses spatial structure
+
+**Validation:**
+- Compare parameter count: CNN vs FC network
+- Shuffle pixels: FC network breaks, CNN should too (locality matters!)
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 2: Convolution Layers Implemented
+
+**Success Criteria:**
+- Conv2D forward pass works
+- Conv2D backward pass works
+- MaxPool forward/backward works
+- Gradient checks pass (<1e-6 error)
+
+**Validation:**
+- Numerical gradient check
+- Apply edge detection filter manually, verify output
+- Check: conv output dimensions match formula
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 3: Full CNN Training
+
+**Success Criteria:**
+- CNN achieves >85% accuracy on medical images (or >70% on CIFAR-10)
+- Training loss decreases smoothly
+- Batch normalization speeds up training
+- Can visualize learned filters
+
+**Validation:**
+- First layer filters look like edge detectors
+- Deeper layers capture more complex patterns
+- Network doesn't overfit with dropout
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 4: Uncertainty Quantification
+
+**Success Criteria:**
+- MC Dropout provides uncertainty estimates
+- High uncertainty correlates with errors
+- Calibration curve shows good calibration
+- Can set threshold for human review
+
+**Validation:**
+- ECE < 0.1 (reasonably calibrated)
+- At 90% confidence threshold, actual accuracy ~90%
+- Low confidence samples are genuinely ambiguous
+
+</div>
+
+---
+
+## 📊 Suggested Experiments
+
+### Experiment 1: CNN vs FC Network
+
+**Question:** How much better are CNNs than FC networks?
+
+**Procedure:**
+1. Train FC network on images (flatten input)
+2. Train CNN on same images
+3. Compare: accuracy, parameter count, training time
+
+**What to observe:**
+- CNN should have fewer parameters but better accuracy
+- FC network needs more data to reach same performance
+
+### Experiment 2: Filter Visualization
+
+**Question:** What do convolutional filters learn?
+
+**Procedure:**
+1. Train CNN
+2. Visualize first layer filters (3x3 or 5x5 weights)
+3. Visualize activation maps (which filters fire on test image)
+
+**What to observe:**
+- First layer: edge detectors at different orientations
+- Later layers: texture and pattern detectors
+- Different filters activate on different image regions
+
+<details>
+<summary>💡 Click for filter visualization code</summary>
+
+\`\`\`python
+def visualize_filters(conv_layer, layer_name="Conv Layer"):
+    """Visualize convolutional filters."""
+    filters = conv_layer.filters  # (out_channels, in_channels, H, W)
+
+    num_filters = min(filters.shape[0], 32)  # Show first 32 filters
+    grid_size = int(np.ceil(np.sqrt(num_filters)))
+
+    fig, axes = plt.subplots(grid_size, grid_size, figsize=(12, 12))
+    axes = axes.ravel()
+
+    for i in range(num_filters):
+        filter_img = filters[i]  # (in_channels, H, W)
+
+        # For RGB input, show all channels
+        if filter_img.shape[0] == 3:
+            # Normalize to [0, 1]
+            img = filter_img.transpose(1, 2, 0)
+            img = (img - img.min()) / (img.max() - img.min() + 1e-8)
+            axes[i].imshow(img)
+        else:
+            # For multiple input channels, show first channel
+            img = filter_img[0]
+            axes[i].imshow(img, cmap='gray')
+
+        axes[i].axis('off')
+        axes[i].set_title(f'F{i}')
+
+    # Hide remaining subplots
+    for i in range(num_filters, len(axes)):
+        axes[i].axis('off')
+
+    plt.suptitle(f'{layer_name} Filters', fontsize=16)
+    plt.tight_layout()
+    return fig
+
+def visualize_activation_maps(model, X, layer_idx=0):
+    """
+    Visualize activation maps for a specific layer.
+
+    Args:
+        model: Trained CNN
+        X: Input image (1, channels, H, W)
+        layer_idx: Which conv layer to visualize (0, 1, or 2)
+    """
+    # Forward pass up to desired layer
+    out = X
+    layer_count = 0
+
+    for layer in model.layers:
+        if isinstance(layer, Conv2D):
+            out = layer.forward(out)
+            if layer_count == layer_idx:
+                activations = out
+                break
+            out = model.bn1.forward(out, training=False)
+            out = model.relu1.forward(out)
+            out = model.pool1.forward(out)
+            layer_count += 1
+        else:
+            # Continue forward pass
+            if hasattr(layer, 'forward'):
+                out = layer.forward(out)
+
+    # Plot activation maps
+    act = activations[0]  # (num_filters, H, W)
+    num_filters = min(act.shape[0], 32)
+    grid_size = int(np.ceil(np.sqrt(num_filters)))
+
+    fig, axes = plt.subplots(grid_size, grid_size, figsize=(15, 15))
+    axes = axes.ravel()
+
+    for i in range(num_filters):
+        axes[i].imshow(act[i], cmap='viridis')
+        axes[i].axis('off')
+        axes[i].set_title(f'Filter {i}')
+
+    for i in range(num_filters, len(axes)):
+        axes[i].axis('off')
+
+    plt.suptitle(f'Activation Maps - Layer {layer_idx}', fontsize=16)
+    plt.tight_layout()
+    return fig
+
+# Visualize first layer filters
+fig1 = visualize_filters(model.conv1, "First Convolutional Layer")
+plt.savefig('conv1_filters.png', dpi=150)
+
+# Visualize activation maps
+test_image = X_test[0:1]  # Single image
+fig2 = visualize_activation_maps(model, test_image, layer_idx=0)
+plt.savefig('activation_maps_layer0.png', dpi=150)
+
+fig3 = visualize_activation_maps(model, test_image, layer_idx=1)
+plt.savefig('activation_maps_layer1.png', dpi=150)
+\`\`\`
+
+</details>
+
+### Experiment 3: Dropout Rate Tuning
+
+**Question:** How does dropout rate affect uncertainty estimates?
+
+**Procedure:**
+1. Train models with dropout rates: [0.1, 0.3, 0.5, 0.7]
+2. Compute MC Dropout uncertainty for each
+3. Compare ECE and accuracy vs coverage
+
+**What to observe:**
+- Higher dropout → more uncertainty
+- Too high dropout → underfitting
+- Optimal dropout rate balances accuracy and calibration
+
+### Experiment 4: Batch Normalization Impact
+
+**Question:** How much does batch normalization help?
+
+**Procedure:**
+1. Train CNN with batch norm
+2. Train identical CNN without batch norm
+3. Compare convergence speed and final accuracy
+
+**What to observe:**
+- With BN: can use higher learning rate
+- With BN: training is more stable
+- With BN: might achieve better final accuracy
+
+---
+
+## ✅ Final Checklist
+
+Before considering this project complete:
+
+- [ ] Implemented Conv2D layer from scratch with forward/backward pass
+- [ ] Implemented MaxPooling with forward/backward pass
+- [ ] Implemented BatchNorm for Conv and FC layers
+- [ ] Built complete CNN architecture
+- [ ] Achieved >85% accuracy on medical images
+- [ ] Implemented MC Dropout for uncertainty quantification
+- [ ] Generated calibration curves (ECE < 0.1)
+- [ ] Visualized learned filters and activation maps
+- [ ] Can explain why CNNs work for images
+
+**Most importantly:**
+- [ ] You **understand** why convolutions preserve spatial structure
+- [ ] You **understand** how backprop works through conv layers
+- [ ] You have **intuition** for what each layer learns
+- [ ] You can **quantify** when the model is uncertain
+- [ ] You can **explain** to a medical professional how the model works
+
+---
+
+## 📚 Additional Resources
+
+### Research Papers
+- [ImageNet Classification with Deep CNNs (AlexNet)](https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf)
+- [Dropout as a Bayesian Approximation](https://arxiv.org/abs/1506.02142) - MC Dropout
+- [Batch Normalization Paper](https://arxiv.org/abs/1502.03167)
+- [On Calibration of Modern Neural Networks](https://arxiv.org/abs/1706.04599)
+
+### Tutorials & Guides
+- [CS231n: Convolutional Neural Networks](http://cs231n.github.io/convolutional-networks/)
+- [Distill: Feature Visualization](https://distill.pub/2017/feature-visualization/)
+- [Understanding Convolution in Deep Learning](https://timdettmers.com/2015/03/26/convolution-deep-learning/)
+- [A guide to convolution arithmetic](https://arxiv.org/abs/1603.07285)
+
+### Medical Imaging Datasets
+- [Chest X-Ray Images (Pneumonia)](https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia)
+- [ISIC Skin Lesion Dataset](https://www.isic-archive.com/)
+- [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
+
+---
+
+## 🏥 Medical Context & Ethics
+
+**Important considerations for medical imaging:**
+
+1. **False negatives are dangerous:** Missing a disease can be fatal
+2. **False positives waste resources:** Unnecessary tests/treatments
+3. **Uncertainty quantification is critical:** Know when model is guessing
+4. **Calibration matters:** Confidence must match actual accuracy
+5. **Explainability:** Doctors need to understand why model made prediction
+6. **Bias in data:** Training data may not represent all populations
+7. **Regulatory compliance:** Medical devices require FDA approval (or equivalent)
+
+**Always remember:**
+- Your model is a **tool to assist** medical professionals, not replace them
+- High-stakes decisions require human oversight
+- Uncertainty estimates help doctors make informed decisions
+- Regular validation on new data is essential
+
+---
+
+Good luck! Remember: this is about **understanding how neural networks process images**, not just implementing formulas. Visualize, experiment, and build intuition! 🚀
+`;
+
+        // Render markdown
+        document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+    </script>
+</body>
+</html>

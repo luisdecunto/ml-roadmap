@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 3 Mini-Project: Optimization Landscape Explorer - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-body {
+            line-height: 1.6;
+        }
+        .markdown-body h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            border-bottom: 3px solid #f59e0b;
+            padding-bottom: 0.5rem;
+        }
+        .markdown-body h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+        .markdown-body h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+        .markdown-body p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1rem;
+            margin-left: 1.5rem;
+        }
+        .markdown-body li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .markdown-body code {
+            background-color: #f3f4f6;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #dc2626;
+        }
+        .markdown-body pre {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #f3f4f6;
+        }
+        .markdown-body a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .markdown-body a:hover {
+            color: #1d4ed8;
+        }
+        .markdown-body hr {
+            margin: 2rem 0;
+            border: 0;
+            border-top: 2px solid #e5e7eb;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #f59e0b;
+            padding-left: 1rem;
+            color: #6b7280;
+            font-style: italic;
+            margin: 1rem 0;
+        }
+        .markdown-body details {
+            background-color: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .markdown-body details[open] {
+            background-color: #fef9e7;
+        }
+        .markdown-body summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: #d97706;
+            user-select: none;
+            padding: 0.5rem;
+            margin: -1rem;
+            margin-bottom: 1rem;
+            background-color: #fde68a;
+            border-radius: 0.375rem;
+        }
+        .markdown-body summary:hover {
+            background-color: #fcd34d;
+            color: #b45309;
+        }
+        .research-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        .milestone-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 min-h-screen">
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">📦 Mini-Project: Optimization Landscape Explorer</h1>
+                <a href="../index.html" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-semibold">
+                    ← Back to Roadmap
+                </a>
+            </div>
+            <p class="text-gray-600">
+                <strong>Module 3:</strong> Optimization & Gradient Descent | <strong>Estimated Time:</strong> 25-35 hours
+            </p>
+        </div>
+
+        <!-- Content Container -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 markdown-body">
+            <div id="guide-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const markdown = `# Optimization Landscape Explorer
+
+## 🎯 Project Overview
+
+**Challenge:** Build an interactive tool to visualize and understand optimization landscapes, comparing different gradient descent variants and analyzing their behavior on various loss surfaces.
+
+**Why This Matters:** This project forces you to deeply understand:
+- How different optimizers navigate loss landscapes
+- Why momentum helps escape local minima
+- When adaptive learning rates (Adam, RMSprop) outperform vanilla SGD
+- The role of learning rate scheduling
+- How saddle points and plateaus affect convergence
+
+You are **NOT** just implementing formulas. You are building a **research tool** to develop intuition about optimization dynamics.
+
+---
+
+## 📚 Learning Objectives
+
+By completing this project, you will be able to:
+
+1. **Implement** all major optimizers from scratch (SGD, Momentum, RMSprop, Adam)
+2. **Visualize** optimization trajectories on 2D/3D loss surfaces
+3. **Analyze** convergence behavior and failure modes
+4. **Design** custom learning rate schedules
+5. **Compare** optimizer performance quantitatively
+6. **Explain** when to use which optimizer and why
+7. **Debug** optimization issues in practice
+
+---
+
+## 🔬 Problem Statement
+
+### Core Challenge
+
+Design and implement an optimization landscape explorer that:
+
+1. **Creates diverse test functions:** Convex, non-convex, with saddle points, plateaus
+2. **Implements optimizers:** Vanilla SGD, Momentum, Nesterov, RMSprop, Adam, AdamW
+3. **Visualizes trajectories:** 2D contour plots, 3D surface plots, convergence curves
+4. **Compares performance:** Side-by-side comparisons with metrics
+5. **Provides insights:** Explains why each optimizer behaves the way it does
+
+### Technical Constraints
+
+- Must implement optimizers from scratch (no PyTorch/TensorFlow optimizers)
+- Must support batched gradient computation
+- Must visualize at least 5 different test functions
+- Must track and plot: loss curve, gradient norms, parameter updates
+- Must run interactive comparisons (adjustable hyperparameters)
+
+---
+
+## 🤔 Research Questions
+
+These questions should guide your design. **Answer them through experiments:**
+
+### Fundamental Questions
+
+1. **Why does momentum help?**
+   - How does it affect oscillations in narrow valleys?
+   - When does high momentum cause overshooting?
+   - What's the difference between classical and Nesterov momentum?
+
+2. **What do adaptive learning rates solve?**
+   - Why does RMSprop work better on non-stationary problems?
+   - How does Adam combine momentum and adaptive rates?
+   - When should you use AdamW instead of Adam?
+
+3. **How do learning rates affect convergence?**
+   - Too large: What happens? (divergence, oscillation?)
+   - Too small: What happens? (slow convergence?)
+   - Can you design a schedule that starts large and decreases?
+
+4. **What are saddle points and why do they matter?**
+   - How do they slow down convergence?
+   - Which optimizers escape saddle points faster?
+   - Can you create a test function with a prominent saddle point?
+
+<details>
+<summary>💡 Stuck? Click for hints on these fundamentals</summary>
+
+### Understanding Momentum
+
+**What it does:**
+\`\`\`python
+# Vanilla SGD
+theta = theta - learning_rate * gradient
+
+# SGD with Momentum
+velocity = beta * velocity + gradient
+theta = theta - learning_rate * velocity
+\`\`\`
+
+**Why it helps:**
+- Accumulates gradients over time → smooths out oscillations
+- Builds up speed in consistent directions
+- Dampens oscillations in perpendicular directions
+
+**Experiment to try:**
+\`\`\`python
+# Create a narrow valley function
+def rosenbrock(x, y, a=1, b=100):
+    return (a - x)**2 + b * (y - x**2)**2
+
+# Compare vanilla SGD vs momentum on this
+# Vanilla: oscillates in narrow valley
+# Momentum: moves smoothly along valley floor
+\`\`\`
+
+---
+
+### Adaptive Learning Rates
+
+**RMSprop:**
+\`\`\`python
+# Maintains running average of squared gradients
+squared_grad_avg = beta * squared_grad_avg + (1 - beta) * gradient**2
+theta = theta - learning_rate * gradient / (sqrt(squared_grad_avg) + epsilon)
+\`\`\`
+
+**Why:** Adapts learning rate per-parameter. Parameters with consistently large gradients get smaller effective learning rates.
+
+**Adam (combines momentum + RMSprop):**
+\`\`\`python
+# First moment (momentum)
+m = beta1 * m + (1 - beta1) * gradient
+
+# Second moment (RMSprop)
+v = beta2 * v + (1 - beta2) * gradient**2
+
+# Bias correction
+m_hat = m / (1 - beta1**t)
+v_hat = v / (1 - beta2**t)
+
+# Update
+theta = theta - learning_rate * m_hat / (sqrt(v_hat) + epsilon)
+\`\`\`
+
+**When to use:**
+- Adam: Default choice for deep learning (works well out-of-the-box)
+- AdamW: When you need weight decay (better generalization)
+- RMSprop: For RNNs or when gradients are very noisy
+- Momentum: When you understand the landscape and can tune beta
+
+---
+
+### Learning Rate Schedules
+
+**Common schedules:**
+
+1. **Step Decay:**
+\`\`\`python
+lr = initial_lr * decay_rate ** (epoch // step_size)
+\`\`\`
+
+2. **Exponential Decay:**
+\`\`\`python
+lr = initial_lr * exp(-decay_rate * epoch)
+\`\`\`
+
+3. **Cosine Annealing:**
+\`\`\`python
+lr = min_lr + 0.5 * (max_lr - min_lr) * (1 + cos(pi * epoch / total_epochs))
+\`\`\`
+
+4. **1Cycle:**
+\`\`\`python
+# Increase lr first half, decrease second half
+# Used by fast.ai
+\`\`\`
+
+**Your task:** Implement at least 2 schedules and compare their effect on convergence speed.
+
+---
+
+### Saddle Points
+
+**What they are:**
+- Points where gradient = 0 but NOT a minimum
+- Slope is flat in some directions, curved in others
+- Example: f(x,y) = x² - y²  (saddle at origin)
+
+**Why they matter:**
+- Gradients become very small near saddle points
+- Can slow down or stall optimization
+- More common in high dimensions
+
+**Test function:**
+\`\`\`python
+def saddle_function(x, y):
+    return x**2 - y**2
+
+# At (0,0): gradient = 0, but it's a saddle point
+# x-direction: curves up (minimum)
+# y-direction: curves down (maximum)
+\`\`\`
+
+**Experiment:** Which optimizer escapes this saddle point fastest?
+
+</details>
+
+### Advanced Questions
+
+5. **How does batch size affect optimization?**
+   - Full batch vs mini-batch vs stochastic
+   - Noise in gradients: helpful or harmful?
+
+6. **Can you design a function where SGD fails but Adam succeeds?**
+   - What properties make it hard for SGD?
+
+7. **What happens with very high-dimensional loss landscapes?**
+   - Can you extend your visualizations beyond 2D?
+
+---
+
+## 📋 Requirements & Specifications
+
+### Phase 1: Test Functions & Visualization (Required)
+
+**Functionality:**
+- Implement at least 5 test functions with different properties
+- Create 2D contour plots with customizable resolution
+- Create 3D surface plots for visual understanding
+- Support gradient computation (analytical or numerical)
+
+**Test Functions to include:**
+1. **Convex:** Quadratic bowl
+2. **Non-convex:** Rosenbrock (narrow valley)
+3. **Saddle point:** x² - y²
+4. **Many local minima:** Ackley or Rastrigin
+5. **Plateau:** Beale function
+
+<details>
+<summary>💡 Stuck? Click for test function implementations</summary>
+
+### Test Function Library
+
+\`\`\`python
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+class TestFunctions:
+    """Collection of optimization test functions."""
+
+    @staticmethod
+    def sphere(x):
+        """
+        Simple convex quadratic function.
+        Global minimum at origin: f(0,0) = 0
+        """
+        return np.sum(x**2, axis=-1)
+
+    @staticmethod
+    def sphere_grad(x):
+        """Gradient of sphere function."""
+        return 2 * x
+
+    @staticmethod
+    def rosenbrock(x, a=1, b=100):
+        """
+        Rosenbrock function (banana valley).
+        Global minimum at (a, a²): f(a,a²) = 0
+        Very narrow valley - hard to optimize!
+        """
+        if len(x.shape) == 1:
+            return (a - x[0])**2 + b * (x[1] - x[0]**2)**2
+        return (a - x[..., 0])**2 + b * (x[..., 1] - x[..., 0]**2)**2
+
+    @staticmethod
+    def rosenbrock_grad(x, a=1, b=100):
+        """Gradient of Rosenbrock function."""
+        grad = np.zeros_like(x)
+        grad[0] = -2 * (a - x[0]) - 4 * b * x[0] * (x[1] - x[0]**2)
+        grad[1] = 2 * b * (x[1] - x[0]**2)
+        return grad
+
+    @staticmethod
+    def saddle(x):
+        """
+        Simple saddle point function.
+        Saddle at origin: f(0,0) = 0
+        Minimum along x-axis, maximum along y-axis
+        """
+        if len(x.shape) == 1:
+            return x[0]**2 - x[1]**2
+        return x[..., 0]**2 - x[..., 1]**2
+
+    @staticmethod
+    def saddle_grad(x):
+        """Gradient of saddle function."""
+        grad = np.zeros_like(x)
+        grad[0] = 2 * x[0]
+        grad[1] = -2 * x[1]
+        return grad
+
+    @staticmethod
+    def beale(x):
+        """
+        Beale function (has plateaus).
+        Global minimum at (3, 0.5): f(3, 0.5) = 0
+        """
+        if len(x.shape) == 1:
+            x1, x2 = x[0], x[1]
+        else:
+            x1, x2 = x[..., 0], x[..., 1]
+
+        term1 = (1.5 - x1 + x1*x2)**2
+        term2 = (2.25 - x1 + x1*x2**2)**2
+        term3 = (2.625 - x1 + x1*x2**3)**2
+        return term1 + term2 + term3
+
+    @staticmethod
+    def beale_grad(x):
+        """Gradient of Beale function (numerical approximation)."""
+        eps = 1e-8
+        grad = np.zeros_like(x)
+        for i in range(len(x)):
+            x_plus = x.copy()
+            x_plus[i] += eps
+            x_minus = x.copy()
+            x_minus[i] -= eps
+            grad[i] = (TestFunctions.beale(x_plus) - TestFunctions.beale(x_minus)) / (2 * eps)
+        return grad
+
+    @staticmethod
+    def ackley(x, a=20, b=0.2, c=2*np.pi):
+        """
+        Ackley function (many local minima).
+        Global minimum at origin: f(0,0) = 0
+        """
+        if len(x.shape) == 1:
+            d = len(x)
+            sum_sq = np.sum(x**2)
+            sum_cos = np.sum(np.cos(c * x))
+        else:
+            d = x.shape[-1]
+            sum_sq = np.sum(x**2, axis=-1)
+            sum_cos = np.sum(np.cos(c * x), axis=-1)
+
+        term1 = -a * np.exp(-b * np.sqrt(sum_sq / d))
+        term2 = -np.exp(sum_cos / d)
+        return term1 + term2 + a + np.e
+
+    @staticmethod
+    def ackley_grad(x, a=20, b=0.2, c=2*np.pi):
+        """Gradient of Ackley function."""
+        d = len(x)
+        sum_sq = np.sum(x**2)
+        sqrt_term = np.sqrt(sum_sq / d)
+
+        grad_term1 = a * b * np.exp(-b * sqrt_term) * x / (d * sqrt_term)
+        grad_term2 = c * np.exp(np.sum(np.cos(c * x)) / d) * np.sin(c * x) / d
+
+        return grad_term1 + grad_term2
+
+def visualize_function(func, x_range=(-5, 5), y_range=(-5, 5), resolution=100):
+    """
+    Visualize a 2D function with contour and 3D surface plots.
+
+    Args:
+        func: Function to visualize (takes array [x, y])
+        x_range, y_range: (min, max) for each axis
+        resolution: Grid resolution
+    """
+    # Create mesh grid
+    x = np.linspace(x_range[0], x_range[1], resolution)
+    y = np.linspace(y_range[0], y_range[1], resolution)
+    X, Y = np.meshgrid(x, y)
+
+    # Evaluate function
+    points = np.stack([X, Y], axis=-1)
+    Z = func(points)
+
+    # Create figure with subplots
+    fig = plt.figure(figsize=(15, 5))
+
+    # Contour plot
+    ax1 = fig.add_subplot(131)
+    contour = ax1.contour(X, Y, Z, levels=20, cmap='viridis')
+    ax1.clabel(contour, inline=True, fontsize=8)
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('y')
+    ax1.set_title('Contour Plot')
+    ax1.grid(True, alpha=0.3)
+
+    # Filled contour plot
+    ax2 = fig.add_subplot(132)
+    ax2.contourf(X, Y, Z, levels=20, cmap='viridis')
+    ax2.set_xlabel('x')
+    ax2.set_ylabel('y')
+    ax2.set_title('Filled Contour Plot')
+
+    # 3D surface plot
+    ax3 = fig.add_subplot(133, projection='3d')
+    surf = ax3.plot_surface(X, Y, Z, cmap='viridis', alpha=0.8)
+    ax3.set_xlabel('x')
+    ax3.set_ylabel('y')
+    ax3.set_zlabel('f(x,y)')
+    ax3.set_title('3D Surface Plot')
+    fig.colorbar(surf, ax=ax3, shrink=0.5)
+
+    plt.tight_layout()
+    return fig
+
+# Example usage
+funcs = TestFunctions()
+fig = visualize_function(funcs.rosenbrock, x_range=(-2, 2), y_range=(-1, 3))
+plt.savefig('rosenbrock_visualization.png', dpi=150)
+plt.show()
+\`\`\`
+
+**Why each function:**
+- **Sphere:** Baseline - simplest case
+- **Rosenbrock:** Tests handling of narrow valleys
+- **Saddle:** Tests saddle point escape
+- **Beale:** Tests plateau navigation
+- **Ackley:** Tests local minima avoidance
+
+</details>
+
+### Phase 2: Optimizer Implementations (Required)
+
+**Deliverables:**
+Implement from scratch:
+1. Vanilla SGD
+2. SGD with Momentum
+3. SGD with Nesterov Momentum
+4. RMSprop
+5. Adam
+6. (Optional) AdamW
+
+Each must:
+- Support batched gradients
+- Track parameter history for visualization
+- Support learning rate schedules
+- Handle numerical stability (e.g., epsilon in denominators)
+
+<details>
+<summary>💡 Stuck? Click for optimizer implementations</summary>
+
+### Complete Optimizer Library
+
+\`\`\`python
+class Optimizer:
+    """Base class for optimizers."""
+
+    def __init__(self, learning_rate=0.01):
+        self.learning_rate = learning_rate
+        self.history = {'params': [], 'loss': [], 'grad_norm': []}
+
+    def step(self, params, grads):
+        """Perform one optimization step. Override in subclasses."""
+        raise NotImplementedError
+
+    def zero_history(self):
+        """Clear optimization history."""
+        self.history = {'params': [], 'loss': [], 'grad_norm': []}
+
+class SGD(Optimizer):
+    """Vanilla Stochastic Gradient Descent."""
+
+    def step(self, params, grads):
+        """
+        params: current parameters (numpy array)
+        grads: gradients at current parameters
+        """
+        # Store for visualization
+        self.history['params'].append(params.copy())
+        self.history['grad_norm'].append(np.linalg.norm(grads))
+
+        # Update: theta = theta - lr * gradient
+        params_new = params - self.learning_rate * grads
+
+        return params_new
+
+class MomentumSGD(Optimizer):
+    """SGD with classical momentum."""
+
+    def __init__(self, learning_rate=0.01, beta=0.9):
+        super().__init__(learning_rate)
+        self.beta = beta
+        self.velocity = None
+
+    def step(self, params, grads):
+        # Initialize velocity on first step
+        if self.velocity is None:
+            self.velocity = np.zeros_like(params)
+
+        # Store for visualization
+        self.history['params'].append(params.copy())
+        self.history['grad_norm'].append(np.linalg.norm(grads))
+
+        # Update velocity: v = beta * v + gradient
+        self.velocity = self.beta * self.velocity + grads
+
+        # Update parameters: theta = theta - lr * v
+        params_new = params - self.learning_rate * self.velocity
+
+        return params_new
+
+class NesterovMomentum(Optimizer):
+    """SGD with Nesterov accelerated gradient."""
+
+    def __init__(self, learning_rate=0.01, beta=0.9):
+        super().__init__(learning_rate)
+        self.beta = beta
+        self.velocity = None
+
+    def step(self, params, grads):
+        # Initialize velocity on first step
+        if self.velocity is None:
+            self.velocity = np.zeros_like(params)
+
+        # Store for visualization
+        self.history['params'].append(params.copy())
+        self.history['grad_norm'].append(np.linalg.norm(grads))
+
+        # Nesterov update
+        velocity_prev = self.velocity.copy()
+        self.velocity = self.beta * self.velocity + grads
+
+        # Look-ahead step
+        params_new = params - self.learning_rate * (
+            self.beta * self.velocity + grads
+        )
+
+        return params_new
+
+class RMSprop(Optimizer):
+    """RMSprop optimizer with adaptive learning rates."""
+
+    def __init__(self, learning_rate=0.01, beta=0.9, epsilon=1e-8):
+        super().__init__(learning_rate)
+        self.beta = beta
+        self.epsilon = epsilon
+        self.squared_grad_avg = None
+
+    def step(self, params, grads):
+        # Initialize on first step
+        if self.squared_grad_avg is None:
+            self.squared_grad_avg = np.zeros_like(params)
+
+        # Store for visualization
+        self.history['params'].append(params.copy())
+        self.history['grad_norm'].append(np.linalg.norm(grads))
+
+        # Update running average of squared gradients
+        self.squared_grad_avg = (
+            self.beta * self.squared_grad_avg +
+            (1 - self.beta) * grads**2
+        )
+
+        # Adaptive update
+        params_new = params - self.learning_rate * grads / (
+            np.sqrt(self.squared_grad_avg) + self.epsilon
+        )
+
+        return params_new
+
+class Adam(Optimizer):
+    """Adam optimizer (combines momentum + RMSprop)."""
+
+    def __init__(self, learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8):
+        super().__init__(learning_rate)
+        self.beta1 = beta1
+        self.beta2 = beta2
+        self.epsilon = epsilon
+        self.m = None  # First moment
+        self.v = None  # Second moment
+        self.t = 0     # Time step
+
+    def step(self, params, grads):
+        # Initialize on first step
+        if self.m is None:
+            self.m = np.zeros_like(params)
+            self.v = np.zeros_like(params)
+
+        self.t += 1
+
+        # Store for visualization
+        self.history['params'].append(params.copy())
+        self.history['grad_norm'].append(np.linalg.norm(grads))
+
+        # Update biased first moment estimate
+        self.m = self.beta1 * self.m + (1 - self.beta1) * grads
+
+        # Update biased second moment estimate
+        self.v = self.beta2 * self.v + (1 - self.beta2) * grads**2
+
+        # Bias correction
+        m_hat = self.m / (1 - self.beta1**self.t)
+        v_hat = self.v / (1 - self.beta2**self.t)
+
+        # Update parameters
+        params_new = params - self.learning_rate * m_hat / (
+            np.sqrt(v_hat) + self.epsilon
+        )
+
+        return params_new
+
+class AdamW(Adam):
+    """AdamW: Adam with decoupled weight decay."""
+
+    def __init__(self, learning_rate=0.001, beta1=0.9, beta2=0.999,
+                 epsilon=1e-8, weight_decay=0.01):
+        super().__init__(learning_rate, beta1, beta2, epsilon)
+        self.weight_decay = weight_decay
+
+    def step(self, params, grads):
+        # Get Adam update
+        params_new = super().step(params, grads)
+
+        # Add weight decay (applied to parameters, not gradients)
+        params_new = params_new - self.learning_rate * self.weight_decay * params
+
+        return params_new
+\`\`\`
+
+**Why each piece:**
+- **History tracking:** Enables trajectory visualization
+- **Lazy initialization:** Handles any parameter dimension
+- **Epsilon:** Prevents division by zero
+- **Bias correction (Adam):** Corrects for initialization bias
+- **Weight decay (AdamW):** Improves generalization
+
+</details>
+
+### Phase 3: Comparative Analysis (Required)
+
+**Challenge:** Compare all optimizers on all test functions.
+
+**Metrics to track:**
+- Final loss value
+- Number of iterations to convergence
+- Total distance traveled
+- Gradient norm over time
+- Parameter trajectory visualization
+
+**Deliverable:**
+- Side-by-side trajectory plots
+- Convergence curves for all optimizers
+- Statistical summary table
+- Analysis of which optimizer wins on which function type
+
+<details>
+<summary>💡 Stuck? Click for comparison framework</summary>
+
+### Optimizer Comparison Framework
+
+\`\`\`python
+def compare_optimizers(func, func_grad, initial_point, optimizers_dict,
+                      n_iterations=100, tolerance=1e-6):
+    """
+    Compare multiple optimizers on a single function.
+
+    Args:
+        func: Objective function
+        func_grad: Gradient function
+        initial_point: Starting point for optimization
+        optimizers_dict: Dict of {name: optimizer_instance}
+        n_iterations: Max iterations
+        tolerance: Convergence tolerance
+
+    Returns:
+        results: Dict with optimization results for each optimizer
+    """
+    results = {}
+
+    for name, optimizer in optimizers_dict.items():
+        optimizer.zero_history()
+        params = initial_point.copy()
+
+        for i in range(n_iterations):
+            # Compute gradient
+            grads = func_grad(params)
+
+            # Store loss
+            loss = func(params)
+            optimizer.history['loss'].append(loss)
+
+            # Check convergence
+            if np.linalg.norm(grads) < tolerance:
+                print(f"{name} converged at iteration {i}")
+                break
+
+            # Optimization step
+            params = optimizer.step(params, grads)
+
+        # Store final results
+        results[name] = {
+            'final_params': params,
+            'final_loss': func(params),
+            'iterations': i + 1,
+            'history': optimizer.history
+        }
+
+    return results
+
+def visualize_comparison(func, results, x_range=(-5, 5), y_range=(-5, 5)):
+    """Visualize optimization trajectories for multiple optimizers."""
+    # Create mesh for contour plot
+    x = np.linspace(x_range[0], x_range[1], 100)
+    y = np.linspace(y_range[0], y_range[1], 100)
+    X, Y = np.meshgrid(x, y)
+    points = np.stack([X, Y], axis=-1)
+    Z = func(points)
+
+    fig = plt.figure(figsize=(18, 6))
+
+    # Plot 1: All trajectories on contour
+    ax1 = fig.add_subplot(131)
+    ax1.contour(X, Y, Z, levels=20, cmap='gray', alpha=0.3)
+
+    colors = plt.cm.tab10(np.linspace(0, 1, len(results)))
+
+    for (name, result), color in zip(results.items(), colors):
+        trajectory = np.array(result['history']['params'])
+        ax1.plot(trajectory[:, 0], trajectory[:, 1],
+                'o-', label=name, color=color, markersize=3, linewidth=1.5)
+        # Mark start and end
+        ax1.plot(trajectory[0, 0], trajectory[0, 1],
+                'o', color=color, markersize=10, markeredgecolor='black')
+        ax1.plot(trajectory[-1, 0], trajectory[-1, 1],
+                '*', color=color, markersize=15, markeredgecolor='black')
+
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('y')
+    ax1.set_title('Optimization Trajectories')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+
+    # Plot 2: Loss curves
+    ax2 = fig.add_subplot(132)
+    for (name, result), color in zip(results.items(), colors):
+        loss_history = result['history']['loss']
+        ax2.semilogy(loss_history, label=name, color=color, linewidth=2)
+
+    ax2.set_xlabel('Iteration')
+    ax2.set_ylabel('Loss (log scale)')
+    ax2.set_title('Convergence Curves')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+
+    # Plot 3: Gradient norms
+    ax3 = fig.add_subplot(133)
+    for (name, result), color in zip(results.items(), colors):
+        grad_norms = result['history']['grad_norm']
+        ax3.semilogy(grad_norms, label=name, color=color, linewidth=2)
+
+    ax3.set_xlabel('Iteration')
+    ax3.set_ylabel('Gradient Norm (log scale)')
+    ax3.set_title('Gradient Evolution')
+    ax3.legend()
+    ax3.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    return fig
+
+def print_summary_table(results):
+    """Print comparison table."""
+    print("\\n" + "="*80)
+    print(f"{'Optimizer':<20} {'Final Loss':<15} {'Iterations':<12} {'Final Params'}")
+    print("="*80)
+
+    for name, result in results.items():
+        print(f"{name:<20} {result['final_loss']:<15.6e} {result['iterations']:<12} "
+              f"{result['final_params']}")
+    print("="*80)
+
+# Example usage
+funcs = TestFunctions()
+
+# Setup optimizers
+optimizers = {
+    'SGD': SGD(learning_rate=0.01),
+    'Momentum': MomentumSGD(learning_rate=0.01, beta=0.9),
+    'Nesterov': NesterovMomentum(learning_rate=0.01, beta=0.9),
+    'RMSprop': RMSprop(learning_rate=0.01),
+    'Adam': Adam(learning_rate=0.1)
+}
+
+# Compare on Rosenbrock
+initial = np.array([-1.5, 2.0])
+results = compare_optimizers(
+    funcs.rosenbrock,
+    funcs.rosenbrock_grad,
+    initial,
+    optimizers,
+    n_iterations=500
+)
+
+# Visualize
+fig = visualize_comparison(funcs.rosenbrock, results, x_range=(-2, 2), y_range=(-1, 3))
+plt.savefig('optimizer_comparison_rosenbrock.png', dpi=150)
+
+# Print summary
+print_summary_table(results)
+\`\`\`
+
+**What to observe:**
+- Which optimizer finds the minimum fastest?
+- Which optimizer takes the smoothest path?
+- Do any optimizers get stuck or overshoot?
+- How do convergence speeds compare?
+
+</details>
+
+### Phase 4: Learning Rate Schedules (Optional)
+
+**Challenge:** Implement and compare learning rate schedules.
+
+**Schedules to try:**
+1. Step decay
+2. Exponential decay
+3. Cosine annealing
+4. Warm-up + decay
+
+**Experiment:** Does a good schedule help SGD beat Adam?
+
+---
+
+## 🎯 Milestones & Validation
+
+<div class="milestone-box">
+
+### Milestone 1: Visualizations Working
+
+**Success Criteria:**
+- Can visualize all 5 test functions
+- Contour and 3D plots look correct
+- Can identify features (minima, saddle points, valleys)
+
+**Validation:**
+- Rosenbrock shows narrow valley
+- Saddle function shows saddle at origin
+- Ackley shows many local minima
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 2: Optimizers Implemented
+
+**Success Criteria:**
+- All 5+ optimizers work correctly
+- Can run on simple quadratic (should converge to [0,0])
+- Momentum smooths oscillations visibly
+
+**Validation:**
+- Test on sphere function: all should reach origin
+- SGD vs Momentum on Rosenbrock: Momentum should be smoother
+- Adam should converge faster than SGD on most functions
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 3: Comparative Analysis Complete
+
+**Success Criteria:**
+- Ran all optimizers on all test functions
+- Generated trajectory plots for each
+- Have convergence curves and statistics
+
+**Validation:**
+- Can explain why Adam wins on some functions
+- Can explain why Momentum helps on Rosenbrock
+- Can identify when SGD is sufficient vs when adaptive methods needed
+
+</div>
+
+---
+
+## 📊 Suggested Experiments
+
+### Experiment 1: Learning Rate Sensitivity
+
+**Question:** How sensitive is each optimizer to learning rate?
+
+**Procedure:**
+1. Pick one function (e.g., Rosenbrock)
+2. Try learning rates: [0.001, 0.01, 0.1, 1.0]
+3. Plot convergence for each
+
+**What to observe:**
+- Which optimizer is most robust?
+- At what LR does each diverge?
+
+### Experiment 2: Momentum Values
+
+**Question:** How does momentum β affect convergence?
+
+**Procedure:**
+1. Try β = [0.0, 0.5, 0.9, 0.99, 0.999]
+2. Compare on narrow valley (Rosenbrock)
+
+**What to observe:**
+- Sweet spot for β?
+- Too high: overshooting?
+- Too low: slow like vanilla SGD?
+
+### Experiment 3: Saddle Point Escape
+
+**Question:** Which optimizer escapes saddle points fastest?
+
+**Procedure:**
+1. Use saddle function
+2. Start exactly at saddle point + small noise
+3. Count iterations to escape
+
+**What to observe:**
+- Adaptive methods (Adam, RMSprop) add noise → faster escape?
+
+---
+
+## ✅ Final Checklist
+
+Before considering this project complete:
+
+- [ ] Implemented 5+ test functions with analytical gradients
+- [ ] Implemented 5+ optimizers from scratch
+- [ ] Created visualization framework (contours + 3D + trajectories)
+- [ ] Ran comprehensive comparison experiments
+- [ ] Documented findings with plots and tables
+- [ ] (Optional) Implemented learning rate schedules
+- [ ] Can explain when to use which optimizer
+
+**Most importantly:**
+- [ ] You **understand** why momentum helps
+- [ ] You **understand** what adaptive learning rates solve
+- [ ] You have **intuition** for optimization dynamics
+- [ ] You can **debug** optimization issues in practice
+
+---
+
+## 📚 Additional Resources
+
+- [Sebastian Ruder: Overview of Gradient Descent Algorithms](https://arxiv.org/abs/1609.04747)
+- [CS231n: Optimization](http://cs231n.github.io/optimization-1/)
+- [Distill: Why Momentum Really Works](https://distill.pub/2017/momentum/)
+- [Adam Paper](https://arxiv.org/abs/1412.6980)
+
+---
+
+Good luck! Remember: this is about **understanding optimization dynamics**, not just implementing formulas. Experiment, visualize, and build intuition! 🚀
+`;
+
+        // Render markdown
+        document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+    </script>
+</body>
+</html>

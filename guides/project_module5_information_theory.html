@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 5 Mini-Project: Data Compression & Encoding Engine - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-body {
+            line-height: 1.6;
+        }
+        .markdown-body h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            border-bottom: 3px solid #f59e0b;
+            padding-bottom: 0.5rem;
+        }
+        .markdown-body h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+        .markdown-body h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+        .markdown-body p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1rem;
+            margin-left: 1.5rem;
+        }
+        .markdown-body li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .markdown-body code {
+            background-color: #f3f4f6;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #dc2626;
+        }
+        .markdown-body pre {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #f3f4f6;
+        }
+        .markdown-body a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .markdown-body a:hover {
+            color: #1d4ed8;
+        }
+        .markdown-body hr {
+            margin: 2rem 0;
+            border: 0;
+            border-top: 2px solid #e5e7eb;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #f59e0b;
+            padding-left: 1rem;
+            color: #6b7280;
+            font-style: italic;
+            margin: 1rem 0;
+        }
+        .markdown-body details {
+            background-color: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .markdown-body details[open] {
+            background-color: #fef9e7;
+        }
+        .markdown-body summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: #d97706;
+            user-select: none;
+            padding: 0.5rem;
+            margin: -1rem;
+            margin-bottom: 1rem;
+            background-color: #fde68a;
+            border-radius: 0.375rem;
+        }
+        .markdown-body summary:hover {
+            background-color: #fcd34d;
+            color: #b45309;
+        }
+        .research-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        .milestone-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 min-h-screen">
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">📦 Mini-Project: Data Compression & Encoding Engine</h1>
+                <a href="../index.html" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-semibold">
+                    ← Back to Roadmap
+                </a>
+            </div>
+            <p class="text-gray-600">
+                <strong>Module 5:</strong> Information Theory & Entropy | <strong>Estimated Time:</strong> 15-20 hours
+            </p>
+        </div>
+
+        <!-- Content Container -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 markdown-body">
+            <div id="guide-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const markdown = `# Data Compression & Encoding Engine
+
+## 🎯 Project Overview
+
+**Challenge:** Build a comprehensive data compression library from scratch, implementing multiple encoding algorithms and analyzing their performance characteristics across different data types.
+
+**Why This Matters:** This project forces you to deeply understand:
+- How entropy measures information content
+- Why Huffman coding achieves optimal prefix-free compression
+- How arithmetic coding can beat Huffman
+- The trade-offs between compression ratio, speed, and complexity
+- How dictionary-based methods (LZ77/LZ78) exploit redundancy
+- When to use which compression algorithm
+
+You are **NOT** just implementing formulas. You are building a **research tool** to understand the fundamental limits of data compression and the practical engineering trade-offs.
+
+---
+
+## 📚 Learning Objectives
+
+By completing this project, you will be able to:
+
+1. **Calculate** entropy and information content for any data source
+2. **Implement** Huffman coding from scratch with tree construction and traversal
+3. **Build** arithmetic encoding/decoding with proper precision handling
+4. **Create** LZ77 and LZ78 dictionary-based compressors
+5. **Analyze** compression ratios, speed, and memory usage
+6. **Explain** when each algorithm excels and when it fails
+7. **Understand** the theoretical limits of lossless compression
+8. **Design** hybrid compression strategies for specific data types
+
+---
+
+## 🔬 Problem Statement
+
+### Core Challenge
+
+Design and implement a compression engine that:
+
+1. **Analyzes data:** Computes entropy, symbol frequencies, redundancy patterns
+2. **Implements encoders:** Huffman, Arithmetic, LZ77, LZ78
+3. **Benchmarks performance:** Compression ratio, encoding/decoding speed, memory usage
+4. **Compares algorithms:** Side-by-side analysis on different data types
+5. **Provides insights:** Explains why each algorithm performs the way it does
+
+### Technical Constraints
+
+- Must implement all algorithms from scratch (no using libraries like zlib)
+- Must correctly handle edge cases (single symbol, empty input, etc.)
+- Must support both text and binary data
+- Must verify correctness: decode(encode(data)) == data
+- Must measure and report detailed performance metrics
+
+---
+
+## 🤔 Research Questions
+
+These questions should guide your design. **Answer them through experiments:**
+
+### Fundamental Questions
+
+1. **What is entropy and why does it matter?**
+   - How do you calculate the entropy of a data source?
+   - What does entropy tell you about compressibility?
+   - Can you compress data below its entropy?
+
+2. **Why does Huffman achieve optimal prefix-free coding?**
+   - What is the greedy algorithm for building the tree?
+   - Why does it produce optimal codes?
+   - When does Huffman fail to achieve good compression?
+
+3. **How does arithmetic coding beat Huffman?**
+   - How does it represent messages as intervals?
+   - Why can it achieve better than one bit per symbol?
+   - What are the precision challenges?
+
+4. **How do dictionary methods exploit redundancy?**
+   - What patterns does LZ77 find that Huffman misses?
+   - How does the sliding window affect compression?
+   - When does dictionary-based compression excel?
+
+<details>
+<summary>💡 Stuck? Click for hints on these fundamentals</summary>
+
+### Understanding Entropy
+
+**Definition:**
+\`\`\`python
+# Shannon entropy: expected information content
+# H(X) = -Σ p(x) * log2(p(x))
+
+def calculate_entropy(data):
+    """Calculate Shannon entropy in bits."""
+    from collections import Counter
+    import math
+
+    # Count symbol frequencies
+    counts = Counter(data)
+    total = len(data)
+
+    # Calculate probabilities
+    probs = [count / total for count in counts.values()]
+
+    # Calculate entropy
+    entropy = -sum(p * math.log2(p) for p in probs if p > 0)
+
+    return entropy
+
+# Example
+text = "hello world"
+H = calculate_entropy(text)
+print(f"Entropy: {H:.3f} bits per symbol")
+print(f"Theoretical best compression: {len(text) * H:.1f} bits")
+\`\`\`
+
+**What it means:**
+- Low entropy → high predictability → good compression
+- High entropy → high randomness → poor compression
+- Random data has entropy ≈ 8 bits/byte → incompressible
+
+**Experiment to try:**
+\`\`\`python
+# Compare entropy of different data types
+examples = {
+    "Uniform": "aaaaaaaaaa",  # Low entropy
+    "English": "the quick brown fox jumps",  # Medium entropy
+    "Random": "k3n#Qx9@mL"  # High entropy
+}
+
+for name, data in examples.items():
+    H = calculate_entropy(data)
+    print(f"{name}: {H:.3f} bits/symbol")
+\`\`\`
+
+---
+
+### Huffman Coding Algorithm
+
+**Key insight:** Frequent symbols get short codes, rare symbols get long codes.
+
+**Algorithm:**
+\`\`\`python
+# 1. Count frequencies
+# 2. Create leaf node for each symbol
+# 3. Build tree bottom-up:
+#    - Take two nodes with lowest frequency
+#    - Create parent with combined frequency
+#    - Repeat until one node remains (root)
+# 4. Assign codes by tree traversal:
+#    - Left edge = 0, Right edge = 1
+
+# Example tree:
+#       (100)
+#       /    \\
+#     'a'    (60)
+#     40    /    \\
+#         'b'    (30)
+#         30    /    \\
+#             'c'   'd'
+#             15     15
+#
+# Codes: a=0, b=10, c=110, d=111
+\`\`\`
+
+**Why optimal:**
+- Greedy choice: always merge lowest frequencies
+- Optimal substructure: optimal tree contains optimal subtrees
+- Proof: no other prefix-free code can be shorter
+
+**When it fails:**
+- Single symbol repeated → still uses 1 bit per symbol (entropy = 0)
+- Symbols with probability > 0.5 → wastes bits (can't use < 1 bit)
+- Small alphabet with skewed distribution
+
+---
+
+### Arithmetic Coding
+
+**Key insight:** Represent entire message as a single number in [0, 1).
+
+**How it works:**
+\`\`\`python
+# Start with interval [0, 1)
+# For each symbol:
+#   1. Divide current interval by symbol probabilities
+#   2. Select sub-interval for current symbol
+#   3. Continue with that sub-interval
+
+# Example with "HELLO":
+# Probabilities: H=0.2, E=0.2, L=0.4, O=0.2
+#
+# Initial: [0.0, 1.0)
+# After H: [0.0, 0.2)  (H's share)
+# After E: [0.0, 0.04)  (E's share of H's interval)
+# ...
+# Final interval uniquely identifies "HELLO"
+\`\`\`
+
+**Advantages:**
+- Can use fractional bits per symbol
+- Achieves entropy limit (H bits per symbol)
+- Better than Huffman for skewed distributions
+
+**Challenges:**
+- Precision: need enough bits to represent intervals
+- Underflow: intervals get very small
+- Solution: renormalization (rescale intervals periodically)
+
+---
+
+### Dictionary-Based Compression (LZ77)
+
+**Key insight:** Replace repeated sequences with (distance, length) pointers.
+
+**How LZ77 works:**
+\`\`\`python
+# Sliding window approach:
+# - Search buffer (already encoded)
+# - Look-ahead buffer (to be encoded)
+
+# Example: "the_there_was_the_cat"
+#                  ^
+#          Search  |  Look-ahead
+#
+# Find "the" in search buffer
+# Output: (distance=4, length=3, next_char='r')
+# Means: "go back 4 positions, copy 3 chars, then 'r'"
+
+# Compression:
+# Original: "the there" (9 bytes)
+# Encoded: "the (4,3,r)e" (shorter if distance/length encoded efficiently)
+\`\`\`
+
+**When it excels:**
+- Repeated phrases (code, HTML, logs)
+- Long-range dependencies Huffman can't see
+- Combination with Huffman (gzip does this!)
+
+**Parameters:**
+- Window size: larger = better compression, slower
+- Max match length: affects compression ratio
+
+</details>
+
+### Advanced Questions
+
+5. **How do you combine algorithms for better compression?**
+   - Can you use Huffman on LZ77 output?
+   - What does gzip actually do?
+
+6. **What are the practical limits of compression?**
+   - Can you prove some data is incompressible?
+   - What happens if you compress compressed data?
+
+7. **How do you handle streaming data?**
+   - Can you compress without seeing the entire input?
+   - How do adaptive algorithms work?
+
+---
+
+## 📋 Requirements & Specifications
+
+### Phase 1: Entropy Analysis & Foundation (Required)
+
+**Functionality:**
+- Calculate Shannon entropy for any data
+- Compute symbol frequencies and probabilities
+- Analyze redundancy and theoretical compression limits
+- Visualize probability distributions
+
+**Deliverables:**
+- Entropy calculator with detailed statistics
+- Frequency analysis tools
+- Visualization of symbol distributions
+- Information content calculator
+
+<details>
+<summary>💡 Stuck? Click for entropy analysis implementation</summary>
+
+### Complete Entropy Analysis Framework
+
+\`\`\`python
+import math
+from collections import Counter
+import matplotlib.pyplot as plt
+import numpy as np
+
+class EntropyAnalyzer:
+    """Analyze information content and compressibility of data."""
+
+    def __init__(self, data):
+        """
+        Initialize with data to analyze.
+
+        Args:
+            data: bytes, str, or list of symbols
+        """
+        if isinstance(data, str):
+            self.data = data.encode() if all(ord(c) < 128 for c in data) else data
+        else:
+            self.data = data
+
+        self.length = len(self.data)
+        self.frequencies = Counter(self.data)
+        self.alphabet_size = len(self.frequencies)
+        self._calculate_stats()
+
+    def _calculate_stats(self):
+        """Calculate all statistical measures."""
+        # Probabilities
+        self.probabilities = {
+            symbol: count / self.length
+            for symbol, count in self.frequencies.items()
+        }
+
+        # Entropy
+        self.entropy = -sum(
+            p * math.log2(p)
+            for p in self.probabilities.values()
+        )
+
+        # Maximum possible entropy
+        self.max_entropy = math.log2(self.alphabet_size) if self.alphabet_size > 0 else 0
+
+        # Redundancy
+        self.redundancy = self.max_entropy - self.entropy if self.max_entropy > 0 else 0
+        self.redundancy_ratio = self.redundancy / self.max_entropy if self.max_entropy > 0 else 0
+
+        # Theoretical compression
+        self.uncompressed_bits = self.length * 8  # Assuming 8-bit symbols
+        self.theoretical_min_bits = self.length * self.entropy
+        self.theoretical_compression_ratio = (
+            self.theoretical_min_bits / self.uncompressed_bits
+            if self.uncompressed_bits > 0 else 0
+        )
+
+    def calculate_information_content(self, symbol):
+        """
+        Calculate information content of a specific symbol.
+        I(x) = -log2(p(x))
+        """
+        if symbol not in self.probabilities:
+            return float('inf')
+        return -math.log2(self.probabilities[symbol])
+
+    def calculate_joint_entropy(self, n=2):
+        """
+        Calculate n-gram entropy.
+        Shows how much entropy reduces when considering symbol dependencies.
+        """
+        # Create n-grams
+        ngrams = [
+            tuple(self.data[i:i+n])
+            for i in range(len(self.data) - n + 1)
+        ]
+
+        # Calculate n-gram probabilities
+        ngram_counts = Counter(ngrams)
+        total = len(ngrams)
+
+        # Calculate n-gram entropy
+        ngram_entropy = -sum(
+            (count / total) * math.log2(count / total)
+            for count in ngram_counts.values()
+        )
+
+        # Entropy per symbol
+        return ngram_entropy / n
+
+    def print_report(self):
+        """Print detailed entropy analysis report."""
+        print("="*70)
+        print("ENTROPY ANALYSIS REPORT")
+        print("="*70)
+        print(f"Data length: {self.length} symbols")
+        print(f"Alphabet size: {self.alphabet_size} unique symbols")
+        print(f"")
+        print(f"Entropy (H): {self.entropy:.4f} bits/symbol")
+        print(f"Max entropy: {self.max_entropy:.4f} bits/symbol")
+        print(f"Redundancy: {self.redundancy:.4f} bits/symbol ({self.redundancy_ratio*100:.1f}%)")
+        print(f"")
+        print(f"Uncompressed size: {self.uncompressed_bits} bits")
+        print(f"Theoretical minimum: {self.theoretical_min_bits:.1f} bits")
+        print(f"Best possible compression: {self.theoretical_compression_ratio*100:.1f}% of original")
+        print(f"")
+
+        # Show most/least common symbols
+        sorted_symbols = sorted(
+            self.probabilities.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
+        print("Most common symbols:")
+        for symbol, prob in sorted_symbols[:5]:
+            info = self.calculate_information_content(symbol)
+            symbol_repr = chr(symbol) if isinstance(symbol, int) and 32 <= symbol < 127 else repr(symbol)
+            print(f"  {symbol_repr}: p={prob:.4f}, I={info:.4f} bits")
+
+        print(f"")
+
+        # N-gram analysis
+        if self.length >= 2:
+            bigram_entropy = self.calculate_joint_entropy(2)
+            print(f"Bigram entropy: {bigram_entropy:.4f} bits/symbol")
+            print(f"Dependency reduction: {(self.entropy - bigram_entropy):.4f} bits/symbol")
+
+        print("="*70)
+
+    def visualize_distribution(self):
+        """Visualize symbol probability distribution."""
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+
+        # Sort by frequency
+        sorted_items = sorted(
+            self.frequencies.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
+        symbols = [chr(s) if isinstance(s, int) and 32 <= s < 127 else f"0x{s:02x}"
+                  for s, _ in sorted_items[:20]]
+        counts = [c for _, c in sorted_items[:20]]
+        probs = [self.probabilities[s] for s, _ in sorted_items[:20]]
+        info_contents = [self.calculate_information_content(s) for s, _ in sorted_items[:20]]
+
+        # Plot 1: Frequency bar chart
+        axes[0, 0].bar(range(len(counts)), counts, color='steelblue')
+        axes[0, 0].set_xlabel('Symbol (sorted by frequency)')
+        axes[0, 0].set_ylabel('Count')
+        axes[0, 0].set_title('Symbol Frequencies')
+        axes[0, 0].set_xticks(range(len(symbols)))
+        axes[0, 0].set_xticklabels(symbols, rotation=45, ha='right')
+
+        # Plot 2: Probability distribution
+        axes[0, 1].bar(range(len(probs)), probs, color='coral')
+        axes[0, 1].set_xlabel('Symbol (sorted by frequency)')
+        axes[0, 1].set_ylabel('Probability')
+        axes[0, 1].set_title('Probability Distribution')
+        axes[0, 1].set_xticks(range(len(symbols)))
+        axes[0, 1].set_xticklabels(symbols, rotation=45, ha='right')
+
+        # Plot 3: Information content
+        axes[1, 0].bar(range(len(info_contents)), info_contents, color='forestgreen')
+        axes[1, 0].set_xlabel('Symbol (sorted by frequency)')
+        axes[1, 0].set_ylabel('Information Content (bits)')
+        axes[1, 0].set_title('Information Content per Symbol')
+        axes[1, 0].set_xticks(range(len(symbols)))
+        axes[1, 0].set_xticklabels(symbols, rotation=45, ha='right')
+
+        # Plot 4: Cumulative probability
+        cumulative_prob = np.cumsum(probs)
+        axes[1, 1].plot(range(len(cumulative_prob)), cumulative_prob,
+                       marker='o', color='purple', linewidth=2)
+        axes[1, 1].axhline(y=0.9, color='r', linestyle='--', alpha=0.5, label='90%')
+        axes[1, 1].set_xlabel('Number of most common symbols')
+        axes[1, 1].set_ylabel('Cumulative Probability')
+        axes[1, 1].set_title('Cumulative Probability Distribution')
+        axes[1, 1].legend()
+        axes[1, 1].grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        return fig
+
+# Example usage
+if __name__ == "__main__":
+    # Test on different data types
+    test_cases = {
+        "Low entropy": b"aaaaaaaaaa",
+        "English text": b"the quick brown fox jumps over the lazy dog",
+        "High entropy": b"k3n#Qx9@mLpR7vZt2Yw5",
+        "Repeated pattern": b"abcabc" * 10
+    }
+
+    for name, data in test_cases.items():
+        print(f"\n{'='*70}")
+        print(f"Testing: {name}")
+        print(f"{'='*70}")
+
+        analyzer = EntropyAnalyzer(data)
+        analyzer.print_report()
+
+        # Visualize
+        fig = analyzer.visualize_distribution()
+        plt.savefig(f'entropy_{name.replace(" ", "_")}.png', dpi=150)
+        plt.close()
+\`\`\`
+
+**What to observe:**
+- Low entropy data has skewed probability distributions
+- High entropy data has uniform distributions
+- Information content is inversely related to probability
+- English text shows moderate entropy with dependencies
+
+</details>
+
+### Phase 2: Huffman Coding Implementation (Required)
+
+**Deliverables:**
+Implement complete Huffman encoder/decoder:
+1. Build Huffman tree from frequency table
+2. Generate optimal prefix-free codes
+3. Encode data to bitstream
+4. Decode bitstream back to original data
+5. Handle edge cases (empty input, single symbol)
+
+**Requirements:**
+- Must build tree using priority queue
+- Must support both text and binary data
+- Must serialize tree for decoding
+- Must measure compression ratio
+
+<details>
+<summary>💡 Stuck? Click for Huffman coding implementation</summary>
+
+### Complete Huffman Coding Implementation
+
+\`\`\`python
+import heapq
+from collections import Counter, defaultdict
+from typing import Optional, Dict, Tuple
+
+class HuffmanNode:
+    """Node in Huffman tree."""
+
+    def __init__(self, symbol=None, freq=0, left=None, right=None):
+        self.symbol = symbol  # None for internal nodes
+        self.freq = freq
+        self.left = left
+        self.right = right
+
+    def __lt__(self, other):
+        """For priority queue ordering."""
+        return self.freq < other.freq
+
+    def is_leaf(self):
+        """Check if this is a leaf node."""
+        return self.left is None and self.right is None
+
+class HuffmanCoding:
+    """Huffman coding encoder/decoder."""
+
+    def __init__(self):
+        self.root = None
+        self.codes = {}  # symbol -> binary code string
+        self.reverse_codes = {}  # binary code string -> symbol
+
+    def build_tree(self, data):
+        """
+        Build Huffman tree from data.
+
+        Args:
+            data: bytes or string to encode
+        """
+        # Count frequencies
+        frequencies = Counter(data)
+
+        # Handle edge cases
+        if len(frequencies) == 0:
+            return None
+
+        if len(frequencies) == 1:
+            # Single symbol - create minimal tree
+            symbol = list(frequencies.keys())[0]
+            self.root = HuffmanNode(symbol=symbol, freq=frequencies[symbol])
+            self.codes[symbol] = '0'
+            self.reverse_codes['0'] = symbol
+            return self.root
+
+        # Create priority queue of nodes
+        heap = [
+            HuffmanNode(symbol=symbol, freq=freq)
+            for symbol, freq in frequencies.items()
+        ]
+        heapq.heapify(heap)
+
+        # Build tree bottom-up
+        while len(heap) > 1:
+            # Extract two nodes with minimum frequency
+            left = heapq.heappop(heap)
+            right = heapq.heappop(heap)
+
+            # Create parent node
+            parent = HuffmanNode(
+                freq=left.freq + right.freq,
+                left=left,
+                right=right
+            )
+
+            # Add back to heap
+            heapq.heappush(heap, parent)
+
+        # Root is the last remaining node
+        self.root = heap[0]
+
+        # Generate codes
+        self._generate_codes()
+
+        return self.root
+
+    def _generate_codes(self, node=None, code=""):
+        """
+        Generate binary codes by tree traversal.
+        Left edge = 0, Right edge = 1
+        """
+        if node is None:
+            node = self.root
+            self.codes = {}
+            self.reverse_codes = {}
+
+        if node.is_leaf():
+            # Leaf node - assign code
+            code = code if code else '0'  # Single symbol case
+            self.codes[node.symbol] = code
+            self.reverse_codes[code] = node.symbol
+        else:
+            # Internal node - recurse
+            if node.left:
+                self._generate_codes(node.left, code + '0')
+            if node.right:
+                self._generate_codes(node.right, code + '1')
+
+    def encode(self, data):
+        """
+        Encode data using Huffman coding.
+
+        Returns:
+            Tuple of (encoded_bits, tree_data, original_length)
+        """
+        if not data:
+            return "", {}, 0
+
+        # Build tree
+        self.build_tree(data)
+
+        # Encode each symbol
+        encoded = ''.join(self.codes[symbol] for symbol in data)
+
+        # Return encoded data, codebook (for decoding), and original length
+        return encoded, self.codes, len(data)
+
+    def decode(self, encoded_bits, codes_or_tree=None):
+        """
+        Decode Huffman-encoded data.
+
+        Args:
+            encoded_bits: String of '0's and '1's
+            codes_or_tree: Either codebook dict or root node
+        """
+        if not encoded_bits:
+            return b"" if isinstance(list(self.codes.keys())[0], int) else ""
+
+        # Reconstruct reverse codes if given codebook
+        if isinstance(codes_or_tree, dict):
+            self.codes = codes_or_tree
+            self.reverse_codes = {code: symbol for symbol, code in codes_or_tree.items()}
+        elif codes_or_tree is not None:
+            self.root = codes_or_tree
+            self._generate_codes()
+
+        # Decode bit by bit
+        decoded = []
+        current_code = ""
+
+        for bit in encoded_bits:
+            current_code += bit
+            if current_code in self.reverse_codes:
+                decoded.append(self.reverse_codes[current_code])
+                current_code = ""
+
+        # Convert to appropriate type
+        if decoded and isinstance(decoded[0], int):
+            return bytes(decoded)
+        return ''.join(chr(s) if isinstance(s, int) else s for s in decoded)
+
+    def get_compression_stats(self, original_data, encoded_bits):
+        """Calculate compression statistics."""
+        original_bits = len(original_data) * 8
+        compressed_bits = len(encoded_bits)
+
+        # Add overhead for storing codebook (simplified)
+        codebook_overhead = sum(
+            8 + len(code)  # 8 bits for symbol + code length
+            for code in self.codes.values()
+        )
+
+        total_compressed_bits = compressed_bits + codebook_overhead
+
+        compression_ratio = compressed_bits / original_bits if original_bits > 0 else 0
+        with_overhead_ratio = total_compressed_bits / original_bits if original_bits > 0 else 0
+
+        return {
+            'original_bits': original_bits,
+            'compressed_bits': compressed_bits,
+            'codebook_overhead': codebook_overhead,
+            'total_bits': total_compressed_bits,
+            'compression_ratio': compression_ratio,
+            'with_overhead_ratio': with_overhead_ratio,
+            'space_saved': original_bits - total_compressed_bits,
+            'average_code_length': compressed_bits / len(original_data) if original_data else 0
+        }
+
+    def print_codebook(self):
+        """Print the Huffman codebook."""
+        print("\nHuffman Codebook:")
+        print("-" * 50)
+
+        sorted_codes = sorted(self.codes.items(), key=lambda x: len(x[1]))
+
+        for symbol, code in sorted_codes:
+            symbol_repr = chr(symbol) if isinstance(symbol, int) and 32 <= symbol < 127 else repr(symbol)
+            print(f"{symbol_repr:>5} -> {code:<20} ({len(code)} bits)")
+        print("-" * 50)
+
+# Example usage and testing
+if __name__ == "__main__":
+    # Test case 1: Simple text
+    print("="*70)
+    print("Test 1: Simple repeated text")
+    print("="*70)
+
+    data1 = b"aaaaaabbbbbccccddee"
+    huffman1 = HuffmanCoding()
+    encoded1, codes1, original_len1 = huffman1.encode(data1)
+
+    print(f"Original: {data1}")
+    print(f"Original length: {len(data1)} bytes = {len(data1)*8} bits")
+    print(f"Encoded: {encoded1[:50]}..." if len(encoded1) > 50 else f"Encoded: {encoded1}")
+    print(f"Encoded length: {len(encoded1)} bits")
+
+    huffman1.print_codebook()
+
+    # Decode and verify
+    decoded1 = huffman1.decode(encoded1, codes1)
+    print(f"\nDecoded: {decoded1}")
+    print(f"Matches original: {decoded1 == data1}")
+
+    # Statistics
+    stats1 = huffman1.get_compression_stats(data1, encoded1)
+    print(f"\nCompression ratio: {stats1['compression_ratio']*100:.1f}%")
+    print(f"With overhead: {stats1['with_overhead_ratio']*100:.1f}%")
+    print(f"Average bits per symbol: {stats1['average_code_length']:.2f}")
+
+    # Calculate theoretical entropy
+    from collections import Counter
+    import math
+    counts = Counter(data1)
+    total = len(data1)
+    entropy = -sum((c/total) * math.log2(c/total) for c in counts.values())
+    print(f"Theoretical entropy: {entropy:.2f} bits/symbol")
+    print(f"Huffman efficiency: {(entropy/stats1['average_code_length'])*100:.1f}% of optimal")
+
+    print("\n" + "="*70)
+    print("Test 2: English text")
+    print("="*70)
+
+    data2 = b"the quick brown fox jumps over the lazy dog"
+    huffman2 = HuffmanCoding()
+    encoded2, codes2, _ = huffman2.encode(data2)
+
+    print(f"Original: {data2.decode()}")
+    print(f"Original size: {len(data2)*8} bits")
+    print(f"Encoded size: {len(encoded2)} bits")
+
+    stats2 = huffman2.get_compression_stats(data2, encoded2)
+    print(f"Compression ratio: {stats2['compression_ratio']*100:.1f}%")
+
+    # Decode and verify
+    decoded2 = huffman2.decode(encoded2, codes2)
+    print(f"Decoding successful: {decoded2 == data2}")
+\`\`\`
+
+**Key implementation details:**
+- Priority queue ensures greedy merging of lowest-frequency nodes
+- Tree traversal generates prefix-free codes (no code is prefix of another)
+- Edge cases handled: empty data, single symbol
+- Codebook must be stored with compressed data for decoding
+
+**Why Huffman is optimal:**
+- Greedy algorithm produces optimal prefix-free code
+- Average code length = entropy for integer bit lengths
+- Cannot achieve better compression with prefix-free codes
+
+</details>
+
+### Phase 3: Arithmetic Coding (Required)
+
+**Challenge:** Implement arithmetic encoding/decoding with proper precision handling.
+
+**Key features:**
+- Interval arithmetic with probability-based subdivision
+- Precision management and renormalization
+- Encoding entire message as single number
+- Decoding from interval boundaries
+
+**Must handle:**
+- Underflow prevention
+- Finite precision arithmetic
+- EOF symbol for message termination
+
+<details>
+<summary>💡 Stuck? Click for arithmetic coding implementation</summary>
+
+### Complete Arithmetic Coding Implementation
+
+\`\`\`python
+from collections import Counter
+from decimal import Decimal, getcontext
+
+# Set high precision for interval arithmetic
+getcontext().prec = 100
+
+class ArithmeticCoding:
+    """Arithmetic coding encoder/decoder."""
+
+    def __init__(self, precision_bits=32):
+        self.precision_bits = precision_bits
+        self.max_value = (1 << precision_bits) - 1
+        self.half = 1 << (precision_bits - 1)
+        self.quarter = 1 << (precision_bits - 2)
+
+        self.probabilities = {}
+        self.cumulative_probs = {}
+        self.symbols = []
+
+    def build_probability_table(self, data):
+        """Build cumulative probability table from data."""
+        # Count frequencies
+        frequencies = Counter(data)
+        total = len(data)
+
+        # Add EOF symbol
+        EOF = 256 if isinstance(data, (bytes, bytearray)) else None
+        if EOF is not None:
+            frequencies[EOF] = 1
+            total += 1
+
+        # Sort symbols for consistent ordering
+        self.symbols = sorted(frequencies.keys())
+
+        # Calculate probabilities
+        self.probabilities = {
+            symbol: frequencies[symbol] / total
+            for symbol in self.symbols
+        }
+
+        # Calculate cumulative probabilities
+        cumulative = 0
+        self.cumulative_probs = {}
+
+        for symbol in self.symbols:
+            self.cumulative_probs[symbol] = (cumulative, cumulative + self.probabilities[symbol])
+            cumulative += self.probabilities[symbol]
+
+    def encode(self, data):
+        """
+        Encode data using arithmetic coding.
+
+        Returns:
+            Tuple of (encoded_bits, probability_table)
+        """
+        if not data:
+            return "", {}
+
+        # Build probability table
+        self.build_probability_table(data)
+
+        # Initialize interval
+        low = 0
+        high = self.max_value
+        pending_bits = 0
+        output = []
+
+        # Add EOF symbol
+        EOF = 256 if isinstance(data, (bytes, bytearray)) else None
+        if EOF is not None:
+            data_with_eof = list(data) + [EOF]
+        else:
+            data_with_eof = list(data)
+
+        # Encode each symbol
+        for symbol in data_with_eof:
+            # Get cumulative probabilities for this symbol
+            range_total = high - low + 1
+            cum_low, cum_high = self.cumulative_probs[symbol]
+
+            # Update interval
+            high = low + int(range_total * cum_high) - 1
+            low = low + int(range_total * cum_low)
+
+            # Renormalization to prevent underflow
+            while True:
+                if high < self.half:
+                    # Both in lower half - output 0
+                    output.append('0')
+                    output.extend(['1'] * pending_bits)
+                    pending_bits = 0
+                elif low >= self.half:
+                    # Both in upper half - output 1
+                    output.append('1')
+                    output.extend(['0'] * pending_bits)
+                    pending_bits = 0
+                    low -= self.half
+                    high -= self.half
+                elif low >= self.quarter and high < 3 * self.quarter:
+                    # Straddle middle - increment pending bits
+                    pending_bits += 1
+                    low -= self.quarter
+                    high -= self.quarter
+                else:
+                    break
+
+                # Scale up
+                low = 2 * low
+                high = 2 * high + 1
+
+        # Output final bits
+        pending_bits += 1
+        if low < self.quarter:
+            output.append('0')
+            output.extend(['1'] * pending_bits)
+        else:
+            output.append('1')
+            output.extend(['0'] * pending_bits)
+
+        return ''.join(output), self.cumulative_probs
+
+    def decode(self, encoded_bits, cumulative_probs, original_length):
+        """
+        Decode arithmetic-coded data.
+
+        Args:
+            encoded_bits: String of '0's and '1's
+            cumulative_probs: Cumulative probability table
+            original_length: Length of original data (for termination)
+        """
+        if not encoded_bits:
+            return b"" if 256 in cumulative_probs else ""
+
+        self.cumulative_probs = cumulative_probs
+        self.symbols = sorted(cumulative_probs.keys())
+
+        # Determine EOF symbol
+        EOF = 256 if 256 in cumulative_probs else None
+
+        # Initialize
+        low = 0
+        high = self.max_value
+        value = 0
+
+        # Read initial bits
+        for i in range(min(self.precision_bits, len(encoded_bits))):
+            value = (value << 1) | int(encoded_bits[i])
+
+        bit_index = self.precision_bits
+        decoded = []
+
+        # Decode symbols
+        while len(decoded) < original_length + (1 if EOF else 0):
+            # Find symbol whose range contains current value
+            range_total = high - low + 1
+            scaled_value = ((value - low + 1) * 1.0 / range_total)
+
+            # Find symbol
+            symbol = None
+            for s in self.symbols:
+                cum_low, cum_high = cumulative_probs[s]
+                if cum_low <= scaled_value < cum_high:
+                    symbol = s
+                    break
+
+            if symbol is None:
+                # Take last symbol if we can't find exact match
+                symbol = self.symbols[-1]
+
+            # Check for EOF
+            if symbol == EOF:
+                break
+
+            decoded.append(symbol)
+
+            # Update interval
+            cum_low, cum_high = cumulative_probs[symbol]
+            high = low + int(range_total * cum_high) - 1
+            low = low + int(range_total * cum_low)
+
+            # Renormalization
+            while True:
+                if high < self.half:
+                    # Both in lower half
+                    pass
+                elif low >= self.half:
+                    # Both in upper half
+                    value -= self.half
+                    low -= self.half
+                    high -= self.half
+                elif low >= self.quarter and high < 3 * self.quarter:
+                    # Straddle middle
+                    value -= self.quarter
+                    low -= self.quarter
+                    high -= self.quarter
+                else:
+                    break
+
+                # Scale up
+                low = 2 * low
+                high = 2 * high + 1
+                value = 2 * value
+
+                # Read next bit
+                if bit_index < len(encoded_bits):
+                    value += int(encoded_bits[bit_index])
+                    bit_index += 1
+
+        # Convert to appropriate type
+        if decoded and isinstance(decoded[0], int):
+            return bytes(decoded)
+        return ''.join(chr(s) if isinstance(s, int) else s for s in decoded)
+
+# Example usage and comparison with Huffman
+if __name__ == "__main__":
+    print("="*70)
+    print("Arithmetic Coding Test")
+    print("="*70)
+
+    # Test case: Data with skewed distribution
+    data = b"aaaaaaaaabbc"
+
+    print(f"Original data: {data}")
+    print(f"Original size: {len(data)} bytes = {len(data)*8} bits")
+
+    # Arithmetic coding
+    ac = ArithmeticCoding(precision_bits=32)
+    encoded, probs = ac.encode(data)
+
+    print(f"\nArithmetic coding:")
+    print(f"Encoded size: {len(encoded)} bits")
+    print(f"Compression ratio: {len(encoded)/(len(data)*8)*100:.1f}%")
+
+    # Show probability table
+    print("\nProbability table:")
+    for symbol in sorted(probs.keys()):
+        if symbol == 256:
+            print(f"  EOF: {probs[symbol]}")
+        else:
+            sym_repr = chr(symbol) if 32 <= symbol < 127 else f"0x{symbol:02x}"
+            print(f"  {sym_repr}: {probs[symbol]}")
+
+    # Decode and verify
+    decoded = ac.decode(encoded, probs, len(data))
+    print(f"\nDecoded: {decoded}")
+    print(f"Decoding successful: {decoded == data}")
+
+    # Compare with Huffman
+    from collections import Counter
+    import math
+
+    print("\n" + "="*70)
+    print("Comparison with Huffman")
+    print("="*70)
+
+    # Calculate theoretical entropy
+    counts = Counter(data)
+    total = len(data)
+    entropy = -sum((c/total) * math.log2(c/total) for c in counts.values())
+
+    print(f"Theoretical entropy: {entropy:.4f} bits/symbol")
+    print(f"Theoretical minimum: {entropy * len(data):.1f} bits")
+    print(f"Arithmetic coding: {len(encoded)} bits ({len(encoded)/len(data):.2f} bits/symbol)")
+    print(f"Efficiency: {(entropy/(len(encoded)/len(data)))*100:.1f}% of optimal")
+
+    # Note: For this small example, overhead dominates
+    # Arithmetic coding shows benefits on larger data with skewed distributions
+\`\`\`
+
+**Key advantages of arithmetic coding:**
+- Can achieve fractional bits per symbol
+- Approaches entropy limit more closely than Huffman
+- Especially good for highly skewed distributions
+
+**Challenges:**
+- More complex to implement
+- Requires careful precision management
+- Slower than Huffman in practice
+
+</details>
+
+### Phase 4: Dictionary-Based Compression (LZ77/LZ78) (Required)
+
+**Challenge:** Implement LZ77 and/or LZ78 compression algorithms.
+
+**LZ77 features:**
+- Sliding window with search buffer
+- Find longest match in window
+- Output (distance, length, next_char) triples
+- Adjustable window and lookahead sizes
+
+**Deliverables:**
+- Working LZ77 encoder and decoder
+- Configurable window parameters
+- Performance analysis on different data types
+
+<details>
+<summary>💡 Stuck? Click for LZ77 implementation</summary>
+
+### Complete LZ77 Implementation
+
+\`\`\`python
+from collections import namedtuple
+
+# LZ77 token: (distance, length, next_char)
+LZ77Token = namedtuple('LZ77Token', ['distance', 'length', 'next_char'])
+
+class LZ77:
+    """LZ77 dictionary-based compression."""
+
+    def __init__(self, window_size=4096, lookahead_size=18):
+        """
+        Initialize LZ77 compressor.
+
+        Args:
+            window_size: Size of search buffer (typically 32KB for gzip)
+            lookahead_size: Size of lookahead buffer
+        """
+        self.window_size = window_size
+        self.lookahead_size = lookahead_size
+
+    def find_longest_match(self, data, current_pos):
+        """
+        Find longest match in search buffer for current position.
+
+        Returns:
+            Tuple of (match_distance, match_length)
+        """
+        # Define search buffer bounds
+        search_start = max(0, current_pos - self.window_size)
+        search_end = current_pos
+
+        best_match_distance = 0
+        best_match_length = 0
+
+        # Try all possible starting positions in search buffer
+        for start in range(search_start, search_end):
+            # Find match length
+            match_length = 0
+
+            while (match_length < self.lookahead_size and
+                   current_pos + match_length < len(data) and
+                   data[start + match_length] == data[current_pos + match_length]):
+                match_length += 1
+
+            # Update best match
+            if match_length > best_match_length:
+                best_match_distance = current_pos - start
+                best_match_length = match_length
+
+        return best_match_distance, best_match_length
+
+    def encode(self, data):
+        """
+        Encode data using LZ77.
+
+        Returns:
+            List of LZ77Token objects
+        """
+        if isinstance(data, str):
+            data = data.encode()
+
+        tokens = []
+        pos = 0
+
+        while pos < len(data):
+            # Find longest match
+            distance, length = self.find_longest_match(data, pos)
+
+            # Get next character (or None if at end)
+            if pos + length < len(data):
+                next_char = data[pos + length]
+            else:
+                next_char = None
+
+            # Create token
+            token = LZ77Token(distance, length, next_char)
+            tokens.append(token)
+
+            # Move position forward
+            pos += length + (1 if next_char is not None else 0)
+
+        return tokens
+
+    def decode(self, tokens):
+        """
+        Decode LZ77 tokens back to original data.
+
+        Args:
+            tokens: List of LZ77Token objects
+
+        Returns:
+            Decoded bytes
+        """
+        output = bytearray()
+
+        for token in tokens:
+            distance, length, next_char = token
+
+            # Copy from earlier in output
+            if length > 0:
+                start_pos = len(output) - distance
+
+                for i in range(length):
+                    output.append(output[start_pos + i])
+
+            # Add literal character
+            if next_char is not None:
+                output.append(next_char)
+
+        return bytes(output)
+
+    def get_compression_stats(self, original_data, tokens):
+        """Calculate compression statistics."""
+        # Calculate encoded size
+        # Each token needs: distance (12 bits), length (4 bits), char (8 bits) = 24 bits = 3 bytes
+        # This is simplified; real implementations use variable-length encoding
+
+        encoded_bytes = len(tokens) * 3  # Simplified calculation
+        original_bytes = len(original_data)
+
+        # Count literal vs match tokens
+        literal_tokens = sum(1 for t in tokens if t.length == 0)
+        match_tokens = len(tokens) - literal_tokens
+
+        total_matched_chars = sum(t.length for t in tokens)
+
+        return {
+            'original_bytes': original_bytes,
+            'encoded_bytes': encoded_bytes,
+            'compression_ratio': encoded_bytes / original_bytes if original_bytes > 0 else 0,
+            'num_tokens': len(tokens),
+            'literal_tokens': literal_tokens,
+            'match_tokens': match_tokens,
+            'total_matched_chars': total_matched_chars,
+            'avg_match_length': total_matched_chars / match_tokens if match_tokens > 0 else 0
+        }
+
+    def print_tokens(self, tokens, max_tokens=20):
+        """Print tokens for debugging."""
+        print(f"\nLZ77 Tokens (showing first {max_tokens}):")
+        print("-" * 70)
+
+        for i, token in enumerate(tokens[:max_tokens]):
+            if token.next_char is not None:
+                char_repr = chr(token.next_char) if 32 <= token.next_char < 127 else f"0x{token.next_char:02x}"
+            else:
+                char_repr = "EOF"
+
+            if token.length > 0:
+                print(f"  {i:3d}: Match ({token.distance}, {token.length}) + '{char_repr}'")
+            else:
+                print(f"  {i:3d}: Literal '{char_repr}'")
+
+        if len(tokens) > max_tokens:
+            print(f"  ... ({len(tokens) - max_tokens} more tokens)")
+        print("-" * 70)
+
+# Example usage
+if __name__ == "__main__":
+    print("="*70)
+    print("LZ77 Compression Test")
+    print("="*70)
+
+    # Test case 1: Repeated pattern
+    print("\nTest 1: Repeated pattern")
+    data1 = b"abcabcabcabc"
+    print(f"Original: {data1}")
+
+    lz77_1 = LZ77(window_size=100, lookahead_size=10)
+    tokens1 = lz77_1.encode(data1)
+
+    lz77_1.print_tokens(tokens1)
+
+    decoded1 = lz77_1.decode(tokens1)
+    print(f"Decoded: {decoded1}")
+    print(f"Matches original: {decoded1 == data1}")
+
+    stats1 = lz77_1.get_compression_stats(data1, tokens1)
+    print(f"\nCompression ratio: {stats1['compression_ratio']*100:.1f}%")
+    print(f"Tokens: {stats1['num_tokens']} ({stats1['match_tokens']} matches, {stats1['literal_tokens']} literals)")
+    print(f"Average match length: {stats1['avg_match_length']:.2f}")
+
+    # Test case 2: English text with repetition
+    print("\n" + "="*70)
+    print("Test 2: English text")
+    print("="*70)
+
+    data2 = b"the quick brown fox jumps over the lazy dog. the dog was very lazy."
+    print(f"Original: {data2.decode()}")
+    print(f"Length: {len(data2)} bytes")
+
+    lz77_2 = LZ77(window_size=100, lookahead_size=10)
+    tokens2 = lz77_2.encode(data2)
+
+    lz77_2.print_tokens(tokens2)
+
+    decoded2 = lz77_2.decode(tokens2)
+    print(f"\nDecoding successful: {decoded2 == data2}")
+
+    stats2 = lz77_2.get_compression_stats(data2, tokens2)
+    print(f"Compression ratio: {stats2['compression_ratio']*100:.1f}%")
+    print(f"Match tokens: {stats2['match_tokens']}")
+    print(f"Total matched characters: {stats2['total_matched_chars']}")
+
+    # Test case 3: Highly repetitive data
+    print("\n" + "="*70)
+    print("Test 3: Highly repetitive data")
+    print("="*70)
+
+    data3 = b"a" * 100
+    print(f"Original: {'a' * 20}... (100 'a's)")
+
+    lz77_3 = LZ77(window_size=50, lookahead_size=18)
+    tokens3 = lz77_3.encode(data3)
+
+    lz77_3.print_tokens(tokens3, max_tokens=10)
+
+    stats3 = lz77_3.get_compression_stats(data3, tokens3)
+    print(f"\nCompression ratio: {stats3['compression_ratio']*100:.1f}%")
+    print(f"Achieved compression by finding long matches!")
+\`\`\`
+
+**How LZ77 works:**
+- Maintains sliding window of recently-seen data
+- Finds longest match for current position
+- Outputs (distance back, length of match, next literal char)
+- Decoder reconstructs by copying from earlier output
+
+**When LZ77 excels:**
+- Repeated phrases (source code, HTML, logs)
+- Long-range dependencies
+- Combines well with Huffman (this is what gzip does!)
+
+**Parameters matter:**
+- Larger window = better compression, slower encoding
+- Larger lookahead = better compression, much slower encoding
+
+</details>
+
+---
+
+## 🎯 Milestones & Validation
+
+<div class="milestone-box">
+
+### Milestone 1: Entropy Analysis Working
+
+**Success Criteria:**
+- Can calculate entropy for any data
+- Can identify compressible vs incompressible data
+- Can predict theoretical compression limits
+- Visualizations show clear probability distributions
+
+**Validation:**
+- Uniform data (all same symbol) → entropy ≈ 0
+- Random data → entropy ≈ 8 bits/byte
+- English text → entropy ≈ 4-5 bits/byte
+- Can explain why each has its entropy value
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 2: Huffman Coding Implemented
+
+**Success Criteria:**
+- Builds correct Huffman tree from frequencies
+- Generates optimal prefix-free codes
+- Encodes and decodes correctly
+- Handles edge cases (empty, single symbol)
+
+**Validation:**
+- decode(encode(data)) == data for all test cases
+- Frequent symbols have shorter codes than rare ones
+- Average code length ≈ entropy (for reasonable distributions)
+- Compression ratio better on skewed distributions
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 3: Arithmetic Coding Working
+
+**Success Criteria:**
+- Encodes data as interval in [0,1)
+- Handles precision and renormalization
+- Achieves better compression than Huffman on skewed data
+- Decodes correctly
+
+**Validation:**
+- decode(encode(data)) == data
+- Beats Huffman on data with probability > 0.5 for one symbol
+- Approaches entropy limit more closely
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 4: LZ77 Compression Complete
+
+**Success Criteria:**
+- Finds repeated patterns in data
+- Outputs distance/length/char tokens
+- Decodes tokens back to original
+- Shows compression on repetitive data
+
+**Validation:**
+- Compresses "abcabc" better than Huffman
+- Finds long matches in repetitive data
+- Fails gracefully on random data (outputs mostly literals)
+- Window size affects compression quality
+
+</div>
+
+---
+
+## 📊 Suggested Experiments
+
+### Experiment 1: Algorithm Comparison
+
+**Question:** Which algorithm works best for different data types?
+
+**Procedure:**
+1. Collect test data: plain text, source code, HTML, JSON, binary, random
+2. Run all algorithms on each
+3. Measure compression ratio and speed
+
+**What to observe:**
+- Huffman: good on text, poor on repetitive patterns
+- Arithmetic: slightly better than Huffman, slower
+- LZ77: excellent on repetitive data, poor on random
+
+### Experiment 2: Entropy vs Compression Ratio
+
+**Question:** How close to theoretical limits can we get?
+
+**Procedure:**
+1. Calculate entropy for each test file
+2. Compare actual compression ratio to entropy limit
+3. Plot entropy vs compression ratio
+
+**What to observe:**
+- No algorithm compresses below entropy
+- Huffman wastes space on small alphabets
+- Arithmetic approaches entropy more closely
+
+### Experiment 3: Combining Algorithms
+
+**Question:** Can we combine LZ77 + Huffman (like gzip)?
+
+**Procedure:**
+1. Encode with LZ77
+2. Huffman-encode the LZ77 tokens
+3. Compare to LZ77 alone and Huffman alone
+
+**What to observe:**
+- Combination often beats either alone
+- LZ77 finds patterns, Huffman encodes tokens efficiently
+- This is how real-world compressors work!
+
+### Experiment 4: Parameter Tuning
+
+**Question:** How do parameters affect compression?
+
+**Procedure:**
+1. Vary LZ77 window size: [256, 1024, 4096, 32768]
+2. Measure compression ratio and speed
+3. Find optimal trade-off
+
+**What to observe:**
+- Larger window = better compression but slower
+- Diminishing returns after certain size
+- Optimal size depends on data characteristics
+
+---
+
+## ✅ Final Checklist
+
+Before considering this project complete:
+
+- [ ] Implemented entropy calculator with visualization
+- [ ] Implemented Huffman coding (encoder + decoder)
+- [ ] Implemented arithmetic coding (encoder + decoder)
+- [ ] Implemented LZ77 compression
+- [ ] Created comprehensive benchmarking framework
+- [ ] Tested on diverse data types (text, code, binary, random)
+- [ ] Verified correctness: decode(encode(data)) == data for all
+- [ ] Analyzed when each algorithm excels
+- [ ] (Optional) Implemented LZ78 or combined LZ77+Huffman
+
+**Most importantly:**
+- [ ] You **understand** what entropy means and why it's the theoretical limit
+- [ ] You **understand** why Huffman is optimal for prefix-free codes
+- [ ] You **understand** how arithmetic coding beats Huffman
+- [ ] You **understand** when dictionary methods outperform statistical methods
+- [ ] You can **choose** the right compression algorithm for a given data type
+- [ ] You can **explain** the trade-offs between compression ratio, speed, and memory
+
+---
+
+## 📚 Additional Resources
+
+- [Information Theory, Inference, and Learning Algorithms - David MacKay](http://www.inference.org.uk/mackay/itila/)
+- [Data Compression Explained - Matt Mahoney](http://mattmahoney.net/dc/dce.html)
+- [Huffman Coding - Wikipedia](https://en.wikipedia.org/wiki/Huffman_coding)
+- [Arithmetic Coding - Wikipedia](https://en.wikipedia.org/wiki/Arithmetic_coding)
+- [LZ77 and LZ78 - Wikipedia](https://en.wikipedia.org/wiki/LZ77_and_LZ78)
+- [The Data Compression Book - Mark Nelson](https://marknelson.us/posts/2011/08/08/the-data-compression-book.html)
+
+---
+
+Good luck! Remember: this is about **understanding information theory fundamentals**, not just implementing algorithms. Experiment, measure, and build intuition about what makes data compressible!
+`;
+
+        // Render markdown
+        document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+    </script>
+</body>
+</html>

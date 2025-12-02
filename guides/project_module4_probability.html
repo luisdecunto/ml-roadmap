@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 4 Mini-Project: Probabilistic Spam Detector - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-body {
+            line-height: 1.6;
+        }
+        .markdown-body h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            border-bottom: 3px solid #f59e0b;
+            padding-bottom: 0.5rem;
+        }
+        .markdown-body h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+        .markdown-body h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+        .markdown-body p {
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1rem;
+            margin-left: 1.5rem;
+        }
+        .markdown-body li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .markdown-body code {
+            background-color: #f3f4f6;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #dc2626;
+        }
+        .markdown-body pre {
+            background-color: #1f2937;
+            color: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #f3f4f6;
+        }
+        .markdown-body a {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+        .markdown-body a:hover {
+            color: #1d4ed8;
+        }
+        .markdown-body hr {
+            margin: 2rem 0;
+            border: 0;
+            border-top: 2px solid #e5e7eb;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #f59e0b;
+            padding-left: 1rem;
+            color: #6b7280;
+            font-style: italic;
+            margin: 1rem 0;
+        }
+        .markdown-body details {
+            background-color: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .markdown-body details[open] {
+            background-color: #fef9e7;
+        }
+        .markdown-body summary {
+            font-weight: 600;
+            cursor: pointer;
+            color: #d97706;
+            user-select: none;
+            padding: 0.5rem;
+            margin: -1rem;
+            margin-bottom: 1rem;
+            background-color: #fde68a;
+            border-radius: 0.375rem;
+        }
+        .markdown-body summary:hover {
+            background-color: #fcd34d;
+            color: #b45309;
+        }
+        .research-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        .milestone-box {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 min-h-screen">
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">📧 Mini-Project: Probabilistic Spam Detector</h1>
+                <a href="../index.html" class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-semibold">
+                    ← Back to Roadmap
+                </a>
+            </div>
+            <p class="text-gray-600">
+                <strong>Module 4:</strong> Probability & Statistics | <strong>Estimated Time:</strong> 20-25 hours
+            </p>
+        </div>
+
+        <!-- Content Container -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 markdown-body">
+            <div id="guide-content"></div>
+        </div>
+    </div>
+
+    <script>
+        const markdown = `# Probabilistic Spam Detector from Scratch
+
+## 🎯 Project Overview
+
+**Challenge:** Build a spam detector from scratch using Naive Bayes, understanding every aspect of probabilistic classification from text preprocessing to calibration analysis.
+
+**Why This Matters:** This project forces you to deeply understand:
+- How conditional probability enables classification
+- Why Bayes' theorem is fundamental to machine learning
+- How to extract meaningful features from raw text
+- Why the "naive" independence assumption still works remarkably well
+- How to handle zero probabilities and numerical stability
+- The difference between probabilistic and non-probabilistic classifiers
+
+You are **NOT** just applying a formula. You are building a **probabilistic reasoning system** from first principles.
+
+---
+
+## 📚 Learning Objectives
+
+By completing this project, you will be able to:
+
+1. **Implement** Naive Bayes classifier from scratch with full understanding
+2. **Extract** features from text using bag-of-words and TF-IDF
+3. **Apply** Laplace smoothing to handle unseen words
+4. **Analyze** why the independence assumption works despite being "naive"
+5. **Compare** probabilistic vs non-probabilistic approaches
+6. **Evaluate** classifier calibration and confidence estimation
+7. **Debug** common pitfalls (underflow, zero probabilities, feature engineering)
+
+---
+
+## 🔬 Problem Statement
+
+### Core Challenge
+
+Design and implement a spam detection system that:
+
+1. **Preprocesses text:** Tokenization, normalization, stop word handling
+2. **Extracts features:** Bag-of-words, word counts, TF-IDF weights
+3. **Trains probabilistically:** Computes P(spam|text) using Bayes' theorem
+4. **Handles edge cases:** Zero probabilities, unseen words, numerical underflow
+5. **Provides insights:** Confidence scores, feature importance, calibration analysis
+
+### Technical Constraints
+
+- Must implement Naive Bayes from scratch (no sklearn.naive_bayes)
+- Must handle real text data (emails, messages, or similar)
+- Must implement multiple smoothing techniques
+- Must compare bag-of-words vs TF-IDF features
+- Must analyze calibration (are 90% confident predictions 90% accurate?)
+- Must visualize feature importance (which words indicate spam?)
+
+---
+
+## 🤔 Research Questions
+
+These questions should guide your design. **Answer them through experiments:**
+
+### Fundamental Questions
+
+1. **Why does Naive Bayes work despite the independence assumption?**
+   - Words in text are clearly NOT independent ("free" followed by "money" is different from "free" alone)
+   - Yet Naive Bayes performs remarkably well on text classification
+   - What does this tell us about the robustness of the model?
+
+2. **What role does Bayes' theorem play?**
+   - How do we go from P(word|spam) to P(spam|word)?
+   - Why do we need the prior probability P(spam)?
+   - What happens with imbalanced datasets (99% ham, 1% spam)?
+
+3. **Why do zero probabilities break everything?**
+   - What happens if a word appears in test but never in training?
+   - How does Laplace smoothing fix this?
+   - Is there a cost to smoothing? Does it hurt performance?
+
+4. **How is this different from logistic regression?**
+   - Both estimate P(spam|text), but how?
+   - Which makes stronger assumptions?
+   - When would you prefer one over the other?
+
+<details>
+<summary>💡 Stuck? Click for hints on these fundamentals</summary>
+
+### Understanding Bayes' Theorem
+
+**The formula:**
+\`\`\`
+P(spam|text) = P(text|spam) * P(spam) / P(text)
+\`\`\`
+
+**In plain English:**
+- P(spam|text): Probability email is spam GIVEN we see this text
+- P(text|spam): Probability we'd see this text IF email is spam
+- P(spam): Prior probability - how common is spam in general?
+- P(text): Normalizing constant (often ignored in classification)
+
+**Why it matters:**
+- We can observe text directly, but want to infer label (spam/ham)
+- Bayes flips the conditional: from P(text|spam) to P(spam|text)
+- We estimate P(text|spam) from training data, then invert
+
+**Example:**
+\`\`\`python
+# Training data shows:
+# - 40% of emails are spam
+# - "FREE" appears in 80% of spam emails
+# - "FREE" appears in 5% of ham emails
+
+# New email contains "FREE". Is it spam?
+P_spam = 0.4
+P_ham = 0.6
+P_free_given_spam = 0.8
+P_free_given_ham = 0.05
+
+# Using Bayes:
+P_spam_given_free = (P_free_given_spam * P_spam) / P_free
+                  = (0.8 * 0.4) / (0.8*0.4 + 0.05*0.6)
+                  = 0.32 / 0.35
+                  = 0.914  # 91.4% likely spam!
+\`\`\`
+
+---
+
+### The "Naive" Independence Assumption
+
+**What it assumes:**
+\`\`\`
+P(text|spam) = P(word1|spam) * P(word2|spam) * ... * P(wordN|spam)
+\`\`\`
+
+Words are treated as independent given the class.
+
+**Why it's "naive":**
+- Real text has dependencies: "free money" vs "money free"
+- Grammar, syntax, word order all create dependencies
+- This assumption is clearly violated!
+
+**Why it still works:**
+1. **We only care about classification, not exact probabilities**
+   - Don't need P(spam|text) = 0.92 to be exactly right
+   - Just need spam score > ham score
+   - Relative ranking matters more than absolute values
+
+2. **Dependencies often cancel out**
+   - If "free" and "money" appear together in spam, they also appear together in ham
+   - The dependency affects both classes similarly
+
+3. **Simplicity is powerful**
+   - Fewer parameters to estimate
+   - Less prone to overfitting
+   - Computationally efficient
+
+**Experiment to try:**
+\`\`\`python
+# Compare:
+# 1. Naive Bayes (assumes independence)
+# 2. Naive Bayes with bigrams (captures some dependencies)
+# 3. Logistic regression (no independence assumption)
+
+# Often you'll find they perform similarly!
+# This shows the assumption isn't as limiting as it seems.
+\`\`\`
+
+---
+
+### Handling Zero Probabilities
+
+**The problem:**
+\`\`\`python
+# Training data: word "viagra" never appears in ham
+P_viagra_given_ham = 0
+
+# At test time, if ANY email contains "viagra":
+P_ham_given_text = P_word1|ham * P_word2|ham * ... * P_viagra|ham * ...
+                 = something * something * ... * 0 * ...
+                 = 0
+
+# Entire probability becomes zero!
+# Model can't classify anything with unseen words.
+\`\`\`
+
+**Laplace Smoothing (Add-One):**
+\`\`\`python
+# Instead of raw counts:
+P(word|class) = count(word, class) / count(class)
+
+# Add 1 to numerator, |vocabulary| to denominator:
+P(word|class) = (count(word, class) + 1) / (count(class) + |V|)
+
+# Now:
+# - Words we've seen many times: barely affected
+# - Words we've never seen: get small but non-zero probability
+# - No more zero probabilities!
+\`\`\`
+
+**Example:**
+\`\`\`python
+# Vocabulary size = 10,000 words
+# Ham emails: 1,000 total words
+# "meeting" appears 50 times in ham
+
+# Without smoothing:
+P_meeting_ham = 50 / 1000 = 0.05
+
+# With Laplace smoothing:
+P_meeting_ham = (50 + 1) / (1000 + 10000) = 51 / 11000 = 0.00464
+
+# Unseen word "xyzabc":
+# Without smoothing: 0 / 1000 = 0  ← BREAKS
+# With smoothing: 1 / 11000 = 0.00009  ← Works!
+\`\`\`
+
+**Trade-offs:**
+- Add-one can be too aggressive (too much probability mass to unseen words)
+- Alternative: Add-α where α < 1
+- Experiment with different α values!
+
+---
+
+### Probabilistic vs Non-Probabilistic Classifiers
+
+**Naive Bayes (Probabilistic):**
+- Output: P(spam|text) ∈ [0, 1]
+- Interpretation: "This is 85% likely to be spam"
+- Advantages:
+  - Natural confidence scores
+  - Can threshold at different levels
+  - Theoretically grounded
+
+**Non-Probabilistic (e.g., SVM, basic perceptron):**
+- Output: decision boundary (spam or ham)
+- No confidence score (or uncalibrated score)
+- Advantages:
+  - Can be more accurate
+  - Fewer assumptions
+  - Better with complex decision boundaries
+
+**Logistic Regression:**
+- Also probabilistic!
+- Outputs P(spam|text) but estimated differently
+- No independence assumption
+- Usually more accurate but needs more data
+
+**When to prefer Naive Bayes:**
+- Limited training data
+- Need interpretability (can inspect P(word|spam))
+- Need speed (very fast to train and predict)
+- Features are reasonably independent
+- Need calibrated probabilities
+
+</details>
+
+### Advanced Questions
+
+5. **How does feature selection affect performance?**
+   - All words vs top-K most informative words?
+   - Does removing stop words help or hurt?
+   - What about rare words (appearing < 5 times)?
+
+6. **Is the model calibrated?**
+   - If it says 70% confidence, is it right 70% of the time?
+   - How can we measure and improve calibration?
+
+7. **What words are most discriminative?**
+   - Can you rank words by P(spam|word)?
+   - Do they match human intuition?
+   - What about surprising words?
+
+---
+
+## 📋 Requirements & Specifications
+
+### Phase 1: Text Preprocessing & Feature Extraction (Required)
+
+**Functionality:**
+- Load and parse text data (emails or messages)
+- Tokenization (splitting text into words)
+- Normalization (lowercase, punctuation removal)
+- Optional: stop word removal, stemming/lemmatization
+- Build vocabulary from training data
+- Extract features: bag-of-words and TF-IDF
+
+**Deliverables:**
+1. Text cleaning pipeline
+2. Vocabulary builder
+3. Feature extraction (both count-based and TF-IDF)
+4. Visualization of word frequencies
+
+<details>
+<summary>💡 Stuck? Click for text preprocessing implementation</summary>
+
+### Text Preprocessing Pipeline
+
+\`\`\`python
+import re
+import numpy as np
+from collections import Counter, defaultdict
+import string
+
+class TextPreprocessor:
+    """Handles text cleaning and tokenization."""
+
+    def __init__(self, lowercase=True, remove_punctuation=True,
+                 remove_numbers=False, min_word_length=2):
+        self.lowercase = lowercase
+        self.remove_punctuation = remove_punctuation
+        self.remove_numbers = remove_numbers
+        self.min_word_length = min_word_length
+
+        # Common English stop words
+        self.stop_words = {
+            'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for',
+            'from', 'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on',
+            'that', 'the', 'to', 'was', 'will', 'with'
+        }
+
+    def tokenize(self, text):
+        """
+        Convert text to list of tokens (words).
+
+        Args:
+            text: Raw text string
+
+        Returns:
+            List of cleaned tokens
+        """
+        # Convert to lowercase
+        if self.lowercase:
+            text = text.lower()
+
+        # Remove URLs
+        text = re.sub(r'http\S+|www\S+', '', text)
+
+        # Remove email addresses
+        text = re.sub(r'\S+@\S+', '', text)
+
+        # Remove numbers
+        if self.remove_numbers:
+            text = re.sub(r'\d+', '', text)
+
+        # Remove punctuation
+        if self.remove_punctuation:
+            text = text.translate(str.maketrans('', '', string.punctuation))
+
+        # Split into words
+        tokens = text.split()
+
+        # Filter by length
+        tokens = [t for t in tokens if len(t) >= self.min_word_length]
+
+        return tokens
+
+    def remove_stopwords(self, tokens):
+        """Remove common stop words."""
+        return [t for t in tokens if t not in self.stop_words]
+
+
+class VocabularyBuilder:
+    """Builds vocabulary from training corpus."""
+
+    def __init__(self, max_features=None, min_df=1):
+        """
+        Args:
+            max_features: Maximum vocabulary size (None = unlimited)
+            min_df: Minimum document frequency (ignore rare words)
+        """
+        self.max_features = max_features
+        self.min_df = min_df
+        self.vocab = {}  # word -> index mapping
+        self.index_to_word = {}  # index -> word mapping
+        self.word_counts = Counter()  # word frequency
+        self.doc_counts = Counter()  # document frequency
+
+    def fit(self, documents):
+        """
+        Build vocabulary from documents.
+
+        Args:
+            documents: List of token lists
+        """
+        # Count word frequencies and document frequencies
+        for doc in documents:
+            self.word_counts.update(doc)
+            unique_words = set(doc)
+            self.doc_counts.update(unique_words)
+
+        # Filter by document frequency
+        valid_words = [
+            word for word, count in self.doc_counts.items()
+            if count >= self.min_df
+        ]
+
+        # Sort by frequency and limit vocabulary size
+        if self.max_features:
+            valid_words = sorted(
+                valid_words,
+                key=lambda w: self.word_counts[w],
+                reverse=True
+            )[:self.max_features]
+
+        # Build word <-> index mappings
+        self.vocab = {word: idx for idx, word in enumerate(valid_words)}
+        self.index_to_word = {idx: word for word, idx in self.vocab.items()}
+
+        print(f"Vocabulary size: {len(self.vocab)}")
+        print(f"Total words seen: {len(self.word_counts)}")
+        print(f"Most common words: {self.word_counts.most_common(10)}")
+
+    def transform(self, tokens):
+        """Convert tokens to indices."""
+        return [self.vocab[t] for t in tokens if t in self.vocab]
+
+
+class BagOfWords:
+    """Converts documents to bag-of-words vectors."""
+
+    def __init__(self, vocabulary):
+        self.vocab = vocabulary
+        self.vocab_size = len(vocabulary.vocab)
+
+    def transform(self, documents):
+        """
+        Convert documents to bag-of-words matrix.
+
+        Args:
+            documents: List of token lists
+
+        Returns:
+            2D array of shape (n_documents, vocab_size)
+        """
+        matrix = np.zeros((len(documents), self.vocab_size))
+
+        for i, doc in enumerate(documents):
+            # Count words in document
+            word_counts = Counter(doc)
+            for word, count in word_counts.items():
+                if word in self.vocab.vocab:
+                    idx = self.vocab.vocab[word]
+                    matrix[i, idx] = count
+
+        return matrix
+
+
+class TFIDF:
+    """Computes TF-IDF features."""
+
+    def __init__(self, vocabulary):
+        self.vocab = vocabulary
+        self.vocab_size = len(vocabulary.vocab)
+        self.idf = None
+
+    def fit(self, documents):
+        """
+        Compute IDF (inverse document frequency) from training documents.
+
+        IDF(word) = log(N / df(word))
+        where N = total documents, df = document frequency
+        """
+        N = len(documents)
+        doc_freq = np.zeros(self.vocab_size)
+
+        for doc in documents:
+            unique_words = set(doc)
+            for word in unique_words:
+                if word in self.vocab.vocab:
+                    idx = self.vocab.vocab[word]
+                    doc_freq[idx] += 1
+
+        # Compute IDF with smoothing
+        self.idf = np.log((N + 1) / (doc_freq + 1)) + 1
+
+    def transform(self, documents):
+        """
+        Convert documents to TF-IDF matrix.
+
+        TF-IDF(word, doc) = TF(word, doc) * IDF(word)
+        """
+        # First get term frequencies (bag-of-words)
+        bow = BagOfWords(self.vocab)
+        tf_matrix = bow.transform(documents)
+
+        # Multiply by IDF
+        tfidf_matrix = tf_matrix * self.idf
+
+        # Normalize each document vector to unit length
+        norms = np.linalg.norm(tfidf_matrix, axis=1, keepdims=True)
+        norms[norms == 0] = 1  # Avoid division by zero
+        tfidf_matrix = tfidf_matrix / norms
+
+        return tfidf_matrix
+
+
+# Example usage
+if __name__ == "__main__":
+    # Sample data
+    spam_emails = [
+        "FREE MONEY!!! Click here to claim your prize NOW!!!",
+        "Congratulations! You've won $1000000. Send your bank details.",
+        "URGENT: Your account needs verification. Click here immediately."
+    ]
+
+    ham_emails = [
+        "Hey, are we still meeting for lunch tomorrow?",
+        "The project deadline is next Friday. Let me know if you need help.",
+        "Thanks for sending over those documents. I'll review them today."
+    ]
+
+    # Preprocess
+    preprocessor = TextPreprocessor()
+
+    spam_tokens = [preprocessor.tokenize(email) for email in spam_emails]
+    ham_tokens = [preprocessor.tokenize(email) for email in ham_emails]
+
+    all_tokens = spam_tokens + ham_tokens
+
+    print("Sample spam tokens:", spam_tokens[0])
+    print("Sample ham tokens:", ham_tokens[0])
+
+    # Build vocabulary
+    vocab_builder = VocabularyBuilder(max_features=100, min_df=1)
+    vocab_builder.fit(all_tokens)
+
+    # Extract bag-of-words features
+    bow = BagOfWords(vocab_builder)
+    bow_features = bow.transform(all_tokens)
+    print(f"\nBag-of-words shape: {bow_features.shape}")
+    print(f"Sample BOW vector:\n{bow_features[0][:10]}")
+
+    # Extract TF-IDF features
+    tfidf = TFIDF(vocab_builder)
+    tfidf.fit(all_tokens)
+    tfidf_features = tfidf.transform(all_tokens)
+    print(f"\nTF-IDF shape: {tfidf_features.shape}")
+    print(f"Sample TF-IDF vector:\n{tfidf_features[0][:10]}")
+\`\`\`
+
+**Key concepts:**
+- **Tokenization:** Break text into words
+- **Normalization:** Make text consistent (lowercase, remove special chars)
+- **Bag-of-words:** Count how many times each word appears
+- **TF-IDF:** Weight words by importance (rare words in document = more important)
+
+**What to observe:**
+- How many unique words are there?
+- What are the most common words?
+- Does TF-IDF differ significantly from bag-of-words?
+- Do spam and ham have different word distributions?
+
+</details>
+
+### Phase 2: Naive Bayes Implementation (Required)
+
+**Challenge:** Implement Naive Bayes classifier from scratch.
+
+**Components:**
+1. Training: Compute P(word|spam) and P(word|ham) from data
+2. Prediction: Apply Bayes' theorem to classify new documents
+3. Smoothing: Implement Laplace smoothing
+4. Numerical stability: Use log-probabilities to avoid underflow
+
+**Success Criteria:**
+- Achieves >85% accuracy on test set
+- Handles unseen words gracefully
+- Provides probability estimates, not just class labels
+
+<details>
+<summary>💡 Stuck? Click for Naive Bayes implementation</summary>
+
+### Naive Bayes Classifier
+
+\`\`\`python
+import numpy as np
+from collections import defaultdict
+
+class NaiveBayesClassifier:
+    """
+    Naive Bayes classifier for text classification.
+    Uses log-probabilities for numerical stability.
+    """
+
+    def __init__(self, alpha=1.0):
+        """
+        Args:
+            alpha: Laplace smoothing parameter (1.0 = add-one smoothing)
+        """
+        self.alpha = alpha
+
+        # Model parameters (learned during training)
+        self.class_log_priors = {}  # P(class)
+        self.feature_log_probs = {}  # P(word|class)
+        self.classes = []
+        self.vocab_size = 0
+
+    def fit(self, X, y):
+        """
+        Train Naive Bayes classifier.
+
+        Args:
+            X: Feature matrix (n_samples, n_features) - bag-of-words or TF-IDF
+            y: Labels (n_samples,) - 0 or 1
+        """
+        n_samples, n_features = X.shape
+        self.vocab_size = n_features
+        self.classes = np.unique(y)
+
+        # Compute class priors: P(class)
+        for c in self.classes:
+            n_c = np.sum(y == c)
+            self.class_log_priors[c] = np.log(n_c / n_samples)
+
+        # Compute feature likelihoods: P(word|class)
+        for c in self.classes:
+            # Get all samples of this class
+            X_c = X[y == c]
+
+            # Count word occurrences in this class
+            # Sum across all documents in class
+            word_counts = np.sum(X_c, axis=0)
+
+            # Total words in this class
+            total_count = np.sum(word_counts)
+
+            # Apply Laplace smoothing and compute log probabilities
+            # P(word|class) = (count(word in class) + alpha) / (total words in class + alpha * vocab_size)
+            smoothed_counts = word_counts + self.alpha
+            smoothed_total = total_count + self.alpha * self.vocab_size
+
+            self.feature_log_probs[c] = np.log(smoothed_counts / smoothed_total)
+
+        print(f"Training complete!")
+        print(f"Classes: {self.classes}")
+        print(f"Class priors: {[(c, np.exp(self.class_log_priors[c])) for c in self.classes]}")
+
+    def predict_log_proba(self, X):
+        """
+        Compute log probabilities for each class.
+
+        Args:
+            X: Feature matrix (n_samples, n_features)
+
+        Returns:
+            Log probabilities array (n_samples, n_classes)
+        """
+        n_samples = X.shape[0]
+        n_classes = len(self.classes)
+        log_probs = np.zeros((n_samples, n_classes))
+
+        for idx, c in enumerate(self.classes):
+            # Start with class prior: log P(class)
+            log_prob = self.class_log_priors[c]
+
+            # Add feature likelihoods: log P(word|class)
+            # For each document: sum over all words
+            # log P(class|doc) ∝ log P(class) + Σ count(word) * log P(word|class)
+            log_prob = log_prob + np.sum(X * self.feature_log_probs[c], axis=1)
+
+            log_probs[:, idx] = log_prob
+
+        return log_probs
+
+    def predict_proba(self, X):
+        """
+        Predict class probabilities.
+
+        Args:
+            X: Feature matrix (n_samples, n_features)
+
+        Returns:
+            Probability array (n_samples, n_classes)
+        """
+        log_probs = self.predict_log_proba(X)
+
+        # Convert log probabilities to probabilities
+        # Subtract max for numerical stability
+        log_probs = log_probs - np.max(log_probs, axis=1, keepdims=True)
+        probs = np.exp(log_probs)
+
+        # Normalize to sum to 1
+        probs = probs / np.sum(probs, axis=1, keepdims=True)
+
+        return probs
+
+    def predict(self, X):
+        """
+        Predict class labels.
+
+        Args:
+            X: Feature matrix (n_samples, n_features)
+
+        Returns:
+            Predicted labels (n_samples,)
+        """
+        log_probs = self.predict_log_proba(X)
+        return self.classes[np.argmax(log_probs, axis=1)]
+
+    def get_feature_importance(self, vocab, top_k=20):
+        """
+        Get most important features for each class.
+
+        Args:
+            vocab: VocabularyBuilder instance
+            top_k: Number of top features to return
+
+        Returns:
+            Dictionary mapping class to list of (word, log_prob) tuples
+        """
+        importance = {}
+
+        for c in self.classes:
+            # Get log probabilities for this class
+            log_probs = self.feature_log_probs[c]
+
+            # Get top-k words
+            top_indices = np.argsort(log_probs)[-top_k:][::-1]
+
+            top_words = [
+                (vocab.index_to_word[idx], log_probs[idx])
+                for idx in top_indices
+            ]
+
+            importance[c] = top_words
+
+        return importance
+
+
+# Example usage
+def evaluate_classifier(clf, X_train, y_train, X_test, y_test, vocab):
+    """Evaluate Naive Bayes classifier."""
+
+    # Train
+    print("Training Naive Bayes classifier...")
+    clf.fit(X_train, y_train)
+
+    # Predict on training set
+    y_train_pred = clf.predict(X_train)
+    train_accuracy = np.mean(y_train_pred == y_train)
+    print(f"\nTraining accuracy: {train_accuracy:.3f}")
+
+    # Predict on test set
+    y_test_pred = clf.predict(X_test)
+    y_test_proba = clf.predict_proba(X_test)
+    test_accuracy = np.mean(y_test_pred == y_test)
+    print(f"Test accuracy: {test_accuracy:.3f}")
+
+    # Show some predictions with confidence
+    print("\nSample predictions:")
+    for i in range(min(5, len(y_test))):
+        true_label = "spam" if y_test[i] == 1 else "ham"
+        pred_label = "spam" if y_test_pred[i] == 1 else "ham"
+        confidence = y_test_proba[i, y_test_pred[i]]
+        print(f"  True: {true_label:4s} | Pred: {pred_label:4s} | Confidence: {confidence:.3f}")
+
+    # Feature importance
+    print("\nMost indicative words:")
+    importance = clf.get_feature_importance(vocab, top_k=10)
+    for c in clf.classes:
+        class_name = "spam" if c == 1 else "ham"
+        print(f"\n{class_name.upper()}:")
+        for word, log_prob in importance[c]:
+            print(f"  {word:15s} (log_prob: {log_prob:.3f})")
+
+    return clf
+
+
+# Using with our preprocessing pipeline
+if __name__ == "__main__":
+    # Assume we have preprocessed data
+    # X_train_bow, y_train, X_test_bow, y_test from Phase 1
+
+    # Train with different smoothing values
+    for alpha in [0.1, 1.0, 10.0]:
+        print(f"\n{'='*60}")
+        print(f"Alpha = {alpha}")
+        print(f"{'='*60}")
+
+        clf = NaiveBayesClassifier(alpha=alpha)
+        # evaluate_classifier(clf, X_train_bow, y_train, X_test_bow, y_test, vocab)
+\`\`\`
+
+**Why log probabilities?**
+\`\`\`python
+# Problem with regular probabilities:
+P_spam = 0.5
+P_word1_spam = 0.01
+P_word2_spam = 0.01
+# ... multiply 1000 words
+# Result: 0.5 * 0.01^1000 = underflow to 0!
+
+# Solution with log probabilities:
+log_P_spam = log(0.5) = -0.693
+log_P_word1_spam = log(0.01) = -4.605
+log_P_word2_spam = log(0.01) = -4.605
+# ... add instead of multiply
+# Result: -0.693 + (-4.605)*1000 = -4605.693  ← No underflow!
+\`\`\`
+
+**Key insights:**
+- Multiplication becomes addition in log space
+- Prevents numerical underflow
+- More numerically stable
+
+</details>
+
+### Phase 3: Smoothing Techniques (Required)
+
+**Challenge:** Implement and compare different smoothing methods.
+
+**Techniques to implement:**
+1. **Laplace (add-one) smoothing:** α = 1
+2. **Add-α smoothing:** Experiment with different α values
+3. **No smoothing:** See what breaks!
+
+**Experiments:**
+- How does α affect accuracy?
+- What happens with very small/large α?
+- Can you find the optimal α?
+
+<details>
+<summary>💡 Stuck? Click for smoothing analysis code</summary>
+
+### Smoothing Analysis
+
+\`\`\`python
+import matplotlib.pyplot as plt
+
+def analyze_smoothing(X_train, y_train, X_test, y_test):
+    """
+    Analyze effect of different smoothing parameters.
+    """
+    alphas = [0.01, 0.05, 0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 50.0]
+
+    train_accuracies = []
+    test_accuracies = []
+
+    for alpha in alphas:
+        clf = NaiveBayesClassifier(alpha=alpha)
+        clf.fit(X_train, y_train)
+
+        train_acc = np.mean(clf.predict(X_train) == y_train)
+        test_acc = np.mean(clf.predict(X_test) == y_test)
+
+        train_accuracies.append(train_acc)
+        test_accuracies.append(test_acc)
+
+        print(f"α={alpha:6.2f} | Train: {train_acc:.3f} | Test: {test_acc:.3f}")
+
+    # Plot results
+    plt.figure(figsize=(10, 6))
+    plt.semilogx(alphas, train_accuracies, 'o-', label='Train Accuracy', linewidth=2)
+    plt.semilogx(alphas, test_accuracies, 's-', label='Test Accuracy', linewidth=2)
+    plt.xlabel('Smoothing Parameter (α)', fontsize=12)
+    plt.ylabel('Accuracy', fontsize=12)
+    plt.title('Effect of Laplace Smoothing on Accuracy', fontsize=14)
+    plt.legend(fontsize=11)
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig('smoothing_analysis.png', dpi=150)
+    plt.show()
+
+    # Find optimal alpha
+    optimal_idx = np.argmax(test_accuracies)
+    optimal_alpha = alphas[optimal_idx]
+    optimal_acc = test_accuracies[optimal_idx]
+
+    print(f"\nOptimal α: {optimal_alpha} (Test accuracy: {optimal_acc:.3f})")
+
+    return optimal_alpha
+
+
+def demonstrate_zero_probability_problem():
+    """
+    Show what happens without smoothing when encountering unseen words.
+    """
+    print("DEMONSTRATING ZERO PROBABILITY PROBLEM")
+    print("="*60)
+
+    # Simple example
+    spam_words = ["free", "money", "win", "prize"]
+    ham_words = ["meeting", "project", "deadline", "help"]
+
+    # Create simple training data
+    # 2 spam docs, 2 ham docs
+    vocab = spam_words + ham_words
+    vocab_size = len(vocab)
+
+    print(f"Vocabulary: {vocab}")
+    print(f"Spam words: {spam_words}")
+    print(f"Ham words: {ham_words}")
+
+    # Without smoothing
+    print("\n--- WITHOUT SMOOTHING ---")
+    print("Test document: ['meeting', 'free', 'coffee']")
+    print("Word 'coffee' never seen in training!")
+    print("P('coffee'|spam) = 0 / total = 0")
+    print("P('coffee'|ham) = 0 / total = 0")
+    print("Result: P(spam|doc) = P('meeting'|spam) * P('free'|spam) * 0 = 0")
+    print("        P(ham|doc) = P('meeting'|ham) * P('free'|ham) * 0 = 0")
+    print("ERROR: Cannot classify! Both probabilities are zero.")
+
+    # With smoothing
+    print("\n--- WITH LAPLACE SMOOTHING (α=1) ---")
+    print("P('coffee'|spam) = (0 + 1) / (4 + 8) = 1/12 ≈ 0.083")
+    print("P('coffee'|ham) = (0 + 1) / (4 + 8) = 1/12 ≈ 0.083")
+    print("P('meeting'|spam) = (0 + 1) / (4 + 8) = 1/12 ≈ 0.083")
+    print("P('meeting'|ham) = (1 + 1) / (4 + 8) = 2/12 ≈ 0.167")
+    print("P('free'|spam) = (1 + 1) / (4 + 8) = 2/12 ≈ 0.167")
+    print("P('free'|ham) = (0 + 1) / (4 + 8) = 1/12 ≈ 0.083")
+    print("\nResult: Can now compute probabilities for both classes!")
+    print("        P(spam|doc) ∝ 0.083 * 0.167 * 0.083")
+    print("        P(ham|doc) ∝ 0.167 * 0.083 * 0.083")
+    print("        Classification works!")
+
+# Run analysis
+# analyze_smoothing(X_train_bow, y_train, X_test_bow, y_test)
+# demonstrate_zero_probability_problem()
+\`\`\`
+
+**What to observe:**
+- Too small α: May still have issues with rare words
+- Too large α: Over-smoothing, features lose discriminative power
+- Sweet spot: Usually α ∈ [0.1, 2.0]
+
+</details>
+
+### Phase 4: Performance Analysis & Calibration (Required)
+
+**Metrics to compute:**
+1. Accuracy, Precision, Recall, F1 Score
+2. Confusion Matrix
+3. Calibration Curve (are probabilities well-calibrated?)
+4. Feature importance analysis
+
+**Comparisons:**
+- Bag-of-words vs TF-IDF features
+- Different smoothing parameters
+- With vs without stop word removal
+- Different vocabulary sizes
+
+<details>
+<summary>💡 Stuck? Click for evaluation code</summary>
+
+### Comprehensive Evaluation
+
+\`\`\`python
+import matplotlib.pyplot as plt
+from sklearn.calibration import calibration_curve
+
+def compute_metrics(y_true, y_pred):
+    """Compute classification metrics."""
+    # Confusion matrix
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    tn = np.sum((y_true == 0) & (y_pred == 0))
+    fp = np.sum((y_true == 0) & (y_pred == 1))
+    fn = np.sum((y_true == 1) & (y_pred == 0))
+
+    # Metrics
+    accuracy = (tp + tn) / (tp + tn + fp + fn)
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+
+    return {
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f1': f1,
+        'confusion_matrix': np.array([[tn, fp], [fn, tp]])
+    }
+
+
+def plot_confusion_matrix(cm, class_names=['Ham', 'Spam']):
+    """Plot confusion matrix."""
+    fig, ax = plt.subplots(figsize=(6, 5))
+
+    im = ax.imshow(cm, cmap='Blues')
+    ax.set_xticks(np.arange(len(class_names)))
+    ax.set_yticks(np.arange(len(class_names)))
+    ax.set_xticklabels(class_names)
+    ax.set_yticklabels(class_names)
+
+    # Add text annotations
+    for i in range(len(class_names)):
+        for j in range(len(class_names)):
+            text = ax.text(j, i, cm[i, j],
+                          ha="center", va="center", color="black", fontsize=20)
+
+    ax.set_xlabel('Predicted Label', fontsize=12)
+    ax.set_ylabel('True Label', fontsize=12)
+    ax.set_title('Confusion Matrix', fontsize=14)
+    plt.colorbar(im, ax=ax)
+    plt.tight_layout()
+    return fig
+
+
+def plot_calibration_curve(y_true, y_proba, n_bins=10):
+    """
+    Plot calibration curve.
+    Shows if predicted probabilities match actual frequencies.
+    """
+    prob_true, prob_pred = calibration_curve(y_true, y_proba, n_bins=n_bins)
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    # Plot calibration curve
+    ax.plot(prob_pred, prob_true, 's-', linewidth=2, label='Naive Bayes')
+
+    # Plot perfect calibration
+    ax.plot([0, 1], [0, 1], 'k--', linewidth=1, label='Perfect Calibration')
+
+    ax.set_xlabel('Mean Predicted Probability', fontsize=12)
+    ax.set_ylabel('Fraction of Positives', fontsize=12)
+    ax.set_title('Calibration Curve (Reliability Diagram)', fontsize=14)
+    ax.legend(fontsize=11)
+    ax.grid(True, alpha=0.3)
+    ax.set_xlim([0, 1])
+    ax.set_ylim([0, 1])
+    plt.tight_layout()
+
+    return fig
+
+
+def compare_feature_methods(X_train_bow, X_train_tfidf, y_train,
+                           X_test_bow, X_test_tfidf, y_test):
+    """Compare bag-of-words vs TF-IDF features."""
+
+    print("\n" + "="*60)
+    print("COMPARING FEATURE EXTRACTION METHODS")
+    print("="*60)
+
+    # Bag-of-Words
+    print("\n--- BAG-OF-WORDS ---")
+    clf_bow = NaiveBayesClassifier(alpha=1.0)
+    clf_bow.fit(X_train_bow, y_train)
+    y_pred_bow = clf_bow.predict(X_test_bow)
+    metrics_bow = compute_metrics(y_test, y_pred_bow)
+
+    print(f"Accuracy:  {metrics_bow['accuracy']:.3f}")
+    print(f"Precision: {metrics_bow['precision']:.3f}")
+    print(f"Recall:    {metrics_bow['recall']:.3f}")
+    print(f"F1 Score:  {metrics_bow['f1']:.3f}")
+
+    # TF-IDF
+    print("\n--- TF-IDF ---")
+    clf_tfidf = NaiveBayesClassifier(alpha=1.0)
+    clf_tfidf.fit(X_train_tfidf, y_train)
+    y_pred_tfidf = clf_tfidf.predict(X_test_tfidf)
+    metrics_tfidf = compute_metrics(y_test, y_pred_tfidf)
+
+    print(f"Accuracy:  {metrics_tfidf['accuracy']:.3f}")
+    print(f"Precision: {metrics_tfidf['precision']:.3f}")
+    print(f"Recall:    {metrics_tfidf['recall']:.3f}")
+    print(f"F1 Score:  {metrics_tfidf['f1']:.3f}")
+
+    # Plot comparison
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+    # Confusion matrices
+    metrics = ['Accuracy', 'Precision', 'Recall', 'F1']
+    bow_scores = [metrics_bow[m.lower().replace(' ', '_')] for m in metrics]
+    tfidf_scores = [metrics_tfidf[m.lower().replace(' ', '_')] for m in metrics]
+
+    x = np.arange(len(metrics))
+    width = 0.35
+
+    axes[0].bar(x - width/2, bow_scores, width, label='Bag-of-Words')
+    axes[0].bar(x + width/2, tfidf_scores, width, label='TF-IDF')
+    axes[0].set_ylabel('Score', fontsize=12)
+    axes[0].set_title('Performance Comparison', fontsize=14)
+    axes[0].set_xticks(x)
+    axes[0].set_xticklabels(metrics)
+    axes[0].legend()
+    axes[0].grid(True, alpha=0.3, axis='y')
+    axes[0].set_ylim([0, 1])
+
+    # Confusion matrices side by side
+    im1 = axes[1].imshow(metrics_bow['confusion_matrix'], cmap='Blues', aspect='auto')
+    axes[1].set_title('Confusion Matrix (BOW)', fontsize=14)
+    axes[1].set_xlabel('Predicted')
+    axes[1].set_ylabel('True')
+    axes[1].set_xticks([0, 1])
+    axes[1].set_yticks([0, 1])
+    axes[1].set_xticklabels(['Ham', 'Spam'])
+    axes[1].set_yticklabels(['Ham', 'Spam'])
+
+    for i in range(2):
+        for j in range(2):
+            axes[1].text(j, i, metrics_bow['confusion_matrix'][i, j],
+                        ha="center", va="center", color="black", fontsize=16)
+
+    plt.tight_layout()
+    plt.savefig('feature_comparison.png', dpi=150)
+    plt.show()
+
+
+def analyze_prediction_confidence(clf, X_test, y_test):
+    """Analyze how confident the model is in its predictions."""
+    y_proba = clf.predict_proba(X_test)
+    y_pred = clf.predict(X_test)
+
+    # Get confidence scores (max probability)
+    confidences = np.max(y_proba, axis=1)
+
+    # Separate correct and incorrect predictions
+    correct_mask = (y_pred == y_test)
+    correct_confidences = confidences[correct_mask]
+    incorrect_confidences = confidences[~correct_mask]
+
+    # Plot histogram
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    ax.hist(correct_confidences, bins=20, alpha=0.6, label='Correct', color='green')
+    ax.hist(incorrect_confidences, bins=20, alpha=0.6, label='Incorrect', color='red')
+
+    ax.set_xlabel('Prediction Confidence', fontsize=12)
+    ax.set_ylabel('Count', fontsize=12)
+    ax.set_title('Prediction Confidence Distribution', fontsize=14)
+    ax.legend(fontsize=11)
+    ax.grid(True, alpha=0.3, axis='y')
+    plt.tight_layout()
+    plt.savefig('confidence_distribution.png', dpi=150)
+    plt.show()
+
+    print(f"\nAverage confidence (correct): {np.mean(correct_confidences):.3f}")
+    print(f"Average confidence (incorrect): {np.mean(incorrect_confidences):.3f}")
+    print(f"\nConfidence ranges:")
+    for threshold in [0.5, 0.7, 0.9, 0.95]:
+        n_confident = np.sum(confidences >= threshold)
+        acc_confident = np.mean(y_pred[confidences >= threshold] == y_test[confidences >= threshold])
+        print(f"  Confidence ≥ {threshold}: {n_confident:4d} samples, accuracy = {acc_confident:.3f}")
+
+
+# Run comprehensive evaluation
+def run_full_evaluation(clf, X_test, y_test, vocab):
+    """Run all evaluation metrics."""
+
+    # Predictions
+    y_pred = clf.predict(X_test)
+    y_proba = clf.predict_proba(X_test)[:, 1]  # Probability of spam
+
+    # Basic metrics
+    metrics = compute_metrics(y_test, y_pred)
+    print("\nPERFORMANCE METRICS")
+    print("="*40)
+    print(f"Accuracy:  {metrics['accuracy']:.3f}")
+    print(f"Precision: {metrics['precision']:.3f} (of predicted spam, how many are actually spam?)")
+    print(f"Recall:    {metrics['recall']:.3f} (of actual spam, how many did we catch?)")
+    print(f"F1 Score:  {metrics['f1']:.3f} (harmonic mean of precision and recall)")
+
+    # Confusion matrix
+    print("\nCONFUSION MATRIX")
+    print(metrics['confusion_matrix'])
+    fig1 = plot_confusion_matrix(metrics['confusion_matrix'])
+    plt.savefig('confusion_matrix.png', dpi=150)
+
+    # Calibration curve
+    fig2 = plot_calibration_curve(y_test, y_proba)
+    plt.savefig('calibration_curve.png', dpi=150)
+
+    # Confidence analysis
+    analyze_prediction_confidence(clf, X_test, y_test)
+
+    plt.show()
+\`\`\`
+
+**Understanding calibration:**
+- **Well-calibrated:** When model says 70% confidence, it's right 70% of the time
+- **Over-confident:** Says 90% but only right 70% of the time
+- **Under-confident:** Says 60% but actually right 90% of the time
+- **Why it matters:** For decision-making, need reliable uncertainty estimates
+
+</details>
+
+---
+
+## 🎯 Milestones & Validation
+
+<div class="milestone-box">
+
+### Milestone 1: Preprocessing Pipeline Working
+
+**Success Criteria:**
+- Can load and tokenize text data
+- Vocabulary built from training data
+- Both bag-of-words and TF-IDF features extracted
+- Word frequency visualizations created
+
+**Validation:**
+- Check that common words appear frequently
+- Verify TF-IDF downweights common words
+- Ensure no data leakage (test vocabulary not used in training)
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 2: Naive Bayes Implementation
+
+**Success Criteria:**
+- Classifier trains without errors
+- Achieves >85% accuracy on test set
+- Provides probability estimates
+- Handles unseen words gracefully
+
+**Validation:**
+- Test on simple synthetic data first
+- Verify log probabilities don't underflow
+- Check that Laplace smoothing prevents zero probabilities
+- Confirm predictions are sensible (spam words → spam label)
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 3: Smoothing Analysis Complete
+
+**Success Criteria:**
+- Tested multiple α values
+- Found optimal smoothing parameter
+- Documented effect of over/under-smoothing
+- Can explain when smoothing helps
+
+**Validation:**
+- α = 0 should fail on unseen words
+- Very large α should hurt performance
+- Optimal α should be moderate (0.1-2.0 range)
+
+</div>
+
+<div class="milestone-box">
+
+### Milestone 4: Full Evaluation & Analysis
+
+**Success Criteria:**
+- Computed all metrics (accuracy, precision, recall, F1)
+- Created calibration curve
+- Compared bag-of-words vs TF-IDF
+- Analyzed feature importance (which words matter most)
+
+**Validation:**
+- Calibration curve should be close to diagonal
+- Most important spam words should match intuition
+- Can explain trade-offs between different approaches
+
+</div>
+
+---
+
+## 📊 Suggested Experiments
+
+### Experiment 1: The Independence Assumption
+
+**Question:** How much does the independence assumption hurt?
+
+**Procedure:**
+1. Train standard Naive Bayes (unigrams only)
+2. Train Naive Bayes with bigrams (e.g., "free money" as single feature)
+3. Compare accuracy
+
+**What to observe:**
+- Does bigram model perform better?
+- How much more complex is it?
+- Are bigrams worth the added complexity?
+
+### Experiment 2: Feature Selection
+
+**Question:** Do all words help equally?
+
+**Procedure:**
+1. Train with full vocabulary
+2. Train with only top-K most frequent words (K=100, 500, 1000, 5000)
+3. Train with only words that appear in both spam and ham
+4. Compare accuracy and training time
+
+**What to observe:**
+- Is there a point of diminishing returns?
+- Do rare words hurt or help?
+
+### Experiment 3: Imbalanced Data
+
+**Question:** What if spam is rare (1% of emails)?
+
+**Procedure:**
+1. Create imbalanced test set (1% spam, 99% ham)
+2. Train standard Naive Bayes
+3. Compare accuracy, precision, recall
+
+**What to observe:**
+- High accuracy but low recall? (Model just predicts "ham" for everything)
+- How would you adjust the decision threshold?
+- Does adjusting class priors help?
+
+### Experiment 4: Adversarial Spam
+
+**Question:** Can you fool the classifier?
+
+**Procedure:**
+1. Find words with high P(spam|word)
+2. Create spam email that avoids those words
+3. Test if it's classified as ham
+
+**What to observe:**
+- How robust is the model to adversarial examples?
+- What features would make it more robust?
+
+---
+
+## ✅ Final Checklist
+
+Before considering this project complete:
+
+- [ ] Implemented complete text preprocessing pipeline
+- [ ] Built vocabulary from training data
+- [ ] Extracted bag-of-words and TF-IDF features
+- [ ] Implemented Naive Bayes from scratch
+- [ ] Used log probabilities for numerical stability
+- [ ] Implemented Laplace smoothing
+- [ ] Computed all evaluation metrics
+- [ ] Analyzed calibration curve
+- [ ] Compared feature extraction methods
+- [ ] Visualized feature importance
+
+**Most importantly:**
+- [ ] You **understand** how Bayes' theorem enables classification
+- [ ] You **understand** why the independence assumption works
+- [ ] You **understand** the role of smoothing
+- [ ] You can **explain** when to use probabilistic vs non-probabilistic classifiers
+- [ ] You can **debug** common issues (zero probabilities, underflow, poor calibration)
+
+---
+
+## 📚 Additional Resources
+
+- [Andrew Ng: Generative Learning Algorithms](http://cs229.stanford.edu/notes2020fall/notes2020fall/cs229-notes2.pdf)
+- [Stanford NLP: Naive Bayes Classification](https://web.stanford.edu/class/cs124/lec/naivebayes.pdf)
+- [Sebastian Raschka: Naive Bayes and Text Classification](https://arxiv.org/abs/1410.5329)
+- [A Tutorial on Probability Theory](https://cs.brown.edu/courses/cs195-5/fall2019/resources/probability_tutorial.pdf)
+- [Understanding Bayes Theorem With Ratios](https://betterexplained.com/articles/understanding-bayes-theorem-with-ratios/)
+
+---
+
+## 💡 Extension Ideas
+
+Once you've completed the core project, try these extensions:
+
+1. **Multi-class Classification:** Classify emails into categories (spam, promotions, social, primary)
+2. **Online Learning:** Update model as new emails arrive (incremental learning)
+3. **Feature Engineering:** Add features like email length, number of links, presence of attachments
+4. **Ensemble Methods:** Combine Naive Bayes with other classifiers
+5. **Deep Dive into Calibration:** Implement Platt scaling or isotonic regression to improve calibration
+6. **Compare with Logistic Regression:** Implement logistic regression and compare assumptions, performance, interpretability
+
+---
+
+Good luck! Remember: this is about **understanding probabilistic reasoning**, not just implementing formulas. Question assumptions, run experiments, and build intuition for how probability enables learning! 🚀
+`;
+
+        // Render markdown
+        document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+    </script>
+</body>
+</html>
