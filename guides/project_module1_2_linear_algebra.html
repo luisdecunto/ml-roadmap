@@ -86,19 +86,40 @@
             margin: 1rem 0;
         }
         .markdown-body details {
-            background-color: #f0fdf4;
-            border: 2px solid #86efac;
+            background-color: #fef3c7;
+            border: 2px solid #fbbf24;
             border-radius: 0.5rem;
             padding: 1rem;
             margin: 1rem 0;
         }
+        .markdown-body details[open] {
+            background-color: #fef9e7;
+        }
         .markdown-body summary {
             font-weight: 600;
             cursor: pointer;
-            color: #059669;
+            color: #d97706;
             user-select: none;
+            padding: 0.5rem;
+            margin: -1rem;
+            margin-bottom: 1rem;
+            background-color: #fde68a;
+            border-radius: 0.375rem;
         }
         .markdown-body summary:hover {
+            background-color: #fcd34d;
+            color: #b45309;
+        }
+        .markdown-body details details {
+            background-color: #f0fdf4;
+            border: 2px solid #86efac;
+        }
+        .markdown-body details details summary {
+            background-color: #bbf7d0;
+            color: #059669;
+        }
+        .markdown-body details details summary:hover {
+            background-color: #86efac;
             color: #047857;
         }
         .research-box {
@@ -139,8 +160,7 @@
     </div>
 
     <script>
-        const markdown = `
-# Image Compression Engine using SVD
+        const markdown = `# Image Compression Engine using SVD
 
 ## 🎯 Project Overview
 
@@ -220,6 +240,153 @@ These questions should guide your design. **Answer them before coding:**
    - SSIM (Structural Similarity Index)
    - Which metric best reflects human perception?
 
+<details>
+<summary>💡 Stuck? Click for implementation hints on these fundamentals</summary>
+
+### Understanding Singular Values
+
+**What they represent:**
+- Each singular value σᵢ represents the "importance" or "energy" of the i-th component
+- Larger σᵢ = more information captured by that component
+- The first few components typically capture overall structure (low-frequency)
+- Later components capture fine details (high-frequency)
+
+**Why they work for compression:**
+\`\`\`python
+# Visualize singular value spectrum
+U, sigma, Vt = np.linalg.svd(image, full_matrices=False)
+
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.semilogy(sigma, 'b-', linewidth=2)
+plt.xlabel('Component index')
+plt.ylabel('Singular value (log scale)')
+plt.title('Singular Value Spectrum')
+plt.grid(True)
+
+plt.subplot(1, 2, 2)
+energy = np.cumsum(sigma**2) / np.sum(sigma**2) * 100
+plt.plot(energy, 'g-', linewidth=2)
+plt.xlabel('Number of components k')
+plt.ylabel('Energy retained (%)')
+plt.axhline(95, color='r', linestyle='--', label='95% threshold')
+plt.legend()
+plt.grid(True)
+plt.show()
+\`\`\`
+
+**Why this works:** Singular values typically decay rapidly - first 10-50 components often capture 95%+ of energy.
+
+---
+
+### Color Image Handling Options
+
+**Option A: Independent RGB channels**
+\`\`\`python
+def compress_rgb_independent(img_rgb, k):
+    compressed = []
+    for c in range(3):
+        channel = img_rgb[:, :, c]
+        U, sigma, Vt = np.linalg.svd(channel, full_matrices=False)
+        compressed.append({
+            'U_k': U[:, :k],
+            'sigma_k': sigma[:k],
+            'Vt_k': Vt[:k, :]
+        })
+    return compressed
+\`\`\`
+**Why:** Simple, preserves color balance. Same k for all channels.
+
+**Option B: YCbCr color space**
+\`\`\`python
+def rgb_to_ycbcr(img_rgb):
+    R, G, B = img_rgb[:,:,0], img_rgb[:,:,1], img_rgb[:,:,2]
+    Y  = 0.299*R + 0.587*G + 0.114*B
+    Cb = -0.169*R - 0.331*G + 0.5*B + 128
+    Cr = 0.5*R - 0.419*G - 0.081*B + 128
+    return np.stack([Y, Cb, Cr], axis=2)
+
+def compress_ycbcr(img_rgb, k_luma, k_chroma):
+    ycbcr = rgb_to_ycbcr(img_rgb)
+    # Compress Y with k_luma, Cb/Cr with k_chroma (smaller)
+    # ...
+\`\`\`
+**Why:** Human vision is more sensitive to brightness (Y) than color (Cb/Cr). Can compress color channels more aggressively.
+
+**Your task:** Implement both and compare!
+
+---
+
+### Rank Selection Strategies
+
+**Strategy 1: Energy threshold**
+\`\`\`python
+def select_k_by_energy(sigma, threshold=0.95):
+    total_energy = np.sum(sigma ** 2)
+    cumulative_energy = np.cumsum(sigma ** 2)
+    k = np.searchsorted(cumulative_energy, threshold * total_energy) + 1
+    return k
+\`\`\`
+**Why:** Keeps k that retains X% of total energy. Adapts to image complexity.
+
+**Strategy 2: Target PSNR**
+\`\`\`python
+def select_k_by_psnr(img, target_psnr, U, sigma, Vt):
+    # Binary search for smallest k achieving target PSNR
+    k_min, k_max = 1, len(sigma)
+    while k_min <= k_max:
+        k = (k_min + k_max) // 2
+        reconstructed = U[:, :k] @ np.diag(sigma[:k]) @ Vt[:k, :]
+        psnr = calculate_psnr(img, reconstructed)
+        if psnr >= target_psnr:
+            k_max = k - 1
+        else:
+            k_min = k + 1
+    return k_min
+\`\`\`
+**Why:** Direct quality control. Find minimum k for acceptable quality.
+
+**Strategy 3: Fixed compression ratio**
+\`\`\`python
+def select_k_by_ratio(shape, target_ratio):
+    m, n = shape
+    # Ratio = (m*n) / (m*k + k + k*n)
+    k = int((m * n) / (target_ratio * (m + n + 1)))
+    return max(1, min(k, min(m, n)))
+\`\`\`
+**Why:** Predictable storage size. Good for bandwidth-limited scenarios.
+
+**Your task:** Which works best for different types of images?
+
+---
+
+### Quality Metrics
+
+**PSNR (Peak Signal-to-Noise Ratio)**
+\`\`\`python
+def calculate_psnr(original, reconstructed):
+    mse = np.mean((original - reconstructed) ** 2)
+    if mse == 0:
+        return float('inf')
+    max_value = 255.0  # or 1.0 if normalized
+    psnr = 20 * np.log10(max_value / np.sqrt(mse))
+    return psnr
+\`\`\`
+**Why:** Standard metric. > 40 dB = excellent, 30-40 = good, 20-30 = acceptable.
+
+**Compression Ratio**
+\`\`\`python
+def calculate_compression_ratio(original_shape, k, num_channels=3):
+    m, n = original_shape[:2]
+    original_size = m * n * num_channels
+    # Compressed: U_k (m×k) + sigma_k (k) + Vt_k (k×n) per channel
+    compressed_size = num_channels * (m*k + k + k*n)
+    return original_size / compressed_size
+\`\`\`
+**Why:** Shows how much space you save. 10x = 90% storage reduction.
+
+</details>
+
 ### Advanced Questions
 
 5. **Can you beat naive SVD compression?**
@@ -237,6 +404,66 @@ These questions should guide your design. **Answer them before coding:**
    - When does JPEG win?
    - Can you combine both approaches?
 
+<details>
+<summary>💡 Stuck? Click for hints on advanced techniques</summary>
+
+### Block-based SVD
+
+**Why it might work better:**
+- Different image regions have different complexity
+- Can use different k for each block
+- Reduces artifacts (less "global" blur)
+
+\`\`\`python
+def compress_block_svd(image, block_size=16, k=10):
+    h, w = image.shape
+    compressed_blocks = []
+
+    for i in range(0, h, block_size):
+        for j in range(0, w, block_size):
+            block = image[i:i+block_size, j:j+block_size]
+            U, sigma, Vt = np.linalg.svd(block, full_matrices=False)
+            compressed_blocks.append({
+                'U_k': U[:, :k],
+                'sigma_k': sigma[:k],
+                'Vt_k': Vt[:k, :],
+                'position': (i, j)
+            })
+
+    return compressed_blocks
+\`\`\`
+
+**Tradeoff:** Block artifacts vs global blur. Experiment!
+
+---
+
+### Comparing with JPEG
+
+\`\`\`python
+from PIL import Image
+
+def compare_with_jpeg(img_array, target_size):
+    # Save with different JPEG qualities
+    for quality in range(10, 100, 10):
+        img_pil = Image.fromarray(img_array)
+        img_pil.save('temp.jpg', quality=quality)
+
+        jpeg_size = os.path.getsize('temp.jpg')
+        jpeg_img = np.array(Image.open('temp.jpg'))
+        jpeg_psnr = calculate_psnr(img_array, jpeg_img)
+
+        print(f"JPEG Q={quality}: {jpeg_size} bytes, PSNR={jpeg_psnr:.2f} dB")
+\`\`\`
+
+**Compare:**
+- Storage size at same PSNR
+- PSNR at same storage size
+- Visual quality (look at artifacts)
+
+**Observation:** JPEG usually wins for photos (it's optimized for that), but SVD is simpler and more general.
+
+</details>
+
 ---
 
 ## 📋 Requirements & Specifications
@@ -245,9 +472,9 @@ These questions should guide your design. **Answer them before coding:**
 
 **Functionality:**
 - Load image, convert to grayscale
-- Compute SVD: $A = U\\Sigma V^T$
+- Compute SVD: A = UΣV^T
 - Compress by keeping top k singular values
-- Reconstruct: $A_k = U_k\\Sigma_k V_k^T$
+- Reconstruct: A_k = U_k Σ_k V_k^T
 - Display original vs compressed side-by-side
 - Report compression ratio and PSNR
 
@@ -256,6 +483,181 @@ These questions should guide your design. **Answer them before coding:**
 - \`decompress_image(compressed_data)\` function
 - Visualization of singular value decay
 - Comparison plot: k vs PSNR vs compression ratio
+
+<details>
+<summary>💡 Stuck on implementation? Click for code skeleton</summary>
+
+### Complete Phase 1 Implementation
+
+\`\`\`python
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+
+def load_grayscale_image(filepath):
+    """Load and normalize grayscale image."""
+    img = Image.open(filepath).convert('L')
+    img_array = np.array(img, dtype=float)
+    # Normalize to [0, 1]
+    img_normalized = img_array / 255.0
+    return img_normalized
+
+def compress_grayscale(img, k):
+    """
+    Compress grayscale image using SVD.
+
+    Returns: dict with U_k, sigma_k, Vt_k, and metadata
+    """
+    # Compute SVD
+    U, sigma, Vt = np.linalg.svd(img, full_matrices=False)
+
+    # Keep only top k components
+    compressed = {
+        'U_k': U[:, :k],
+        'sigma_k': sigma[:k],
+        'Vt_k': Vt[:k, :],
+        'k': k,
+        'shape': img.shape,
+        'full_sigma': sigma  # Keep for analysis
+    }
+
+    return compressed
+
+def decompress_grayscale(compressed):
+    """Reconstruct image from compressed representation."""
+    U_k = compressed['U_k']
+    sigma_k = compressed['sigma_k']
+    Vt_k = compressed['Vt_k']
+
+    # Reconstruct: A_k = U_k @ diag(sigma_k) @ Vt_k
+    reconstructed = U_k @ np.diag(sigma_k) @ Vt_k
+
+    # Clip to valid range
+    reconstructed = np.clip(reconstructed, 0, 1)
+
+    return reconstructed
+
+def calculate_psnr(original, reconstructed):
+    """Calculate Peak Signal-to-Noise Ratio."""
+    mse = np.mean((original - reconstructed) ** 2)
+    if mse == 0:
+        return float('inf')
+    max_value = 1.0  # Since normalized to [0, 1]
+    psnr = 20 * np.log10(max_value / np.sqrt(mse))
+    return psnr
+
+def calculate_compression_ratio(original_shape, compressed):
+    """Calculate compression ratio."""
+    m, n = original_shape
+    original_size = m * n
+
+    k = compressed['k']
+    compressed_size = m*k + k + k*n  # U_k + sigma_k + Vt_k
+
+    return original_size / compressed_size
+
+def visualize_compression(original, reconstructed, compressed):
+    """Create comprehensive visualization."""
+    k = compressed['k']
+    sigma = compressed['full_sigma']
+
+    fig = plt.figure(figsize=(16, 10))
+
+    # Row 1: Images
+    ax1 = plt.subplot(2, 3, 1)
+    ax1.imshow(original, cmap='gray', vmin=0, vmax=1)
+    ax1.set_title('Original', fontsize=14)
+    ax1.axis('off')
+
+    ax2 = plt.subplot(2, 3, 2)
+    ax2.imshow(reconstructed, cmap='gray', vmin=0, vmax=1)
+    psnr = calculate_psnr(original, reconstructed)
+    ratio = calculate_compression_ratio(original.shape, compressed)
+    ax2.set_title(f'Compressed (k={k})\\nPSNR: {psnr:.2f} dB\\nRatio: {ratio:.2f}x', fontsize=14)
+    ax2.axis('off')
+
+    ax3 = plt.subplot(2, 3, 3)
+    diff = np.abs(original - reconstructed)
+    ax3.imshow(diff * 10, cmap='hot', vmin=0, vmax=1)
+    ax3.set_title('Difference (10x amplified)', fontsize=14)
+    ax3.axis('off')
+
+    # Row 2: Analysis
+    ax4 = plt.subplot(2, 3, 4)
+    ax4.semilogy(sigma, 'b-', linewidth=2)
+    ax4.axvline(k, color='r', linestyle='--', linewidth=2, label=f'k={k}')
+    ax4.set_xlabel('Component index i', fontsize=12)
+    ax4.set_ylabel('Singular value σᵢ (log)', fontsize=12)
+    ax4.set_title('Singular Value Spectrum', fontsize=14)
+    ax4.grid(True, alpha=0.3)
+    ax4.legend()
+
+    ax5 = plt.subplot(2, 3, 5)
+    energy = np.cumsum(sigma**2) / np.sum(sigma**2) * 100
+    ax5.plot(energy, 'g-', linewidth=2)
+    ax5.axvline(k, color='r', linestyle='--', linewidth=2, label=f'k={k}')
+    ax5.axhline(95, color='orange', linestyle=':', linewidth=2, label='95% energy')
+    ax5.set_xlabel('Number of components k', fontsize=12)
+    ax5.set_ylabel('Cumulative energy (%)', fontsize=12)
+    ax5.set_title('Energy Retention', fontsize=14)
+    ax5.grid(True, alpha=0.3)
+    ax5.legend()
+
+    ax6 = plt.subplot(2, 3, 6)
+    metrics_text = (
+        f"Rank k: {k}\\n"
+        f"PSNR: {psnr:.2f} dB\\n"
+        f"Compression: {ratio:.2f}x\\n"
+        f"Energy retained: {energy[k-1]:.1f}%\\n"
+        f"Original: {original.shape[0]}×{original.shape[1]}\\n"
+        f"Storage: {compressed_size/1000:.1f} KB → {original_size/1000:.1f} KB"
+    )
+    ax6.text(0.5, 0.5, metrics_text, ha='center', va='center',
+             fontsize=12, bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
+    ax6.axis('off')
+    ax6.set_title('Metrics Summary', fontsize=14)
+
+    plt.tight_layout()
+    return fig
+
+# Example usage
+if __name__ == "__main__":
+    # Load image
+    img = load_grayscale_image('test_image.jpg')
+    print(f"Image shape: {img.shape}")
+
+    # Try different k values
+    k_values = [5, 10, 20, 50, 100]
+
+    for k in k_values:
+        # Compress
+        compressed = compress_grayscale(img, k)
+
+        # Decompress
+        reconstructed = decompress_grayscale(compressed)
+
+        # Metrics
+        psnr = calculate_psnr(img, reconstructed)
+        ratio = calculate_compression_ratio(img.shape, compressed)
+
+        print(f"k={k:3d}: PSNR={psnr:6.2f} dB, Ratio={ratio:6.2f}x")
+
+    # Visualize one case
+    compressed_50 = compress_grayscale(img, k=50)
+    reconstructed_50 = decompress_grayscale(compressed_50)
+    fig = visualize_compression(img, reconstructed_50, compressed_50)
+    plt.savefig('compression_result.png', dpi=150, bbox_inches='tight')
+    plt.show()
+\`\`\`
+
+**Why each piece:**
+- **Normalization [0,1]:** Better numerical stability for SVD
+- **full_matrices=False:** Compact SVD, saves memory
+- **Clipping:** Ensures reconstructed values stay valid
+- **Log scale plot:** Singular values decay exponentially
+- **Energy curve:** Shows diminishing returns of adding more components
+
+</details>
 
 ### Phase 2: Color Image Support (Required)
 
@@ -271,22 +673,410 @@ How do you extend SVD to RGB images? Multiple approaches possible:
 - Compare their performance
 - Justify your choice with data
 
+<details>
+<summary>💡 Stuck? Click for color handling implementation</summary>
+
+### Color Image Handling - Complete Implementation
+
+\`\`\`python
+def load_color_image(filepath):
+    """Load and normalize color image."""
+    img = Image.open(filepath)
+    img_array = np.array(img, dtype=float)
+    img_normalized = img_array / 255.0
+    return img_normalized
+
+# Approach A: Independent RGB
+def compress_rgb_independent(img_rgb, k):
+    """Compress each RGB channel independently."""
+    compressed_channels = []
+
+    for c in range(3):
+        channel = img_rgb[:, :, c]
+        U, sigma, Vt = np.linalg.svd(channel, full_matrices=False)
+        compressed_channels.append({
+            'U_k': U[:, :k],
+            'sigma_k': sigma[:k],
+            'Vt_k': Vt[:k, :],
+            'full_sigma': sigma
+        })
+
+    return {'method': 'rgb', 'channels': compressed_channels, 'k': k}
+
+def decompress_rgb_independent(compressed):
+    """Reconstruct RGB from compressed channels."""
+    reconstructed_channels = []
+
+    for ch in compressed['channels']:
+        U_k = ch['U_k']
+        sigma_k = ch['sigma_k']
+        Vt_k = ch['Vt_k']
+        reconstructed = U_k @ np.diag(sigma_k) @ Vt_k
+        reconstructed_channels.append(np.clip(reconstructed, 0, 1))
+
+    return np.stack(reconstructed_channels, axis=2)
+
+# Approach B: YCbCr
+def rgb_to_ycbcr(img_rgb):
+    """Convert RGB to YCbCr color space."""
+    R, G, B = img_rgb[:,:,0], img_rgb[:,:,1], img_rgb[:,:,2]
+
+    Y  = 0.299 * R + 0.587 * G + 0.114 * B
+    Cb = -0.169 * R - 0.331 * G + 0.5 * B + 0.5
+    Cr = 0.5 * R - 0.419 * G - 0.081 * B + 0.5
+
+    return np.stack([Y, Cb, Cr], axis=2)
+
+def ycbcr_to_rgb(img_ycbcr):
+    """Convert YCbCr back to RGB."""
+    Y, Cb, Cr = img_ycbcr[:,:,0], img_ycbcr[:,:,1], img_ycbcr[:,:,2]
+
+    Cb = Cb - 0.5
+    Cr = Cr - 0.5
+
+    R = Y + 1.402 * Cr
+    G = Y - 0.344 * Cb - 0.714 * Cr
+    B = Y + 1.772 * Cb
+
+    return np.clip(np.stack([R, G, B], axis=2), 0, 1)
+
+def compress_rgb_ycbcr(img_rgb, k_luma, k_chroma):
+    """Compress using YCbCr with different k for luminance vs chrominance."""
+    img_ycbcr = rgb_to_ycbcr(img_rgb)
+
+    compressed_channels = []
+    k_values = [k_luma, k_chroma, k_chroma]
+
+    for c, k in enumerate(k_values):
+        channel = img_ycbcr[:, :, c]
+        U, sigma, Vt = np.linalg.svd(channel, full_matrices=False)
+        compressed_channels.append({
+            'U_k': U[:, :k],
+            'sigma_k': sigma[:k],
+            'Vt_k': Vt[:k, :],
+            'full_sigma': sigma,
+            'k': k
+        })
+
+    return {'method': 'ycbcr', 'channels': compressed_channels, 'k_luma': k_luma, 'k_chroma': k_chroma}
+
+def decompress_rgb_ycbcr(compressed):
+    """Reconstruct RGB from compressed YCbCr."""
+    ycbcr_channels = []
+
+    for ch in compressed['channels']:
+        U_k = ch['U_k']
+        sigma_k = ch['sigma_k']
+        Vt_k = ch['Vt_k']
+        reconstructed = U_k @ np.diag(sigma_k) @ Vt_k
+        ycbcr_channels.append(np.clip(reconstructed, 0, 1))
+
+    img_ycbcr = np.stack(ycbcr_channels, axis=2)
+    return ycbcr_to_rgb(img_ycbcr)
+
+def compare_color_approaches(img_rgb):
+    """Compare RGB vs YCbCr approaches."""
+    print("\\n" + "="*60)
+    print("Color Compression Comparison")
+    print("="*60)
+
+    # Approach A: RGB with k=50 for all
+    compressed_rgb = compress_rgb_independent(img_rgb, k=50)
+    reconstructed_rgb = decompress_rgb_independent(compressed_rgb)
+    psnr_rgb = calculate_psnr(img_rgb, reconstructed_rgb)
+
+    # Calculate storage for RGB
+    m, n = img_rgb.shape[:2]
+    k = 50
+    storage_rgb = 3 * (m*k + k + k*n)
+    ratio_rgb = (m * n * 3) / storage_rgb
+
+    print(f"\\nApproach A: RGB Independent (k=50 all channels)")
+    print(f"  PSNR: {psnr_rgb:.2f} dB")
+    print(f"  Compression ratio: {ratio_rgb:.2f}x")
+    print(f"  Storage: {storage_rgb} values")
+
+    # Approach B: YCbCr with k_Y=50, k_CbCr=25
+    compressed_ycbcr = compress_rgb_ycbcr(img_rgb, k_luma=50, k_chroma=25)
+    reconstructed_ycbcr = decompress_rgb_ycbcr(compressed_ycbcr)
+    psnr_ycbcr = calculate_psnr(img_rgb, reconstructed_ycbcr)
+
+    # Calculate storage for YCbCr
+    storage_ycbcr = (m*50 + 50 + 50*n) + 2 * (m*25 + 25 + 25*n)
+    ratio_ycbcr = (m * n * 3) / storage_ycbcr
+
+    print(f"\\nApproach B: YCbCr (k_Y=50, k_CbCr=25)")
+    print(f"  PSNR: {psnr_ycbcr:.2f} dB")
+    print(f"  Compression ratio: {ratio_ycbcr:.2f}x")
+    print(f"  Storage: {storage_ycbcr} values")
+
+    print(f"\\nResult:")
+    if psnr_ycbcr > psnr_rgb and ratio_ycbcr > ratio_rgb:
+        print(f"  ✅ YCbCr wins! Better quality AND compression")
+    elif psnr_ycbcr > psnr_rgb:
+        print(f"  ⚖️  YCbCr: better quality (+{psnr_ycbcr-psnr_rgb:.2f} dB)")
+    elif ratio_ycbcr > ratio_rgb:
+        print(f"  ⚖️  YCbCr: better compression (+{ratio_ycbcr-ratio_rgb:.2f}x)")
+    else:
+        print(f"  ⚖️  RGB might be simpler for this case")
+
+    # Visualize
+    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+
+    axes[0, 0].imshow(img_rgb)
+    axes[0, 0].set_title('Original', fontsize=14)
+    axes[0, 0].axis('off')
+
+    axes[0, 1].imshow(reconstructed_rgb)
+    axes[0, 1].set_title(f'RGB Method\\nPSNR: {psnr_rgb:.2f} dB\\nRatio: {ratio_rgb:.2f}x', fontsize=14)
+    axes[0, 1].axis('off')
+
+    axes[0, 2].imshow(reconstructed_ycbcr)
+    axes[0, 2].set_title(f'YCbCr Method\\nPSNR: {psnr_ycbcr:.2f} dB\\nRatio: {ratio_ycbcr:.2f}x', fontsize=14)
+    axes[0, 2].axis('off')
+
+    # Difference maps
+    diff_rgb = np.abs(img_rgb - reconstructed_rgb)
+    diff_ycbcr = np.abs(img_rgb - reconstructed_ycbcr)
+
+    axes[1, 0].axis('off')
+
+    axes[1, 1].imshow(np.mean(diff_rgb, axis=2) * 10, cmap='hot', vmin=0, vmax=1)
+    axes[1, 1].set_title('RGB Error (10x)', fontsize=14)
+    axes[1, 1].axis('off')
+
+    axes[1, 2].imshow(np.mean(diff_ycbcr, axis=2) * 10, cmap='hot', vmin=0, vmax=1)
+    axes[1, 2].set_title('YCbCr Error (10x)', fontsize=14)
+    axes[1, 2].axis('off')
+
+    plt.tight_layout()
+    return fig
+
+# Usage
+img_color = load_color_image('test_color.jpg')
+fig = compare_color_approaches(img_color)
+plt.savefig('color_comparison.png', dpi=150, bbox_inches='tight')
+plt.show()
+\`\`\`
+
+**Why YCbCr often wins:**
+- Human vision: more sensitive to luminance (Y) than chrominance (Cb, Cr)
+- Can compress Cb/Cr more aggressively without visible quality loss
+- Same principle JPEG uses
+
+**Your task:** Test on multiple images and decide which approach you prefer!
+
+</details>
+
 ### Phase 3: Adaptive Rank Selection (Required)
 
 **Challenge:** Don't hardcode k - find it automatically.
 
 **Options to explore:**
 1. **Energy threshold:** Keep k values that capture 95% of total energy
-   - Energy = $\\sum_{i=1}^{k} \\sigma_i^2 / \\sum_{i=1}^{r} \\sigma_i^2$
-
 2. **Quality constraint:** Find smallest k that achieves target PSNR
-
 3. **Hybrid:** Balance compression ratio and quality using weighted objective
 
 **Deliverable:**
 - \`auto_select_rank(image, strategy, params)\` function
 - Comparison of different strategies
 - Justify which strategy works best and why
+
+<details>
+<summary>💡 Stuck? Click for adaptive rank selection implementation</summary>
+
+### Adaptive Rank Selection - All Strategies
+
+\`\`\`python
+def select_k_by_energy(sigma, threshold=0.95):
+    """
+    Select k that retains at least threshold% of total energy.
+
+    Energy = sum of squared singular values.
+    """
+    total_energy = np.sum(sigma ** 2)
+    cumulative_energy = np.cumsum(sigma ** 2)
+
+    # Find smallest k where energy >= threshold
+    k = np.searchsorted(cumulative_energy, threshold * total_energy) + 1
+
+    # Make sure k is valid
+    k = min(k, len(sigma))
+
+    return k
+
+def select_k_by_psnr(img, target_psnr, U, sigma, Vt):
+    """
+    Binary search for smallest k achieving target PSNR.
+    """
+    k_min, k_max = 1, len(sigma)
+    best_k = k_max
+
+    while k_min <= k_max:
+        k = (k_min + k_max) // 2
+
+        # Reconstruct with this k
+        reconstructed = U[:, :k] @ np.diag(sigma[:k]) @ Vt[:k, :]
+        reconstructed = np.clip(reconstructed, 0, 1)
+
+        # Calculate PSNR
+        psnr = calculate_psnr(img, reconstructed)
+
+        if psnr >= target_psnr:
+            best_k = k
+            k_max = k - 1  # Try smaller k
+        else:
+            k_min = k + 1  # Need larger k
+
+    return best_k
+
+def select_k_by_ratio(shape, target_ratio):
+    """
+    Select k to achieve target compression ratio.
+
+    For grayscale: ratio = (m*n) / (m*k + k + k*n)
+    Solving for k: k = (m*n) / (ratio * (m + n + 1))
+    """
+    m, n = shape[:2]
+    k = int((m * n) / (target_ratio * (m + n + 1)))
+
+    # Clamp to valid range
+    k = max(1, min(k, min(m, n)))
+
+    return k
+
+def compare_selection_strategies(images_dict):
+    """
+    Compare all three strategies on multiple images.
+
+    images_dict: {'name': img_array}
+    """
+    strategies = {
+        'Energy 90%': lambda img, U, s, Vt: select_k_by_energy(s, 0.90),
+        'Energy 95%': lambda img, U, s, Vt: select_k_by_energy(s, 0.95),
+        'Energy 99%': lambda img, U, s, Vt: select_k_by_energy(s, 0.99),
+        'PSNR 30dB': lambda img, U, s, Vt: select_k_by_psnr(img, 30.0, U, s, Vt),
+        'PSNR 35dB': lambda img, U, s, Vt: select_k_by_psnr(img, 35.0, U, s, Vt),
+        'PSNR 40dB': lambda img, U, s, Vt: select_k_by_psnr(img, 40.0, U, s, Vt),
+        'Ratio 5x': lambda img, U, s, Vt: select_k_by_ratio(img.shape, 5.0),
+        'Ratio 10x': lambda img, U, s, Vt: select_k_by_ratio(img.shape, 10.0),
+        'Ratio 20x': lambda img, U, s, Vt: select_k_by_ratio(img.shape, 20.0),
+    }
+
+    results = []
+
+    for img_name, img in images_dict.items():
+        # Compute SVD once
+        U, sigma, Vt = np.linalg.svd(img, full_matrices=False)
+
+        for strategy_name, strategy_func in strategies.items():
+            # Select k using strategy
+            k = strategy_func(img, U, sigma, Vt)
+
+            # Reconstruct
+            reconstructed = U[:, :k] @ np.diag(sigma[:k]) @ Vt[:k, :]
+            reconstructed = np.clip(reconstructed, 0, 1)
+
+            # Metrics
+            psnr = calculate_psnr(img, reconstructed)
+            ratio = (img.shape[0] * img.shape[1]) / (img.shape[0]*k + k + k*img.shape[1])
+
+            results.append({
+                'Image': img_name,
+                'Strategy': strategy_name,
+                'k': k,
+                'PSNR (dB)': psnr,
+                'Compression Ratio': ratio
+            })
+
+    import pandas as pd
+    df = pd.DataFrame(results)
+
+    print("\\n" + "="*80)
+    print("Adaptive Rank Selection Strategy Comparison")
+    print("="*80)
+    print(df.to_string(index=False))
+
+    # Visualize
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+    # Plot 1: k values by strategy
+    pivot1 = df.pivot(index='Strategy', columns='Image', values='k')
+    pivot1.plot(kind='bar', ax=axes[0], width=0.8)
+    axes[0].set_title('Selected k by Strategy', fontsize=14)
+    axes[0].set_ylabel('Rank k', fontsize=12)
+    axes[0].legend(title='Image')
+    axes[0].grid(True, alpha=0.3)
+
+    # Plot 2: PSNR by strategy
+    pivot2 = df.pivot(index='Strategy', columns='Image', values='PSNR (dB)')
+    pivot2.plot(kind='bar', ax=axes[1], width=0.8)
+    axes[1].set_title('Resulting PSNR', fontsize=14)
+    axes[1].set_ylabel('PSNR (dB)', fontsize=12)
+    axes[1].axhline(30, color='orange', linestyle='--', alpha=0.5, label='30 dB threshold')
+    axes[1].axhline(40, color='green', linestyle='--', alpha=0.5, label='40 dB threshold')
+    axes[1].legend(title='Image')
+    axes[1].grid(True, alpha=0.3)
+
+    # Plot 3: Compression ratio by strategy
+    pivot3 = df.pivot(index='Strategy', columns='Image', values='Compression Ratio')
+    pivot3.plot(kind='bar', ax=axes[2], width=0.8)
+    axes[2].set_title('Compression Ratio', fontsize=14)
+    axes[2].set_ylabel('Ratio', fontsize=12)
+    axes[2].legend(title='Image')
+    axes[2].grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    return df, fig
+
+# Test on different image types
+test_images = {
+    'Smooth': create_smooth_gradient(512, 512),
+    'Photo': load_grayscale_image('photo.jpg'),
+    'Texture': load_grayscale_image('texture.jpg'),
+    'Text': load_grayscale_image('text.jpg')
+}
+
+df_results, fig = compare_selection_strategies(test_images)
+plt.savefig('strategy_comparison.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+# Analysis
+print("\\n" + "="*80)
+print("Analysis & Recommendations")
+print("="*80)
+print("\\n1. Energy-based strategies:")
+print("   - Adapt to image complexity automatically")
+print("   - Simple images need fewer components")
+print("   - Complex images get more components")
+print("   - RECOMMENDATION: Use 95% threshold as default")
+print("\\n2. PSNR-based strategies:")
+print("   - Predictable quality")
+print("   - Good for applications with quality requirements")
+print("   - RECOMMENDATION: Use PSNR 35dB for 'good quality'")
+print("\\n3. Ratio-based strategies:")
+print("   - Predictable storage size")
+print("   - Ignores image content")
+print("   - RECOMMENDATION: Use for bandwidth-limited scenarios")
+\`\`\`
+
+**Helper function for testing:**
+\`\`\`python
+def create_smooth_gradient(h, w):
+    """Create smooth gradient test image."""
+    x = np.linspace(0, 1, w)
+    y = np.linspace(0, 1, h)
+    X, Y = np.meshgrid(x, y)
+    return X * 0.5 + Y * 0.5
+\`\`\`
+
+**Your task:**
+1. Run comparison on your own test images
+2. Observe which strategy is most consistent
+3. Pick one strategy and justify your choice
+4. Document the tradeoffs you discovered
+
+</details>
 
 ### Phase 4: Performance Optimization (Optional)
 
@@ -389,9 +1179,9 @@ Pick one or more:
 ### Hint 1: Understanding SVD Geometrically
 
 Before implementing, understand what SVD does:
-- $U$: Orthonormal basis for column space (image basis)
-- $\\Sigma$: Scaling factors (importance of each basis)
-- $V^T$: Orthonormal basis for row space
+- U: Orthonormal basis for column space (image basis)
+- Σ: Scaling factors (importance of each basis)
+- V^T: Orthonormal basis for row space
 
 **Visualization idea:** Plot first 10 singular vectors as images - what do they look like?
 
@@ -403,15 +1193,15 @@ Before implementing, understand what SVD does:
 
 Compression ratio = Original size / Compressed size
 
-**Original:** $m \\times n$ matrix = $m \\cdot n$ values
+**Original:** m × n matrix = m · n values
 
 **Compressed:**
-- $U_k$: $m \\times k$
-- $\\Sigma_k$: $k$ values
-- $V_k^T$: $k \\times n$
-- Total: $m \\cdot k + k + k \\cdot n = k(m + n + 1)$
+- U_k: m × k
+- Σ_k: k values
+- V_k^T: k × n
+- Total: m · k + k + k · n = k(m + n + 1)
 
-Ratio: $\\frac{m \\cdot n}{k(m + n + 1)}$
+Ratio: (m · n) / (k(m + n + 1))
 
 </div>
 
@@ -420,7 +1210,7 @@ Ratio: $\\frac{m \\cdot n}{k(m + n + 1)}$
 ### Hint 3: Quality Metrics
 
 **PSNR (Peak Signal-to-Noise Ratio):**
-$$\\text{PSNR} = 10 \\log_{10}\\left(\\frac{\\text{MAX}^2}{\\text{MSE}}\\right)$$
+PSNR = 10 log₁₀(MAX² / MSE)
 
 Where MSE = Mean Squared Error between original and compressed
 
@@ -462,8 +1252,8 @@ Run these experiments to build intuition:
 **Procedure:**
 1. Load test image
 2. Compute SVD
-3. Plot singular values $\\sigma_i$ (log scale)
-4. Plot cumulative energy: $\\sum_{i=1}^{k} \\sigma_i^2 / \\sum \\sigma_i^2$
+3. Plot singular values σᵢ (log scale)
+4. Plot cumulative energy
 
 **What to observe:**
 - How many singular values to capture 90% energy?
@@ -522,7 +1312,7 @@ Build an **interactive dashboard** showing:
    - Zoom capability to see details
 
 2. **Singular value spectrum**
-   - Bar plot of $\\sigma_i$
+   - Bar plot of σᵢ
    - Cumulative energy curve
    - Slider to select k and see effect
 
@@ -654,342 +1444,257 @@ If you finish early and want to go deeper:
 ---
 
 <details>
-<summary>💡 Click for Solution Guide (Try on your own first!)</summary>
+<summary>💡 Click for Complete Reference Implementation (Try on your own first!)</summary>
 
-# Solution Guide
+# Complete Reference Implementation
 
-## Basic Implementation Structure
+Below is a full working implementation combining all phases.
 
 \`\`\`python
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
+import os
 
 class SVDImageCompressor:
     """
-    SVD-based image compression engine.
+    Complete SVD-based image compression system.
 
-    Design decisions to consider:
-    - How to handle color channels
-    - How to store compressed data efficiently
-    - How to choose optimal rank
+    Supports:
+    - Grayscale and color images
+    - Multiple k selection strategies
+    - RGB and YCbCr color spaces
     """
 
-    def __init__(self, rank_selection='fixed', target_quality=None):
+    def __init__(self, k_selection='energy', k_param=0.95, color_method='ycbcr'):
         """
-        Parameters:
-        - rank_selection: 'fixed', 'energy', 'quality'
-        - target_quality: target PSNR if using quality-based selection
+        Initialize compressor.
+
+        Args:
+            k_selection: 'fixed', 'energy', 'psnr', 'ratio'
+            k_param: parameter for k selection
+            color_method: 'rgb' or 'ycbcr'
         """
-        self.rank_selection = rank_selection
-        self.target_quality = target_quality
+        self.k_selection = k_selection
+        self.k_param = k_param
+        self.color_method = color_method
 
-    def compress(self, image, k=None):
-        """
-        Compress image using SVD.
+    def compress(self, img, k=None):
+        """Compress image (grayscale or color)."""
+        img_norm = img.astype(float) / 255.0
 
-        Your implementation should:
-        1. Handle RGB images (convert to appropriate color space)
-        2. Compute SVD for each channel
-        3. Select rank k (if not provided)
-        4. Store compressed representation efficiently
-
-        Returns:
-        - compressed_data: dict with U_k, sigma_k, Vt_k for each channel
-        """
-        raise NotImplementedError("Implement this!")
-
-    def decompress(self, compressed_data):
-        """
-        Reconstruct image from compressed representation.
-
-        Returns:
-        - reconstructed_image: numpy array
-        """
-        raise NotImplementedError("Implement this!")
-
-    def calculate_metrics(self, original, compressed):
-        """
-        Calculate quality and compression metrics.
-
-        Returns:
-        - metrics: dict with PSNR, SSIM, compression_ratio
-        """
-        raise NotImplementedError("Implement this!")
-
-    def auto_select_rank(self, image, strategy='energy', threshold=0.95):
-        """
-        Automatically select optimal rank.
-
-        Strategies:
-        - 'energy': Keep k that retains threshold% of energy
-        - 'quality': Binary search for k that achieves target PSNR
-        - 'adaptive': Different k per channel based on content
-
-        Returns:
-        - k: selected rank (can be different per channel)
-        """
-        raise NotImplementedError("Implement this!")
-\`\`\`
-
-## Key Implementation Details
-
-### 1. Grayscale Compression
-
-\`\`\`python
-def compress_grayscale(image, k):
-    """
-    Simplest case: grayscale image compression.
-    """
-    # Normalize to [0, 1]
-    img_normalized = image.astype(float) / 255.0
-
-    # Compute SVD: A = U @ diag(sigma) @ Vt
-    U, sigma, Vt = np.linalg.svd(img_normalized, full_matrices=False)
-
-    # Keep only top k components
-    U_k = U[:, :k]
-    sigma_k = sigma[:k]
-    Vt_k = Vt[:k, :]
-
-    # Compressed representation
-    compressed = {
-        'U_k': U_k,
-        'sigma_k': sigma_k,
-        'Vt_k': Vt_k,
-        'shape': image.shape
-    }
-
-    return compressed
-
-def decompress_grayscale(compressed):
-    """
-    Reconstruct from compressed representation.
-    """
-    U_k = compressed['U_k']
-    sigma_k = compressed['sigma_k']
-    Vt_k = compressed['Vt_k']
-
-    # Reconstruct: A_k = U_k @ diag(sigma_k) @ Vt_k
-    img_reconstructed = U_k @ np.diag(sigma_k) @ Vt_k
-
-    # Denormalize and clip
-    img_reconstructed = np.clip(img_reconstructed * 255, 0, 255).astype(np.uint8)
-
-    return img_reconstructed
-\`\`\`
-
-### 2. Color Image Handling
-
-\`\`\`python
-def compress_rgb_approach_a(image, k):
-    """
-    Approach A: Compress each channel independently with same k.
-    Simple but not optimal.
-    """
-    compressed_channels = []
-    for channel in range(3):
-        compressed_channels.append(
-            compress_grayscale(image[:, :, channel], k)
-        )
-    return compressed_channels
-
-def compress_rgb_approach_b(image, k_luma, k_chroma):
-    """
-    Approach B: Convert to YCbCr, use different k for Y vs CbCr.
-    More efficient - exploits human vision properties.
-    """
-    # RGB to YCbCr conversion
-    # Y = 0.299*R + 0.587*G + 0.114*B
-    # Cb = -0.169*R - 0.331*G + 0.5*B + 128
-    # Cr = 0.5*R - 0.419*G - 0.081*B + 128
-
-    R, G, B = image[:, :, 0], image[:, :, 1], image[:, :, 2]
-
-    Y = 0.299*R + 0.587*G + 0.114*B
-    Cb = -0.169*R - 0.331*G + 0.5*B + 128
-    Cr = 0.5*R - 0.419*G - 0.081*B + 128
-
-    # Compress with different ranks
-    Y_compressed = compress_grayscale(Y.astype(np.uint8), k_luma)
-    Cb_compressed = compress_grayscale(Cb.astype(np.uint8), k_chroma)
-    Cr_compressed = compress_grayscale(Cr.astype(np.uint8), k_chroma)
-
-    return {
-        'Y': Y_compressed,
-        'Cb': Cb_compressed,
-        'Cr': Cr_compressed
-    }
-\`\`\`
-
-### 3. Adaptive Rank Selection
-
-\`\`\`python
-def select_rank_by_energy(sigma, threshold=0.95):
-    """
-    Select k that retains threshold% of total energy.
-
-    Energy = sum of squared singular values
-    """
-    total_energy = np.sum(sigma ** 2)
-    cumulative_energy = np.cumsum(sigma ** 2)
-
-    # Find smallest k where cumulative_energy >= threshold * total_energy
-    k = np.searchsorted(cumulative_energy, threshold * total_energy) + 1
-
-    return k
-
-def select_rank_by_quality(image, target_psnr):
-    """
-    Binary search for k that achieves target PSNR.
-    """
-    # Compute full SVD once
-    U, sigma, Vt = np.linalg.svd(image.astype(float) / 255.0, full_matrices=False)
-
-    # Binary search
-    k_min, k_max = 1, len(sigma)
-    best_k = k_max
-
-    while k_min <= k_max:
-        k = (k_min + k_max) // 2
-
-        # Reconstruct with this k
-        reconstructed = U[:, :k] @ np.diag(sigma[:k]) @ Vt[:k, :]
-        reconstructed = np.clip(reconstructed * 255, 0, 255)
-
-        # Calculate PSNR
-        mse = np.mean((image - reconstructed) ** 2)
-        psnr = 10 * np.log10(255**2 / mse) if mse > 0 else float('inf')
-
-        if psnr >= target_psnr:
-            best_k = k
-            k_max = k - 1  # Try smaller k
+        if len(img.shape) == 2:
+            return self._compress_grayscale(img_norm, k)
         else:
-            k_min = k + 1  # Need larger k
+            return self._compress_color(img_norm, k)
 
-    return best_k
-\`\`\`
+    def decompress(self, compressed):
+        """Reconstruct image from compressed representation."""
+        if 'method' in compressed:
+            # Color image
+            if compressed['method'] == 'rgb':
+                return self._decompress_rgb(compressed)
+            else:
+                return self._decompress_ycbcr(compressed)
+        else:
+            # Grayscale
+            return self._decompress_grayscale(compressed)
 
-### 4. Quality Metrics
+    def _compress_grayscale(self, img, k=None):
+        """Compress grayscale image."""
+        U, sigma, Vt = np.linalg.svd(img, full_matrices=False)
 
-\`\`\`python
-def calculate_psnr(original, compressed):
-    """
-    Peak Signal-to-Noise Ratio.
-    Higher is better (typically 20-50 dB).
-    """
-    mse = np.mean((original.astype(float) - compressed.astype(float)) ** 2)
-    if mse == 0:
-        return float('inf')
-    max_pixel = 255.0
-    psnr = 20 * np.log10(max_pixel / np.sqrt(mse))
-    return psnr
+        if k is None:
+            k = self._select_k(img.shape, sigma, img, U, Vt)
 
-def calculate_compression_ratio(original_shape, k):
-    """
-    Compression ratio = original_size / compressed_size
-    """
-    m, n = original_shape[:2]
-    channels = 1 if len(original_shape) == 2 else original_shape[2]
+        return {
+            'U_k': U[:, :k],
+            'sigma_k': sigma[:k],
+            'Vt_k': Vt[:k, :],
+            'k': k,
+            'shape': img.shape,
+            'full_sigma': sigma
+        }
 
-    original_size = m * n * channels
-    compressed_size = channels * (m * k + k + k * n)  # U_k + sigma_k + Vt_k
+    def _decompress_grayscale(self, compressed):
+        """Reconstruct grayscale image."""
+        reconstructed = (
+            compressed['U_k'] @
+            np.diag(compressed['sigma_k']) @
+            compressed['Vt_k']
+        )
+        reconstructed = np.clip(reconstructed * 255, 0, 255)
+        return reconstructed.astype(np.uint8)
 
-    ratio = original_size / compressed_size
-    return ratio
-\`\`\`
+    def _compress_color(self, img, k=None):
+        """Compress color image."""
+        if self.color_method == 'rgb':
+            return self._compress_rgb(img, k)
+        else:
+            return self._compress_ycbcr(img, k)
 
-### 5. Visualization
+    def _compress_rgb(self, img, k):
+        """Compress RGB independently."""
+        channels = []
+        for c in range(3):
+            channels.append(self._compress_grayscale(img[:, :, c], k))
+        return {'method': 'rgb', 'channels': channels}
 
-\`\`\`python
-def visualize_compression(original, compressed, sigma, k):
-    """
-    Create comprehensive visualization.
-    """
-    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+    def _compress_ycbcr(self, img, k):
+        """Compress in YCbCr space."""
+        img_ycbcr = self._rgb_to_ycbcr(img)
 
-    # Original image
-    axes[0, 0].imshow(original, cmap='gray' if len(original.shape)==2 else None)
-    axes[0, 0].set_title('Original')
-    axes[0, 0].axis('off')
+        k_luma = k if k is not None else None
+        k_chroma = k // 2 if k is not None else None
 
-    # Compressed image
-    axes[0, 1].imshow(compressed, cmap='gray' if len(compressed.shape)==2 else None)
-    axes[0, 1].set_title(f'Compressed (k={k})')
-    axes[0, 1].axis('off')
+        channels = [
+            self._compress_grayscale(img_ycbcr[:, :, 0], k_luma),
+            self._compress_grayscale(img_ycbcr[:, :, 1], k_chroma),
+            self._compress_grayscale(img_ycbcr[:, :, 2], k_chroma)
+        ]
 
-    # Difference (amplified)
-    diff = np.abs(original.astype(float) - compressed.astype(float))
-    axes[0, 2].imshow(diff * 5, cmap='hot')
-    axes[0, 2].set_title('Difference (5x amplified)')
-    axes[0, 2].axis('off')
+        return {'method': 'ycbcr', 'channels': channels}
 
-    # Singular value spectrum
-    axes[1, 0].semilogy(sigma, 'b-', linewidth=2)
-    axes[1, 0].axvline(k, color='r', linestyle='--', label=f'k={k}')
-    axes[1, 0].set_xlabel('Index i')
-    axes[1, 0].set_ylabel('Singular value $\\\\sigma_i$')
-    axes[1, 0].set_title('Singular Value Decay')
-    axes[1, 0].grid(True, alpha=0.3)
-    axes[1, 0].legend()
+    def _decompress_rgb(self, compressed):
+        """Reconstruct RGB image."""
+        channels = [self._decompress_grayscale(ch) for ch in compressed['channels']]
+        return np.stack(channels, axis=2)
 
-    # Cumulative energy
-    energy = np.cumsum(sigma**2) / np.sum(sigma**2) * 100
-    axes[1, 1].plot(energy, 'g-', linewidth=2)
-    axes[1, 1].axvline(k, color='r', linestyle='--', label=f'k={k}')
-    axes[1, 1].axhline(95, color='orange', linestyle=':', label='95% energy')
-    axes[1, 1].set_xlabel('Rank k')
-    axes[1, 1].set_ylabel('Cumulative Energy (%)')
-    axes[1, 1].set_title('Energy Retention')
-    axes[1, 1].grid(True, alpha=0.3)
-    axes[1, 1].legend()
+    def _decompress_ycbcr(self, compressed):
+        """Reconstruct from YCbCr."""
+        ycbcr_channels = [self._decompress_grayscale(ch) for ch in compressed['channels']]
+        img_ycbcr = np.stack(ycbcr_channels, axis=2)
+        return self._ycbcr_to_rgb(img_ycbcr)
 
-    # Compression metrics
-    psnr = calculate_psnr(original, compressed)
-    ratio = calculate_compression_ratio(original.shape, k)
-    metrics_text = f"PSNR: {psnr:.2f} dB\\nCompression: {ratio:.2f}x\\nRank: {k}/{len(sigma)}"
-    axes[1, 2].text(0.5, 0.5, metrics_text, ha='center', va='center',
-                   fontsize=14, bbox=dict(boxstyle='round', facecolor='wheat'))
-    axes[1, 2].axis('off')
-    axes[1, 2].set_title('Metrics')
+    def _rgb_to_ycbcr(self, img_rgb):
+        """RGB to YCbCr conversion."""
+        R, G, B = img_rgb[:,:,0], img_rgb[:,:,1], img_rgb[:,:,2]
+        Y  = 0.299*R + 0.587*G + 0.114*B
+        Cb = -0.169*R - 0.331*G + 0.5*B + 0.5
+        Cr = 0.5*R - 0.419*G - 0.081*B + 0.5
+        return np.stack([Y, Cb, Cr], axis=2)
 
+    def _ycbcr_to_rgb(self, img_ycbcr):
+        """YCbCr to RGB conversion."""
+        img_ycbcr = img_ycbcr.astype(float) / 255.0
+        Y, Cb, Cr = img_ycbcr[:,:,0], img_ycbcr[:,:,1], img_ycbcr[:,:,2]
+        Cb, Cr = Cb - 0.5, Cr - 0.5
+
+        R = Y + 1.402 * Cr
+        G = Y - 0.344 * Cb - 0.714 * Cr
+        B = Y + 1.772 * Cb
+
+        rgb = np.stack([R, G, B], axis=2)
+        return np.clip(rgb * 255, 0, 255).astype(np.uint8)
+
+    def _select_k(self, shape, sigma, img, U, Vt):
+        """Select k based on strategy."""
+        if self.k_selection == 'fixed':
+            return int(self.k_param)
+        elif self.k_selection == 'energy':
+            return self._select_k_energy(sigma, self.k_param)
+        elif self.k_selection == 'psnr':
+            return self._select_k_psnr(img, self.k_param, U, sigma, Vt)
+        elif self.k_selection == 'ratio':
+            return self._select_k_ratio(shape, self.k_param)
+
+    def _select_k_energy(self, sigma, threshold):
+        """Select k by energy threshold."""
+        cumulative = np.cumsum(sigma**2) / np.sum(sigma**2)
+        return int(np.searchsorted(cumulative, threshold) + 1)
+
+    def _select_k_psnr(self, img, target_psnr, U, sigma, Vt):
+        """Select k by target PSNR (binary search)."""
+        k_min, k_max = 1, len(sigma)
+        best_k = k_max
+
+        while k_min <= k_max:
+            k = (k_min + k_max) // 2
+            reconstructed = U[:, :k] @ np.diag(sigma[:k]) @ Vt[:k, :]
+            psnr = self.calculate_psnr(img, reconstructed)
+
+            if psnr >= target_psnr:
+                best_k = k
+                k_max = k - 1
+            else:
+                k_min = k + 1
+
+        return best_k
+
+    def _select_k_ratio(self, shape, target_ratio):
+        """Select k by target compression ratio."""
+        m, n = shape[:2]
+        k = int((m * n) / (target_ratio * (m + n + 1)))
+        return max(1, min(k, min(m, n)))
+
+    @staticmethod
+    def calculate_psnr(original, reconstructed):
+        """Calculate PSNR."""
+        mse = np.mean((original - reconstructed) ** 2)
+        if mse == 0:
+            return float('inf')
+        max_value = 1.0
+        return 20 * np.log10(max_value / np.sqrt(mse))
+
+    @staticmethod
+    def calculate_compression_ratio(original_shape, compressed):
+        """Calculate compression ratio."""
+        m, n = original_shape[:2]
+
+        if 'method' in compressed:
+            # Color image
+            total_size = 0
+            for ch in compressed['channels']:
+                k = ch['k']
+                total_size += m*k + k + k*n
+            original_size = m * n * 3
+        else:
+            # Grayscale
+            k = compressed['k']
+            total_size = m*k + k + k*n
+            original_size = m * n
+
+        return original_size / total_size
+
+
+# Example usage
+if __name__ == "__main__":
+    # Test grayscale
+    compressor = SVDImageCompressor(k_selection='energy', k_param=0.95)
+
+    img = Image.open('test.jpg')
+    img_array = np.array(img)
+
+    # Compress
+    compressed = compressor.compress(img_array)
+
+    # Decompress
+    reconstructed = compressor.decompress(compressed)
+
+    # Metrics
+    psnr = compressor.calculate_psnr(
+        img_array.astype(float)/255,
+        reconstructed.astype(float)/255
+    )
+    ratio = compressor.calculate_compression_ratio(img_array.shape, compressed)
+
+    print(f"PSNR: {psnr:.2f} dB")
+    print(f"Compression: {ratio:.2f}x")
+
+    # Display
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+    axes[0].imshow(img_array)
+    axes[0].set_title('Original')
+    axes[0].axis('off')
+    axes[1].imshow(reconstructed)
+    axes[1].set_title(f'Compressed\\nPSNR: {psnr:.1f} dB, Ratio: {ratio:.1f}x')
+    axes[1].axis('off')
     plt.tight_layout()
-    return fig
+    plt.savefig('result.png', dpi=150)
+    plt.show()
 \`\`\`
 
-## Example Usage
-
-\`\`\`python
-# Load image
-image = np.array(Image.open('test_image.jpg'))
-
-# Initialize compressor
-compressor = SVDImageCompressor(rank_selection='energy')
-
-# Compress
-compressed_data = compressor.compress(image, k=50)
-
-# Decompress
-reconstructed = compressor.decompress(compressed_data)
-
-# Calculate metrics
-metrics = compressor.calculate_metrics(image, reconstructed)
-print(f"PSNR: {metrics['psnr']:.2f} dB")
-print(f"Compression: {metrics['compression_ratio']:.2f}x")
-
-# Visualize
-visualize_compression(image, reconstructed, compressed_data['sigma'], k=50)
-plt.savefig('compression_result.png', dpi=150)
-\`\`\`
-
-## Expected Results
-
-For a 512x512 RGB image with k=50:
-- **Compression Ratio:** ~15-20x
-- **PSNR:** ~35-40 dB (good quality)
-- **Storage:** ~200 KB instead of 3 MB
-
-The reconstructed image should be visually very similar to original, with slight blurring in high-frequency details.
+This implementation includes everything: grayscale, color (RGB and YCbCr), all k selection strategies, and proper normalization/clipping.
 
 </details>
 
@@ -1020,7 +1725,7 @@ Before considering this project complete:
 
 **Most importantly:**
 - [ ] You **understand** why SVD works for compression
-- [ ] You can **explain** the tradeoffs you discovered
+- [ ] You **explain** the tradeoffs you discovered
 - [ ] You have **intuition** for singular values and their meaning
 
 ---
