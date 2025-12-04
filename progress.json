@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-04T16:04:54.935Z",
+  "lastUpdated": "2025-12-04T16:14:56.690Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -147,7 +147,8 @@
     "Module 3: Optimization Foundations (12-15 hours)-9": true,
     "Module 3: Optimization Foundations (12-15 hours)-10": true,
     "Module 3: Optimization Foundations (12-15 hours)-11": true,
-    "Module 2: Matrix Calculus for ML (15-20 hours)-10": true
+    "Module 2: Matrix Calculus for ML (15-20 hours)-10": true,
+    "Module 2: Matrix Calculus for ML (15-20 hours)-13": true
   },
   "expandedMonths": {
     "Foundations: Linear Algebra & Calculus": true
