@@ -177,6 +177,17 @@ You are **NOT** building a tutorial project. You are building a **research tool*
 
 ---
 
+## 📚 Additional Resources
+
+Before starting, familiarize yourself with these resources:
+
+- [3Blue1Brown: Essence of Linear Algebra](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) - Watch the SVD video
+- [MIT OCW: Linear Algebra](https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/) - Gilbert Strang's lectures
+- [Low-Rank Approximation (Wikipedia)](https://en.wikipedia.org/wiki/Low-rank_approximation) - Mathematical theory behind SVD compression
+- [JPEG Compression Explained](https://www.youtube.com/watch?v=Kv1Hiv3ox8I) - To compare with your implementation
+
+---
+
 ## 📚 Learning Objectives
 
 By completing this project, you will be able to:
@@ -1700,15 +1711,6 @@ This implementation includes everything: grayscale, color (RGB and YCbCr), all k
 
 ---
 
-## 📚 Additional Resources
-
-- [3Blue1Brown: Essence of Linear Algebra](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) - Watch the SVD video
-- [MIT OCW: Linear Algebra](https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/) - Gilbert Strang's lectures
-- [Image Compression Using SVD (Paper)](https://www.researchgate.net/publication/220481547_Image_Compression_Using_Singular_Value_Decomposition)
-- [JPEG Compression Explained](https://www.youtube.com/watch?v=Kv1Hiv3ox8I)
-
----
-
 ## ✅ Final Checklist
 
 Before considering this project complete:
@@ -1735,6 +1737,30 @@ Good luck! Remember: this is about **understanding**, not just getting code to r
 
         // Render markdown
         document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+
+        // Make checkboxes interactive and persistent
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const storageKey = 'project_module1_2_checklist';
+
+        // Load saved state
+        const saved = localStorage.getItem(storageKey);
+        const checkedState = saved ? JSON.parse(saved) : {};
+
+        checkboxes.forEach((checkbox, index) => {
+            const checkboxId = `checkbox_${index}`;
+            checkbox.id = checkboxId;
+
+            // Restore checked state
+            if (checkedState[checkboxId]) {
+                checkbox.checked = true;
+            }
+
+            // Save state on change
+            checkbox.addEventListener('change', function() {
+                checkedState[checkboxId] = this.checked;
+                localStorage.setItem(storageKey, JSON.stringify(checkedState));
+            });
+        });
     </script>
 </body>
 </html>

@@ -166,6 +166,19 @@ You are **NOT** just implementing formulas. You are building a **research tool**
 
 ---
 
+## 📚 Additional Resources
+
+Before starting, familiarize yourself with these resources:
+
+- [Information Theory, Inference, and Learning Algorithms - David MacKay](http://www.inference.org.uk/mackay/itila/)
+- [Data Compression Explained - Matt Mahoney](http://mattmahoney.net/dc/dce.html)
+- [Huffman Coding - Wikipedia](https://en.wikipedia.org/wiki/Huffman_coding)
+- [Arithmetic Coding - Wikipedia](https://en.wikipedia.org/wiki/Arithmetic_coding)
+- [LZ77 and LZ78 - Wikipedia](https://en.wikipedia.org/wiki/LZ77_and_LZ78)
+- [The Data Compression Book - Mark Nelson](https://marknelson.us/posts/2011/08/08/the-data-compression-book.html)
+
+---
+
 ## 📚 Learning Objectives
 
 By completing this project, you will be able to:
@@ -1655,22 +1668,35 @@ Before considering this project complete:
 
 ---
 
-## 📚 Additional Resources
-
-- [Information Theory, Inference, and Learning Algorithms - David MacKay](http://www.inference.org.uk/mackay/itila/)
-- [Data Compression Explained - Matt Mahoney](http://mattmahoney.net/dc/dce.html)
-- [Huffman Coding - Wikipedia](https://en.wikipedia.org/wiki/Huffman_coding)
-- [Arithmetic Coding - Wikipedia](https://en.wikipedia.org/wiki/Arithmetic_coding)
-- [LZ77 and LZ78 - Wikipedia](https://en.wikipedia.org/wiki/LZ77_and_LZ78)
-- [The Data Compression Book - Mark Nelson](https://marknelson.us/posts/2011/08/08/the-data-compression-book.html)
-
----
-
 Good luck! Remember: this is about **understanding information theory fundamentals**, not just implementing algorithms. Experiment, measure, and build intuition about what makes data compressible!
 `;
 
         // Render markdown
         document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+
+        // Make checkboxes interactive and persistent
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const storageKey = 'project_module5_checklist';
+
+        // Load saved state
+        const saved = localStorage.getItem(storageKey);
+        const checkedState = saved ? JSON.parse(saved) : {};
+
+        checkboxes.forEach((checkbox, index) => {
+            const checkboxId = `checkbox_${index}`;
+            checkbox.id = checkboxId;
+
+            // Restore checked state
+            if (checkedState[checkboxId]) {
+                checkbox.checked = true;
+            }
+
+            // Save state on change
+            checkbox.addEventListener('change', function() {
+                checkedState[checkboxId] = this.checked;
+                localStorage.setItem(storageKey, JSON.stringify(checkedState));
+            });
+        });
     </script>
 </body>
 </html>

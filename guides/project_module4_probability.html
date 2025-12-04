@@ -166,6 +166,18 @@ You are **NOT** just applying a formula. You are building a **probabilistic reas
 
 ---
 
+## 📚 Additional Resources
+
+Before starting, familiarize yourself with these resources:
+
+- [Andrew Ng: Generative Learning Algorithms](http://cs229.stanford.edu/notes2020fall/notes2020fall/cs229-notes2.pdf)
+- [Stanford NLP: Naive Bayes Classification](https://web.stanford.edu/class/cs124/lec/naivebayes.pdf)
+- [Sebastian Raschka: Naive Bayes and Text Classification](https://arxiv.org/abs/1410.5329)
+- [A Tutorial on Probability Theory](https://cs.brown.edu/courses/cs195-5/fall2019/resources/probability_tutorial.pdf)
+- [Understanding Bayes Theorem With Ratios](https://betterexplained.com/articles/understanding-bayes-theorem-with-ratios/)
+
+---
+
 ## 📚 Learning Objectives
 
 By completing this project, you will be able to:
@@ -1479,16 +1491,6 @@ Before considering this project complete:
 
 ---
 
-## 📚 Additional Resources
-
-- [Andrew Ng: Generative Learning Algorithms](http://cs229.stanford.edu/notes2020fall/notes2020fall/cs229-notes2.pdf)
-- [Stanford NLP: Naive Bayes Classification](https://web.stanford.edu/class/cs124/lec/naivebayes.pdf)
-- [Sebastian Raschka: Naive Bayes and Text Classification](https://arxiv.org/abs/1410.5329)
-- [A Tutorial on Probability Theory](https://cs.brown.edu/courses/cs195-5/fall2019/resources/probability_tutorial.pdf)
-- [Understanding Bayes Theorem With Ratios](https://betterexplained.com/articles/understanding-bayes-theorem-with-ratios/)
-
----
-
 ## 💡 Extension Ideas
 
 Once you've completed the core project, try these extensions:
@@ -1507,6 +1509,30 @@ Good luck! Remember: this is about **understanding probabilistic reasoning**, no
 
         // Render markdown
         document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+
+        // Make checkboxes interactive and persistent
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const storageKey = 'project_module4_checklist';
+
+        // Load saved state
+        const saved = localStorage.getItem(storageKey);
+        const checkedState = saved ? JSON.parse(saved) : {};
+
+        checkboxes.forEach((checkbox, index) => {
+            const checkboxId = `checkbox_${index}`;
+            checkbox.id = checkboxId;
+
+            // Restore checked state
+            if (checkedState[checkboxId]) {
+                checkbox.checked = true;
+            }
+
+            // Save state on change
+            checkbox.addEventListener('change', function() {
+                checkedState[checkboxId] = this.checked;
+                localStorage.setItem(storageKey, JSON.stringify(checkedState));
+            });
+        });
     </script>
 </body>
 </html>

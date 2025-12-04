@@ -166,6 +166,29 @@ You are **NOT** just stacking layers. You are building a **medical diagnostic to
 
 ---
 
+## 📚 Additional Resources
+
+Before starting, familiarize yourself with these resources:
+
+### Research Papers
+- [ImageNet Classification with Deep CNNs (AlexNet)](https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf)
+- [Dropout as a Bayesian Approximation](https://arxiv.org/abs/1506.02142) - MC Dropout
+- [Batch Normalization Paper](https://arxiv.org/abs/1502.03167)
+- [On Calibration of Modern Neural Networks](https://arxiv.org/abs/1706.04599)
+
+### Tutorials & Guides
+- [CS231n: Convolutional Neural Networks](http://cs231n.github.io/convolutional-networks/)
+- [Distill: Feature Visualization](https://distill.pub/2017/feature-visualization/)
+- [Understanding Convolution in Deep Learning](https://timdettmers.com/2015/03/26/convolution-deep-learning/)
+- [A guide to convolution arithmetic](https://arxiv.org/abs/1603.07285)
+
+### Medical Imaging Datasets
+- [Chest X-Ray Images (Pneumonia)](https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia)
+- [ISIC Skin Lesion Dataset](https://www.isic-archive.com/)
+- [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
+
+---
+
 ## 📚 Learning Objectives
 
 By completing this project, you will be able to:
@@ -2124,27 +2147,6 @@ Before considering this project complete:
 
 ---
 
-## 📚 Additional Resources
-
-### Research Papers
-- [ImageNet Classification with Deep CNNs (AlexNet)](https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf)
-- [Dropout as a Bayesian Approximation](https://arxiv.org/abs/1506.02142) - MC Dropout
-- [Batch Normalization Paper](https://arxiv.org/abs/1502.03167)
-- [On Calibration of Modern Neural Networks](https://arxiv.org/abs/1706.04599)
-
-### Tutorials & Guides
-- [CS231n: Convolutional Neural Networks](http://cs231n.github.io/convolutional-networks/)
-- [Distill: Feature Visualization](https://distill.pub/2017/feature-visualization/)
-- [Understanding Convolution in Deep Learning](https://timdettmers.com/2015/03/26/convolution-deep-learning/)
-- [A guide to convolution arithmetic](https://arxiv.org/abs/1603.07285)
-
-### Medical Imaging Datasets
-- [Chest X-Ray Images (Pneumonia)](https://www.kaggle.com/paultimothymooney/chest-xray-pneumonia)
-- [ISIC Skin Lesion Dataset](https://www.isic-archive.com/)
-- [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
-
----
-
 ## 🏥 Medical Context & Ethics
 
 **Important considerations for medical imaging:**
@@ -2170,6 +2172,30 @@ Good luck! Remember: this is about **understanding how neural networks process i
 
         // Render markdown
         document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+
+        // Make checkboxes interactive and persistent
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const storageKey = 'project_module6_checklist';
+
+        // Load saved state
+        const saved = localStorage.getItem(storageKey);
+        const checkedState = saved ? JSON.parse(saved) : {};
+
+        checkboxes.forEach((checkbox, index) => {
+            const checkboxId = `checkbox_${index}`;
+            checkbox.id = checkboxId;
+
+            // Restore checked state
+            if (checkedState[checkboxId]) {
+                checkbox.checked = true;
+            }
+
+            // Save state on change
+            checkbox.addEventListener('change', function() {
+                checkedState[checkboxId] = this.checked;
+                localStorage.setItem(storageKey, JSON.stringify(checkedState));
+            });
+        });
     </script>
 </body>
 </html>

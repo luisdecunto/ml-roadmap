@@ -165,6 +165,17 @@ You are **NOT** just implementing formulas. You are building a **research tool**
 
 ---
 
+## 📚 Additional Resources
+
+Before starting, familiarize yourself with these resources:
+
+- [Sebastian Ruder: Overview of Gradient Descent Algorithms](https://arxiv.org/abs/1609.04747)
+- [CS231n: Optimization](http://cs231n.github.io/optimization-1/)
+- [Distill: Why Momentum Really Works](https://distill.pub/2017/momentum/)
+- [Adam Paper](https://arxiv.org/abs/1412.6980)
+
+---
+
 ## 📚 Learning Objectives
 
 By completing this project, you will be able to:
@@ -1085,20 +1096,35 @@ Before considering this project complete:
 
 ---
 
-## 📚 Additional Resources
-
-- [Sebastian Ruder: Overview of Gradient Descent Algorithms](https://arxiv.org/abs/1609.04747)
-- [CS231n: Optimization](http://cs231n.github.io/optimization-1/)
-- [Distill: Why Momentum Really Works](https://distill.pub/2017/momentum/)
-- [Adam Paper](https://arxiv.org/abs/1412.6980)
-
----
-
 Good luck! Remember: this is about **understanding optimization dynamics**, not just implementing formulas. Experiment, visualize, and build intuition! 🚀
 `;
 
         // Render markdown
         document.getElementById('guide-content').innerHTML = marked.parse(markdown);
+
+        // Make checkboxes interactive and persistent
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const storageKey = 'project_module3_checklist';
+
+        // Load saved state
+        const saved = localStorage.getItem(storageKey);
+        const checkedState = saved ? JSON.parse(saved) : {};
+
+        checkboxes.forEach((checkbox, index) => {
+            const checkboxId = `checkbox_${index}`;
+            checkbox.id = checkboxId;
+
+            // Restore checked state
+            if (checkedState[checkboxId]) {
+                checkbox.checked = true;
+            }
+
+            // Save state on change
+            checkbox.addEventListener('change', function() {
+                checkedState[checkboxId] = this.checked;
+                localStorage.setItem(storageKey, JSON.stringify(checkedState));
+            });
+        });
     </script>
 </body>
 </html>
