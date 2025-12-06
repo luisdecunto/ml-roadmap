@@ -615,13 +615,18 @@ def visualize_compression(original, reconstructed, compressed):
     ax5.legend()
 
     ax6 = plt.subplot(2, 3, 6)
+    # Calculate storage sizes for display
+    m, n = original.shape
+    original_size = m * n
+    compressed_size = m*k + k + k*n
+
     metrics_text = (
         f"Rank k: {k}\\n"
         f"PSNR: {psnr:.2f} dB\\n"
         f"Compression: {ratio:.2f}x\\n"
         f"Energy retained: {energy[k-1]:.1f}%\\n"
         f"Original: {original.shape[0]}×{original.shape[1]}\\n"
-        f"Storage: {compressed_size/1000:.1f} KB → {original_size/1000:.1f} KB"
+        f"Storage: {original_size/1000:.1f} KB → {compressed_size/1000:.1f} KB"
     )
     ax6.text(0.5, 0.5, metrics_text, ha='center', va='center',
              fontsize=12, bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
