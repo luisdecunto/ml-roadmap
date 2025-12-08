@@ -980,6 +980,792 @@ print_summary_table(results)
 
 **Experiment:** Does a good schedule help SGD beat Adam?
 
+<details>
+<summary><strong>💡 Implementation Guide: Learning Rate Schedules</strong></summary>
+
+Learning rate schedules can significantly improve optimization, especially for vanilla SGD and momentum-based methods.
+
+#### 1. Step Decay
+
+Reduce learning rate by a factor at fixed intervals:
+
+```python
+class StepDecaySchedule:
+    """
+    Reduce learning rate by factor every 'step_size' iterations.
+    """
+    def __init__(self, initial_lr, decay_factor=0.5, step_size=100):
+        self.initial_lr = initial_lr
+        self.decay_factor = decay_factor
+        self.step_size = step_size
+
+    def get_lr(self, iteration):
+        """Get learning rate at given iteration."""
+        return self.initial_lr * (self.decay_factor ** (iteration // self.step_size))
+
+# Usage example
+schedule = StepDecaySchedule(initial_lr=0.1, decay_factor=0.5, step_size=100)
+
+# In optimization loop:
+for i in range(n_iterations):
+    lr = schedule.get_lr(i)
+    optimizer.learning_rate = lr
+    # ... rest of optimization
+```
+
+**When to use:** Good for well-understood problems where you know approximately when to reduce learning rate.
+
+#### 2. Exponential Decay
+
+Smoothly decay learning rate over time:
+
+```python
+class ExponentialDecaySchedule:
+    """
+    Exponentially decay learning rate: lr = initial_lr * (decay_rate^iteration)
+    """
+    def __init__(self, initial_lr, decay_rate=0.99):
+        self.initial_lr = initial_lr
+        self.decay_rate = decay_rate
+
+    def get_lr(self, iteration):
+        return self.initial_lr * (self.decay_rate ** iteration)
+
+# Usage
+schedule = ExponentialDecaySchedule(initial_lr=0.1, decay_rate=0.995)
+
+for i in range(n_iterations):
+    lr = schedule.get_lr(i)
+    optimizer.learning_rate = lr
+```
+
+**Trade-off:** Smooth decay, but requires careful tuning of decay_rate.
+
+#### 3. Cosine Annealing
+
+Decay learning rate following a cosine curve:
+
+```python
+import numpy as np
+
+class CosineAnnealingSchedule:
+    """
+    Cosine annealing: lr varies between max_lr and min_lr following cosine curve.
+    Popular in deep learning (used in training ResNets, transformers, etc.)
+    """
+    def __init__(self, initial_lr, min_lr=0.0, T_max=500):
+        self.initial_lr = initial_lr
+        self.min_lr = min_lr
+        self.T_max = T_max  # Period of cosine cycle
+
+    def get_lr(self, iteration):
+        """Cosine annealing formula."""
+        return self.min_lr + 0.5 * (self.initial_lr - self.min_lr) * \
+               (1 + np.cos(np.pi * iteration / self.T_max))
+
+# Usage
+schedule = CosineAnnealingSchedule(initial_lr=0.1, min_lr=0.001, T_max=500)
+
+for i in range(n_iterations):
+    lr = schedule.get_lr(i)
+    optimizer.learning_rate = lr
+```
+
+**Benefit:** Smooth decay with natural minimum, works well in practice without much tuning.
+
+#### 4. Warmup + Decay
+
+Linear warmup followed by decay (common in transformer training):
+
+```python
+class WarmupCosineSchedule:
+    """
+    Linear warmup for 'warmup_iterations', then cosine decay.
+    This is the schedule used in many modern transformers.
+    """
+    def __init__(self, initial_lr, warmup_iterations=50, max_iterations=500, min_lr=0.0):
+        self.initial_lr = initial_lr
+        self.warmup_iterations = warmup_iterations
+        self.max_iterations = max_iterations
+        self.min_lr = min_lr
+
+    def get_lr(self, iteration):
+        if iteration < self.warmup_iterations:
+            # Linear warmup
+            return self.initial_lr * (iteration / self.warmup_iterations)
+        else:
+            # Cosine decay
+            progress = (iteration - self.warmup_iterations) / \
+                      (self.max_iterations - self.warmup_iterations)
+            return self.min_lr + 0.5 * (self.initial_lr - self.min_lr) * \
+                   (1 + np.cos(np.pi * progress))
+
+# Usage
+schedule = WarmupCosineSchedule(initial_lr=0.1, warmup_iterations=50,
+                                max_iterations=500, min_lr=0.001)
+
+for i in range(n_iterations):
+    lr = schedule.get_lr(i)
+    optimizer.learning_rate = lr
+```
+
+**Why warmup?** Prevents instability at the start when gradients can be large and optimizer statistics haven't stabilized.
+
+#### Complete Example: Comparing Schedules
+
+```python
+def run_optimizer_with_schedule(func, grad_func, initial, optimizer, schedule, n_iterations=500):
+    """
+    Run optimizer with a learning rate schedule.
+    """
+    params = initial.copy()
+    trajectory = [params.copy()]
+    losses = [func(params)]
+    learning_rates = []
+
+    optimizer.reset()
+
+    for i in range(n_iterations):
+        # Update learning rate according to schedule
+        lr = schedule.get_lr(i)
+        optimizer.learning_rate = lr
+        learning_rates.append(lr)
+
+        # Optimization step
+        grads = grad_func(params)
+        params = optimizer.step(params, grads)
+
+        trajectory.append(params.copy())
+        losses.append(func(params))
+
+    return {
+        'trajectory': np.array(trajectory),
+        'losses': np.array(losses),
+        'learning_rates': np.array(learning_rates),
+        'final_params': params,
+        'final_loss': losses[-1]
+    }
+
+# Compare different schedules on SGD
+schedules = {
+    'Constant': None,  # No schedule
+    'StepDecay': StepDecaySchedule(initial_lr=0.01, decay_factor=0.5, step_size=100),
+    'Exponential': ExponentialDecaySchedule(initial_lr=0.01, decay_rate=0.995),
+    'Cosine': CosineAnnealingSchedule(initial_lr=0.01, min_lr=0.0001, T_max=500),
+    'WarmupCosine': WarmupCosineSchedule(initial_lr=0.01, warmup_iterations=50,
+                                          max_iterations=500, min_lr=0.0001)
+}
+
+funcs = TestFunctions()
+results_with_schedule = {}
+
+for name, schedule in schedules.items():
+    print(f"Testing {name}...")
+    if schedule is None:
+        # Constant learning rate
+        optimizer = SGD(learning_rate=0.01)
+        result = run_optimizer(funcs.rosenbrock, funcs.rosenbrock_grad,
+                              np.array([-1.5, 2.5]), optimizer, n_iterations=500)
+    else:
+        # With schedule
+        optimizer = SGD(learning_rate=0.01)  # Initial LR (will be updated by schedule)
+        result = run_optimizer_with_schedule(funcs.rosenbrock, funcs.rosenbrock_grad,
+                                             np.array([-1.5, 2.5]), optimizer,
+                                             schedule, n_iterations=500)
+
+    results_with_schedule[name] = result
+
+# Visualize comparison
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+# Plot 1: Trajectories
+ax1 = axes[0]
+x = np.linspace(-2, 2, 100)
+y = np.linspace(-1, 3, 100)
+X, Y = np.meshgrid(x, y)
+Z = np.array([[funcs.rosenbrock(np.array([xi, yi])) for xi in x] for yi in y])
+ax1.contour(X, Y, Z, levels=30, cmap='gray', alpha=0.3)
+
+for name, result in results_with_schedule.items():
+    traj = result['trajectory']
+    ax1.plot(traj[:, 0], traj[:, 1], 'o-', label=name, markersize=2, linewidth=1.5)
+
+ax1.set_xlabel('x₀')
+ax1.set_ylabel('x₁')
+ax1.set_title('Trajectories with Different Schedules')
+ax1.legend()
+ax1.grid(True, alpha=0.3)
+
+# Plot 2: Loss curves
+ax2 = axes[1]
+for name, result in results_with_schedule.items():
+    ax2.semilogy(result['losses'], label=name, linewidth=2)
+
+ax2.set_xlabel('Iteration')
+ax2.set_ylabel('Loss (log scale)')
+ax2.set_title('Convergence Comparison')
+ax2.legend()
+ax2.grid(True, alpha=0.3)
+
+# Plot 3: Learning rate schedules
+ax3 = axes[2]
+for name, result in results_with_schedule.items():
+    if 'learning_rates' in result:
+        ax3.plot(result['learning_rates'], label=name, linewidth=2)
+
+ax3.set_xlabel('Iteration')
+ax3.set_ylabel('Learning Rate')
+ax3.set_title('Learning Rate Schedules')
+ax3.legend()
+ax3.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('schedule_comparison.png', dpi=150)
+plt.show()
+
+# Print final results
+print("\n" + "="*70)
+print(f"{'Schedule':<20} {'Final Loss':<15} {'Iterations to <0.1':<20}")
+print("="*70)
+
+for name, result in results_with_schedule.items():
+    final_loss = result['final_loss']
+    # Find iteration where loss first drops below 0.1
+    iterations_to_converge = np.argmax(result['losses'] < 0.1)
+    if result['losses'][iterations_to_converge] >= 0.1:
+        iterations_to_converge = "Did not converge"
+    print(f"{name:<20} {final_loss:<15.6f} {str(iterations_to_converge):<20}")
+
+print("="*70)
+```
+
+#### Key Insights
+
+**Does scheduling help SGD beat Adam?**
+
+Test this yourself! Expected observations:
+- **Constant LR SGD**: Slow convergence, may not reach minimum
+- **Step Decay**: Significant improvement, but sensitive to step timing
+- **Exponential Decay**: Smooth improvement, requires careful tuning
+- **Cosine Annealing**: Often best performance, smooth and predictable
+- **Warmup + Cosine**: Most robust, used in state-of-the-art training
+
+**General findings:**
+- Good schedule can make SGD competitive with Adam on well-behaved functions
+- Adam still typically better on functions with very different curvatures
+- Schedules help more on optimization problems with clear phases (exploration → refinement)
+
+**Practical tips:**
+1. Start with cosine annealing - good default choice
+2. Use warmup if optimization is unstable at start
+3. For SGD, good schedule is often essential
+4. For Adam, schedules provide smaller improvements but still helpful
+
+</details>
+
+---
+
+<details>
+<summary>💡 Click for Complete Reference Implementation (Try on your own first!)</summary>
+
+# Complete Reference Implementation
+
+Below is a full working implementation combining all phases into a comprehensive optimizer framework.
+
+```python
+"""
+Optimization Landscape Explorer - Complete Reference Implementation
+Combines all phases into a unified framework for comparing optimizers.
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+from mpl_toolkits.mplot3d import Axes3D
+from typing import Dict, List, Tuple, Callable
+
+# ============================================================================
+# Test Functions (Phase 1)
+# ============================================================================
+
+class TestFunctions:
+    """Collection of optimization test functions."""
+
+    @staticmethod
+    def sphere(x):
+        """Simple convex quadratic. Global minimum at (0, 0)."""
+        return x[0]**2 + x[1]**2
+
+    @staticmethod
+    def sphere_grad(x):
+        return np.array([2*x[0], 2*x[1]])
+
+    @staticmethod
+    def rosenbrock(x, a=1, b=100):
+        """Rosenbrock's banana function. Narrow curved valley.
+        Global minimum at (a, a²)."""
+        return (a - x[0])**2 + b*(x[1] - x[0]**2)**2
+
+    @staticmethod
+    def rosenbrock_grad(x, a=1, b=100):
+        dx0 = -2*(a - x[0]) - 4*b*x[0]*(x[1] - x[0]**2)
+        dx1 = 2*b*(x[1] - x[0]**2)
+        return np.array([dx0, dx1])
+
+    @staticmethod
+    def ackley(x, a=20, b=0.2, c=2*np.pi):
+        """Ackley function. Many local minima.
+        Global minimum at (0, 0)."""
+        term1 = -a * np.exp(-b * np.sqrt(0.5 * (x[0]**2 + x[1]**2)))
+        term2 = -np.exp(0.5 * (np.cos(c*x[0]) + np.cos(c*x[1])))
+        return term1 + term2 + a + np.e
+
+    @staticmethod
+    def ackley_grad(x, a=20, b=0.2, c=2*np.pi):
+        r = np.sqrt(x[0]**2 + x[1]**2)
+        if r < 1e-10:
+            return np.array([0.0, 0.0])
+
+        exp1 = np.exp(-b * r)
+        exp2 = np.exp(0.5 * (np.cos(c*x[0]) + np.cos(c*x[1])))
+
+        dx0 = (a * b * x[0] / r) * exp1 + (0.5 * c * np.sin(c*x[0])) * exp2
+        dx1 = (a * b * x[1] / r) * exp1 + (0.5 * c * np.sin(c*x[1])) * exp2
+
+        return np.array([dx0, dx1])
+
+    @staticmethod
+    def saddle(x):
+        """Saddle function. Saddle point at origin."""
+        return x[0]**2 - x[1]**2
+
+    @staticmethod
+    def saddle_grad(x):
+        return np.array([2*x[0], -2*x[1]])
+
+    @staticmethod
+    def beale(x):
+        """Beale function. Has plateaus and valleys.
+        Global minimum at (3, 0.5)."""
+        term1 = (1.5 - x[0] + x[0]*x[1])**2
+        term2 = (2.25 - x[0] + x[0]*x[1]**2)**2
+        term3 = (2.625 - x[0] + x[0]*x[1]**3)**2
+        return term1 + term2 + term3
+
+    @staticmethod
+    def beale_grad(x):
+        t1 = 1.5 - x[0] + x[0]*x[1]
+        t2 = 2.25 - x[0] + x[0]*x[1]**2
+        t3 = 2.625 - x[0] + x[0]*x[1]**3
+
+        dx0 = (2*t1*(-1 + x[1]) +
+               2*t2*(-1 + x[1]**2) +
+               2*t3*(-1 + x[1]**3))
+        dx1 = (2*t1*(x[0]) +
+               2*t2*(2*x[0]*x[1]) +
+               2*t3*(3*x[0]*x[1]**2))
+
+        return np.array([dx0, dx1])
+
+# ============================================================================
+# Optimizer Base Class and Implementations (Phase 2)
+# ============================================================================
+
+class Optimizer:
+    """Base class for all optimizers."""
+
+    def __init__(self, learning_rate=0.01):
+        self.learning_rate = learning_rate
+        self.iteration = 0
+
+    def step(self, params, grads):
+        """Update parameters given gradients. Must be implemented by subclass."""
+        raise NotImplementedError
+
+    def reset(self):
+        """Reset optimizer state."""
+        self.iteration = 0
+
+class SGD(Optimizer):
+    """Stochastic Gradient Descent."""
+
+    def step(self, params, grads):
+        return params - self.learning_rate * grads
+
+class Momentum(Optimizer):
+    """SGD with momentum."""
+
+    def __init__(self, learning_rate=0.01, beta=0.9):
+        super().__init__(learning_rate)
+        self.beta = beta
+        self.velocity = None
+
+    def step(self, params, grads):
+        if self.velocity is None:
+            self.velocity = np.zeros_like(params)
+
+        self.velocity = self.beta * self.velocity + (1 - self.beta) * grads
+        return params - self.learning_rate * self.velocity
+
+    def reset(self):
+        super().reset()
+        self.velocity = None
+
+class Nesterov(Optimizer):
+    """Nesterov Accelerated Gradient."""
+
+    def __init__(self, learning_rate=0.01, beta=0.9):
+        super().__init__(learning_rate)
+        self.beta = beta
+        self.velocity = None
+
+    def step(self, params, grads):
+        if self.velocity is None:
+            self.velocity = np.zeros_like(params)
+
+        velocity_old = self.velocity.copy()
+        self.velocity = self.beta * self.velocity + (1 - self.beta) * grads
+        return params - self.learning_rate * (self.beta * self.velocity + (1 - self.beta) * grads)
+
+    def reset(self):
+        super().reset()
+        self.velocity = None
+
+class RMSprop(Optimizer):
+    """RMSprop optimizer."""
+
+    def __init__(self, learning_rate=0.01, beta=0.9, epsilon=1e-8):
+        super().__init__(learning_rate)
+        self.beta = beta
+        self.epsilon = epsilon
+        self.squared_grads = None
+
+    def step(self, params, grads):
+        if self.squared_grads is None:
+            self.squared_grads = np.zeros_like(params)
+
+        self.squared_grads = (self.beta * self.squared_grads +
+                             (1 - self.beta) * grads**2)
+
+        return params - self.learning_rate * grads / (np.sqrt(self.squared_grads) + self.epsilon)
+
+    def reset(self):
+        super().reset()
+        self.squared_grads = None
+
+class Adam(Optimizer):
+    """Adam optimizer."""
+
+    def __init__(self, learning_rate=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8):
+        super().__init__(learning_rate)
+        self.beta1 = beta1
+        self.beta2 = beta2
+        self.epsilon = epsilon
+        self.m = None
+        self.v = None
+        self.t = 0
+
+    def step(self, params, grads):
+        if self.m is None:
+            self.m = np.zeros_like(params)
+            self.v = np.zeros_like(params)
+
+        self.t += 1
+
+        # Update biased first and second moments
+        self.m = self.beta1 * self.m + (1 - self.beta1) * grads
+        self.v = self.beta2 * self.v + (1 - self.beta2) * grads**2
+
+        # Bias correction
+        m_hat = self.m / (1 - self.beta1**self.t)
+        v_hat = self.v / (1 - self.beta2**self.t)
+
+        return params - self.learning_rate * m_hat / (np.sqrt(v_hat) + self.epsilon)
+
+    def reset(self):
+        super().reset()
+        self.m = None
+        self.v = None
+        self.t = 0
+
+class AdamW(Adam):
+    """AdamW: Adam with decoupled weight decay."""
+
+    def __init__(self, learning_rate=0.001, beta1=0.9, beta2=0.999,
+                 epsilon=1e-8, weight_decay=0.01):
+        super().__init__(learning_rate, beta1, beta2, epsilon)
+        self.weight_decay = weight_decay
+
+    def step(self, params, grads):
+        # Get Adam update
+        params_new = super().step(params, grads)
+
+        # Add weight decay (applied to parameters, not gradients)
+        params_new = params_new - self.learning_rate * self.weight_decay * params
+
+        return params_new
+
+# ============================================================================
+# Visualization Functions (Phase 1)
+# ============================================================================
+
+def visualize_function(func, x_range=(-5, 5), y_range=(-5, 5), resolution=100):
+    """Create 2D contour and 3D surface plots of a function."""
+    x = np.linspace(x_range[0], x_range[1], resolution)
+    y = np.linspace(y_range[0], y_range[1], resolution)
+    X, Y = np.meshgrid(x, y)
+
+    Z = np.zeros_like(X)
+    for i in range(X.shape[0]):
+        for j in range(X.shape[1]):
+            Z[i, j] = func(np.array([X[i, j], Y[i, j]]))
+
+    fig = plt.figure(figsize=(14, 5))
+
+    # 2D contour plot
+    ax1 = fig.add_subplot(121)
+    contour = ax1.contour(X, Y, Z, levels=30, cmap='viridis')
+    ax1.clabel(contour, inline=True, fontsize=8)
+    ax1.set_xlabel('x₀')
+    ax1.set_ylabel('x₁')
+    ax1.set_title('Contour Plot')
+    ax1.grid(True, alpha=0.3)
+
+    # 3D surface plot
+    ax2 = fig.add_subplot(122, projection='3d')
+    surf = ax2.plot_surface(X, Y, Z, cmap='viridis', alpha=0.8,
+                           edgecolor='none', antialiased=True)
+    ax2.set_xlabel('x₀')
+    ax2.set_ylabel('x₁')
+    ax2.set_zlabel('f(x)')
+    ax2.set_title('3D Surface Plot')
+    fig.colorbar(surf, ax=ax2, shrink=0.5, aspect=5)
+
+    plt.tight_layout()
+    return fig
+
+# ============================================================================
+# Optimization Runner (Phase 2 & 3)
+# ============================================================================
+
+def run_optimizer(func, grad_func, initial, optimizer, n_iterations=500):
+    """Run a single optimizer and record trajectory."""
+    params = initial.copy()
+    trajectory = [params.copy()]
+    losses = [func(params)]
+
+    optimizer.reset()
+
+    for i in range(n_iterations):
+        grads = grad_func(params)
+        params = optimizer.step(params, grads)
+
+        trajectory.append(params.copy())
+        losses.append(func(params))
+
+    return {
+        'trajectory': np.array(trajectory),
+        'losses': np.array(losses),
+        'final_params': params,
+        'final_loss': losses[-1]
+    }
+
+def compare_optimizers(func, grad_func, initial, optimizers, n_iterations=500):
+    """Compare multiple optimizers on the same function."""
+    results = {}
+
+    for name, optimizer in optimizers.items():
+        print(f"Running {name}...")
+        results[name] = run_optimizer(func, grad_func, initial, optimizer, n_iterations)
+
+    return results
+
+# ============================================================================
+# Visualization for Comparison (Phase 3)
+# ============================================================================
+
+def visualize_comparison(func, results, x_range=(-5, 5), y_range=(-5, 5), resolution=100):
+    """Visualize optimization trajectories for multiple optimizers."""
+    # Create contour plot
+    x = np.linspace(x_range[0], x_range[1], resolution)
+    y = np.linspace(y_range[0], y_range[1], resolution)
+    X, Y = np.meshgrid(x, y)
+
+    Z = np.zeros_like(X)
+    for i in range(X.shape[0]):
+        for j in range(X.shape[1]):
+            Z[i, j] = func(np.array([X[i, j], Y[i, j]]))
+
+    fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+
+    # Trajectory plot
+    ax1 = axes[0]
+    contour = ax1.contour(X, Y, Z, levels=30, cmap='gray', alpha=0.3)
+
+    colors = plt.cm.tab10(np.linspace(0, 1, len(results)))
+    for (name, result), color in zip(results.items(), colors):
+        traj = result['trajectory']
+        ax1.plot(traj[:, 0], traj[:, 1], 'o-', label=name,
+                color=color, markersize=3, linewidth=2, alpha=0.7)
+        ax1.plot(traj[0, 0], traj[0, 1], 'o', color=color,
+                markersize=10, markeredgecolor='black', markeredgewidth=2)
+        ax1.plot(traj[-1, 0], traj[-1, 1], '*', color=color,
+                markersize=15, markeredgecolor='black', markeredgewidth=2)
+
+    ax1.set_xlabel('x₀', fontsize=12)
+    ax1.set_ylabel('x₁', fontsize=12)
+    ax1.set_title('Optimization Trajectories', fontsize=14, fontweight='bold')
+    ax1.legend(loc='best')
+    ax1.grid(True, alpha=0.3)
+
+    # Convergence plot
+    ax2 = axes[1]
+    for (name, result), color in zip(results.items(), colors):
+        losses = result['losses']
+        ax2.semilogy(losses, label=name, color=color, linewidth=2)
+
+    ax2.set_xlabel('Iteration', fontsize=12)
+    ax2.set_ylabel('Loss (log scale)', fontsize=12)
+    ax2.set_title('Convergence Curves', fontsize=14, fontweight='bold')
+    ax2.legend(loc='best')
+    ax2.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    return fig
+
+def print_summary_table(results):
+    """Print a summary table of optimization results."""
+    print("\n" + "="*80)
+    print(f"{'Optimizer':<15} {'Final Loss':<15} {'Final x₀':<15} {'Final x₁':<15}")
+    print("="*80)
+
+    for name, result in results.items():
+        final_loss = result['final_loss']
+        final_params = result['final_params']
+        print(f"{name:<15} {final_loss:<15.6f} {final_params[0]:<15.6f} {final_params[1]:<15.6f}")
+
+    print("="*80 + "\n")
+
+# ============================================================================
+# Example Usage
+# ============================================================================
+
+if __name__ == "__main__":
+    # Initialize test functions
+    funcs = TestFunctions()
+
+    # Example 1: Visualize Rosenbrock function
+    print("Visualizing Rosenbrock function...")
+    fig = visualize_function(funcs.rosenbrock, x_range=(-2, 2), y_range=(-1, 3))
+    plt.savefig('rosenbrock_landscape.png', dpi=150)
+    plt.show()
+
+    # Example 2: Compare optimizers on Rosenbrock
+    print("\nComparing optimizers on Rosenbrock...")
+
+    # Define optimizers
+    optimizers = {
+        'SGD': SGD(learning_rate=0.001),
+        'Momentum': Momentum(learning_rate=0.002, beta=0.9),
+        'Nesterov': Nesterov(learning_rate=0.002, beta=0.9),
+        'RMSprop': RMSprop(learning_rate=0.01, beta=0.9),
+        'Adam': Adam(learning_rate=0.01),
+        'AdamW': AdamW(learning_rate=0.01, weight_decay=0.01)
+    }
+
+    # Starting point
+    initial = np.array([-1.5, 2.5])
+
+    # Run comparison
+    results = compare_optimizers(
+        funcs.rosenbrock,
+        funcs.rosenbrock_grad,
+        initial,
+        optimizers,
+        n_iterations=500
+    )
+
+    # Visualize
+    fig = visualize_comparison(funcs.rosenbrock, results, x_range=(-2, 2), y_range=(-1, 3))
+    plt.savefig('optimizer_comparison_rosenbrock.png', dpi=150)
+    plt.show()
+
+    # Print summary
+    print_summary_table(results)
+
+    # Example 3: Compare on Ackley function
+    print("\nComparing optimizers on Ackley...")
+
+    initial_ackley = np.array([4.0, 4.0])
+    results_ackley = compare_optimizers(
+        funcs.ackley,
+        funcs.ackley_grad,
+        initial_ackley,
+        optimizers,
+        n_iterations=500
+    )
+
+    fig = visualize_comparison(funcs.ackley, results_ackley, x_range=(-5, 5), y_range=(-5, 5))
+    plt.savefig('optimizer_comparison_ackley.png', dpi=150)
+    plt.show()
+
+    print_summary_table(results_ackley)
+```
+
+## Key Features
+
+This complete implementation provides:
+
+1. **Modular Design**: Separate classes for test functions and optimizers
+2. **Easy Extension**: Base `Optimizer` class makes adding new optimizers simple
+3. **Comprehensive Visualization**: Contour plots, 3D surfaces, trajectories, and convergence curves
+4. **Batch Comparison**: Compare multiple optimizers simultaneously
+5. **Clean Output**: Summary tables and high-quality plots
+
+## Usage Examples
+
+**Test a new optimizer:**
+```python
+# Add your custom optimizer
+class MyOptimizer(Optimizer):
+    def step(self, params, grads):
+        # Your optimization logic here
+        return updated_params
+
+optimizers['MyOptimizer'] = MyOptimizer(learning_rate=0.01)
+```
+
+**Test on a new function:**
+```python
+# Add your custom function
+def my_func(x):
+    return your_expression
+
+def my_func_grad(x):
+    return gradient_array
+
+results = compare_optimizers(my_func, my_func_grad, initial, optimizers)
+```
+
+**Quick benchmark:**
+```python
+# Test all optimizers on all functions
+test_cases = [
+    ('Rosenbrock', funcs.rosenbrock, funcs.rosenbrock_grad, np.array([-1.5, 2.5])),
+    ('Ackley', funcs.ackley, funcs.ackley_grad, np.array([4.0, 4.0])),
+    ('Saddle', funcs.saddle, funcs.saddle_grad, np.array([-1.1, 1.2])),
+]
+
+for name, func, grad, init in test_cases:
+    print(f"\n{'='*80}")
+    print(f"Testing on {name} function")
+    print('='*80)
+    results = compare_optimizers(func, grad, init, optimizers)
+    print_summary_table(results)
+```
+
+</details>
+
 ---
 
 ## 🎯 Milestones & Validation
