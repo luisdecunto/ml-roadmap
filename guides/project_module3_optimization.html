@@ -989,7 +989,7 @@ Learning rate schedules can significantly improve optimization, especially for v
 
 Reduce learning rate by a factor at fixed intervals:
 
-```python
+\`\`\`python
 class StepDecaySchedule:
     """
     Reduce learning rate by factor every 'step_size' iterations.
@@ -1011,7 +1011,7 @@ for i in range(n_iterations):
     lr = schedule.get_lr(i)
     optimizer.learning_rate = lr
     # ... rest of optimization
-```
+\`\`\`
 
 **When to use:** Good for well-understood problems where you know approximately when to reduce learning rate.
 
@@ -1019,7 +1019,7 @@ for i in range(n_iterations):
 
 Smoothly decay learning rate over time:
 
-```python
+\`\`\`python
 class ExponentialDecaySchedule:
     """
     Exponentially decay learning rate: lr = initial_lr * (decay_rate^iteration)
@@ -1037,7 +1037,7 @@ schedule = ExponentialDecaySchedule(initial_lr=0.1, decay_rate=0.995)
 for i in range(n_iterations):
     lr = schedule.get_lr(i)
     optimizer.learning_rate = lr
-```
+\`\`\`
 
 **Trade-off:** Smooth decay, but requires careful tuning of decay_rate.
 
@@ -1045,7 +1045,7 @@ for i in range(n_iterations):
 
 Decay learning rate following a cosine curve:
 
-```python
+\`\`\`python
 import numpy as np
 
 class CosineAnnealingSchedule:
@@ -1069,7 +1069,7 @@ schedule = CosineAnnealingSchedule(initial_lr=0.1, min_lr=0.001, T_max=500)
 for i in range(n_iterations):
     lr = schedule.get_lr(i)
     optimizer.learning_rate = lr
-```
+\`\`\`
 
 **Benefit:** Smooth decay with natural minimum, works well in practice without much tuning.
 
@@ -1077,7 +1077,7 @@ for i in range(n_iterations):
 
 Linear warmup followed by decay (common in transformer training):
 
-```python
+\`\`\`python
 class WarmupCosineSchedule:
     """
     Linear warmup for 'warmup_iterations', then cosine decay.
@@ -1107,13 +1107,13 @@ schedule = WarmupCosineSchedule(initial_lr=0.1, warmup_iterations=50,
 for i in range(n_iterations):
     lr = schedule.get_lr(i)
     optimizer.learning_rate = lr
-```
+\`\`\`
 
 **Why warmup?** Prevents instability at the start when gradients can be large and optimizer statistics haven't stabilized.
 
 #### Complete Example: Comparing Schedules
 
-```python
+\`\`\`python
 def run_optimizer_with_schedule(func, grad_func, initial, optimizer, schedule, n_iterations=500):
     """
     Run optimizer with a learning rate schedule.
@@ -1237,7 +1237,7 @@ for name, result in results_with_schedule.items():
     print(f"{name:<20} {final_loss:<15.6f} {str(iterations_to_converge):<20}")
 
 print("="*70)
-```
+\`\`\`
 
 #### Key Insights
 
@@ -1272,7 +1272,7 @@ Test this yourself! Expected observations:
 
 Below is a full working implementation combining all phases into a comprehensive optimizer framework.
 
-```python
+\`\`\`python
 """
 Optimization Landscape Explorer - Complete Reference Implementation
 Combines all phases into a unified framework for comparing optimizers.
@@ -1710,7 +1710,7 @@ if __name__ == "__main__":
     plt.show()
 
     print_summary_table(results_ackley)
-```
+\`\`\`
 
 ## Key Features
 
@@ -1725,7 +1725,7 @@ This complete implementation provides:
 ## Usage Examples
 
 **Test a new optimizer:**
-```python
+\`\`\`python
 # Add your custom optimizer
 class MyOptimizer(Optimizer):
     def step(self, params, grads):
@@ -1733,10 +1733,10 @@ class MyOptimizer(Optimizer):
         return updated_params
 
 optimizers['MyOptimizer'] = MyOptimizer(learning_rate=0.01)
-```
+\`\`\`
 
 **Test on a new function:**
-```python
+\`\`\`python
 # Add your custom function
 def my_func(x):
     return your_expression
@@ -1745,10 +1745,10 @@ def my_func_grad(x):
     return gradient_array
 
 results = compare_optimizers(my_func, my_func_grad, initial, optimizers)
-```
+\`\`\`
 
 **Quick benchmark:**
-```python
+\`\`\`python
 # Test all optimizers on all functions
 test_cases = [
     ('Rosenbrock', funcs.rosenbrock, funcs.rosenbrock_grad, np.array([-1.5, 2.5])),
@@ -1762,7 +1762,7 @@ for name, func, grad, init in test_cases:
     print('='*80)
     results = compare_optimizers(func, grad, init, optimizers)
     print_summary_table(results)
-```
+\`\`\`
 
 </details>
 

@@ -1115,7 +1115,7 @@ def create_smooth_gradient(h, w):
 
 Instead of computing full SVD, compute only the top k components you need:
 
-```python
+\`\`\`python
 from scipy.sparse.linalg import svds
 
 def truncated_svd_compress(img, k):
@@ -1139,7 +1139,7 @@ def truncated_svd_compress(img, k):
     reconstructed = U @ np.diag(S) @ Vt
 
     return reconstructed, U, S, Vt
-```
+\`\`\`
 
 **When to use:** Large images (>1000x1000) with small k (<100). Can be 5-10x faster than full SVD.
 
@@ -1147,7 +1147,7 @@ def truncated_svd_compress(img, k):
 
 Process image in smaller blocks for better parallelization and memory efficiency:
 
-```python
+\`\`\`python
 def block_svd_compress(img, k, block_size=128):
     """
     Divide image into blocks and compress each independently.
@@ -1175,7 +1175,7 @@ def block_svd_compress(img, k, block_size=128):
             reconstructed[i:i+block_size, j:j+block_size] = U @ np.diag(S) @ Vt
 
     return reconstructed
-```
+\`\`\`
 
 **Trade-off:** Faster and more memory efficient, but may have visible block boundaries. Use overlapping blocks to reduce artifacts.
 
@@ -1183,7 +1183,7 @@ def block_svd_compress(img, k, block_size=128):
 
 For color images, process RGB channels in parallel:
 
-```python
+\`\`\`python
 from multiprocessing import Pool
 import functools
 
@@ -1208,7 +1208,7 @@ def parallel_color_compress(img, k, n_workers=3):
 
     # Stack back together
     return np.dstack(compressed_channels)
-```
+\`\`\`
 
 **Speedup:** ~3x for color images on multi-core systems.
 
@@ -1216,7 +1216,7 @@ def parallel_color_compress(img, k, n_workers=3):
 
 Store compressed representation efficiently:
 
-```python
+\`\`\`python
 import pickle
 
 def save_compressed(U, S, Vt, filepath):
@@ -1246,11 +1246,11 @@ def load_compressed(filepath):
     reconstructed = data['U'] @ np.diag(data['S']) @ data['Vt']
 
     return reconstructed, data
-```
+\`\`\`
 
 #### Performance Comparison Example
 
-```python
+\`\`\`python
 import time
 
 # Original method
@@ -1267,7 +1267,7 @@ time_truncated = time.time() - start
 print(f"Full SVD: {time_full:.2f}s")
 print(f"Truncated SVD: {time_truncated:.2f}s")
 print(f"Speedup: {time_full/time_truncated:.1f}x")
-```
+\`\`\`
 
 **Expected results for 1920x1080 image, k=50:**
 - Full SVD: ~20-30 seconds
@@ -1293,7 +1293,7 @@ Pick one or more:
 
 Allow users to load images at increasing quality levels:
 
-```python
+\`\`\`python
 class ProgressiveSVDCompressor:
     """
     SVD compressor that supports progressive quality improvement.
@@ -1359,7 +1359,7 @@ medium = compressor.progressive_load('medium')  # Better quality
 
 # Final high quality
 high = compressor.progressive_load('high')  # High quality
-```
+\`\`\`
 
 **Use case:** Web applications where you want to show a quick preview then progressively enhance quality.
 
@@ -1367,7 +1367,7 @@ high = compressor.progressive_load('high')  # High quality
 
 Treat video as a 3D tensor (height × width × frames) and apply SVD:
 
-```python
+\`\`\`python
 def video_svd_compress(video_frames, k_spatial, k_temporal):
     """
     Compress video using 3D SVD decomposition.
@@ -1441,7 +1441,7 @@ compressed_size = (h * k_spatial + k_spatial + k_spatial * w +  # Spatial
 compression_ratio = original_size / compressed_size
 
 print(f"Compression ratio: {compression_ratio:.2f}x")
-```
+\`\`\`
 
 **Trade-off:** Temporal compression assumes smooth motion. Works well for slow-moving scenes, less effective for fast action.
 
@@ -1449,7 +1449,7 @@ print(f"Compression ratio: {compression_ratio:.2f}x")
 
 Benchmark SVD compression against JPEG, PNG, WebP:
 
-```python
+\`\`\`python
 from PIL import Image
 import io
 import cv2
@@ -1543,7 +1543,7 @@ def print_comparison_table(results):
 # Usage
 results = compare_compression_methods(img_gray, k_values=[10, 25, 50, 100])
 print_comparison_table(results)
-```
+\`\`\`
 
 **Expected insights:**
 - JPEG often achieves better PSNR at similar file sizes (optimized for natural images)
