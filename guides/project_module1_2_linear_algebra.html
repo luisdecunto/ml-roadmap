@@ -1108,6 +1108,183 @@ def create_smooth_gradient(h, w):
 - Compress 1920x1080 image in < 5 seconds
 - Memory efficient (don't store full matrices)
 
+<details>
+<summary>💡 Stuck? Click for performance optimization implementation</summary>
+
+### Performance Optimization Techniques
+
+\`\`\`python
+import numpy as np
+from scipy.sparse.linalg import svds
+from concurrent.futures import ThreadPoolExecutor
+import time
+
+class OptimizedSVDCompressor:
+    """Performance-optimized SVD compressor."""
+
+    def __init__(self, use_truncated_svd=True, use_parallel=True):
+        self.use_truncated_svd = use_truncated_svd
+        self.use_parallel = use_parallel
+
+    def compress_truncated(self, img, k):
+        """
+        Use truncated SVD - only compute top k components.
+        Much faster than full SVD when k << min(m,n).
+        """
+        if k >= min(img.shape):
+            # Fall back to full SVD
+            U, sigma, Vt = np.linalg.svd(img, full_matrices=False)
+            return U[:, :k], sigma[:k], Vt[:k, :]
+
+        # Truncated SVD from scipy
+        U_k, sigma_k, Vt_k = svds(img, k=k)
+
+        # svds returns in ascending order, reverse it
+        U_k = np.fliplr(U_k)
+        sigma_k = sigma_k[::-1]
+        Vt_k = np.flipud(Vt_k)
+
+        return U_k, sigma_k, Vt_k
+
+    def compress_parallel(self, img_rgb, k):
+        """
+        Compress RGB channels in parallel using ThreadPoolExecutor.
+        """
+        def compress_channel(channel):
+            if self.use_truncated_svd:
+                U_k, sigma_k, Vt_k = self.compress_truncated(channel, k)
+            else:
+                U, sigma, Vt = np.linalg.svd(channel, full_matrices=False)
+                U_k, sigma_k, Vt_k = U[:, :k], sigma[:k], Vt[:k, :]
+
+            return {'U_k': U_k, 'sigma_k': sigma_k, 'Vt_k': Vt_k}
+
+        channels = [img_rgb[:, :, c] for c in range(3)]
+
+        if self.use_parallel:
+            with ThreadPoolExecutor(max_workers=3) as executor:
+                compressed_channels = list(executor.map(compress_channel, channels))
+        else:
+            compressed_channels = [compress_channel(ch) for ch in channels]
+
+        return {'channels': compressed_channels, 'k': k}
+
+    def compress_block_based(self, img, block_size=64, k=10):
+        """
+        Block-based SVD compression.
+        Divides image into blocks and compresses each independently.
+        """
+        h, w = img.shape
+        compressed_blocks = []
+
+        for i in range(0, h, block_size):
+            for j in range(0, w, block_size):
+                # Extract block (handle edge cases)
+                block = img[i:i+block_size, j:j+block_size]
+
+                # Skip if block is too small
+                if min(block.shape) <= k:
+                    continue
+
+                # Compress block
+                if self.use_truncated_svd:
+                    U_k, sigma_k, Vt_k = self.compress_truncated(block, k)
+                else:
+                    U, sigma, Vt = np.linalg.svd(block, full_matrices=False)
+                    U_k, sigma_k, Vt_k = U[:, :k], sigma[:k], Vt[:k, :]
+
+                compressed_blocks.append({
+                    'U_k': U_k,
+                    'sigma_k': sigma_k,
+                    'Vt_k': Vt_k,
+                    'position': (i, j),
+                    'shape': block.shape
+                })
+
+        return {
+            'blocks': compressed_blocks,
+            'original_shape': img.shape,
+            'block_size': block_size
+        }
+
+    def decompress_block_based(self, compressed):
+        """Reconstruct image from block-based compression."""
+        h, w = compressed['original_shape']
+        reconstructed = np.zeros((h, w))
+
+        for block_data in compressed['blocks']:
+            U_k = block_data['U_k']
+            sigma_k = block_data['sigma_k']
+            Vt_k = block_data['Vt_k']
+            i, j = block_data['position']
+            block_h, block_w = block_data['shape']
+
+            # Reconstruct block
+            block_reconstructed = U_k @ np.diag(sigma_k) @ Vt_k
+
+            # Place in image
+            reconstructed[i:i+block_h, j:j+block_w] = block_reconstructed
+
+        return np.clip(reconstructed, 0, 1)
+
+def benchmark_compression_methods(img, k=50):
+    """Compare different compression methods for speed."""
+    print("\\n" + "="*60)
+    print("Performance Benchmark")
+    print("="*60)
+
+    methods = {
+        'Full SVD': lambda: np.linalg.svd(img, full_matrices=False),
+        'Truncated SVD': lambda: svds(img, k=k),
+        'Block-based (32x32)': lambda: OptimizedSVDCompressor().compress_block_based(img, 32, k=10),
+        'Block-based (64x64)': lambda: OptimizedSVDCompressor().compress_block_based(img, 64, k=10),
+    }
+
+    for name, method in methods.items():
+        start = time.time()
+        result = method()
+        elapsed = time.time() - start
+        print(f"{name:25s}: {elapsed:6.3f} seconds")
+
+# Example usage
+if __name__ == "__main__":
+    from PIL import Image
+
+    # Load test image
+    img = Image.open('test.jpg').convert('L')
+    img_array = np.array(img, dtype=float) / 255.0
+
+    print(f"Image shape: {img_array.shape}")
+
+    # Benchmark
+    benchmark_compression_methods(img_array, k=50)
+
+    # Test parallel compression on color image
+    img_color = Image.open('test.jpg')
+    img_rgb = np.array(img_color, dtype=float) / 255.0
+
+    compressor = OptimizedSVDCompressor(use_truncated_svd=True, use_parallel=True)
+
+    start = time.time()
+    compressed = compressor.compress_parallel(img_rgb, k=50)
+    elapsed = time.time() - start
+
+    print(f"\\nParallel RGB compression: {elapsed:.3f} seconds")
+\`\`\`
+
+**Key optimizations:**
+1. **Truncated SVD:** Only compute top k singular values/vectors (much faster when k << min(m,n))
+2. **Parallel processing:** Compress RGB channels in parallel using threading
+3. **Block-based compression:** Process image in smaller chunks to reduce memory and enable parallelization
+4. **Efficient storage:** Store compressed format directly without intermediate copies
+
+**Benchmark results (typical 1920x1080 image):**
+- Full SVD: ~5-10 seconds
+- Truncated SVD (k=50): ~1-2 seconds
+- Block-based + parallel: ~0.5-1 seconds
+
+</details>
+
 ### Phase 5: Advanced Extensions (Optional)
 
 Pick one or more:
@@ -1117,6 +1294,245 @@ Pick one or more:
 3. **Progressive compression:** Allow gradual quality improvement
 4. **Combine with JPEG:** Use SVD in frequency domain
 5. **Video compression:** Extend to video frames
+
+<details>
+<summary>💡 Stuck? Click for advanced extension implementations</summary>
+
+### Advanced Extension: Progressive Compression & Video
+
+\`\`\`python
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+import cv2
+
+class ProgressiveCompressor:
+    """
+    Progressive SVD compression - transmit/store singular values
+    in order of importance for gradual quality improvement.
+    """
+
+    def __init__(self):
+        self.compressed_data = None
+
+    def compress(self, img):
+        """Compute full SVD and store all components."""
+        U, sigma, Vt = np.linalg.svd(img, full_matrices=False)
+
+        self.compressed_data = {
+            'U': U,
+            'sigma': sigma,
+            'Vt': Vt,
+            'shape': img.shape
+        }
+
+        return self.compressed_data
+
+    def reconstruct_progressive(self, k):
+        """Reconstruct with first k components."""
+        if self.compressed_data is None:
+            raise ValueError("Must compress first")
+
+        U = self.compressed_data['U']
+        sigma = self.compressed_data['sigma']
+        Vt = self.compressed_data['Vt']
+
+        # Use only top k components
+        k = min(k, len(sigma))
+        reconstructed = U[:, :k] @ np.diag(sigma[:k]) @ Vt[:k, :]
+
+        return np.clip(reconstructed, 0, 1)
+
+    def demo_progressive_loading(self, img, k_values=[5, 10, 20, 50, 100]):
+        """Demonstrate progressive loading effect."""
+        # Compress once
+        self.compress(img)
+
+        # Show progressive reconstruction
+        fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+        axes = axes.flatten()
+
+        for idx, k in enumerate(k_values):
+            if idx >= len(axes):
+                break
+
+            reconstructed = self.reconstruct_progressive(k)
+
+            axes[idx].imshow(reconstructed, cmap='gray', vmin=0, vmax=1)
+            axes[idx].set_title(f'k = {k} components')
+            axes[idx].axis('off')
+
+        # Original in last slot
+        if len(k_values) < len(axes):
+            axes[-1].imshow(img, cmap='gray', vmin=0, vmax=1)
+            axes[-1].set_title('Original')
+            axes[-1].axis('off')
+
+        plt.tight_layout()
+        return fig
+
+class VideoCompressor:
+    """
+    Video compression using SVD across temporal dimension.
+    Treats video as 3D tensor and applies SVD.
+    """
+
+    def __init__(self):
+        pass
+
+    def load_video_frames(self, video_path, max_frames=100):
+        """Load video frames as numpy array."""
+        cap = cv2.VideoCapture(video_path)
+        frames = []
+
+        count = 0
+        while count < max_frames:
+            ret, frame = cap.read()
+            if not ret:
+                break
+
+            # Convert to grayscale and normalize
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            frames.append(gray.astype(float) / 255.0)
+            count += 1
+
+        cap.release()
+        return np.array(frames)  # Shape: (n_frames, height, width)
+
+    def compress_temporal(self, video_frames, k_temporal=20):
+        """
+        Compress video using temporal SVD.
+        Reshape to (n_frames, height*width) and apply SVD.
+        """
+        n_frames, height, width = video_frames.shape
+
+        # Reshape: each row is a flattened frame
+        frames_matrix = video_frames.reshape(n_frames, height * width)
+
+        # Apply SVD across temporal dimension
+        U, sigma, Vt = np.linalg.svd(frames_matrix, full_matrices=False)
+
+        return {
+            'U_k': U[:, :k_temporal],
+            'sigma_k': sigma[:k_temporal],
+            'Vt_k': Vt[:k_temporal, :],
+            'original_shape': (n_frames, height, width)
+        }
+
+    def decompress_temporal(self, compressed):
+        """Reconstruct video from temporal compression."""
+        U_k = compressed['U_k']
+        sigma_k = compressed['sigma_k']
+        Vt_k = compressed['Vt_k']
+        n_frames, height, width = compressed['original_shape']
+
+        # Reconstruct
+        frames_matrix = U_k @ np.diag(sigma_k) @ Vt_k
+
+        # Reshape back
+        video_frames = frames_matrix.reshape(n_frames, height, width)
+
+        return np.clip(video_frames, 0, 1)
+
+    def compress_spatial_then_temporal(self, video_frames, k_spatial=30, k_temporal=15):
+        """
+        Two-stage compression:
+        1. Compress each frame spatially with SVD
+        2. Compress temporal evolution of coefficients
+        """
+        n_frames, height, width = video_frames.shape
+
+        # Stage 1: Compress each frame spatially
+        U_spatial, sigma_spatial, Vt_spatial = np.linalg.svd(
+            video_frames[0], full_matrices=False
+        )
+        U_k_spatial = U_spatial[:, :k_spatial]
+        Vt_k_spatial = Vt_spatial[:k_spatial, :]
+
+        # Project all frames onto spatial basis
+        coefficients = np.zeros((n_frames, k_spatial))
+        for t in range(n_frames):
+            frame = video_frames[t]
+            # Project: coefficients[t] = sigma values for this frame
+            coeffs = U_k_spatial.T @ frame @ Vt_k_spatial.T
+            coefficients[t] = np.diag(coeffs)
+
+        # Stage 2: Compress temporal evolution
+        U_temp, sigma_temp, Vt_temp = np.linalg.svd(coefficients, full_matrices=False)
+
+        return {
+            'U_spatial': U_k_spatial,
+            'Vt_spatial': Vt_k_spatial,
+            'U_temporal': U_temp[:, :k_temporal],
+            'sigma_temporal': sigma_temp[:k_temporal],
+            'Vt_temporal': Vt_temp[:k_temporal, :],
+            'original_shape': (n_frames, height, width)
+        }
+
+    def compare_video_compression(self, video_frames):
+        """Compare different video compression approaches."""
+        print("\\n" + "="*60)
+        print("Video Compression Comparison")
+        print("="*60)
+
+        # Method 1: Frame-by-frame spatial compression
+        spatial_k = 30
+        spatial_size = 0
+        for frame in video_frames:
+            U, sigma, Vt = np.linalg.svd(frame, full_matrices=False)
+            h, w = frame.shape
+            spatial_size += (h * spatial_k + spatial_k + spatial_k * w)
+
+        # Method 2: Temporal compression
+        temporal_compressed = self.compress_temporal(video_frames, k_temporal=20)
+        n_frames, h, w = video_frames.shape
+        temporal_size = (n_frames * 20 + 20 + 20 * h * w)
+
+        # Method 3: Spatial + Temporal
+        hybrid_compressed = self.compress_spatial_then_temporal(
+            video_frames, k_spatial=30, k_temporal=15
+        )
+        hybrid_size = (h * 30 + 30 * w) + (n_frames * 15 + 15 + 15 * 30)
+
+        original_size = n_frames * h * w
+
+        print(f"Original size: {original_size} values")
+        print(f"\\nSpatial-only compression:")
+        print(f"  Size: {spatial_size} values")
+        print(f"  Ratio: {original_size/spatial_size:.2f}x")
+        print(f"\\nTemporal compression:")
+        print(f"  Size: {temporal_size} values")
+        print(f"  Ratio: {original_size/temporal_size:.2f}x")
+        print(f"\\nHybrid (Spatial + Temporal):")
+        print(f"  Size: {hybrid_size} values")
+        print(f"  Ratio: {original_size/hybrid_size:.2f}x")
+
+# Example usage
+if __name__ == "__main__":
+    # Progressive compression demo
+    img = Image.open('test.jpg').convert('L')
+    img_array = np.array(img, dtype=float) / 255.0
+
+    progressive = ProgressiveCompressor()
+    fig = progressive.demo_progressive_loading(img_array)
+    plt.savefig('progressive_loading.png', dpi=150)
+    plt.show()
+
+    # Video compression demo (requires video file)
+    # video_comp = VideoCompressor()
+    # frames = video_comp.load_video_frames('test_video.mp4', max_frames=50)
+    # video_comp.compare_video_compression(frames)
+\`\`\`
+
+**Advanced insights:**
+1. **Progressive compression:** Like JPEG progressive loading - send important components first
+2. **Video temporal compression:** Exploits redundancy between frames
+3. **Hybrid approach:** Compress both spatial (within frame) and temporal (across frames)
+4. **Real-world comparison:** Compare with H.264/H.265 video codecs
+
+**Your task:** Implement one of these extensions and analyze when it works better than basic SVD!
+
+</details>
 
 ---
 

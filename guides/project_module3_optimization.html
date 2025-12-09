@@ -980,6 +980,183 @@ print_summary_table(results)
 
 **Experiment:** Does a good schedule help SGD beat Adam?
 
+<details>
+<summary>💡 Stuck? Click for learning rate schedule implementations</summary>
+
+### Complete Learning Rate Schedule Implementation
+
+\`\`\`python
+import numpy as np
+import matplotlib.pyplot as plt
+
+class LRSchedule:
+    """Base class for learning rate schedules."""
+    def __init__(self, initial_lr):
+        self.initial_lr = initial_lr
+
+    def get_lr(self, epoch):
+        """Return learning rate for given epoch."""
+        raise NotImplementedError
+
+class StepDecaySchedule(LRSchedule):
+    """Step decay: reduce LR by factor every N epochs."""
+
+    def __init__(self, initial_lr, decay_rate=0.5, step_size=100):
+        super().__init__(initial_lr)
+        self.decay_rate = decay_rate
+        self.step_size = step_size
+
+    def get_lr(self, epoch):
+        return self.initial_lr * (self.decay_rate ** (epoch // self.step_size))
+
+class ExponentialDecaySchedule(LRSchedule):
+    """Exponential decay: lr = lr0 * exp(-decay_rate * epoch)."""
+
+    def __init__(self, initial_lr, decay_rate=0.01):
+        super().__init__(initial_lr)
+        self.decay_rate = decay_rate
+
+    def get_lr(self, epoch):
+        return self.initial_lr * np.exp(-self.decay_rate * epoch)
+
+class CosineAnnealingSchedule(LRSchedule):
+    """Cosine annealing: smooth decay following cosine curve."""
+
+    def __init__(self, initial_lr, min_lr=0.0, T_max=500):
+        super().__init__(initial_lr)
+        self.min_lr = min_lr
+        self.T_max = T_max
+
+    def get_lr(self, epoch):
+        return self.min_lr + 0.5 * (self.initial_lr - self.min_lr) * \\
+               (1 + np.cos(np.pi * epoch / self.T_max))
+
+class WarmupCosineSchedule(LRSchedule):
+    """Warmup then cosine annealing."""
+
+    def __init__(self, initial_lr, warmup_epochs=50, T_max=500, min_lr=0.0):
+        super().__init__(initial_lr)
+        self.warmup_epochs = warmup_epochs
+        self.min_lr = min_lr
+        self.T_max = T_max
+
+    def get_lr(self, epoch):
+        if epoch < self.warmup_epochs:
+            # Linear warmup
+            return self.initial_lr * (epoch / self.warmup_epochs)
+        else:
+            # Cosine annealing
+            progress = (epoch - self.warmup_epochs) / (self.T_max - self.warmup_epochs)
+            return self.min_lr + 0.5 * (self.initial_lr - self.min_lr) * \\
+                   (1 + np.cos(np.pi * progress))
+
+def visualize_schedules(schedules_dict, n_epochs=500):
+    """Visualize multiple learning rate schedules."""
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    epochs = np.arange(n_epochs)
+
+    for name, schedule in schedules_dict.items():
+        lrs = [schedule.get_lr(e) for e in epochs]
+        ax.plot(epochs, lrs, label=name, linewidth=2)
+
+    ax.set_xlabel('Epoch', fontsize=12)
+    ax.set_ylabel('Learning Rate', fontsize=12)
+    ax.set_title('Learning Rate Schedules Comparison', fontsize=14)
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    return fig
+
+def compare_schedules_on_optimization(func, func_grad, initial_point,
+                                     base_optimizer_class, schedules_dict,
+                                     n_iterations=500):
+    """Compare optimizer with different LR schedules."""
+    results = {}
+
+    for name, schedule in schedules_dict.items():
+        params = initial_point.copy()
+        optimizer = base_optimizer_class(learning_rate=schedule.initial_lr)
+        optimizer.zero_history()
+
+        for epoch in range(n_iterations):
+            # Update learning rate
+            optimizer.learning_rate = schedule.get_lr(epoch)
+
+            # Compute gradient
+            grads = func_grad(params)
+
+            # Store loss
+            loss = func(params)
+            optimizer.history['loss'].append(loss)
+
+            # Optimization step
+            params = optimizer.step(params, grads)
+
+        results[name] = {
+            'final_params': params,
+            'final_loss': func(params),
+            'history': optimizer.history
+        }
+
+    return results
+
+# Example usage
+if __name__ == "__main__":
+    # Visualize schedules
+    schedules = {
+        'Constant': StepDecaySchedule(0.1, decay_rate=1.0, step_size=1000),
+        'Step Decay': StepDecaySchedule(0.1, decay_rate=0.5, step_size=100),
+        'Exponential': ExponentialDecaySchedule(0.1, decay_rate=0.005),
+        'Cosine': CosineAnnealingSchedule(0.1, min_lr=0.001, T_max=500),
+        'Warmup+Cosine': WarmupCosineSchedule(0.1, warmup_epochs=50,
+                                              T_max=500, min_lr=0.001)
+    }
+
+    fig = visualize_schedules(schedules, n_epochs=500)
+    plt.savefig('lr_schedules.png', dpi=150)
+    plt.show()
+
+    # Compare on optimization task
+    from test_functions import TestFunctions
+    from optimizers import SGD
+
+    funcs = TestFunctions()
+    initial = np.array([-1.5, 2.0])
+
+    results = compare_schedules_on_optimization(
+        funcs.rosenbrock,
+        funcs.rosenbrock_grad,
+        initial,
+        SGD,
+        schedules,
+        n_iterations=500
+    )
+
+    # Plot convergence
+    fig, ax = plt.subplots(figsize=(12, 6))
+    for name, result in results.items():
+        ax.semilogy(result['history']['loss'], label=name, linewidth=2)
+
+    ax.set_xlabel('Iteration')
+    ax.set_ylabel('Loss (log scale)')
+    ax.set_title('SGD with Different Learning Rate Schedules on Rosenbrock')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.savefig('schedule_comparison.png', dpi=150)
+    plt.show()
+\`\`\`
+
+**Key insights:**
+- **Step decay:** Simple, works well in practice
+- **Exponential decay:** Smooth continuous decay
+- **Cosine annealing:** Popular in modern deep learning, smooth convergence
+- **Warmup:** Prevents instability at start, especially important for Adam/adaptive methods
+
+**Experiment:** Try these schedules with SGD on difficult landscapes (Rosenbrock, Beale) and see if good scheduling can match Adam's performance!
+
+</details>
+
 ---
 
 ## 🎯 Milestones & Validation
