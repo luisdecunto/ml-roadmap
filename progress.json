@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-08T22:28:05.280Z",
+  "lastUpdated": "2025-12-09T09:36:36.881Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -152,8 +152,14 @@
     "Module 2: Matrix Calculus for ML (15-20 hours)-14": true,
     "Module 4: Probability & Statistics (15-20 hours)-0": true,
     "Module 4: Probability & Statistics (15-20 hours)-1": true,
-    "Module 4: Probability & Statistics (15-20 hours)-2": false
+    "Module 4: Probability & Statistics (15-20 hours)-2": true
   },
-  "expandedMonths": {},
-  "expandedWeeks": {}
+  "expandedMonths": {
+    "Foundations: Linear Algebra & Calculus": true,
+    "Core Theory: Probability & Information": true
+  },
+  "expandedWeeks": {
+    "Foundations: Linear Algebra & Calculus-Module 3: Optimization Foundations (12-15 hours)": true,
+    "Core Theory: Probability & Information-Module 4: Probability & Statistics (15-20 hours)": true
+  }
 }
