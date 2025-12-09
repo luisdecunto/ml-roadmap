@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-09T15:36:59.843Z",
+  "lastUpdated": "2025-12-09T15:46:23.402Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -155,8 +155,13 @@
     "Module 4: Probability & Statistics (15-20 hours)-2": true,
     "Module 3: Optimization Foundations (12-15 hours)-12": true,
     "Module 4: Probability & Statistics (15-20 hours)-3": true,
-    "Module 4: Probability & Statistics (15-20 hours)-4": true
+    "Module 4: Probability & Statistics (15-20 hours)-4": true,
+    "Module 4: Probability & Statistics (15-20 hours)-5": true
   },
-  "expandedMonths": {},
-  "expandedWeeks": {}
+  "expandedMonths": {
+    "Core Theory: Probability & Information": true
+  },
+  "expandedWeeks": {
+    "Core Theory: Probability & Information-Module 4: Probability & Statistics (15-20 hours)": true
+  }
 }
