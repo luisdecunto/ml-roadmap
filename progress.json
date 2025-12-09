@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-09T14:26:16.450Z",
+  "lastUpdated": "2025-12-09T14:26:18.697Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -153,7 +153,8 @@
     "Module 4: Probability & Statistics (15-20 hours)-0": true,
     "Module 4: Probability & Statistics (15-20 hours)-1": true,
     "Module 4: Probability & Statistics (15-20 hours)-2": false,
-    "Module 3: Optimization Foundations (12-15 hours)-12": true
+    "Module 3: Optimization Foundations (12-15 hours)-12": true,
+    "Module 4: Probability & Statistics (15-20 hours)-3": true
   },
   "expandedMonths": {
     "Foundations: Linear Algebra & Calculus": true,
