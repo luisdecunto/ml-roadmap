@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-09T15:05:17.854Z",
+  "lastUpdated": "2025-12-09T15:36:59.843Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -157,10 +157,6 @@
     "Module 4: Probability & Statistics (15-20 hours)-3": true,
     "Module 4: Probability & Statistics (15-20 hours)-4": true
   },
-  "expandedMonths": {
-    "Core Theory: Probability & Information": true
-  },
-  "expandedWeeks": {
-    "Core Theory: Probability & Information-Module 4: Probability & Statistics (15-20 hours)": true
-  }
+  "expandedMonths": {},
+  "expandedWeeks": {}
 }
