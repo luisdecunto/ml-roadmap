@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-10T14:10:19.815Z",
+  "lastUpdated": "2025-12-10T16:55:14.535Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -159,7 +159,8 @@
     "Module 4: Probability & Statistics (15-20 hours)-5": true,
     "Module 4: Probability & Statistics (15-20 hours)-6": true,
     "Module 4: Probability & Statistics (15-20 hours)-7": true,
-    "Module 4: Probability & Statistics (15-20 hours)-8": true
+    "Module 4: Probability & Statistics (15-20 hours)-8": true,
+    "Module 4: Probability & Statistics (15-20 hours)-9": true
   },
   "expandedMonths": {
     "Month 1: SQL Mastery + Python/Docker Foundations": true,
