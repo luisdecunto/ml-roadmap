@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-10T16:55:14.535Z",
+  "lastUpdated": "2025-12-10T17:11:10.428Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -162,19 +162,6 @@
     "Module 4: Probability & Statistics (15-20 hours)-8": true,
     "Module 4: Probability & Statistics (15-20 hours)-9": true
   },
-  "expandedMonths": {
-    "Month 1: SQL Mastery + Python/Docker Foundations": true,
-    "Month 2: Deep Learning Foundations + MLOps": true,
-    "Month 3: Transformers, LLMs, and Advanced SQL": true,
-    "Modern Deep Learning: Attention & Transformers": false,
-    "Core Theory: Probability & Information": true
-  },
-  "expandedWeeks": {
-    "Month 1: SQL Mastery + Python/Docker Foundations-Week 2: Advanced SQL + Python/Pandas (46 hours)": true,
-    "Month 1: SQL Mastery + Python/Docker Foundations-Week 3: SQL Portfolio Project + Docker (46 hours)": false,
-    "Month 2: Deep Learning Foundations + MLOps-Week 5: PyTorch Fundamentals (44 hours)": true,
-    "Month 2: Deep Learning Foundations + MLOps-Week 6: Deep Learning + FastAPI (46 hours)": false,
-    "Month 3: Transformers, LLMs, and Advanced SQL-Week 9: Transformers & Hugging Face (44 hours)": false,
-    "Core Theory: Probability & Information-Module 4: Probability & Statistics (15-20 hours)": true
-  }
+  "expandedMonths": {},
+  "expandedWeeks": {}
 }
