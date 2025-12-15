@@ -10,9 +10,7 @@ Implement probability and statistical methods from scratch:
 1. Probability distributions (Gaussian, Bernoulli, Binomial)
 2. Maximum Likelihood Estimation (MLE)
 3. Naive Bayes classifier from scratch
-4. Information theory metrics (entropy, cross-entropy, KL divergence)
-5. Bayesian inference with conjugate priors
-6. **Project:** Spam classifier with uncertainty quantification
+4. **Project:** Spam classifier with uncertainty quantification
 
 ---
 
@@ -25,8 +23,6 @@ cd probability-from-scratch
 # Create files
 touch distributions.py
 touch naive_bayes.py
-touch information_theory.py
-touch bayesian_inference.py
 touch spam_classifier.py
 touch test_all.py
 touch requirements.txt
@@ -417,245 +413,7 @@ if __name__ == "__main__":
 
 ---
 
-## Part 3: Information Theory
-
-### Theory
-
-**Entropy** (uncertainty):
-```
-H(X) = -Σ p(x) log p(x)
-```
-
-**Cross-Entropy** (cost of encoding):
-```
-H(p, q) = -Σ p(x) log q(x)
-```
-
-**KL Divergence** (distance between distributions):
-```
-D_KL(p||q) = Σ p(x) log(p(x)/q(x))
-```
-
-**Mutual Information** (shared information):
-```
-I(X;Y) = H(X) + H(Y) - H(X,Y)
-```
-
-### Implementation
-
-```python
-# information_theory.py
-import numpy as np
-import matplotlib.pyplot as plt
-
-def entropy(p, base=2):
-    """
-    Calculate Shannon entropy
-
-    Args:
-        p: probability distribution (must sum to 1)
-        base: logarithm base (2 for bits, e for nats)
-    Returns:
-        H(p): entropy in bits/nats
-    """
-    p = np.array(p)
-    # Remove zero probabilities (0 log 0 = 0)
-    p = p[p > 0]
-
-    if base == 2:
-        return -np.sum(p * np.log2(p))
-    elif base == np.e:
-        return -np.sum(p * np.log(p))
-    else:
-        return -np.sum(p * np.log(p)) / np.log(base)
-
-
-def cross_entropy(p, q, base=np.e):
-    """
-    Calculate cross-entropy H(p, q)
-
-    Args:
-        p: true distribution
-        q: predicted distribution
-        base: logarithm base
-    Returns:
-        H(p,q): cross-entropy
-    """
-    p = np.array(p)
-    q = np.array(q)
-
-    # Numerical stability: avoid log(0)
-    q = np.clip(q, 1e-15, 1.0)
-
-    if base == 2:
-        return -np.sum(p * np.log2(q))
-    elif base == np.e:
-        return -np.sum(p * np.log(q))
-    else:
-        return -np.sum(p * np.log(q)) / np.log(base)
-
-
-def kl_divergence(p, q, base=2):
-    """
-    Calculate KL divergence D_KL(p||q)
-
-    Args:
-        p: true distribution
-        q: approximate distribution
-        base: logarithm base
-    Returns:
-        D_KL(p||q): KL divergence
-    """
-    p = np.array(p)
-    q = np.array(q)
-
-    # Numerical stability
-    p = np.clip(p, 1e-15, 1.0)
-    q = np.clip(q, 1e-15, 1.0)
-
-    if base == 2:
-        return np.sum(p * np.log2(p / q))
-    elif base == np.e:
-        return np.sum(p * np.log(p / q))
-    else:
-        return np.sum(p * np.log(p / q)) / np.log(base)
-
-
-def mutual_information(px, py, pxy):
-    """
-    Calculate mutual information I(X;Y)
-
-    Args:
-        px: marginal distribution of X
-        py: marginal distribution of Y
-        pxy: joint distribution P(X,Y)
-    Returns:
-        I(X;Y): mutual information
-    """
-    hx = entropy(px)
-    hy = entropy(py)
-    hxy = entropy(pxy.flatten())
-
-    return hx + hy - hxy
-
-
-def joint_entropy(pxy):
-    """Calculate joint entropy H(X,Y)"""
-    return entropy(pxy.flatten())
-
-
-def conditional_entropy(pxy, px):
-    """
-    Calculate conditional entropy H(Y|X)
-    H(Y|X) = H(X,Y) - H(X)
-    """
-    return joint_entropy(pxy) - entropy(px)
-
-
-# Visualization and examples
-if __name__ == "__main__":
-    print("="*60)
-    print("Information Theory Metrics")
-    print("="*60)
-
-    # Example 1: Entropy of coin flips
-    print("\n1. Entropy of coin flips:")
-    for p in [0.5, 0.7, 0.9, 0.99]:
-        coin_dist = np.array([p, 1-p])
-        h = entropy(coin_dist)
-        print(f"   P(heads)={p:.2f}: H={h:.4f} bits")
-
-    # Example 2: Cross-entropy
-    print("\n2. Cross-entropy (classification loss):")
-    p_true = np.array([1, 0, 0])  # True class is 0
-    p_pred = np.array([0.7, 0.2, 0.1])  # Predicted probabilities
-    ce = cross_entropy(p_true, p_pred, base=np.e)
-    print(f"   True: {p_true}")
-    print(f"   Pred: {p_pred}")
-    print(f"   Cross-entropy: {ce:.4f} nats")
-
-    # Example 3: KL divergence
-    print("\n3. KL divergence:")
-    p = np.array([0.5, 0.5])
-    q1 = np.array([0.5, 0.5])  # Same as p
-    q2 = np.array([0.9, 0.1])  # Different from p
-    print(f"   D_KL(p||p)  = {kl_divergence(p, q1):.4f} bits (should be 0)")
-    print(f"   D_KL(p||q2) = {kl_divergence(p, q2):.4f} bits")
-
-    # Example 4: Mutual information
-    print("\n4. Mutual information:")
-    # Create joint distribution for two correlated variables
-    pxy = np.array([[0.4, 0.1],
-                    [0.1, 0.4]])
-    px = pxy.sum(axis=1)
-    py = pxy.sum(axis=0)
-
-    mi = mutual_information(px, py, pxy)
-    print(f"   I(X;Y) = {mi:.4f} bits")
-
-    # Visualizations
-    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
-
-    # Plot 1: Entropy vs probability
-    ax1 = axes[0, 0]
-    p_vals = np.linspace(0.01, 0.99, 100)
-    h_vals = [entropy(np.array([p, 1-p])) for p in p_vals]
-    ax1.plot(p_vals, h_vals, 'b-', linewidth=2)
-    ax1.set_xlabel('P(X=1)')
-    ax1.set_ylabel('H(X) [bits]')
-    ax1.set_title('Binary Entropy Function')
-    ax1.grid(True, alpha=0.3)
-    ax1.axvline(0.5, color='r', linestyle='--', alpha=0.5, label='Max entropy')
-    ax1.legend()
-
-    # Plot 2: KL divergence
-    ax2 = axes[0, 1]
-    p_true = 0.5
-    q_vals = np.linspace(0.01, 0.99, 100)
-    kl_vals = [kl_divergence(np.array([p_true, 1-p_true]),
-                              np.array([q, 1-q]))
-               for q in q_vals]
-    ax2.plot(q_vals, kl_vals, 'g-', linewidth=2)
-    ax2.set_xlabel('q (predicted probability)')
-    ax2.set_ylabel('D_KL(p||q) [bits]')
-    ax2.set_title(f'KL Divergence (true p={p_true})')
-    ax2.grid(True, alpha=0.3)
-    ax2.axvline(p_true, color='r', linestyle='--', alpha=0.5, label='p=q (min)')
-    ax2.legend()
-
-    # Plot 3: Cross-entropy
-    ax3 = axes[1, 0]
-    ce_vals = [cross_entropy(np.array([p_true, 1-p_true]),
-                             np.array([q, 1-q]), base=np.e)
-               for q in q_vals]
-    ax3.plot(q_vals, ce_vals, 'purple', linewidth=2)
-    ax3.set_xlabel('q (predicted probability)')
-    ax3.set_ylabel('H(p,q) [nats]')
-    ax3.set_title('Cross-Entropy')
-    ax3.grid(True, alpha=0.3)
-
-    # Plot 4: Joint distribution heatmap
-    ax4 = axes[1, 1]
-    im = ax4.imshow(pxy, cmap='Blues', aspect='auto')
-    ax4.set_xlabel('Y')
-    ax4.set_ylabel('X')
-    ax4.set_title('Joint Distribution P(X,Y)')
-    plt.colorbar(im, ax=ax4)
-
-    # Add text annotations
-    for i in range(pxy.shape[0]):
-        for j in range(pxy.shape[1]):
-            ax4.text(j, i, f'{pxy[i,j]:.2f}',
-                    ha='center', va='center', color='black')
-
-    plt.tight_layout()
-    plt.savefig('information_theory.png', dpi=150)
-    plt.show()
-```
-
----
-
-## Part 4: Spam Classifier Project
+## Part 3: Spam Classifier Project
 
 ### Complete Implementation
 
@@ -665,10 +423,15 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from naive_bayes import GaussianNaiveBayes
-from information_theory import entropy, cross_entropy
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+def entropy(p):
+    """Calculate Shannon entropy of probability distribution"""
+    p = np.array(p)
+    p = p[p > 0]  # Remove zeros
+    return -np.sum(p * np.log2(p))
 
 class SpamClassifier:
     """
@@ -905,7 +668,6 @@ if __name__ == "__main__":
 import numpy as np
 from distributions import GaussianDistribution, BernoulliDistribution
 from naive_bayes import GaussianNaiveBayes
-from information_theory import entropy, cross_entropy, kl_divergence
 
 def test_gaussian_distribution():
     """Test Gaussian distribution implementation"""
@@ -947,30 +709,6 @@ def test_naive_bayes():
     print(f"✓ Naive Bayes accuracy: {accuracy:.4f}")
 
 
-def test_information_theory():
-    """Test information theory metrics"""
-    print("\nTesting Information Theory...")
-
-    # Test entropy
-    uniform = np.array([0.5, 0.5])
-    h = entropy(uniform)
-    assert abs(h - 1.0) < 0.001, f"Binary entropy failed: {h}"
-
-    # Test KL divergence
-    p = np.array([0.5, 0.5])
-    kl = kl_divergence(p, p)
-    assert kl < 0.001, f"KL(p||p) should be 0: {kl}"
-
-    # Test cross-entropy
-    p_true = np.array([1, 0])
-    p_pred = np.array([0.9, 0.1])
-    ce = cross_entropy(p_true, p_pred, base=np.e)
-    expected_ce = -np.log(0.9)
-    assert abs(ce - expected_ce) < 0.001, f"Cross-entropy failed: {ce}"
-
-    print("✓ Information theory tests passed")
-
-
 if __name__ == "__main__":
     print("="*60)
     print("RUNNING ALL TESTS")
@@ -978,7 +716,6 @@ if __name__ == "__main__":
 
     test_gaussian_distribution()
     test_naive_bayes()
-    test_information_theory()
 
     print("\n" + "="*60)
     print("ALL TESTS PASSED ✓")
@@ -997,14 +734,10 @@ Complete these tasks in order:
 - [ ] **Part 2:** Implement Gaussian Naive Bayes from scratch
 - [ ] Test on Iris dataset (target: >90% accuracy)
 - [ ] Compare with sklearn implementation
-- [ ] **Part 3:** Implement entropy, cross-entropy, KL divergence
-- [ ] Visualize information metrics
-- [ ] Calculate mutual information for joint distributions
-- [ ] **Part 4:** Build spam classifier with uncertainty quantification
+- [ ] **Part 3:** Build spam classifier with uncertainty quantification
 - [ ] Achieve >90% accuracy on SMS Spam dataset
 - [ ] Analyze confident vs uncertain predictions
 - [ ] Visualize results (confusion matrix, feature importance)
-- [ ] **Bonus:** Implement Bayesian inference with conjugate priors
 - [ ] Run all tests in `test_all.py`
 
 ---
@@ -1030,7 +763,7 @@ Complete these tasks in order:
 ## What's Next?
 
 After completing this guide:
-1. Move to **Module 5: Information Theory** for deeper dive
-2. Try the **Mini-Project:** Build production-grade probabilistic model
+1. Move to **Module 5: Information Theory** (entropy, cross-entropy, KL divergence)
+2. Try the **Mini-Project:** Build production-grade probabilistic spam detector
 3. Study **Bayesian Networks** and graphical models
 4. Learn **Variational Inference** and MCMC methods
