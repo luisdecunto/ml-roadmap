@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-15T11:05:04.657Z",
+  "lastUpdated": "2025-12-15T11:16:34.664Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -86,7 +86,8 @@
     "optimization-6.2": true,
     "optimization-6.3": true,
     "optimization-challenge-1": true,
-    "optimization-challenge-2": true
+    "optimization-challenge-2": true,
+    "probability-1.1": true
   },
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
@@ -164,9 +165,11 @@
     "Module 4: Probability & Statistics (15-20 hours)-10": true
   },
   "expandedMonths": {
-    "Core Theory: Probability & Information": true
+    "Core Theory: Probability & Information": true,
+    "Practice Exercises": true
   },
   "expandedWeeks": {
-    "Core Theory: Probability & Information-Module 4: Probability & Statistics (15-20 hours)": true
+    "Core Theory: Probability & Information-Module 4: Probability & Statistics (15-20 hours)": true,
+    "Practice Exercises-Probability & Statistics Exercises": true
   }
 }
