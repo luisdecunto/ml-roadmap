@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-12-17T08:51:58.150Z",
+  "lastUpdated": "2026-01-02T10:13:50.600Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -185,15 +185,6 @@
     "Module 4: Probability & Statistics (15-20 hours)-11": true,
     "Module 5: Information Theory (10-15 hours)-0": true
   },
-  "expandedMonths": {
-    "Core Theory: Probability & Information": true,
-    "Neural Networks: From Scratch": false,
-    "Advanced Topics & Optimization": false
-  },
-  "expandedWeeks": {
-    "Core Theory: Probability & Information-Module 4: Probability & Statistics (15-20 hours)": true,
-    "Advanced Topics & Optimization-Module 12: Optimization Deep Dive (15-20 hours)": false,
-    "Neural Networks: From Scratch-Module 6: Feedforward Networks from Scratch (20-25 hours)": false,
-    "Core Theory: Probability & Information-Module 5: Information Theory (10-15 hours)": true
-  }
+  "expandedMonths": {},
+  "expandedWeeks": {}
 }
