@@ -103,18 +103,27 @@
 
 ### Tasks
 - [ ] Read MacKay's Information Theory Ch 1-2
+- [ ] Watch: [3Blue1Brown - Solving Wordle using Information Theory](https://www.3blue1brown.com/lessons/wordle) (entropy explanation)
+- [ ] Watch: [StatQuest - Entropy, Clearly Explained](https://www.youtube.com/watch?v=YtebGVx-Fxw)
 - [ ] Learn entropy and its intuition
 - [ ] Study cross-entropy loss derivation
+- [ ] Read: [Cross-Entropy Loss Derivation Tutorial](https://www.datacamp.com/tutorial/the-cross-entropy-loss-function-in-machine-learning)
 - [ ] Understand KL divergence
+- [ ] Read: [KL Divergence Explained - DataCamp](https://www.datacamp.com/tutorial/kl-divergence)
+- [ ] Watch: [StatQuest - Mutual Information, Clearly Explained](https://www.youtube.com/watch?v=U9p5WNuwTQw)
 - [ ] Learn mutual information
 - [ ] Study Jensen-Shannon divergence
+- [ ] Read: [Jensen-Shannon Divergence Tutorial](https://medium.com/data-science/how-to-understand-and-use-jensen-shannon-divergence-b10e11b03fd6)
 - [ ] Implement entropy calculations
 - [ ] Connect information theory to ML loss functions
+- [ ] Read: [Information Bottleneck Theory (Tishby Paper)](https://arxiv.org/pdf/physics/0004057)
 - [ ] Read about information bottleneck theory
 - [ ] Study VAE from information theory perspective
+- [ ] Read: [What is a Variational Autoencoder? Tutorial](https://jaan.io/what-is-variational-autoencoder-vae-tutorial/)
 
 **Resources:**
 - [Information Theory, Inference, and Learning Algorithms (MacKay) - Free PDF](http://www.inference.org.uk/mackay/itila/)
+- [Dive into Deep Learning - Information Theory Chapter](https://d2l.ai/chapter_appendix-mathematics-for-deep-learning/information-theory.html)
 
 ---
 
