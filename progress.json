@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-04T20:41:57.528Z",
+  "lastUpdated": "2026-01-04T20:44:22.095Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -122,7 +122,8 @@
     "info-theory-5.1": true,
     "info-theory-5.2": true,
     "info-theory-5.3": true,
-    "info-theory-challenge-1": true
+    "info-theory-challenge-1": true,
+    "info-theory-challenge-2": true
   },
   "checkedTasks": {
     "Week 1: SQL Intensive Bootcamp (45 hours)-0": true,
