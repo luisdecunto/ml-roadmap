@@ -13,7 +13,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
 
         const MLRoadmapTracker = () => {
             const GITHUB_USERNAME = 'luisdecunto';
@@ -688,6 +688,9 @@
             const [isEditMode, setIsEditMode] = useState(false);
             const [showEditLogin, setShowEditLogin] = useState(false);
 
+            // Track if this is the initial load to prevent saving on mount
+            const isInitialLoad = useRef(true);
+
             useEffect(() => {
                 const savedToken = localStorage.getItem('githubToken');
                 if (savedToken) {
@@ -703,7 +706,11 @@
             useEffect(() => {
                 if (githubToken && Object.keys(checkedTasks).length > 0) {
                     localStorage.setItem('mlRoadmapCheckedTasks', JSON.stringify(checkedTasks));
-                    saveProgressToGitHub();
+
+                    // Skip saving on initial load (when data is loaded from GitHub)
+                    if (!isInitialLoad.current) {
+                        saveProgressToGitHub();
+                    }
                 }
             }, [checkedTasks]);
 
@@ -762,14 +769,28 @@
                         }
                         setLastSyncTime(new Date().toLocaleTimeString());
                         setSyncStatus(token ? 'synced' : 'view-only');
+
+                        // Mark initial load as complete after data is loaded
+                        setTimeout(() => {
+                            isInitialLoad.current = false;
+                        }, 100);
                     } else if (response.status === 404 && token) {
                         await saveProgressToGitHub(token);
+                        setTimeout(() => {
+                            isInitialLoad.current = false;
+                        }, 100);
                     } else {
                         setSyncStatus('view-only');
+                        setTimeout(() => {
+                            isInitialLoad.current = false;
+                        }, 100);
                     }
                 } catch (error) {
                     console.error('Error loading from GitHub:', error);
                     setSyncStatus('view-only');
+                    setTimeout(() => {
+                        isInitialLoad.current = false;
+                    }, 100);
                 }
             };
 
