@@ -6,129 +6,145 @@ Comprehensive solutions with step-by-step mathematical work and code implementat
 
 ## Part 1: Entropy Basics
 
-### Exercise 1.1 Solution: Basic Entropy Calculation
+### Exercise 1.1 Solution: Binary Entropy
 
-A fair coin (H or T), P(H) = P(T) = 0.5
+A biased coin has P(H) = 0.7, P(T) = 0.3
 
-**Entropy formula:** H(X) = -∑ p(x) log₂ p(x)
+**1. Calculate entropy H(X) = -Σ p(x) log₂ p(x)**
 
-**Step 1: Calculate entropy**
 ```
 H(X) = -[P(H)·log₂ P(H) + P(T)·log₂ P(T)]
-     = -[0.5·log₂(0.5) + 0.5·log₂(0.5)]
-     = -[0.5·(-1) + 0.5·(-1)]
-     = -[-0.5 - 0.5]
-     = 1 bit
+     = -[0.7·log₂(0.7) + 0.3·log₂(0.3)]
+     = -[0.7·(-0.515) + 0.3·(-1.737)]
+     = -[-0.3605 - 0.5211]
+     = 0.8816 bits
 ```
 
-**Interpretation:** A fair coin has maximum entropy of 1 bit. This means we need exactly 1 bit to encode the outcome on average, and there's maximum uncertainty before the flip.
+**2. Units: bits** (because we use log₂)
+
+**3. Compare with fair coin (P(H) = 0.5)**
+
+Fair coin entropy:
+```
+H(fair) = -[0.5·log₂(0.5) + 0.5·log₂(0.5)]
+        = -[0.5·(-1) + 0.5·(-1)]
+        = 1.0 bit
+```
+
+**4. Which has more entropy?**
+
+The **fair coin** (1.0 bit) has more entropy than the biased coin (0.8816 bits).
+
+**Why?** Entropy measures uncertainty/surprise. A fair coin is maximally uncertain (50-50 chance). The biased coin is more predictable (70% likely heads), so lower entropy.
 
 **NumPy verification:**
 ```python
 import numpy as np
 
 def entropy(probs):
-    """Calculate entropy H(X) = -∑ p(x) log₂ p(x)"""
-    # Filter out zero probabilities to avoid log(0)
     probs = np.array(probs)
-    probs = probs[probs > 0]
+    probs = probs[probs > 0]  # Filter zeros
     return -np.sum(probs * np.log2(probs))
+
+# Biased coin
+p_biased = [0.7, 0.3]
+H_biased = entropy(p_biased)
+print(f"Biased coin: {H_biased:.4f} bits")  # 0.8816
 
 # Fair coin
 p_fair = [0.5, 0.5]
 H_fair = entropy(p_fair)
-print(f"Fair coin entropy: {H_fair:.4f} bits")
-# Output: 1.0000 bits
+print(f"Fair coin: {H_fair:.4f} bits")  # 1.0000
 ```
 
 ---
 
-### Exercise 1.2 Solution: Entropy of Biased Coin
+### Exercise 1.2 Solution: Discrete Distribution Entropy
 
-Biased coin with P(H) = 0.8, P(T) = 0.2
+Distribution: P(X=1) = 0.5, P(X=2) = 0.25, P(X=3) = 0.125, P(X=4) = 0.125
 
-**Step 1: Calculate entropy**
+**1. Calculate H(X)**
+
 ```
-H(X) = -[0.8·log₂(0.8) + 0.2·log₂(0.2)]
-     = -[0.8·(-0.322) + 0.2·(-2.322)]
-     = -[-0.258 - 0.464]
-     = 0.722 bits
-```
-
-**Step 2: Compare with fair coin**
-```
-Fair coin:   H = 1.000 bits (maximum)
-Biased coin: H = 0.722 bits (lower)
-
-The biased coin has less uncertainty/entropy!
+H(X) = -Σ p(xᵢ) log₂ p(xᵢ)
+     = -[0.5·log₂(0.5) + 0.25·log₂(0.25) + 0.125·log₂(0.125) + 0.125·log₂(0.125)]
+     = -[0.5·(-1) + 0.25·(-2) + 0.125·(-3) + 0.125·(-3)]
+     = -[-0.5 - 0.5 - 0.375 - 0.375]
+     = 1.75 bits
 ```
 
-**Interpretation:** When outcomes are unequal, entropy decreases. The more predictable the system, the lower the entropy. Maximum entropy occurs when all outcomes are equally likely.
+**2. Maximum possible entropy for 4 outcomes**
+
+Maximum entropy occurs with uniform distribution:
+```
+H_max = log₂(4) = 2 bits
+```
+
+**3. How close to maximum?**
+
+```
+Ratio = H(X) / H_max = 1.75 / 2 = 0.875 = 87.5%
+```
+
+This distribution is 87.5% as entropic as the maximum. It's fairly high entropy but not uniform (outcome 1 is more likely).
 
 **NumPy verification:**
 ```python
-# Biased coin
-p_biased = [0.8, 0.2]
-H_biased = entropy(p_biased)
-print(f"Biased coin entropy: {H_biased:.4f} bits")
-print(f"Reduction from fair: {H_fair - H_biased:.4f} bits")
-
-# Visualize entropy for different bias levels
-import matplotlib.pyplot as plt
-
-p_values = np.linspace(0.01, 0.99, 100)
-H_values = [entropy([p, 1-p]) for p in p_values]
-
-plt.figure(figsize=(8, 5))
-plt.plot(p_values, H_values)
-plt.axvline(0.5, color='r', linestyle='--', label='Fair coin (max entropy)')
-plt.axvline(0.8, color='g', linestyle='--', label='Biased coin (p=0.8)')
-plt.xlabel('P(Heads)')
-plt.ylabel('Entropy (bits)')
-plt.title('Entropy of Biased Coin')
-plt.legend()
-plt.grid(True, alpha=0.3)
-plt.show()
+p = np.array([0.5, 0.25, 0.125, 0.125])
+H = -np.sum(p * np.log2(p))
+H_max = np.log2(len(p))
+print(f"H(X) = {H:.4f} bits")  # 1.7500
+print(f"H_max = {H_max:.4f} bits")  # 2.0000
+print(f"Ratio = {H/H_max:.2%}")  # 87.50%
 ```
 
 ---
 
-### Exercise 1.3 Solution: Entropy of Die Roll
+### Exercise 1.3 Solution: Uniform vs Non-uniform
 
-Fair 6-sided die, each outcome has probability 1/6
+A: P(a) = 0.25 for all 4 outcomes (uniform)
+B: P(b) = [0.7, 0.1, 0.1, 0.1] (non-uniform)
 
-**Step 1: Calculate entropy**
+**1. Calculate H(A)**
+
 ```
-H(X) = -∑ᵢ₌₁⁶ (1/6)·log₂(1/6)
-     = -6 × (1/6)·log₂(1/6)
-     = -log₂(1/6)
-     = log₂(6)
-     ≈ 2.585 bits
-```
-
-**Step 2: Why more than coin?**
-```
-Coin: 2 outcomes → H = log₂(2) = 1 bit
-Die:  6 outcomes → H = log₂(6) ≈ 2.585 bits
-
-More outcomes = more uncertainty = higher entropy
+H(A) = -4 × (0.25 × log₂(0.25))
+     = -4 × (0.25 × -2)
+     = -4 × (-0.5)
+     = 2 bits
 ```
 
-**General formula:** For n equally likely outcomes: H(X) = log₂(n)
+**2. Calculate H(B)**
+
+```
+H(B) = -[0.7·log₂(0.7) + 3×(0.1·log₂(0.1))]
+     = -[0.7·(-0.515) + 0.3·(-3.322)]
+     = -[-0.3605 - 0.9966]
+     = 1.3571 bits
+```
+
+**3. Which is more "surprising"?**
+
+**Distribution A** (2 bits) is more surprising. All outcomes are equally likely, so maximum uncertainty.
+
+**4. Entropy and predictability relationship**
+
+**High entropy = Low predictability = High surprise**
+- Uniform distribution A: can't predict outcome, high surprise
+- Skewed distribution B: outcome 1 is 70% likely, more predictable
+
+**General principle:** Entropy quantifies average surprise/information content. Predictable systems have low entropy, unpredictable systems have high entropy.
 
 **NumPy verification:**
 ```python
-# Fair 6-sided die
-p_die = [1/6] * 6
-H_die = entropy(p_die)
-print(f"Fair die entropy: {H_die:.4f} bits")
-print(f"Theoretical: {np.log2(6):.4f} bits")
+A = np.array([0.25, 0.25, 0.25, 0.25])
+B = np.array([0.7, 0.1, 0.1, 0.1])
 
-# Compare different dice
-for n_sides in [2, 4, 6, 8, 10, 20]:
-    p = [1/n_sides] * n_sides
-    H = entropy(p)
-    print(f"{n_sides:2d}-sided die: H = {H:.4f} bits = log₂({n_sides})")
+H_A = -np.sum(A * np.log2(A))
+H_B = -np.sum(B * np.log2(B))
+
+print(f"H(A) = {H_A:.4f} bits")  # 2.0000
+print(f"H(B) = {H_B:.4f} bits")  # 1.3571
 ```
 
 ---
@@ -137,348 +153,355 @@ for n_sides in [2, 4, 6, 8, 10, 20]:
 
 ### Exercise 2.1 Solution: Joint Entropy
 
-Joint distribution P(X, Y):
+Joint distribution table:
+
+| X\Y | Y=0 | Y=1 |
+|-----|-----|-----|
+| X=0 | 0.3 | 0.2 |
+| X=1 | 0.1 | 0.4 |
+
+**1. Calculate H(X, Y)**
+
 ```
-      Y=0   Y=1
-X=0   0.2   0.3
-X=1   0.3   0.2
+H(X,Y) = -ΣΣ p(x,y) log₂ p(x,y)
+       = -[0.3·log₂(0.3) + 0.2·log₂(0.2) + 0.1·log₂(0.1) + 0.4·log₂(0.4)]
+       = -[0.3·(-1.737) + 0.2·(-2.322) + 0.1·(-3.322) + 0.4·(-1.322)]
+       = -[-0.5211 - 0.4644 - 0.3322 - 0.5288]
+       = 1.8465 bits
 ```
 
-**Step 1: Calculate H(X, Y)**
+**2. Calculate marginal H(X)**
+
+Marginal P(X):
+- P(X=0) = 0.3 + 0.2 = 0.5
+- P(X=1) = 0.1 + 0.4 = 0.5
+
 ```
-H(X,Y) = -∑ₓ ∑ᵧ P(x,y)·log₂ P(x,y)
-       = -[0.2·log₂(0.2) + 0.3·log₂(0.3) + 0.3·log₂(0.3) + 0.2·log₂(0.2)]
-       = -[0.2·(-2.322) + 0.3·(-1.737) + 0.3·(-1.737) + 0.2·(-2.322)]
-       = -[-0.464 - 0.521 - 0.521 - 0.464]
-       = 1.970 bits
+H(X) = -[0.5·log₂(0.5) + 0.5·log₂(0.5)]
+     = 1 bit
 ```
 
-**Step 2: Calculate marginal H(X)**
-```
-P(X=0) = 0.2 + 0.3 = 0.5
-P(X=1) = 0.3 + 0.2 = 0.5
+**3. Calculate marginal H(Y)**
 
-H(X) = -[0.5·log₂(0.5) + 0.5·log₂(0.5)] = 1 bit
-```
+Marginal P(Y):
+- P(Y=0) = 0.3 + 0.1 = 0.4
+- P(Y=1) = 0.2 + 0.4 = 0.6
 
-**Step 3: Calculate marginal H(Y)**
 ```
-P(Y=0) = 0.2 + 0.3 = 0.5
-P(Y=1) = 0.3 + 0.2 = 0.5
-
-H(Y) = -[0.5·log₂(0.5) + 0.5·log₂(0.5)] = 1 bit
+H(Y) = -[0.4·log₂(0.4) + 0.6·log₂(0.6)]
+     = -[0.4·(-1.322) + 0.6·(-0.737)]
+     = -[-0.5288 - 0.4422]
+     = 0.9710 bits
 ```
 
-**Step 4: Compare**
-```
-H(X,Y) = 1.970 bits
-H(X) + H(Y) = 1 + 1 = 2 bits
+**4. Verify: H(X, Y) ≤ H(X) + H(Y)**
 
-H(X,Y) < H(X) + H(Y) because X and Y are not independent!
-The difference (0.03 bits) is the mutual information I(X;Y)
+```
+H(X,Y) = 1.8465 bits
+H(X) + H(Y) = 1 + 0.9710 = 1.9710 bits
+
+1.8465 ≤ 1.9710 ✓
 ```
 
-**NumPy implementation:**
+**Why?** Joint entropy is maximized when variables are independent. If dependent (as here), H(X,Y) < H(X) + H(Y).
+
+**NumPy verification:**
 ```python
-# Joint distribution
-joint_probs = np.array([
-    [0.2, 0.3],  # X=0
-    [0.3, 0.2]   # X=1
-])
+joint = np.array([[0.3, 0.2],
+                   [0.1, 0.4]])
 
-# Joint entropy
-H_XY = entropy(joint_probs.flatten())
-print(f"H(X,Y) = {H_XY:.4f} bits")
+H_joint = -np.sum(joint * np.log2(joint))
+p_x = joint.sum(axis=1)
+p_y = joint.sum(axis=0)
+H_x = -np.sum(p_x * np.log2(p_x))
+H_y = -np.sum(p_y * np.log2(p_y))
 
-# Marginal distributions
-p_X = joint_probs.sum(axis=1)  # Sum over Y
-p_Y = joint_probs.sum(axis=0)  # Sum over X
-
-H_X = entropy(p_X)
-H_Y = entropy(p_Y)
-
-print(f"H(X) = {H_X:.4f} bits")
-print(f"H(Y) = {H_Y:.4f} bits")
-print(f"H(X) + H(Y) = {H_X + H_Y:.4f} bits")
-print(f"Difference: {(H_X + H_Y) - H_XY:.4f} bits (mutual information)")
+print(f"H(X,Y) = {H_joint:.4f} bits")  # 1.8465
+print(f"H(X) = {H_x:.4f} bits")  # 1.0000
+print(f"H(Y) = {H_y:.4f} bits")  # 0.9710
+print(f"H(X) + H(Y) = {H_x + H_y:.4f} bits")  # 1.9710
 ```
 
 ---
 
 ### Exercise 2.2 Solution: Conditional Entropy
 
-Using the same joint distribution from Exercise 2.1
+Using same joint distribution from 2.1.
 
-**Formula:** H(Y|X) = H(X,Y) - H(X)
+**1. Calculate P(Y|X=0) and P(Y|X=1)**
 
-**Step 1: Use chain rule**
+P(Y|X=0):
 ```
-H(Y|X) = H(X,Y) - H(X)
-       = 1.970 - 1.000
-       = 0.970 bits
-```
-
-**Step 2: Verify by direct calculation**
-```
-H(Y|X) = ∑ₓ P(x)·H(Y|X=x)
-
-For X=0:
-P(Y=0|X=0) = 0.2/0.5 = 0.4
-P(Y=1|X=0) = 0.3/0.5 = 0.6
-H(Y|X=0) = -[0.4·log₂(0.4) + 0.6·log₂(0.6)]
-         = -[-0.529 - 0.442]
-         = 0.971 bits
-
-For X=1:
-P(Y=0|X=1) = 0.3/0.5 = 0.6
-P(Y=1|X=1) = 0.2/0.5 = 0.4
-H(Y|X=1) = 0.971 bits (symmetric)
-
-H(Y|X) = 0.5·0.971 + 0.5·0.971 = 0.971 bits ✓
+P(Y=0|X=0) = P(X=0,Y=0) / P(X=0) = 0.3 / 0.5 = 0.6
+P(Y=1|X=0) = P(X=0,Y=1) / P(X=0) = 0.2 / 0.5 = 0.4
 ```
 
-**Interpretation:** Knowing X reduces uncertainty about Y from H(Y) = 1 bit to H(Y|X) = 0.97 bits. The reduction is small because X and Y are weakly dependent.
+P(Y|X=1):
+```
+P(Y=0|X=1) = P(X=1,Y=0) / P(X=1) = 0.1 / 0.5 = 0.2
+P(Y=1|X=1) = P(X=1,Y=1) / P(X=1) = 0.4 / 0.5 = 0.8
+```
 
-**NumPy implementation:**
+**2. Calculate H(Y|X=0) and H(Y|X=1)**
+
+```
+H(Y|X=0) = -[0.6·log₂(0.6) + 0.4·log₂(0.4)]
+         = -[0.6·(-0.737) + 0.4·(-1.322)]
+         = 0.9710 bits
+
+H(Y|X=1) = -[0.2·log₂(0.2) + 0.8·log₂(0.8)]
+         = -[0.2·(-2.322) + 0.8·(-0.322)]
+         = 0.7219 bits
+```
+
+**3. Calculate H(Y|X)**
+
+```
+H(Y|X) = Σ P(x) H(Y|X=x)
+       = P(X=0)·H(Y|X=0) + P(X=1)·H(Y|X=1)
+       = 0.5·(0.9710) + 0.5·(0.7219)
+       = 0.8465 bits
+```
+
+**4. Verify: H(X, Y) = H(X) + H(Y|X)**
+
+```
+H(X) + H(Y|X) = 1.0 + 0.8465 = 1.8465 bits
+H(X,Y) = 1.8465 bits ✓
+```
+
+This is the **chain rule for entropy**!
+
+**NumPy verification:**
 ```python
-# Method 1: Chain rule
-H_Y_given_X = H_XY - H_X
-print(f"H(Y|X) via chain rule: {H_Y_given_X:.4f} bits")
+# Conditional distributions
+P_Y_given_X0 = joint[0, :] / p_x[0]
+P_Y_given_X1 = joint[1, :] / p_x[1]
 
-# Method 2: Direct calculation
-def conditional_entropy(joint_probs):
-    """Calculate H(Y|X) = ∑ₓ P(x)·H(Y|X=x)"""
-    p_X = joint_probs.sum(axis=1)
-    H_cond = 0
+H_Y_given_X0 = -np.sum(P_Y_given_X0 * np.log2(P_Y_given_X0))
+H_Y_given_X1 = -np.sum(P_Y_given_X1 * np.log2(P_Y_given_X1))
 
-    for i, p_x in enumerate(p_X):
-        if p_x > 0:
-            # Conditional distribution P(Y|X=i)
-            p_Y_given_X = joint_probs[i, :] / p_x
-            H_Y_given_Xi = entropy(p_Y_given_X)
-            H_cond += p_x * H_Y_given_Xi
+H_Y_given_X = p_x[0] * H_Y_given_X0 + p_x[1] * H_Y_given_X1
 
-    return H_cond
-
-H_Y_given_X_direct = conditional_entropy(joint_probs)
-print(f"H(Y|X) direct: {H_Y_given_X_direct:.4f} bits")
-
-# Information gain
-print(f"Information gain: H(Y) - H(Y|X) = {H_Y - H_Y_given_X:.4f} bits")
+print(f"H(Y|X=0) = {H_Y_given_X0:.4f}")  # 0.9710
+print(f"H(Y|X=1) = {H_Y_given_X1:.4f}")  # 0.7219
+print(f"H(Y|X) = {H_Y_given_X:.4f}")  # 0.8465
+print(f"H(X) + H(Y|X) = {H_x + H_Y_given_X:.4f}")  # 1.8465
 ```
 
 ---
 
-### Exercise 2.3 Solution: Chain Rule Verification
+### Exercise 2.3 Solution: Chain Rule
 
-**Chain Rule:** H(X, Y) = H(X) + H(Y|X) = H(Y) + H(X|Y)
+**1. Chain rule for 3 variables**
 
-Using our joint distribution:
-
-**Step 1: Calculate H(X) + H(Y|X)**
 ```
-H(X) = 1.000 bits (from Exercise 2.1)
-H(Y|X) = 0.970 bits (from Exercise 2.2)
-H(X) + H(Y|X) = 1.970 bits
+H(X,Y,Z) = H(X) + H(Y|X) + H(Z|X,Y)
 ```
 
-**Step 2: Calculate H(Y) + H(X|Y)**
+**Intuition:** The joint entropy equals the entropy of the first variable, plus the additional entropy from the second given the first, plus the additional entropy from the third given both previous.
+
+**2. Given values:**
+- H(X) = 2 bits
+- H(Y|X) = 1.5 bits
+- H(Z|X,Y) = 1 bit
+
+**3. Calculate H(X, Y, Z)**
+
 ```
-H(Y) = 1.000 bits (from Exercise 2.1)
-H(X|Y) = H(X,Y) - H(Y) = 1.970 - 1.000 = 0.970 bits
-H(Y) + H(X|Y) = 1.970 bits
+H(X,Y,Z) = H(X) + H(Y|X) + H(Z|X,Y)
+         = 2 + 1.5 + 1
+         = 4.5 bits
 ```
 
-**Step 3: Verify all equal**
-```
-H(X,Y) = 1.970 bits
-H(X) + H(Y|X) = 1.970 bits ✓
-H(Y) + H(X|Y) = 1.970 bits ✓
+**4. Why useful for sequential data?**
 
-Chain rule verified!
-```
+The chain rule is crucial for modeling sequences (text, speech, time series):
+- Language models predict next word given context
+- In "The cat sat on the ___", we predict given previous words
+- Each word adds information conditioned on what came before
+- H(sentence) = H(w₁) + H(w₂|w₁) + H(w₃|w₁,w₂) + ...
 
-**NumPy implementation:**
-```python
-# Calculate all quantities
-H_X_given_Y = H_XY - H_Y
-
-print("Chain Rule Verification:")
-print(f"H(X,Y) = {H_XY:.4f} bits")
-print(f"H(X) + H(Y|X) = {H_X + H_Y_given_X:.4f} bits")
-print(f"H(Y) + H(X|Y) = {H_Y + H_X_given_Y:.4f} bits")
-print(f"All equal? {np.allclose([H_XY, H_X + H_Y_given_X, H_Y + H_X_given_Y])}")
-```
+This decomposition helps us:
+- Understand information flow in sequences
+- Build autoregressive models (GPT, etc.)
+- Measure compression efficiency
+- Calculate perplexity (exp of entropy per symbol)
 
 ---
 
 ## Part 3: Mutual Information
 
-### Exercise 3.1 Solution: Mutual Information Calculation
+### Exercise 3.1 Solution: Computing Mutual Information
 
-**Formula:** I(X;Y) = H(X) + H(Y) - H(X,Y)
+Using joint distribution from Exercise 2.1:
 
-Using our joint distribution:
+**1. Calculate I(X; Y) = H(X) + H(Y) - H(X, Y)**
 
-**Step 1: Calculate I(X;Y)**
+From Exercise 2.1:
+- H(X) = 1.0 bit
+- H(Y) = 0.9710 bits
+- H(X, Y) = 1.8465 bits
+
 ```
-I(X;Y) = H(X) + H(Y) - H(X,Y)
-       = 1.000 + 1.000 - 1.970
-       = 0.030 bits
-```
-
-**Step 2: Alternative formula**
-```
-I(X;Y) = H(X) - H(X|Y)
-       = 1.000 - 0.970
-       = 0.030 bits ✓
-
-I(X;Y) = H(Y) - H(Y|X)
-       = 1.000 - 0.970
-       = 0.030 bits ✓
+I(X; Y) = 1.0 + 0.9710 - 1.8465
+        = 0.1245 bits
 ```
 
-**Interpretation:** X and Y share 0.03 bits of information. This is small, indicating weak dependence. If they were independent, I(X;Y) = 0. If perfectly correlated, I(X;Y) = 1 bit.
+**2. Alternative: I(X; Y) = H(X) - H(X|Y)**
 
-**NumPy implementation:**
-```python
-def mutual_information(joint_probs):
-    """Calculate I(X;Y) = H(X) + H(Y) - H(X,Y)"""
-    # Marginal distributions
-    p_X = joint_probs.sum(axis=1)
-    p_Y = joint_probs.sum(axis=0)
-
-    # Entropies
-    H_X = entropy(p_X)
-    H_Y = entropy(p_Y)
-    H_XY = entropy(joint_probs.flatten())
-
-    return H_X + H_Y - H_XY
-
-I_XY = mutual_information(joint_probs)
-print(f"I(X;Y) = {I_XY:.4f} bits")
-
-# Verify alternative formulas
-I_XY_alt1 = H_X - H_X_given_Y
-I_XY_alt2 = H_Y - H_Y_given_X
-
-print(f"I(X;Y) = H(X) - H(X|Y) = {I_XY_alt1:.4f} bits")
-print(f"I(X;Y) = H(Y) - H(Y|X) = {I_XY_alt2:.4f} bits")
+First calculate H(X|Y):
+```
+H(X|Y) = H(X,Y) - H(Y)
+       = 1.8465 - 0.9710
+       = 0.8755 bits
 ```
 
----
-
-### Exercise 3.2 Solution: Independent Variables
-
-For independent X and Y: P(X,Y) = P(X)·P(Y)
-
-**Example:** X ~ {0, 1} with P(X=0) = 0.3, Y ~ {0, 1} with P(Y=0) = 0.6
-
-**Step 1: Joint distribution**
+Then:
 ```
-P(0,0) = 0.3 × 0.6 = 0.18
-P(0,1) = 0.3 × 0.4 = 0.12
-P(1,0) = 0.7 × 0.6 = 0.42
-P(1,1) = 0.7 × 0.4 = 0.28
+I(X; Y) = H(X) - H(X|Y)
+        = 1.0 - 0.8755
+        = 0.1245 bits ✓
 ```
 
-**Step 2: Calculate entropies**
-```
-H(X) = -[0.3·log₂(0.3) + 0.7·log₂(0.7)]
-     = -[-0.521 - 0.360]
-     = 0.881 bits
+**3. Both give same result** ✓
 
-H(Y) = -[0.6·log₂(0.6) + 0.4·log₂(0.4)]
-     = -[-0.442 - 0.529]
-     = 0.971 bits
+**4. Are X and Y independent?**
 
-H(X,Y) = -[0.18·log₂(0.18) + 0.12·log₂(0.12) +
-           0.42·log₂(0.42) + 0.28·log₂(0.28)]
-       = 1.852 bits
-```
+**No.** If independent, I(X; Y) = 0. Here I(X; Y) = 0.1245 bits > 0, so X and Y share information.
 
-**Step 3: Calculate I(X;Y)**
-```
-I(X;Y) = H(X) + H(Y) - H(X,Y)
-       = 0.881 + 0.971 - 1.852
-       = 0.000 bits ✓
-
-For independent variables, I(X;Y) = 0!
-```
+**Interpretation:** Knowing X reduces uncertainty about Y by 0.1245 bits (and vice versa).
 
 **NumPy verification:**
 ```python
-# Independent variables
-p_X_indep = np.array([0.3, 0.7])
-p_Y_indep = np.array([0.6, 0.4])
+I_xy = H_x + H_y - H_joint
+print(f"I(X;Y) = {I_xy:.4f} bits")  # 0.1245
 
-# Joint distribution (outer product)
-joint_indep = np.outer(p_X_indep, p_Y_indep)
-
-print("Joint distribution (independent):")
-print(joint_indep)
-
-I_indep = mutual_information(joint_indep)
-print(f"\nI(X;Y) for independent variables: {I_indep:.6f} bits")
-print(f"Essentially zero? {np.isclose(I_indep, 0)}")
+# Alternative
+H_x_given_y = H_joint - H_y
+I_xy_alt = H_x - H_x_given_y
+print(f"I(X;Y) alternative = {I_xy_alt:.4f} bits")  # 0.1245
 ```
 
 ---
 
-### Exercise 3.3 Solution: Perfectly Correlated Variables
+### Exercise 3.2 Solution: Independence Test
 
-Y = X (perfect correlation)
+Joint distribution:
 
-**Step 1: Joint distribution**
+| X\Y | Y=0 | Y=1 |
+|-----|-----|-----|
+| X=0 | 0.3 | 0.3 |
+| X=1 | 0.2 | 0.2 |
+
+**1. Calculate I(X; Y)**
+
+Marginals:
+- P(X=0) = 0.6, P(X=1) = 0.4
+- P(Y=0) = 0.5, P(Y=1) = 0.5
+
 ```
-      Y=0   Y=1
-X=0   0.5   0.0
-X=1   0.0   0.5
-```
+H(X) = -[0.6·log₂(0.6) + 0.4·log₂(0.4)]
+     = 0.9710 bits
 
-**Step 2: Calculate entropies**
-```
-H(X) = -[0.5·log₂(0.5) + 0.5·log₂(0.5)] = 1 bit
-H(Y) = 1 bit (same as X)
+H(Y) = -[0.5·log₂(0.5) + 0.5·log₂(0.5)]
+     = 1.0 bit
 
-H(X,Y) = -[0.5·log₂(0.5) + 0·log₂(0) + 0·log₂(0) + 0.5·log₂(0.5)]
-       = -[0.5·(-1) + 0.5·(-1)]
-       = 1 bit
+H(X,Y) = -[0.3·log₂(0.3) + 0.3·log₂(0.3) + 0.2·log₂(0.2) + 0.2·log₂(0.2)]
+       = -[2×(0.3·(-1.737)) + 2×(0.2·(-2.322))]
+       = 1.9710 bits
 
-(Note: 0·log₂(0) = 0 by convention)
-```
-
-**Step 3: Mutual information**
-```
-I(X;Y) = H(X) + H(Y) - H(X,Y)
-       = 1 + 1 - 1
-       = 1 bit
-
-I(X;Y) = H(X) = H(Y) for perfect correlation!
+I(X;Y) = 0.9710 + 1.0 - 1.9710 = 0 bits
 ```
 
-**Interpretation:** When Y = X, knowing one variable completely determines the other. The mutual information equals the entropy of either variable.
+**2. Are X and Y independent?**
 
-**NumPy implementation:**
+**Yes!** I(X; Y) = 0 means X and Y share no information.
+
+**3. Verify: P(X,Y) = P(X)P(Y) for all x,y**
+
+```
+P(X=0,Y=0) = 0.3,  P(X=0)·P(Y=0) = 0.6·0.5 = 0.3 ✓
+P(X=0,Y=1) = 0.3,  P(X=0)·P(Y=1) = 0.6·0.5 = 0.3 ✓
+P(X=1,Y=0) = 0.2,  P(X=1)·P(Y=0) = 0.4·0.5 = 0.2 ✓
+P(X=1,Y=1) = 0.2,  P(X=1)·P(Y=1) = 0.4·0.5 = 0.2 ✓
+```
+
+All equal! **Independence confirmed.**
+
+**NumPy verification:**
 ```python
-# Perfect correlation Y = X
-joint_perfect = np.array([
-    [0.5, 0.0],
-    [0.0, 0.5]
-])
+joint_indep = np.array([[0.3, 0.3],
+                         [0.2, 0.2]])
 
-I_perfect = mutual_information(joint_perfect)
-p_X_perfect = joint_perfect.sum(axis=1)
-H_X_perfect = entropy(p_X_perfect)
+H_joint_indep = -np.sum(joint_indep * np.log2(joint_indep))
+p_x_indep = joint_indep.sum(axis=1)
+p_y_indep = joint_indep.sum(axis=0)
+H_x_indep = -np.sum(p_x_indep * np.log2(p_x_indep))
+H_y_indep = -np.sum(p_y_indep * np.log2(p_y_indep))
 
-print(f"I(X;Y) for Y=X: {I_perfect:.4f} bits")
-print(f"H(X): {H_X_perfect:.4f} bits")
-print(f"I(X;Y) = H(X)? {np.isclose(I_perfect, H_X_perfect)}")
-
-# Conditional entropy should be 0
-H_Y_given_X_perfect = entropy(joint_perfect.flatten()) - H_X_perfect
-print(f"H(Y|X) for Y=X: {H_Y_given_X_perfect:.6f} bits (should be 0)")
+I_indep = H_x_indep + H_y_indep - H_joint_indep
+print(f"I(X;Y) = {I_indep:.10f} bits")  # ~0.0000000000
 ```
+
+---
+
+### Exercise 3.3 Solution: Mutual Information Properties
+
+Given: I(X; Y) = 0.5 bits, H(X) = 2 bits, H(Y) = 1.5 bits
+
+**1. Calculate H(X|Y)**
+
+From I(X; Y) = H(X) - H(X|Y):
+```
+H(X|Y) = H(X) - I(X; Y)
+       = 2 - 0.5
+       = 1.5 bits
+```
+
+**2. Calculate H(Y|X)**
+
+From I(X; Y) = H(Y) - H(Y|X):
+```
+H(Y|X) = H(Y) - I(X; Y)
+       = 1.5 - 0.5
+       = 1.0 bit
+```
+
+**3. Calculate H(X, Y)**
+
+From I(X; Y) = H(X) + H(Y) - H(X, Y):
+```
+H(X,Y) = H(X) + H(Y) - I(X; Y)
+       = 2 + 1.5 - 0.5
+       = 3.0 bits
+```
+
+**4. Entropy Venn Diagram**
+
+```
+         ┌─────────────────┐
+         │                 │
+    ┌────┼────┐            │
+    │    │    │            │
+    │ 1.5│0.5 │    1.0     │
+    │    │    │            │
+    └────┼────┘            │
+         │                 │
+         └─────────────────┘
+
+    H(X|Y)  I(X;Y)   H(Y|X)
+
+    Total H(X) = 1.5 + 0.5 = 2.0
+    Total H(Y) = 0.5 + 1.0 = 1.5
+    Total H(X,Y) = 1.5 + 0.5 + 1.0 = 3.0
+```
+
+**Key relationships:**
+- I(X; Y) is the overlap (shared information)
+- H(X|Y) is X's unique information (given Y)
+- H(Y|X) is Y's unique information (given X)
+- H(X, Y) = H(X|Y) + I(X; Y) + H(Y|X)
 
 ---
 
@@ -486,340 +509,428 @@ print(f"H(Y|X) for Y=X: {H_Y_given_X_perfect:.6f} bits (should be 0)")
 
 ### Exercise 4.1 Solution: Cross-Entropy
 
-True distribution: p = [0.5, 0.5]
-Model distribution: q = [0.7, 0.3]
+True distribution P: [0.5, 0.3, 0.2]
+Model distribution Q: [0.4, 0.4, 0.2]
 
-**Cross-entropy formula:** H(p, q) = -∑ₓ p(x)·log₂ q(x)
+**1. Calculate H(P, Q) = -Σ p(x) log q(x)**
 
-**Step 1: Calculate H(p, q)**
 ```
-H(p,q) = -[p(0)·log₂ q(0) + p(1)·log₂ q(1)]
-       = -[0.5·log₂(0.7) + 0.5·log₂(0.3)]
-       = -[0.5·(-0.515) + 0.5·(-1.737)]
-       = -[-0.258 - 0.868]
-       = 1.126 bits
+H(P,Q) = -[0.5·log₂(0.4) + 0.3·log₂(0.4) + 0.2·log₂(0.2)]
+       = -[0.5·(-1.322) + 0.3·(-1.322) + 0.2·(-2.322)]
+       = -[-0.6610 - 0.3966 - 0.4644]
+       = 1.5220 bits
 ```
 
-**Step 2: Compare with H(p)**
+**2. Calculate H(P)**
+
 ```
-H(p) = -[0.5·log₂(0.5) + 0.5·log₂(0.5)] = 1.000 bit
-
-H(p,q) = 1.126 bits > H(p) = 1.000 bit
-
-Cross-entropy is always ≥ entropy, with equality when p = q
+H(P) = -[0.5·log₂(0.5) + 0.3·log₂(0.3) + 0.2·log₂(0.2)]
+     = -[0.5·(-1) + 0.3·(-1.737) + 0.2·(-2.322)]
+     = 1.4855 bits
 ```
 
-**Step 3: Interpretation**
-The cross-entropy measures the expected number of bits needed to encode events from p using code optimized for q. Since q ≠ p, we need more bits (1.126) than optimal (1.000).
+**3. Which is larger?**
 
-**NumPy implementation:**
+**H(P, Q) = 1.5220 > H(P) = 1.4855**
+
+Cross-entropy is always ≥ entropy of true distribution.
+
+**Why?** H(P, Q) ≥ H(P) with equality only when P = Q. The difference is the KL divergence.
+
+**4. What does this tell us?**
+
+Using Q to encode data from P requires **more bits** (1.5220) than the optimal code for P (1.4855).
+
+The extra cost is:
+```
+D_KL(P||Q) = H(P,Q) - H(P) = 1.5220 - 1.4855 = 0.0365 bits
+```
+
+This is the **penalty** for using the wrong distribution.
+
+**NumPy verification:**
 ```python
-def cross_entropy(p, q):
-    """Calculate H(p,q) = -∑ p(x)·log₂ q(x)"""
-    p = np.array(p)
-    q = np.array(q)
-    # Avoid log(0)
-    return -np.sum(p * np.log2(q + 1e-10))
+P = np.array([0.5, 0.3, 0.2])
+Q = np.array([0.4, 0.4, 0.2])
 
-p_true = np.array([0.5, 0.5])
-q_model = np.array([0.7, 0.3])
+H_p = -np.sum(P * np.log2(P))
+H_pq = -np.sum(P * np.log2(Q))
 
-H_p = entropy(p_true)
-H_pq = cross_entropy(p_true, q_model)
-
-print(f"H(p) = {H_p:.4f} bits")
-print(f"H(p,q) = {H_pq:.4f} bits")
-print(f"Extra bits due to model mismatch: {H_pq - H_p:.4f} bits")
+print(f"H(P) = {H_p:.4f} bits")  # 1.4855
+print(f"H(P,Q) = {H_pq:.4f} bits")  # 1.5220
+print(f"Difference = {H_pq - H_p:.4f} bits")  # 0.0365
 ```
 
 ---
 
 ### Exercise 4.2 Solution: KL Divergence
 
-**KL Divergence formula:** D_KL(p||q) = ∑ₓ p(x)·log₂(p(x)/q(x))
+Same distributions: P: [0.5, 0.3, 0.2], Q: [0.4, 0.4, 0.2]
 
-Using p = [0.5, 0.5] and q = [0.7, 0.3]:
+**1. Calculate D_KL(P || Q) = Σ p(x) log(p(x)/q(x))**
 
-**Step 1: Calculate D_KL(p||q)**
 ```
-D_KL(p||q) = p(0)·log₂(p(0)/q(0)) + p(1)·log₂(p(1)/q(1))
-           = 0.5·log₂(0.5/0.7) + 0.5·log₂(0.5/0.3)
-           = 0.5·log₂(0.714) + 0.5·log₂(1.667)
-           = 0.5·(-0.485) + 0.5·(0.737)
-           = -0.243 + 0.368
-           = 0.126 bits
+D_KL(P||Q) = 0.5·log₂(0.5/0.4) + 0.3·log₂(0.3/0.4) + 0.2·log₂(0.2/0.2)
+           = 0.5·log₂(1.25) + 0.3·log₂(0.75) + 0.2·log₂(1.0)
+           = 0.5·(0.3219) + 0.3·(-0.4150) + 0.2·(0)
+           = 0.1610 - 0.1245 + 0
+           = 0.0365 bits
 ```
 
-**Step 2: Relationship to cross-entropy**
-```
-D_KL(p||q) = H(p,q) - H(p)
-           = 1.126 - 1.000
-           = 0.126 bits ✓
-```
+**2. Verify: D_KL(P || Q) = H(P, Q) - H(P)**
 
-**Step 3: Calculate D_KL(q||p) (reverse)**
 ```
-D_KL(q||p) = 0.7·log₂(0.7/0.5) + 0.3·log₂(0.3/0.5)
-           = 0.7·log₂(1.4) + 0.3·log₂(0.6)
-           = 0.7·(0.485) + 0.3·(-0.737)
-           = 0.340 - 0.221
-           = 0.119 bits
-
-D_KL(p||q) ≠ D_KL(q||p)
-KL divergence is NOT symmetric!
+H(P,Q) - H(P) = 1.5220 - 1.4855 = 0.0365 bits ✓
 ```
 
-**NumPy implementation:**
-```python
-def kl_divergence(p, q):
-    """Calculate D_KL(p||q) = ∑ p(x)·log₂(p(x)/q(x))"""
-    p = np.array(p)
-    q = np.array(q)
-    # Avoid division by zero
-    return np.sum(p * np.log2((p + 1e-10) / (q + 1e-10)))
+This confirms the relationship!
 
-D_pq = kl_divergence(p_true, q_model)
-D_qp = kl_divergence(q_model, p_true)
+**3. Calculate D_KL(Q || P)**
 
-print(f"D_KL(p||q) = {D_pq:.4f} bits")
-print(f"D_KL(q||p) = {D_qp:.4f} bits")
-print(f"Symmetric? {np.isclose(D_pq, D_qp)}")
-
-# Verify relationship
-print(f"\nVerification: D_KL(p||q) = H(p,q) - H(p)")
-print(f"{D_pq:.4f} = {H_pq:.4f} - {H_p:.4f} ✓")
+```
+D_KL(Q||P) = 0.4·log₂(0.4/0.5) + 0.4·log₂(0.4/0.3) + 0.2·log₂(0.2/0.2)
+           = 0.4·log₂(0.8) + 0.4·log₂(1.333) + 0
+           = 0.4·(-0.3219) + 0.4·(0.4150)
+           = -0.1288 + 0.1660
+           = 0.0372 bits
 ```
 
----
+**4. Is KL divergence symmetric?**
 
-### Exercise 4.3 Solution: Properties of KL Divergence
-
-**Property 1: Non-negativity** D_KL(p||q) ≥ 0, with equality iff p = q
-
-**Proof sketch:**
-By Gibbs' inequality: -∑ p(x)·log q(x) ≥ -∑ p(x)·log p(x)
-Therefore: H(p,q) ≥ H(p)
-So: D_KL(p||q) = H(p,q) - H(p) ≥ 0
-
-**Test 1: Different distributions**
+**No!**
 ```
-p = [0.5, 0.5]
-q = [0.7, 0.3]
-D_KL(p||q) = 0.126 > 0 ✓
+D_KL(P||Q) = 0.0365 bits
+D_KL(Q||P) = 0.0372 bits
+
+D_KL(P||Q) ≠ D_KL(Q||P)
 ```
 
-**Test 2: Identical distributions**
-```
-p = [0.5, 0.5]
-q = [0.5, 0.5]
-D_KL(p||q) = 0.5·log₂(1) + 0.5·log₂(1) = 0 ✓
-```
+**Interpretation:**
+- D_KL(P||Q): cost of using Q to approximate P
+- D_KL(Q||P): cost of using P to approximate Q
+- Different perspectives, different costs!
 
 **NumPy verification:**
 ```python
-# Test 1: Different distributions
-p1 = np.array([0.5, 0.5])
-q1 = np.array([0.7, 0.3])
-D1 = kl_divergence(p1, q1)
-print(f"Different dists: D_KL = {D1:.6f} (should be > 0)")
-assert D1 > 0, "KL divergence should be positive for different distributions"
+D_kl_PQ = np.sum(P * np.log2(P / Q))
+D_kl_QP = np.sum(Q * np.log2(Q / P))
 
-# Test 2: Identical distributions
-p2 = np.array([0.5, 0.5])
-q2 = np.array([0.5, 0.5])
-D2 = kl_divergence(p2, q2)
-print(f"Identical dists: D_KL = {D2:.6f} (should be 0)")
-assert np.isclose(D2, 0), "KL divergence should be 0 for identical distributions"
-
-# Test 3: Many random distributions
-for _ in range(10):
-    p = np.random.dirichlet([1, 1, 1])
-    q = np.random.dirichlet([1, 1, 1])
-    D = kl_divergence(p, q)
-    assert D >= -1e-10, f"KL divergence should be non-negative, got {D}"
-
-print("\nAll non-negativity tests passed! ✓")
+print(f"D_KL(P||Q) = {D_kl_PQ:.4f} bits")  # 0.0365
+print(f"D_KL(Q||P) = {D_kl_QP:.4f} bits")  # 0.0372
+print(f"Are they equal? {np.isclose(D_kl_PQ, D_kl_QP)}")  # False
 ```
 
 ---
 
-### Exercise 4.4 Solution: JS Divergence
+### Exercise 4.3 Solution: KL Divergence Properties
 
-**Jensen-Shannon Divergence:** JS(p||q) = ½D_KL(p||m) + ½D_KL(q||m), where m = ½(p + q)
+P = [0.8, 0.2], Q = [0.6, 0.4], R = [0.5, 0.5]
 
-Using p = [0.5, 0.5] and q = [0.7, 0.3]:
+**1. Calculate D_KL(P || Q)**
 
-**Step 1: Calculate midpoint**
 ```
-m = ½(p + q) = ½([0.5, 0.5] + [0.7, 0.3])
-              = ½[1.2, 0.8]
-              = [0.6, 0.4]
-```
-
-**Step 2: Calculate D_KL(p||m)**
-```
-D_KL(p||m) = 0.5·log₂(0.5/0.6) + 0.5·log₂(0.5/0.4)
-           = 0.5·log₂(0.833) + 0.5·log₂(1.25)
-           = 0.5·(-0.263) + 0.5·(0.322)
-           = 0.030 bits
+D_KL(P||Q) = 0.8·log₂(0.8/0.6) + 0.2·log₂(0.2/0.4)
+           = 0.8·log₂(1.333) + 0.2·log₂(0.5)
+           = 0.8·(0.4150) + 0.2·(-1.0)
+           = 0.3320 - 0.2
+           = 0.1320 bits
 ```
 
-**Step 3: Calculate D_KL(q||m)**
+**2. Calculate D_KL(P || R)**
+
 ```
-D_KL(q||m) = 0.7·log₂(0.7/0.6) + 0.3·log₂(0.3/0.4)
-           = 0.7·log₂(1.167) + 0.3·log₂(0.75)
-           = 0.7·(0.222) + 0.3·(-0.415)
-           = 0.030 bits
+D_KL(P||R) = 0.8·log₂(0.8/0.5) + 0.2·log₂(0.2/0.5)
+           = 0.8·log₂(1.6) + 0.2·log₂(0.4)
+           = 0.8·(0.6781) + 0.2·(-1.3219)
+           = 0.5425 - 0.2644
+           = 0.2781 bits
 ```
 
-**Step 4: Calculate JS divergence**
+**3. Calculate D_KL(Q || R)**
+
 ```
-JS(p||q) = ½·0.030 + ½·0.030
-         = 0.030 bits
+D_KL(Q||R) = 0.6·log₂(0.6/0.5) + 0.4·log₂(0.4/0.5)
+           = 0.6·log₂(1.2) + 0.4·log₂(0.8)
+           = 0.6·(0.2630) + 0.4·(-0.3219)
+           = 0.1578 - 0.1288
+           = 0.0290 bits
 ```
 
-**Property: Symmetry**
-```
-JS(p||q) = JS(q||p) by construction
+**4. Which model is "closer" to P?**
 
-Unlike KL divergence, JS divergence is symmetric!
-Also: 0 ≤ JS(p||q) ≤ 1 (bounded)
+**Model Q** is closer to P:
+```
+D_KL(P||Q) = 0.1320 bits < D_KL(P||R) = 0.2781 bits
 ```
 
-**NumPy implementation:**
+**Interpretation:**
+- Q = [0.6, 0.4] is closer to P = [0.8, 0.2]
+- R = [0.5, 0.5] (uniform) is farther from P
+- Lower KL divergence = better approximation
+
+**NumPy verification:**
 ```python
-def js_divergence(p, q):
-    """Calculate Jensen-Shannon divergence"""
-    p = np.array(p)
-    q = np.array(q)
-    m = 0.5 * (p + q)
-    return 0.5 * kl_divergence(p, m) + 0.5 * kl_divergence(q, m)
+P = np.array([0.8, 0.2])
+Q = np.array([0.6, 0.4])
+R = np.array([0.5, 0.5])
 
-JS_pq = js_divergence(p_true, q_model)
-JS_qp = js_divergence(q_model, p_true)
+D_PQ = np.sum(P * np.log2(P / Q))
+D_PR = np.sum(P * np.log2(P / R))
+D_QR = np.sum(Q * np.log2(Q / R))
 
-print(f"JS(p||q) = {JS_pq:.4f} bits")
-print(f"JS(q||p) = {JS_qp:.4f} bits")
-print(f"Symmetric? {np.isclose(JS_pq, JS_qp)}")
+print(f"D_KL(P||Q) = {D_PQ:.4f} bits")  # 0.1320
+print(f"D_KL(P||R) = {D_PR:.4f} bits")  # 0.2781
+print(f"D_KL(Q||R) = {D_QR:.4f} bits")  # 0.0290
+print(f"Closest to P: {'Q' if D_PQ < D_PR else 'R'}")  # Q
+```
 
-# Compare with KL divergence
-print(f"\nD_KL(p||q) = {D_pq:.4f} bits (not symmetric)")
-print(f"D_KL(q||p) = {D_qp:.4f} bits")
-print(f"JS(p||q) = {JS_pq:.4f} bits (symmetric)")
+---
+
+### Exercise 4.4 Solution: Cross-Entropy in Classification
+
+Binary classification:
+- True labels: [1, 0, 1, 1]
+- Predictions: [0.9, 0.2, 0.8, 0.7]
+
+**1. Cross-entropy loss formula**
+
+```
+L = -(1/n)Σ[yᵢ log(ŷᵢ) + (1-yᵢ)log(1-ŷᵢ)]
+```
+
+**2. Calculate for each sample**
+
+Sample 1: y=1, ŷ=0.9
+```
+L₁ = -[1·log(0.9) + 0·log(0.1)]
+   = -log(0.9)
+   = 0.1054
+```
+
+Sample 2: y=0, ŷ=0.2
+```
+L₂ = -[0·log(0.2) + 1·log(0.8)]
+   = -log(0.8)
+   = 0.2231
+```
+
+Sample 3: y=1, ŷ=0.8
+```
+L₃ = -log(0.8)
+   = 0.2231
+```
+
+Sample 4: y=1, ŷ=0.7
+```
+L₄ = -log(0.7)
+   = 0.3567
+```
+
+**3. Take average**
+
+```
+L = (0.1054 + 0.2231 + 0.2231 + 0.3567) / 4
+  = 0.9083 / 4
+  = 0.2271
+```
+
+**4. What happens if prediction is wrong but confident?**
+
+Example: y=1, ŷ=0.1 (confident but wrong)
+```
+L = -log(0.1) = 2.3026 (very high!)
+```
+
+Example: y=1, ŷ=0.9 (confident and right)
+```
+L = -log(0.9) = 0.1054 (low)
+```
+
+**Key insight:** Cross-entropy **heavily penalizes** confident wrong predictions. The loss grows without bound as confidence in wrong answer increases.
+
+**NumPy verification:**
+```python
+y_true = np.array([1, 0, 1, 1])
+y_pred = np.array([0.9, 0.2, 0.8, 0.7])
+
+# Per-sample losses
+losses = -(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+print(f"Per-sample losses: {losses}")
+# [0.1054, 0.2231, 0.2231, 0.3567]
+
+# Average
+bce = np.mean(losses)
+print(f"Binary Cross-Entropy = {bce:.4f}")  # 0.2271
+
+# Confident wrong prediction
+y_wrong = np.array([1])
+y_pred_wrong = np.array([0.1])
+loss_wrong = -np.log(y_pred_wrong[0])
+print(f"Loss for confident wrong = {loss_wrong:.4f}")  # 2.3026
 ```
 
 ---
 
 ## Part 5: Applications to ML
 
-### Exercise 5.1 Solution: Cross-Entropy Loss
+### Exercise 5.1 Solution: Optimal Code Length
 
-True labels: y = [1, 0, 1] (one-hot encoded)
-Predictions: ŷ = [0.8, 0.1, 0.9]
+Message probabilities: P(A)=0.5, P(B)=0.25, P(C)=0.125, P(D)=0.125
 
-**Binary cross-entropy formula:** L = -∑ᵢ [yᵢ·log(ŷᵢ) + (1-yᵢ)·log(1-ŷᵢ)]
+**1. Calculate entropy H (minimum average bits)**
 
-**Step 1: Calculate loss for each sample**
 ```
-Sample 1: y=1, ŷ=0.8
-L₁ = -[1·log(0.8) + 0·log(0.2)]
-   = -log(0.8)
-   = 0.223
-
-Sample 2: y=0, ŷ=0.1
-L₂ = -[0·log(0.1) + 1·log(0.9)]
-   = -log(0.9)
-   = 0.105
-
-Sample 3: y=1, ŷ=0.9
-L₃ = -[1·log(0.9) + 0·log(0.1)]
-   = -log(0.9)
-   = 0.105
+H = -[0.5·log₂(0.5) + 0.25·log₂(0.25) + 0.125·log₂(0.125) + 0.125·log₂(0.125)]
+  = -[0.5·(-1) + 0.25·(-2) + 0.125·(-3) + 0.125·(-3)]
+  = 1.75 bits
 ```
 
-**Step 2: Average loss**
+**2. Design Huffman code**
+
+Build tree by combining lowest probabilities:
+
 ```
-L_avg = (L₁ + L₂ + L₃) / 3
-      = (0.223 + 0.105 + 0.105) / 3
-      = 0.144
+Step 1: Combine C(0.125) + D(0.125) = CD(0.25)
+Step 2: Combine B(0.25) + CD(0.25) = BCD(0.5)
+Step 3: Combine A(0.5) + BCD(0.5) = Root(1.0)
+
+Tree:
+         Root
+        /    \
+       A      BCD
+       |      / \
+       |     B  CD
+       |     |  / \
+       |     |  C  D
+
+Codes (left=0, right=1):
+A:  0      (1 bit)
+B:  10     (2 bits)
+C:  110    (3 bits)
+D:  111    (3 bits)
 ```
 
-**NumPy implementation:**
+**3. Calculate average code length**
+
+```
+Avg = 0.5·(1) + 0.25·(2) + 0.125·(3) + 0.125·(3)
+    = 0.5 + 0.5 + 0.375 + 0.375
+    = 1.75 bits
+```
+
+**4. How close to entropy?**
+
+```
+Entropy = 1.75 bits
+Huffman avg = 1.75 bits
+
+Perfect match! ✓
+```
+
+**Why perfect?** This distribution has powers-of-2 probabilities, so Huffman achieves Shannon's entropy bound exactly.
+
+**Python verification:**
 ```python
-def binary_cross_entropy(y_true, y_pred):
-    """Calculate binary cross-entropy loss"""
-    y_true = np.array(y_true)
-    y_pred = np.array(y_pred)
-    # Clip predictions to avoid log(0)
-    y_pred = np.clip(y_pred, 1e-10, 1 - 1e-10)
-    return -np.mean(y_true * np.log(y_pred) +
-                    (1 - y_true) * np.log(1 - y_pred))
+# Calculate entropy
+probs = np.array([0.5, 0.25, 0.125, 0.125])
+H = -np.sum(probs * np.log2(probs))
 
-y_true = np.array([1, 0, 1])
-y_pred = np.array([0.8, 0.1, 0.9])
+# Huffman code lengths
+code_lengths = np.array([1, 2, 3, 3])
+avg_length = np.sum(probs * code_lengths)
 
-loss = binary_cross_entropy(y_true, y_pred)
-print(f"Binary cross-entropy loss: {loss:.4f}")
-
-# Individual losses
-individual_losses = -(y_true * np.log(y_pred + 1e-10) +
-                      (1 - y_true) * np.log(1 - y_pred + 1e-10))
-print(f"Individual losses: {individual_losses}")
-print(f"Mean: {np.mean(individual_losses):.4f}")
+print(f"Entropy H = {H:.4f} bits")  # 1.7500
+print(f"Huffman avg = {avg_length:.4f} bits")  # 1.7500
+print(f"Efficiency = {H/avg_length:.2%}")  # 100.00%
 ```
 
 ---
 
-### Exercise 5.2 Solution: Categorical Cross-Entropy
+### Exercise 5.2 Solution: Decision Tree Splitting
 
-True label: y = [0, 1, 0] (class 1)
-Predictions: ŷ = [0.1, 0.7, 0.2]
+Dataset: [6Y, 4N] total
 
-**Categorical cross-entropy:** L = -∑ₖ yₖ·log(ŷₖ)
+Split A:
+- Left: [4Y, 1N] (5 samples)
+- Right: [2Y, 3N] (5 samples)
 
-**Step 1: Calculate loss**
+**1. Entropy of parent node**
+
 ```
-L = -[0·log(0.1) + 1·log(0.7) + 0·log(0.2)]
-  = -log(0.7)
-  = 0.357
-```
+P(Y) = 6/10 = 0.6
+P(N) = 4/10 = 0.4
 
-**Interpretation:** The loss is the negative log probability of the correct class. Lower probability → higher loss.
-
-**Compare different predictions:**
-```
-Prediction [0.1, 0.7, 0.2]: L = -log(0.7) = 0.357
-Prediction [0.1, 0.9, 0.0]: L = -log(0.9) = 0.105 (better!)
-Prediction [0.4, 0.4, 0.2]: L = -log(0.4) = 0.916 (worse!)
+H(parent) = -[0.6·log₂(0.6) + 0.4·log₂(0.4)]
+          = -[0.6·(-0.737) + 0.4·(-1.322)]
+          = 0.9710 bits
 ```
 
-**NumPy implementation:**
+**2. Entropy of left child [4Y, 1N]**
+
+```
+P(Y) = 4/5 = 0.8
+P(N) = 1/5 = 0.2
+
+H(left) = -[0.8·log₂(0.8) + 0.2·log₂(0.2)]
+        = -[0.8·(-0.322) + 0.2·(-2.322)]
+        = 0.7219 bits
+```
+
+**3. Entropy of right child [2Y, 3N]**
+
+```
+P(Y) = 2/5 = 0.4
+P(N) = 3/5 = 0.6
+
+H(right) = -[0.4·log₂(0.4) + 0.6·log₂(0.6)]
+         = -[0.4·(-1.322) + 0.6·(-0.737)]
+         = 0.9710 bits
+```
+
+**4. Calculate information gain**
+
+```
+IG = H(parent) - Σ(nᵢ/n)·H(childᵢ)
+   = H(parent) - [(5/10)·H(left) + (5/10)·H(right)]
+   = 0.9710 - [0.5·(0.7219) + 0.5·(0.9710)]
+   = 0.9710 - [0.3610 + 0.4855]
+   = 0.9710 - 0.8465
+   = 0.1245 bits
+```
+
+**5. Is this a good split?**
+
+**Yes, but moderate.** We gain 0.1245 bits of information (reduce uncertainty by 12.8%).
+
+Good split characteristics:
+- IG > 0 ✓ (we learn something)
+- Left child is purer (0.7219 < 0.9710) ✓
+- Right child is same entropy (0.9710 = 0.9710)
+
+**Could be better:** Right child didn't improve. Ideal split would maximize purity in both children.
+
+**NumPy verification:**
 ```python
-def categorical_cross_entropy(y_true, y_pred):
-    """Calculate categorical cross-entropy loss"""
-    y_true = np.array(y_true)
-    y_pred = np.array(y_pred)
-    # Clip predictions to avoid log(0)
-    y_pred = np.clip(y_pred, 1e-10, 1)
-    return -np.sum(y_true * np.log(y_pred))
+def calc_entropy(counts):
+    probs = counts / counts.sum()
+    return -np.sum(probs * np.log2(probs + 1e-10))
 
-y_true = np.array([0, 1, 0])
-y_pred = np.array([0.1, 0.7, 0.2])
+parent = np.array([6, 4])
+left = np.array([4, 1])
+right = np.array([2, 3])
 
-loss = categorical_cross_entropy(y_true, y_pred)
-print(f"Categorical cross-entropy: {loss:.4f}")
+H_parent = calc_entropy(parent)
+H_left = calc_entropy(left)
+H_right = calc_entropy(right)
 
-# Test with different predictions
-predictions = [
-    [0.1, 0.7, 0.2],
-    [0.1, 0.9, 0.0],
-    [0.4, 0.4, 0.2],
-    [0.0, 1.0, 0.0],  # Perfect prediction
-]
+n = parent.sum()
+IG = H_parent - (left.sum()/n * H_left + right.sum()/n * H_right)
 
-for pred in predictions:
-    L = categorical_cross_entropy(y_true, pred)
-    print(f"Prediction {pred}: Loss = {L:.4f}")
+print(f"H(parent) = {H_parent:.4f} bits")  # 0.9710
+print(f"H(left) = {H_left:.4f} bits")  # 0.7219
+print(f"H(right) = {H_right:.4f} bits")  # 0.9710
+print(f"Information Gain = {IG:.4f} bits")  # 0.1245
+print(f"Reduction = {IG/H_parent:.2%}")  # 12.82%
 ```
 
 ---
@@ -827,270 +938,363 @@ for pred in predictions:
 ### Exercise 5.3 Solution: Softmax and Cross-Entropy
 
 Logits: z = [2.0, 1.0, 0.1]
-True label: y = [0, 1, 0]
+True label: class 0 (one-hot: [1, 0, 0])
 
-**Step 1: Apply softmax**
+**1. Calculate softmax: p(i) = exp(zᵢ) / Σ exp(zⱼ)**
+
 ```
-softmax(zᵢ) = exp(zᵢ) / ∑ⱼ exp(zⱼ)
-
 exp(z) = [exp(2.0), exp(1.0), exp(0.1)]
        = [7.389, 2.718, 1.105]
 
-∑ exp(z) = 7.389 + 2.718 + 1.105 = 11.212
+Sum = 7.389 + 2.718 + 1.105 = 11.212
 
-ŷ = [7.389/11.212, 2.718/11.212, 1.105/11.212]
-  = [0.659, 0.242, 0.099]
+p(0) = 7.389 / 11.212 = 0.6590
+p(1) = 2.718 / 11.212 = 0.2424
+p(2) = 1.105 / 11.212 = 0.0986
 ```
 
-**Step 2: Calculate cross-entropy**
+Check: 0.6590 + 0.2424 + 0.0986 = 1.0000 ✓
+
+**2. Calculate cross-entropy: -Σ yᵢ log(p(i))**
+
+True label: y = [1, 0, 0]
+
 ```
-L = -[0·log(0.659) + 1·log(0.242) + 0·log(0.099)]
-  = -log(0.242)
-  = 1.419
+CE = -[1·log(0.6590) + 0·log(0.2424) + 0·log(0.0986)]
+   = -log(0.6590)
+   = 0.4170
 ```
 
-**Step 3: Derivative for backprop**
+**Simplification:** For one-hot encoded labels, only the true class matters:
 ```
-∂L/∂zᵢ = ŷᵢ - yᵢ
-
-∂L/∂z = [0.659-0, 0.242-1, 0.099-0]
-       = [0.659, -0.758, 0.099]
+CE = -log(p(true_class))
 ```
 
-**NumPy implementation:**
+**3. What if true label was class 2?**
+
+```
+CE = -log(p(2))
+   = -log(0.0986)
+   = 2.3165
+```
+
+Much higher loss! Model predicted 6.59% for class 2 but it was correct.
+
+**4. Why use log in the loss?**
+
+Key reasons:
+1. **Numerical stability:** Softmax outputs multiply (p₁·p₂·...), log converts to sum
+2. **Gradient simplicity:** ∂CE/∂zᵢ = p(i) - yᵢ (beautiful clean gradient!)
+3. **Information theory:** log relates to bits/nats of surprise
+4. **Penalizes confidence:** Wrong predictions near 0 get huge loss (→ ∞)
+5. **Maximum likelihood:** Log-likelihood is the natural objective
+
+**NumPy verification:**
 ```python
-def softmax(z):
-    """Numerically stable softmax"""
-    exp_z = np.exp(z - np.max(z))  # Subtract max for stability
-    return exp_z / np.sum(exp_z)
+logits = np.array([2.0, 1.0, 0.1])
 
-def softmax_cross_entropy_loss(z, y_true):
-    """Combined softmax + cross-entropy"""
-    y_pred = softmax(z)
-    loss = -np.sum(y_true * np.log(y_pred + 1e-10))
-    # Gradient
-    grad = y_pred - y_true
-    return loss, grad, y_pred
+# Softmax
+probs = np.exp(logits) / np.sum(np.exp(logits))
+print(f"Softmax probs: {probs}")
+# [0.6590, 0.2424, 0.0986]
 
-z = np.array([2.0, 1.0, 0.1])
-y_true = np.array([0, 1, 0])
+# Cross-entropy for class 0
+true_label = np.array([1, 0, 0])
+ce_loss = -np.sum(true_label * np.log(probs))
+print(f"CE loss (class 0): {ce_loss:.4f}")  # 0.4170
 
-loss, grad, y_pred = softmax_cross_entropy_loss(z, y_true)
+# Cross-entropy for class 2
+true_label_2 = np.array([0, 0, 1])
+ce_loss_2 = -np.sum(true_label_2 * np.log(probs))
+print(f"CE loss (class 2): {ce_loss_2:.4f}")  # 2.3165
 
-print(f"Logits: {z}")
-print(f"Softmax probabilities: {y_pred}")
-print(f"Cross-entropy loss: {loss:.4f}")
-print(f"Gradient ∂L/∂z: {grad}")
+# Simplified calculation
+ce_simple = -np.log(probs[0])
+print(f"CE simplified: {ce_simple:.4f}")  # 0.4170
 ```
 
 ---
 
 ## Challenge Problems
 
-### Challenge 1 Solution: Entropy of English Text
+### Challenge 1 Solution: Entropy Rate of Markov Chain
 
-Estimate the entropy of English text by character frequencies
-
-**Method:** Sample English text and calculate character-level entropy
-
-**Step 1: Count character frequencies**
-```python
-sample_text = """
-The quick brown fox jumps over the lazy dog.
-Machine learning is transforming artificial intelligence.
-Information theory provides the mathematical foundation.
-""".lower()
-
-# Count frequencies
-from collections import Counter
-char_counts = Counter(sample_text)
-total_chars = sum(char_counts.values())
-
-# Calculate probabilities
-char_probs = {char: count/total_chars for char, count in char_counts.items()}
-
-# Calculate entropy
-H_english = entropy(list(char_probs.values()))
-print(f"Character-level entropy of English: {H_english:.4f} bits/char")
+Transition matrix:
+```
+     [0.7  0.3]
+P =  [0.4  0.6]
 ```
 
-**Step 2: Compare with uniform distribution**
-```python
-# If all 27 characters (26 letters + space) were equally likely
-H_uniform = np.log2(27)
-print(f"Uniform distribution entropy: {H_uniform:.4f} bits/char")
-print(f"Compression ratio: {H_english / H_uniform:.2%}")
+**1. Find stationary distribution π (solve πP = π)**
+
+Setup: π = [π₀, π₁] such that:
+```
+π₀·0.7 + π₁·0.4 = π₀
+π₀·0.3 + π₁·0.6 = π₁
+π₀ + π₁ = 1
 ```
 
-**Interpretation:**
-- English has ~4.5 bits/char entropy (varies by analysis)
-- Uniform would be ~4.75 bits/char (27 characters)
-- Letters are NOT equally likely (e, t, a more common than z, q)
-- This redundancy allows compression!
+From first equation:
+```
+π₀·0.7 + π₁·0.4 = π₀
+π₁·0.4 = π₀·0.3
+π₁ = (0.3/0.4)·π₀ = 0.75·π₀
+```
 
-**Full implementation:**
+Substitute into normalization:
+```
+π₀ + 0.75·π₀ = 1
+1.75·π₀ = 1
+π₀ = 1/1.75 = 0.5714
+
+π₁ = 0.75·0.5714 = 0.4286
+```
+
+**Stationary distribution: π = [0.5714, 0.4286]**
+
+Check:
+```
+π·P = [0.5714·0.7 + 0.4286·0.4, 0.5714·0.3 + 0.4286·0.6]
+    = [0.4000 + 0.1714, 0.1714 + 0.2572]
+    = [0.5714, 0.4286] = π ✓
+```
+
+**2. Calculate entropy rate: H = -ΣᵢΣⱼ πᵢ pᵢⱼ log pᵢⱼ**
+
+```
+H = -[π₀·(p₀₀·log₂ p₀₀ + p₀₁·log₂ p₀₁) + π₁·(p₁₀·log₂ p₁₀ + p₁₁·log₂ p₁₁)]
+  = -[0.5714·(0.7·log₂ 0.7 + 0.3·log₂ 0.3) + 0.4286·(0.4·log₂ 0.4 + 0.6·log₂ 0.6)]
+  = -[0.5714·(0.7·(-0.515) + 0.3·(-1.737)) + 0.4286·(0.4·(-1.322) + 0.6·(-0.737))]
+  = -[0.5714·(-0.8816) + 0.4286·(-0.9710)]
+  = -[-0.5038 - 0.4162]
+  = 0.9200 bits/step
+```
+
+**3. Compare with entropy of stationary distribution**
+
+```
+H(π) = -[0.5714·log₂ 0.5714 + 0.4286·log₂ 0.4286]
+     = -[0.5714·(-0.807) + 0.4286·(-1.222)]
+     = 0.9850 bits
+```
+
+**Comparison:**
+- Entropy rate: 0.9200 bits/step
+- Stationary entropy: 0.9850 bits
+
+**Entropy rate < Stationary entropy** because knowing current state reduces uncertainty about next state (Markov property).
+
+**4. Interpret: what does entropy rate measure?**
+
+**Entropy rate = average uncertainty about the next symbol given the process history**
+
+In this Markov chain:
+- H = 0.9200 bits/step: average surprise of each new state
+- H(π) = 0.9850 bits: surprise if states were independent
+- Difference: 0.0650 bits saved by using Markov structure
+
+**Applications:**
+- Text compression (predict next character from context)
+- Speech coding (exploit temporal correlation)
+- Measuring complexity of sequences
+
+**NumPy verification:**
 ```python
-def estimate_text_entropy(text):
-    """Estimate entropy of text"""
-    text = text.lower()
-    # Count character frequencies
-    counts = Counter(text)
-    total = sum(counts.values())
-    probs = np.array([count/total for count in counts.values()])
-    return entropy(probs)
+P = np.array([[0.7, 0.3],
+              [0.4, 0.6]])
 
-# Test on longer text
-with open('sample_english.txt', 'r') as f:
-    long_text = f.read()
+# Find stationary distribution (eigenvector with eigenvalue 1)
+eigenvalues, eigenvectors = np.linalg.eig(P.T)
+idx = np.argmax(np.abs(eigenvalues - 1) < 1e-10)
+stationary = eigenvectors[:, idx].real
+stationary = stationary / stationary.sum()
 
-H_est = estimate_text_entropy(long_text)
-print(f"Estimated entropy: {H_est:.4f} bits/char")
+print(f"Stationary distribution: {stationary}")
+# [0.5714, 0.4286]
 
-# Claude Shannon's estimate: ~1 bit/char for word-level English
-# Character-level: ~4-5 bits/char
-# This difference shows context reduces uncertainty!
+# Entropy rate
+H_rate = 0
+for i in range(len(stationary)):
+    for j in range(len(stationary)):
+        if P[i, j] > 0:
+            H_rate -= stationary[i] * P[i, j] * np.log2(P[i, j])
+
+print(f"Entropy rate: {H_rate:.4f} bits/step")  # 0.9200
+
+# Stationary entropy
+H_stationary = -np.sum(stationary * np.log2(stationary))
+print(f"Stationary entropy: {H_stationary:.4f} bits")  # 0.9850
+print(f"Reduction: {H_stationary - H_rate:.4f} bits")  # 0.0650
 ```
 
 ---
 
-### Challenge 2 Solution: Information Gain for Decision Trees
+### Challenge 2 Solution: Differential Entropy
 
-Dataset: 8 samples, 4 positive, 4 negative
-Feature A splits: Left (3+, 1-), Right (1+, 3-)
+Continuous uniform distribution X ~ Uniform(0, a)
 
-**Step 1: Calculate initial entropy**
+**1. PDF: f(x) = 1/a for x ∈ [0, a]**
+
+This is given. The PDF is constant over [0, a].
+
+**2. Differential entropy: h(X) = -∫ f(x) log f(x) dx**
+
 ```
-H(Y) = -[4/8·log₂(4/8) + 4/8·log₂(4/8)]
-     = -[0.5·(-1) + 0.5·(-1)]
-     = 1 bit
-```
-
-**Step 2: Calculate entropy after split**
-
-Left node (4 samples: 3+, 1-):
-```
-H(Y|Left) = -[3/4·log₂(3/4) + 1/4·log₂(1/4)]
-          = -[0.75·(-0.415) + 0.25·(-2)]
-          = -[-0.311 - 0.5]
-          = 0.811 bits
+h(X) = -∫₀ᵃ (1/a) log(1/a) dx
 ```
 
-Right node (4 samples: 1+, 3-):
+Note: (1/a) is constant, and log(1/a) = -log(a)
+
 ```
-H(Y|Right) = -[1/4·log₂(1/4) + 3/4·log₂(3/4)]
-           = 0.811 bits (symmetric)
+h(X) = -∫₀ᵃ (1/a)·(-log a) dx
+     = (log a / a) ∫₀ᵃ dx
+     = (log a / a) · a
+     = log a
 ```
 
-**Step 3: Weighted average entropy after split**
+**3. h(X) in terms of a**
+
 ```
-H(Y|A) = P(Left)·H(Y|Left) + P(Right)·H(Y|Right)
-       = 4/8·0.811 + 4/8·0.811
-       = 0.811 bits
+h(X) = log a  (in nats if ln, in bits if log₂)
 ```
 
-**Step 4: Information gain**
+For log₂:
 ```
-IG(Y, A) = H(Y) - H(Y|A)
-         = 1.000 - 0.811
-         = 0.189 bits
+h(X) = log₂ a bits
 ```
 
-**Interpretation:** Feature A reduces uncertainty by 0.189 bits. This is the same as the mutual information I(Y;A).
+**Examples:**
+- a = 1: h(X) = 0 bits (no uncertainty, point mass at 0)
+- a = 2: h(X) = 1 bit
+- a = 4: h(X) = 2 bits
+- a = 0.5: h(X) = -1 bit (can be negative!)
 
-**NumPy implementation:**
+**4. How does it differ from discrete entropy?**
+
+**Key differences:**
+
+| Property | Discrete Entropy H(X) | Differential Entropy h(X) |
+|----------|----------------------|--------------------------|
+| **Range** | H(X) ≥ 0 | h(X) can be negative! |
+| **Units** | Absolute (bits) | Relative (depends on units) |
+| **Meaning** | Average surprise | Relative to uniform |
+| **Maximum** | H(X) ≤ log N | No finite maximum |
+| **Under scaling** | Unchanged | h(cX) = h(X) + log\|c\| |
+
+**Why can h(X) be negative?**
+
+Discrete: smallest probability is 1/N, so H ≥ 0
+
+Continuous: PDF can be > 1 (concentrated mass), giving negative differential entropy
+
+Example: Uniform(0, 0.5) has h(X) = log₂(0.5) = -1 bit
+
+**Interpretation:** Differential entropy measures bits needed relative to uniform distribution with same support, not absolute information content.
+
+**Python verification:**
 ```python
-def calculate_entropy_split(n_pos, n_neg):
-    """Calculate entropy for a node"""
-    total = n_pos + n_neg
-    if total == 0:
-        return 0
-    p_pos = n_pos / total
-    p_neg = n_neg / total
-    return entropy([p_pos, p_neg])
+import scipy.stats as stats
 
-def information_gain(n_pos_parent, n_neg_parent,
-                    n_pos_left, n_neg_left,
-                    n_pos_right, n_neg_right):
-    """Calculate information gain for a split"""
-    # Parent entropy
-    H_parent = calculate_entropy_split(n_pos_parent, n_neg_parent)
+# Uniform(0, a)
+a_values = [0.25, 0.5, 1, 2, 4, 8]
 
-    # Child entropies
-    H_left = calculate_entropy_split(n_pos_left, n_neg_left)
-    H_right = calculate_entropy_split(n_pos_right, n_neg_right)
+for a in a_values:
+    # Differential entropy (analytical)
+    h_analytical = np.log2(a)
 
-    # Weighted average
-    total = n_pos_parent + n_neg_parent
-    n_left = n_pos_left + n_neg_left
-    n_right = n_pos_right + n_neg_right
+    # Numerical verification via scipy
+    dist = stats.uniform(0, a)
+    h_numerical = dist.entropy() / np.log(2)  # Convert nats to bits
 
-    H_children = (n_left/total * H_left +
-                  n_right/total * H_right)
+    print(f"a = {a:4.2f}: h(X) = {h_analytical:6.2f} bits (analytical) = {h_numerical:6.2f} bits (numerical)")
 
-    # Information gain
-    return H_parent - H_children
-
-# Example from problem
-IG = information_gain(
-    n_pos_parent=4, n_neg_parent=4,
-    n_pos_left=3, n_neg_left=1,
-    n_pos_right=1, n_neg_right=3
-)
-
-print(f"Information Gain: {IG:.4f} bits")
-
-# Compare with different splits
-print("\nComparing different possible splits:")
-
-# Perfect split
-IG_perfect = information_gain(4, 4, 4, 0, 0, 4)
-print(f"Perfect split (4+,0- | 0+,4-): IG = {IG_perfect:.4f} bits")
-
-# No information
-IG_none = information_gain(4, 4, 2, 2, 2, 2)
-print(f"No information (2+,2- | 2+,2-): IG = {IG_none:.4f} bits")
-
-# Our split
-print(f"Our split (3+,1- | 1+,3-): IG = {IG:.4f} bits")
+# Output:
+# a = 0.25: h(X) =  -2.00 bits (analytical) =  -2.00 bits (numerical)
+# a = 0.50: h(X) =  -1.00 bits (analytical) =  -1.00 bits (numerical)
+# a = 1.00: h(X) =   0.00 bits (analytical) =   0.00 bits (numerical)
+# a = 2.00: h(X) =   1.00 bits (analytical) =   1.00 bits (numerical)
+# a = 4.00: h(X) =   2.00 bits (analytical) =   2.00 bits (numerical)
+# a = 8.00: h(X) =   3.00 bits (analytical) =   3.00 bits (numerical)
 ```
 
 ---
 
-## Summary
+## Summary: Key Formulas
 
-**Key Concepts:**
+### Entropy
+```
+H(X) = -Σ p(x) log p(x)
+```
 
-1. **Entropy H(X):** Measure of uncertainty/information content
-   - H(X) = -∑ p(x)·log₂ p(x)
-   - Maximum when distribution is uniform
-   - Measured in bits
+### Joint Entropy
+```
+H(X,Y) = -ΣΣ p(x,y) log p(x,y)
+```
 
-2. **Joint and Conditional Entropy:**
-   - H(X,Y): Uncertainty about both variables
-   - H(Y|X): Uncertainty about Y given X
-   - Chain rule: H(X,Y) = H(X) + H(Y|X)
+### Conditional Entropy
+```
+H(Y|X) = Σ p(x) H(Y|X=x)
+H(X,Y) = H(X) + H(Y|X)  [Chain Rule]
+```
 
-3. **Mutual Information I(X;Y):**
-   - Shared information between variables
-   - I(X;Y) = H(X) + H(Y) - H(X,Y)
-   - I(X;Y) = 0 for independent variables
-   - I(X;Y) = H(X) for perfectly correlated variables
+### Mutual Information
+```
+I(X;Y) = H(X) + H(Y) - H(X,Y)
+I(X;Y) = H(X) - H(X|Y)
+I(X;Y) = H(Y) - H(Y|X)
+I(X;Y) = 0 ⟺ X and Y independent
+```
 
-4. **Cross-Entropy and KL Divergence:**
-   - H(p,q): Expected bits using wrong code
-   - D_KL(p||q): Extra bits due to model mismatch
-   - D_KL(p||q) = H(p,q) - H(p)
-   - KL divergence is non-negative and asymmetric
+### Cross-Entropy
+```
+H(P,Q) = -Σ p(x) log q(x)
+H(P,Q) ≥ H(P)  [Gibbs' Inequality]
+```
 
-5. **Applications to ML:**
-   - Cross-entropy loss for classification
-   - Information gain for decision trees
-   - KL divergence for model comparison
-   - Entropy for regularization
+### KL Divergence
+```
+D_KL(P||Q) = Σ p(x) log(p(x)/q(x))
+D_KL(P||Q) = H(P,Q) - H(P)
+D_KL(P||Q) ≥ 0
+D_KL(P||Q) ≠ D_KL(Q||P)  [Not symmetric!]
+```
 
-**Practical Tips:**
-- Use cross-entropy loss for classification problems
-- Higher entropy = more uncertainty = harder to predict
-- Mutual information measures feature relevance
-- KL divergence measures distribution mismatch
-- Information theory provides theoretical limits for compression and communication
+### Binary Cross-Entropy
+```
+L = -[y log(ŷ) + (1-y)log(1-ŷ)]
+```
+
+### Information Gain
+```
+IG = H(parent) - Σ (nᵢ/n) H(childᵢ)
+```
+
+---
+
+## Tips & Common Mistakes
+
+✅ **DO:**
+- Use log₂ for bits, ln for nats
+- Add small epsilon (10⁻¹⁰) to avoid log(0)
+- Draw Venn diagrams for entropy relationships
+- Check: I(X;Y) ≥ 0, H(X,Y) ≤ H(X) + H(Y)
+- Remember: cross-entropy ≥ entropy always
+
+❌ **DON'T:**
+- Confuse H(X,Y) with H(X) + H(Y) (only equal if independent)
+- Think KL divergence is symmetric (it's not!)
+- Forget that differential entropy can be negative
+- Mix up D_KL(P||Q) vs D_KL(Q||P) (order matters!)
+- Use H(X|Y) when you mean H(Y|X) (conditioning direction matters)
+
+---
+
+**Congratulations!** You've completed all Information Theory exercises. These concepts form the mathematical foundation for:
+- Loss functions in neural networks
+- Compression algorithms
+- Feature selection methods
+- Probabilistic modeling
+- Information bottleneck theory
+- Understanding what neural networks learn
+
+Keep these formulas handy - you'll use them constantly in ML!
