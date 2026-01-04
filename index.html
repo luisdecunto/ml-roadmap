@@ -400,7 +400,7 @@
                         "Read <a href='http://www.inference.org.uk/itprnn/book.pdf' target='_blank' style='color: #2563eb;'>MacKay's 'Information Theory, Inference, and Learning Algorithms'</a> Ch 2 Section 2.4: Definition of entropy and related functions",
                         "Code: Implement entropy H(X) for discrete distributions (test on coin flips) (<a href='guides/information_theory_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
                         "Read: <a href='https://colah.github.io/posts/2015-09-Visual-Information/' target='_blank' style='color: #2563eb;'>'Visual Information Theory'</a> by colah.github.io (complete blog post)",
-                        "Watch: <a href='https://www.youtube.com/watch?v=U9p5WNuwTQw' target='_blank' style='color: #2563eb;'>StatQuest - Mutual Information, Clearly Explained</a>",
+                        "Read: <a href='https://machinelearningmastery.com/information-gain-and-mutual-information/' target='_blank' style='color: #2563eb;'>Mutual Information and Information Gain for ML</a>",
                         "Read MacKay Ch 2 Sections 2.4-2.6: Entropy and related functions, decomposability, Gibbs' inequality",
                         "Code: Calculate H(X), H(Y), H(X,Y), I(X;Y) for image pixel pairs (<a href='guides/information_theory_guide.html' target='_blank' style='color: #10b981; font-weight: 600; text-decoration: underline;'>💻 Coding Guide</a>)",
                         "Read: <a href='https://machinelearningmastery.com/cross-entropy-for-machine-learning/' target='_blank' style='color: #2563eb;'>'Cross-Entropy for Machine Learning'</a> and <a href='https://eli.thegreenplace.net/2025/cross-entropy-and-kl-divergence/' target='_blank' style='color: #2563eb;'>KL Divergence tutorial</a>",
@@ -751,8 +751,11 @@
                         setFileSha(data.sha);
                         const content = JSON.parse(atob(data.content));
                         setCheckedTasks(content.checkedTasks || {});
-                        if (content.expandedMonths) setExpandedMonths(content.expandedMonths);
-                        if (content.expandedWeeks) setExpandedWeeks(content.expandedWeeks);
+                        // Load expandedMonths/expandedWeeks from localStorage instead of GitHub
+                        const savedExpandedMonths = localStorage.getItem('mlRoadmapExpandedMonths');
+                        const savedExpandedWeeks = localStorage.getItem('mlRoadmapExpandedWeeks');
+                        if (savedExpandedMonths) setExpandedMonths(JSON.parse(savedExpandedMonths));
+                        if (savedExpandedWeeks) setExpandedWeeks(JSON.parse(savedExpandedWeeks));
                         // Sync exercise completions to localStorage
                         if (content.exerciseCompletions) {
                             localStorage.setItem('exercise-completions', JSON.stringify(content.exerciseCompletions));
@@ -772,7 +775,7 @@
 
             const saveProgressToGitHub = async (token = githubToken) => {
                 if (!token) return;
-                
+
                 try {
                     setSyncStatus('saving');
 
@@ -782,9 +785,8 @@
                     const progressData = {
                         lastUpdated: new Date().toISOString(),
                         exerciseCompletions: exerciseCompletions,
-                        checkedTasks: checkedTasks,
-                        expandedMonths: expandedMonths,
-                        expandedWeeks: expandedWeeks
+                        checkedTasks: checkedTasks
+                        // Note: expandedMonths and expandedWeeks are UI state only, saved to localStorage but not GitHub
                     };
 
                     const content = btoa(JSON.stringify(progressData, null, 2));
