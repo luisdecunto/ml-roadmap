@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-05T16:48:05.205Z",
+  "lastUpdated": "2026-01-05T16:48:41.904Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -219,6 +219,6 @@
     "Module 5: Information Theory (10-15 hours)-12": true,
     "Module 4: Probability & Statistics (15-20 hours)-12": true,
     "Module 6: Feedforward Networks from Scratch (20-25 hours)-0": true,
-    "Module 6: Feedforward Networks from Scratch (20-25 hours)-1": false
+    "Module 6: Feedforward Networks from Scratch (20-25 hours)-1": true
   }
 }
