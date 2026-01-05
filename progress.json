@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-05T13:27:57.238Z",
+  "lastUpdated": "2026-01-05T15:57:46.009Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -215,6 +215,7 @@
     "Neural Networks Exercises-0": false,
     "CNN Exercises-0": false,
     "Module 5: Information Theory (10-15 hours)-8": true,
-    "Module 5: Information Theory (10-15 hours)-6": true
+    "Module 5: Information Theory (10-15 hours)-6": true,
+    "Module 5: Information Theory (10-15 hours)-12": true
   }
 }
