@@ -206,7 +206,9 @@
                     <div class="flex-1">
                         <h3>Exercise 2.4: Why Non-linearity?</h3>
                         <div class="content-text">
-                            Two-layer network with linear activations:
+                            Two-layer network with linear activations, x = [1, 1]:<br>
+                            W₁ = [[1, 2], [3, 4]], b₁ = [0, 0]<br>
+                            W₂ = [[1, 2]], b₂ = [0]
                             <ol class="list-decimal ml-6 my-2">
                                 <li>Compute output for x = [1, 1]</li>
                                 <li>Show this equals single layer: W₂W₁x</li>
@@ -225,11 +227,13 @@
                     <div class="flex-1">
                         <h3>Exercise 3.1: Two-Layer Network</h3>
                         <div class="content-text">
-                            2 → 3 → 1 architecture with given weights, x = [1.0, 2.0]:
+                            2 → 3 → 1 architecture, x = [1.0, 2.0]:<br>
+                            W₁ = [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]], b₁ = [0.1, 0.2, 0.3]<br>
+                            W₂ = [[1.0], [2.0], [3.0]], b₂ = [0.5]
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Calculate z₁ = W₁x + b₁</li>
+                                <li>Calculate z₁ = W₁ᵀx + b₁</li>
                                 <li>Calculate a₁ = σ(z₁)</li>
-                                <li>Calculate z₂ = W₂a₁ + b₂</li>
+                                <li>Calculate z₂ = W₂ᵀa₁ + b₂</li>
                                 <li>Calculate a₂ = σ(z₂)</li>
                             </ol>
                         </div>
@@ -299,13 +303,16 @@
                     <div class="flex-1">
                         <h3>Exercise 4.2: Two-Layer Backprop</h3>
                         <div class="content-text">
-                            x → h (2 neurons) → y, all sigmoid:
+                            x → h (2 neurons) → y, all sigmoid, x = [1.0], t = 1.0:<br>
+                            W₁ = [[0.5], [0.3]], b₁ = [0.1, 0.2]<br>
+                            W₂ = [[0.4, 0.6]], b₂ = [0.1]
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Forward: z₁ = W₁x, a₁ = σ(z₁), z₂ = W₂a₁, y = σ(z₂)</li>
+                                <li>Forward: z₁ = W₁x + b₁, a₁ = σ(z₁), z₂ = W₂a₁ + b₂, y = σ(z₂)</li>
+                                <li>Loss: L = ½(y - t)²</li>
                                 <li>Backward: δ₂ = (y - t) · σ'(z₂)</li>
-                                <li>Calculate ∂L/∂W₂ = δ₂ · a₁ᵀ</li>
+                                <li>Calculate ∂L/∂W₂ = δ₂ · a₁ᵀ and ∂L/∂b₂</li>
                                 <li>Calculate δ₁ = (W₂ᵀδ₂) ⊙ σ'(z₁)</li>
-                                <li>Calculate ∂L/∂W₁ = δ₁ · xᵀ</li>
+                                <li>Calculate ∂L/∂W₁ = δ₁ · xᵀ and ∂L/∂b₁</li>
                             </ol>
                         </div>
                     </div>
@@ -392,12 +399,13 @@
                     <div class="flex-1">
                         <h3>Exercise 5.3: Learning Rate Effects</h3>
                         <div class="content-text">
-                            Initial weights near optimum, gradient ≈ 0.1:
+                            w = 0.5, ∂L/∂w = 0.1 (gradient):
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Update with α = 0.01</li>
-                                <li>Update with α = 1.0</li>
-                                <li>Update with α = 10.0</li>
+                                <li>Update with α = 0.01: w_new = ?</li>
+                                <li>Update with α = 1.0: w_new = ?</li>
+                                <li>Update with α = 10.0: w_new = ?</li>
                                 <li>Which learning rate works best? Why?</li>
+                                <li>What if gradient = -0.1 instead?</li>
                             </ol>
                         </div>
                     </div>
@@ -412,11 +420,12 @@
                     <div class="flex-1">
                         <h3>Exercise 6.1: Gradient Checking</h3>
                         <div class="content-text">
-                            Network with w = 0.5:
+                            Single neuron: y = σ(wx), L = ½(y - t)²<br>
+                            w = 0.5, x = 2.0, t = 1.0, ε = 1e-5
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Compute analytical gradient: ∂L/∂w = 0.3</li>
-                                <li>Compute numerical: (L(w+ε) - L(w-ε))/(2ε), ε = 1e-5</li>
-                                <li>Calculate relative error</li>
+                                <li>Compute analytical gradient: ∂L/∂w using chain rule</li>
+                                <li>Compute numerical: (L(w+ε) - L(w-ε))/(2ε)</li>
+                                <li>Calculate relative error: |analytical - numerical| / (|analytical| + |numerical|)</li>
                                 <li>If error < 1e-7, gradients correct!</li>
                             </ol>
                         </div>

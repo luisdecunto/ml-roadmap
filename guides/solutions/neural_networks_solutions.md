@@ -924,28 +924,924 @@ print(f"\nFinal output: {a3[0]:.4f}")
 
 ---
 
-**[Continuing in next message with Parts 4-6...]**
+## Part 4: Backpropagation (45 min)
+
+### Exercise 4.1 Solution: Single Neuron Gradient
+
+**Given:**
+- Model: y = σ(wx + b)
+- Loss: L = ½(y - t)²
+- Values: w = 0.5, b = 0.1, x = 2.0, t = 1.0
+
+**Step 1: Forward pass - calculate y and loss L**
+
+```
+z = wx + b = 0.5 × 2.0 + 0.1 = 1.0 + 0.1 = 1.1
+
+y = σ(1.1) = 1/(1 + e^(-1.1))
+           = 1/(1 + 0.3329)
+           = 1/1.3329
+           = 0.7503
+
+L = ½(y - t)²
+  = ½(0.7503 - 1.0)²
+  = ½(-0.2497)²
+  = ½(0.0624)
+  = 0.0312
+```
+
+**Step 2: Calculate ∂L/∂y, ∂y/∂z, ∂z/∂w**
+
+```
+∂L/∂y = y - t = 0.7503 - 1.0 = -0.2497
+
+∂y/∂z = σ'(z) = σ(z)(1 - σ(z))
+      = 0.7503 × (1 - 0.7503)
+      = 0.7503 × 0.2497
+      = 0.1873
+
+∂z/∂w = x = 2.0
+```
+
+**Step 3: Chain rule - ∂L/∂w = ∂L/∂y · ∂y/∂z · ∂z/∂w**
+
+```
+∂L/∂w = ∂L/∂y · ∂y/∂z · ∂z/∂w
+      = (-0.2497) × 0.1873 × 2.0
+      = -0.0935
+```
+
+**Step 4: Calculate ∂L/∂b similarly**
+
+```
+∂z/∂b = 1
+
+∂L/∂b = ∂L/∂y · ∂y/∂z · ∂z/∂b
+      = (-0.2497) × 0.1873 × 1
+      = -0.0468
+```
+
+**NumPy Implementation:**
+
+```python
+import numpy as np
+
+def sigmoid(z):
+    return 1 / (1 + np.exp(-z))
+
+def sigmoid_derivative(z):
+    s = sigmoid(z)
+    return s * (1 - s)
+
+# Given values
+w = 0.5
+b = 0.1
+x = 2.0
+t = 1.0
+
+# Forward pass
+z = w * x + b
+y = sigmoid(z)
+loss = 0.5 * (y - t)**2
+
+print(f"Forward pass:")
+print(f"  z = {z:.4f}")
+print(f"  y = σ(z) = {y:.4f}")
+print(f"  L = ½(y-t)² = {loss:.4f}")
+
+# Backward pass - compute gradients
+dL_dy = y - t
+dy_dz = sigmoid_derivative(z)
+dz_dw = x
+dz_db = 1
+
+dL_dw = dL_dy * dy_dz * dz_dw
+dL_db = dL_dy * dy_dz * dz_db
+
+print(f"\nBackward pass:")
+print(f"  ∂L/∂y = {dL_dy:.4f}")
+print(f"  ∂y/∂z = {dy_dz:.4f}")
+print(f"  ∂z/∂w = {dz_dw:.4f}")
+print(f"  ∂L/∂w = {dL_dw:.4f}")
+print(f"  ∂L/∂b = {dL_db:.4f}")
+```
 
 ---
 
-## Quick Reference: Forward Pass Summary
+### Exercise 4.2 Solution: Two-Layer Backprop
 
-**Single sample:**
+**Given:**
+- Architecture: 1 → 2 → 1 (all sigmoid)
+- x = [1.0], t = 1.0
+- W₁ = [[0.5], [0.3]], b₁ = [0.1, 0.2]
+- W₂ = [[0.4, 0.6]], b₂ = [0.1]
+- Loss: L = ½(y - t)²
+
+**Step 1: Forward pass**
+
+```
+z₁ = W₁x + b₁
+   = [[0.5], [0.3]] × [1.0] + [0.1, 0.2]
+   = [0.5, 0.3] + [0.1, 0.2]
+   = [0.6, 0.5]
+
+a₁ = σ(z₁) = [σ(0.6), σ(0.5)]
+           = [0.6457, 0.6225]
+
+z₂ = W₂a₁ + b₂
+   = [[0.4, 0.6]] @ [0.6457, 0.6225] + [0.1]
+   = [0.4×0.6457 + 0.6×0.6225] + [0.1]
+   = [0.2583 + 0.3735] + [0.1]
+   = [0.7318]
+
+y = σ(z₂) = σ(0.7318) = 0.6751
+
+L = ½(y - t)² = ½(0.6751 - 1.0)² = ½(0.1055) = 0.0528
+```
+
+**Step 2: Loss gradient**
+
+```
+∂L/∂y = y - t = 0.6751 - 1.0 = -0.3249
+```
+
+**Step 3: Output layer backward (δ₂)**
+
+```
+δ₂ = (y - t) · σ'(z₂)
+   = -0.3249 × [σ(z₂)(1 - σ(z₂))]
+   = -0.3249 × [0.6751 × 0.3249]
+   = -0.3249 × 0.2193
+   = -0.0713
+```
+
+**Step 4: Gradients for W₂ and b₂**
+
+```
+∂L/∂W₂ = δ₂ · a₁ᵀ
+       = [-0.0713] @ [0.6457, 0.6225]ᵀ
+       = [[-0.0460, -0.0444]]
+
+∂L/∂b₂ = δ₂ = [-0.0713]
+```
+
+**Step 5: Hidden layer backward (δ₁)**
+
+```
+δ₁ = (W₂ᵀδ₂) ⊙ σ'(z₁)
+   = [[0.4], [0.6]] × [-0.0713] ⊙ [σ'(0.6), σ'(0.5)]
+   = [-0.0285, -0.0428] ⊙ [0.2289, 0.2350]
+   = [-0.0065, -0.0101]
+```
+
+**Step 6: Gradients for W₁ and b₁**
+
+```
+∂L/∂W₁ = δ₁ · xᵀ
+       = [[-0.0065], [-0.0101]] @ [1.0]
+       = [[-0.0065], [-0.0101]]
+
+∂L/∂b₁ = δ₁ = [-0.0065, -0.0101]
+```
+
+**NumPy Implementation:**
+
 ```python
-z = x @ W + b
-a = activation(z)
+# Network parameters
+W1 = np.array([[0.5], [0.3]])  # (2, 1)
+b1 = np.array([0.1, 0.2])      # (2,)
+W2 = np.array([[0.4, 0.6]])    # (1, 2)
+b2 = np.array([0.1])           # (1,)
+
+x = np.array([1.0])
+t = np.array([1.0])
+
+# Forward pass
+z1 = W1 @ x + b1
+a1 = sigmoid(z1)
+
+z2 = W2 @ a1 + b2
+y = sigmoid(z2)
+
+loss = 0.5 * (y - t)**2
+
+print("Forward pass:")
+print(f"  z₁ = {z1}")
+print(f"  a₁ = {a1}")
+print(f"  z₂ = {z2}")
+print(f"  y = {y}")
+print(f"  L = {loss[0]:.4f}")
+
+# Backward pass
+# Output layer
+delta2 = (y - t) * sigmoid_derivative(z2)
+dL_dW2 = np.outer(delta2, a1)
+dL_db2 = delta2
+
+# Hidden layer
+delta1 = (W2.T @ delta2) * sigmoid_derivative(z1)
+dL_dW1 = np.outer(delta1, x)
+dL_db1 = delta1
+
+print("\nBackward pass:")
+print(f"  δ₂ = {delta2}")
+print(f"  ∂L/∂W₂ = {dL_dW2}")
+print(f"  ∂L/∂b₂ = {dL_db2}")
+print(f"  δ₁ = {delta1}")
+print(f"  ∂L/∂W₁ = {dL_dW1}")
+print(f"  ∂L/∂b₁ = {dL_db1}")
 ```
 
-**Batch of samples:**
+---
+
+### Exercise 4.3 Solution: Backprop with ReLU
+
+**Using same architecture as 4.2 but with ReLU:**
+
+Replace sigmoid with ReLU in hidden layer. Forward pass will differ, and gradients will be simpler!
+
+**Key difference:** ReLU'(z) = 1 if z > 0, else 0
+
+**NumPy Implementation:**
+
 ```python
-Z = X @ W + b  # Broadcasting handles batch dimension
-A = activation(Z)
+def relu(z):
+    return np.maximum(0, z)
+
+def relu_derivative(z):
+    return (z > 0).astype(float)
+
+# Forward with ReLU in hidden layer
+z1 = W1 @ x + b1
+a1 = relu(z1)  # ReLU instead of sigmoid
+
+z2 = W2 @ a1 + b2
+y = sigmoid(z2)  # Output still sigmoid
+
+loss = 0.5 * (y - t)**2
+
+print("Forward with ReLU:")
+print(f"  z₁ = {z1}")
+print(f"  a₁ (ReLU) = {a1}")
+print(f"  y = {y}")
+print(f"  L = {loss[0]:.4f}")
+
+# Backward pass
+delta2 = (y - t) * sigmoid_derivative(z2)
+dL_dW2_relu = np.outer(delta2, a1)
+dL_db2_relu = delta2
+
+# Hidden layer - ReLU derivative
+delta1_relu = (W2.T @ delta2) * relu_derivative(z1)
+dL_dW1_relu = np.outer(delta1_relu, x)
+dL_db1_relu = delta1_relu
+
+print("\nComparison:")
+print(f"Sigmoid hidden: δ₁ = {delta1}")
+print(f"ReLU hidden:    δ₁ = {delta1_relu}")
+print("\nReLU gradients are simpler (either 0 or 1)!")
 ```
 
-**Parameter counting:**
+---
+
+### Exercise 4.4 Solution: Vanishing Gradient
+
+**Given:** Deep network with 10 sigmoid layers
+
+**Step 1: Maximum sigmoid derivative**
+
 ```
-Total params = Σ(weights) + Σ(biases)
-For layer i→j: weights = i×j, biases = j
+σ'(z) = σ(z)(1 - σ(z))
+Max occurs at z = 0: σ'(0) = 0.5 × 0.5 = 0.25
 ```
 
-Try the remaining exercises (Parts 4-6) on your own! The solutions follow the same pattern of detailed step-by-step calculations.
+**Step 2: Gradient at first layer**
+
+```
+If each layer has gradient ≈ 0.25:
+Gradient at layer 1 = (0.25)^10 = 9.5 × 10^(-7) ≈ 0.000001
+```
+
+**Step 3: Why is this problematic?**
+
+- Gradients become extremely small (vanish)
+- First layers learn very slowly or not at all
+- Network can't learn long-term dependencies
+- Training stalls
+
+**Step 4: How do ReLU and skip connections help?**
+
+**ReLU:**
+- Gradient is 1 for z > 0 (no decay!)
+- No saturation for positive values
+- Faster convergence
+
+**Skip connections (ResNets):**
+- Gradient can flow directly: ∂L/∂x = ∂L/∂output × (1 + ∂F/∂x)
+- Always has path with gradient = 1
+- Enables training of very deep networks (100+ layers)
+
+**NumPy Demonstration:**
+
+```python
+# Simulate gradient flow through 10 layers
+n_layers = 10
+
+# Sigmoid network
+grad_sigmoid = 1.0
+for i in range(n_layers):
+    grad_sigmoid *= 0.25  # Max sigmoid derivative
+
+print(f"Gradient after {n_layers} sigmoid layers: {grad_sigmoid:.2e}")
+
+# ReLU network
+grad_relu = 1.0
+for i in range(n_layers):
+    grad_relu *= 1.0  # ReLU derivative (for active neurons)
+
+print(f"Gradient after {n_layers} ReLU layers: {grad_relu:.2e}")
+
+print(f"\nRatio: {grad_relu / grad_sigmoid:.2e}x better!")
+```
+
+---
+
+## Part 5: Training (35 min)
+
+### Exercise 5.1 Solution: Gradient Descent Update
+
+**Given:**
+- Gradients: ∂L/∂w = 0.3, ∂L/∂b = 0.2
+- Initial: w = 0.5, b = 0.1
+- Learning rate: α = 0.1
+
+**Step 1: Update rule**
+
+```
+w_new = w - α · ∂L/∂w
+b_new = b - α · ∂L/∂b
+```
+
+**Step 2: Calculate new w and b**
+
+```
+w_new = 0.5 - 0.1 × 0.3 = 0.5 - 0.03 = 0.47
+b_new = 0.1 - 0.1 × 0.2 = 0.1 - 0.02 = 0.08
+```
+
+**Step 3: Perform 5 iterations**
+
+Assuming gradients stay constant (they wouldn't in practice):
+
+```
+Iteration 1: w = 0.47, b = 0.08
+Iteration 2: w = 0.44, b = 0.06
+Iteration 3: w = 0.41, b = 0.04
+Iteration 4: w = 0.38, b = 0.02
+Iteration 5: w = 0.35, b = 0.00
+```
+
+**Step 4: Does loss decrease?**
+
+Yes! Since we're moving in the negative gradient direction, we're going downhill on the loss surface.
+
+**NumPy Implementation:**
+
+```python
+w = 0.5
+b = 0.1
+alpha = 0.1
+grad_w = 0.3
+grad_b = 0.2
+
+print("Gradient Descent Updates:")
+print(f"{'Iter':<6} {'w':<8} {'b':<8} {'Δw':<10} {'Δb':<10}")
+print("-" * 42)
+
+for i in range(6):
+    print(f"{i:<6} {w:<8.4f} {b:<8.4f} {-alpha*grad_w:<10.4f} {-alpha*grad_b:<10.4f}")
+
+    if i < 5:
+        w = w - alpha * grad_w
+        b = b - alpha * grad_b
+```
+
+---
+
+### Exercise 5.2 Solution: Mini-batch Training
+
+**Given:** Dataset with 100 samples, batch size 10
+
+**Step 1: How many batches per epoch?**
+
+```
+Number of batches = Total samples / Batch size
+                  = 100 / 10
+                  = 10 batches per epoch
+```
+
+**Step 2: Weight updates per epoch?**
+
+```
+Updates per epoch = Number of batches = 10 updates
+```
+
+**Step 3: Compare with batch GD (1 update/epoch)**
+
+```
+Batch GD:
+- 1 update per epoch (use all 100 samples)
+- More accurate gradient
+- Slower (must process all data before update)
+- More memory required
+
+Mini-batch (10 samples):
+- 10 updates per epoch
+- 10x more frequent updates
+- Faster convergence (usually)
+- Better memory efficiency
+```
+
+**Step 4: Compare with SGD (100 updates/epoch)**
+
+```
+SGD (batch size = 1):
+- 100 updates per epoch
+- Very noisy gradients
+- Can escape local minima
+- Fastest per-update
+- May not converge to exact minimum
+
+Mini-batch strikes a balance:
+- More stable than SGD
+- Faster than batch GD
+- Best of both worlds!
+```
+
+**Summary Table:**
+
+```
+Method          | Batch Size | Updates/Epoch | Gradient Noise | Speed
+----------------|------------|---------------|----------------|-------
+Batch GD        | 100        | 1             | Low            | Slow
+Mini-batch GD   | 10         | 10            | Medium         | Fast
+SGD             | 1          | 100           | High           | Fastest
+```
+
+---
+
+### Exercise 5.3 Solution: Learning Rate Effects
+
+**Given:** w = 0.5, ∂L/∂w = 0.1
+
+**Step 1: Update with α = 0.01**
+
+```
+w_new = w - α · ∂L/∂w
+      = 0.5 - 0.01 × 0.1
+      = 0.5 - 0.001
+      = 0.499
+```
+Small step, safe but slow.
+
+**Step 2: Update with α = 1.0**
+
+```
+w_new = 0.5 - 1.0 × 0.1
+      = 0.5 - 0.1
+      = 0.4
+```
+Reasonable step size.
+
+**Step 3: Update with α = 10.0**
+
+```
+w_new = 0.5 - 10.0 × 0.1
+      = 0.5 - 1.0
+      = -0.5
+```
+Too large! May overshoot the minimum.
+
+**Step 4: Which learning rate works best?**
+
+**α = 0.01:** Too small
+- Very slow convergence
+- Needs many iterations
+- Safe but inefficient
+
+**α = 1.0:** Good choice
+- Reasonable progress per step
+- Balanced speed and stability
+
+**α = 10.0:** Too large
+- May overshoot minimum
+- Can cause divergence
+- Loss might oscillate or increase
+
+**Step 5: What if gradient = -0.1 instead?**
+
+```
+α = 0.01: w_new = 0.5 - 0.01 × (-0.1) = 0.501 (moves opposite direction)
+α = 1.0:  w_new = 0.5 - 1.0 × (-0.1) = 0.6
+α = 10.0: w_new = 0.5 - 10.0 × (-0.1) = 1.5
+```
+
+Negative gradient means we're on the other side of the minimum - we move in the positive direction!
+
+**NumPy Implementation:**
+
+```python
+w = 0.5
+grad = 0.1
+
+learning_rates = [0.01, 1.0, 10.0]
+
+print("Learning Rate Effects:")
+print(f"{'α':<10} {'w_new':<10} {'Step size':<12} {'Assessment'}")
+print("-" * 50)
+
+for alpha in learning_rates:
+    w_new = w - alpha * grad
+    step = abs(w_new - w)
+
+    if alpha < 0.1:
+        assessment = "Too slow"
+    elif alpha > 5:
+        assessment = "Too fast (risk overshoot)"
+    else:
+        assessment = "Good"
+
+    print(f"{alpha:<10} {w_new:<10.3f} {step:<12.3f} {assessment}")
+
+# With negative gradient
+print("\nWith negative gradient (-0.1):")
+grad_neg = -0.1
+for alpha in learning_rates:
+    w_new = w - alpha * grad_neg
+    print(f"α = {alpha:<5}: w_new = {w_new:.3f}")
+```
+
+---
+
+## Part 6: Debugging NNs (35 min)
+
+### Exercise 6.1 Solution: Gradient Checking
+
+**Given:**
+- y = σ(wx), L = ½(y - t)²
+- w = 0.5, x = 2.0, t = 1.0, ε = 1e-5
+
+**Step 1: Compute analytical gradient using chain rule**
+
+```
+z = wx = 0.5 × 2.0 = 1.0
+y = σ(1.0) = 0.7311
+L = ½(0.7311 - 1.0)² = 0.0362
+
+∂L/∂y = y - t = 0.7311 - 1.0 = -0.2689
+∂y/∂z = σ'(z) = 0.7311 × (1 - 0.7311) = 0.1966
+∂z/∂w = x = 2.0
+
+∂L/∂w = ∂L/∂y · ∂y/∂z · ∂z/∂w
+      = -0.2689 × 0.1966 × 2.0
+      = -0.1058
+```
+
+**Step 2: Compute numerical gradient**
+
+```
+def L(w):
+    z = w * x
+    y = σ(z)
+    return ½(y - t)²
+
+w⁺ = w + ε = 0.5 + 0.00001 = 0.50001
+w⁻ = w - ε = 0.5 - 0.00001 = 0.49999
+
+L(w⁺) = ½(σ(0.50001 × 2) - 1)² = 0.036146
+L(w⁻) = ½(σ(0.49999 × 2) - 1)² = 0.036252
+
+Numerical gradient = (L(w⁺) - L(w⁻)) / (2ε)
+                   = (0.036146 - 0.036252) / (2 × 0.00001)
+                   = -0.00106 / 0.00002
+                   = -0.1058
+```
+
+**Step 3: Calculate relative error**
+
+```
+Relative error = |analytical - numerical| / (|analytical| + |numerical|)
+               = |−0.1058 - (−0.1058)| / (|−0.1058| + |−0.1058|)
+               = 0 / 0.2116
+               = 0.0000
+
+(In practice, might be ~1e-9 due to floating point precision)
+```
+
+**Step 4: Verify correctness**
+
+```
+Error < 1e-7? ✓ YES!
+
+The analytical gradient is correct!
+```
+
+**NumPy Implementation:**
+
+```python
+def compute_loss(w, x, t):
+    z = w * x
+    y = sigmoid(z)
+    return 0.5 * (y - t)**2
+
+# Analytical gradient
+w = 0.5
+x = 2.0
+t = 1.0
+
+z = w * x
+y = sigmoid(z)
+
+dL_dy = y - t
+dy_dz = sigmoid_derivative(z)
+dz_dw = x
+
+grad_analytical = dL_dy * dy_dz * dz_dw
+
+# Numerical gradient
+epsilon = 1e-5
+w_plus = w + epsilon
+w_minus = w - epsilon
+
+loss_plus = compute_loss(w_plus, x, t)
+loss_minus = compute_loss(w_minus, x, t)
+
+grad_numerical = (loss_plus - loss_minus) / (2 * epsilon)
+
+# Relative error
+relative_error = abs(grad_analytical - grad_numerical) / (abs(grad_analytical) + abs(grad_numerical))
+
+print("Gradient Checking:")
+print(f"  Analytical gradient: {grad_analytical:.6f}")
+print(f"  Numerical gradient:  {grad_numerical:.6f}")
+print(f"  Relative error:      {relative_error:.2e}")
+
+if relative_error < 1e-7:
+    print("  ✓ PASS - Gradients are correct!")
+else:
+    print("  ✗ FAIL - Check your backprop implementation!")
+```
+
+---
+
+### Exercise 6.2 Solution: Detecting Bugs
+
+**Step 1: Loss is NaN → What's wrong?**
+
+**Possible causes:**
+- **Exploding gradients:** Learning rate too high, weights become huge
+- **Numerical overflow:** exp() in softmax with large logits
+- **Division by zero:** Computing log(0) in cross-entropy
+- **NaN in input data**
+
+**Fixes:**
+- Use gradient clipping
+- Subtract max in softmax for numerical stability
+- Add small epsilon to log: log(p + 1e-10)
+- Check data for NaNs/Infs
+
+**Step 2: Loss doesn't decrease → Check?**
+
+**Debugging checklist:**
+1. **Learning rate:** Try smaller values (0.001, 0.0001)
+2. **Gradients:** Check if they're zero (dead neurons?)
+3. **Implementation bugs:** Gradient sign, weight update formula
+4. **Data preprocessing:** Normalize inputs
+5. **Initialization:** Too large or too small weights
+6. **Activation functions:** Dead ReLUs?
+
+**Quick test:** Overfit on single batch - if it doesn't work, there's a bug!
+
+**Step 3: Training 99%, validation 60% → Problem?**
+
+**This is overfitting!**
+
+**Why it happens:**
+- Model memorizes training data
+- Doesn't generalize to new data
+- Too complex for dataset size
+
+**Solutions:**
+- **Regularization:** Add L2/L1 penalty
+- **Dropout:** Randomly disable neurons during training
+- **Early stopping:** Stop when validation loss stops improving
+- **More data:** Best solution if possible
+- **Data augmentation:** Create variations of existing data
+- **Simpler model:** Reduce layers/neurons
+
+**Step 4: Loss oscillates wildly → Fix?**
+
+**Possible causes:**
+- **Learning rate too high:** Taking huge steps
+- **Batch size too small:** Very noisy gradients (batch=1 or 2)
+- **Bad initialization:** Weights too large
+
+**Fixes:**
+- **Reduce learning rate:** Try 0.1x current value
+- **Increase batch size:** Try 32, 64, 128
+- **Use learning rate scheduling:** Decay over time
+- **Add gradient clipping:** Prevent extreme updates
+- **Use momentum/Adam:** Smoother updates
+
+**Visualization:**
+
+```python
+import matplotlib.pyplot as plt
+
+# Example loss curves
+epochs = np.arange(50)
+
+# Good training
+loss_good = 2.0 * np.exp(-epochs/10) + 0.1
+
+# Oscillating (LR too high)
+loss_oscillate = 2.0 * np.exp(-epochs/10) + 0.5 * np.sin(epochs/2)
+
+# Not decreasing (bug or LR too small)
+loss_flat = 2.0 + 0.1 * np.random.randn(50)
+
+plt.figure(figsize=(12, 4))
+
+plt.subplot(1, 3, 1)
+plt.plot(epochs, loss_good)
+plt.title("Good Training ✓")
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.grid(True, alpha=0.3)
+
+plt.subplot(1, 3, 2)
+plt.plot(epochs, loss_oscillate)
+plt.title("Oscillating Loss ✗\n(LR too high)")
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.grid(True, alpha=0.3)
+
+plt.subplot(1, 3, 3)
+plt.plot(epochs, loss_flat)
+plt.title("Not Decreasing ✗\n(Bug or LR too small)")
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+```
+
+---
+
+### Exercise 6.3 Solution: Sanity Checks
+
+**Before training, perform these checks:**
+
+**Step 1: Overfit single batch (10 samples) - should reach ~0 loss**
+
+```python
+# Test on tiny batch
+X_tiny = X_train[:10]
+y_tiny = y_train[:10]
+
+# Train for many epochs
+for epoch in range(1000):
+    loss = train_step(X_tiny, y_tiny)
+    if epoch % 100 == 0:
+        print(f"Epoch {epoch}: Loss = {loss:.4f}")
+
+# Should reach near-zero loss
+# If not, there's a bug in your implementation!
+```
+
+**Why this works:** With only 10 samples, the network should memorize them perfectly. If it can't, your training code has a bug.
+
+**Step 2: Check loss on random predictions**
+
+```python
+# Completely random predictions
+y_random = np.random.randint(0, num_classes, size=len(y_test))
+
+# For binary classification with cross-entropy
+expected_loss = -np.log(1/num_classes)  # Should be ~0.69 for 2 classes
+
+print(f"Random predictions loss: {compute_loss(y_random):.4f}")
+print(f"Expected (theoretical): {expected_loss:.4f}")
+
+# Initial network loss should be close to random
+```
+
+**Why this matters:** If your initial loss is very different from random chance, something is wrong with initialization or loss calculation.
+
+**Step 3: Disable regularization - loss should decrease**
+
+```python
+# Without regularization
+model = MyNetwork(l2_lambda=0.0, dropout=0.0)
+loss_no_reg = train(model, X_train, y_train)
+
+# With regularization
+model_reg = MyNetwork(l2_lambda=0.01, dropout=0.5)
+loss_with_reg = train(model_reg, X_train, y_train)
+
+# Training loss without regularization should be lower
+assert loss_no_reg < loss_with_reg, "Regularization should increase training loss!"
+```
+
+**Step 4: Try tiny dataset - should memorize perfectly**
+
+```python
+# Use only 20 samples
+X_tiny = X_train[:20]
+y_tiny = y_train[:20]
+
+# Train until perfect
+model = train_until_perfect(X_tiny, y_tiny, max_epochs=5000)
+
+accuracy = evaluate(model, X_tiny, y_tiny)
+assert accuracy > 0.99, "Should perfectly memorize 20 samples!"
+
+print(f"Memorized {len(X_tiny)} samples with {accuracy:.1%} accuracy ✓")
+```
+
+**Complete Sanity Check Script:**
+
+```python
+def sanity_checks(model, X_train, y_train, X_test, y_test):
+    """Run all sanity checks before serious training"""
+
+    print("="*50)
+    print("SANITY CHECKS")
+    print("="*50)
+
+    # Check 1: Random predictions
+    print("\n1. Random Prediction Loss:")
+    y_random = np.random.randint(0, 2, size=len(y_test))
+    random_acc = np.mean(y_random == y_test)
+    print(f"   Random accuracy: {random_acc:.2%}")
+    print(f"   Expected: ~50% for binary")
+
+    # Check 2: Initial loss
+    print("\n2. Initial Network Loss:")
+    initial_loss = model.compute_loss(X_test[:100], y_test[:100])
+    expected = -np.log(0.5)  # For binary
+    print(f"   Initial loss: {initial_loss:.4f}")
+    print(f"   Expected (~): {expected:.4f}")
+
+    # Check 3: Overfit tiny batch
+    print("\n3. Overfitting Tiny Batch:")
+    X_tiny = X_train[:10]
+    y_tiny = y_train[:10]
+
+    for epoch in range(500):
+        loss = model.train_step(X_tiny, y_tiny)
+        if epoch % 100 == 0:
+            acc = np.mean(model.predict(X_tiny) == y_tiny)
+            print(f"   Epoch {epoch}: Loss={loss:.4f}, Acc={acc:.1%}")
+
+    if loss < 0.01:
+        print("   ✓ PASS - Can overfit tiny batch")
+    else:
+        print("   ✗ FAIL - Cannot overfit tiny batch (bug!)")
+
+    print("\n" + "="*50)
+
+# Run checks
+sanity_checks(model, X_train, y_train, X_test, y_test)
+```
+
+---
+
+## Summary: Key Takeaways
+
+**Backpropagation:**
+- Chain rule is fundamental: ∂L/∂w = ∂L/∂y · ∂y/∂z · ∂z/∂w
+- Work backwards from loss to inputs
+- Cache forward pass values for backward pass
+- Vanishing gradients are real - use ReLU!
+
+**Training:**
+- SGD: θ ← θ - α·∇L
+- Mini-batches balance speed and stability
+- Learning rate is critical - start small (0.001)
+- Monitor both training and validation loss
+
+**Debugging:**
+- Always do gradient checking first
+- Overfit tiny batch to verify implementation
+- Check sanity: initial loss, random predictions
+- Use proper initialization (Xavier/He)
+
+**Common Issues:**
+- Loss is NaN → Check for overflow, use gradient clipping
+- Loss doesn't decrease → Lower learning rate, check gradients
+- Overfitting → Regularization, dropout, more data
+- Oscillating loss → Lower learning rate, increase batch size
+
+Now you have complete solutions for all exercises! Practice these by hand to build deep intuition.
