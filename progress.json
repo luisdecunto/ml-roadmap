@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-11T11:48:32.104Z",
+  "lastUpdated": "2026-01-11T12:55:38.808Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -239,6 +239,7 @@
     "Module 6: Feedforward Networks from Scratch (20-25 hours)-9": true,
     "Module 6: Feedforward Networks from Scratch (20-25 hours)-7": true,
     "Module 6: Feedforward Networks from Scratch (20-25 hours)-10": true,
-    "Module 6: Feedforward Networks from Scratch (20-25 hours)-13": true
+    "Module 6: Feedforward Networks from Scratch (20-25 hours)-13": true,
+    "Module 6: Feedforward Networks from Scratch (20-25 hours)-12": true
   }
 }
