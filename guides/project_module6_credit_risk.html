@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 6 Mini-Project: Credit Risk Predictor - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 min-h-screen">
+    <div class="max-w-4xl mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold text-gray-800">📦 Mini-Project: Credit Risk Predictor with Uncertainty</h1>
+                <a href="../index.html" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm font-semibold">
+                    ← Back to Roadmap
+                </a>
+            </div>
+            <p class="text-gray-600">
+                <strong>Module 6:</strong> Feedforward Networks from Scratch | <strong>Estimated Time:</strong> 25-30 hours
+            </p>
+        </div>
+
+        <!-- Content Container -->
+        <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-yellow-800">
+                            Project Guide Coming Soon
+                        </h3>
+                        <div class="mt-2 text-sm text-yellow-700">
+                            <p>This mini-project guide is currently being developed. It will cover building a production-ready feedforward neural network for loan default prediction using tabular data with Bayesian uncertainty quantification.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🎯 Project Overview</h2>
+            <p class="text-gray-700 mb-4">
+                Build a feedforward neural network from scratch to predict credit risk (loan defaults) using tabular financial data. The model will provide uncertainty estimates using Monte Carlo Dropout to determine when predictions are reliable vs when human review is needed.
+            </p>
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 mt-6">📚 Key Learning Objectives</h2>
+            <ul class="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                <li>Build feedforward networks for tabular data (no CNNs)</li>
+                <li>Handle real-world data: missing values, scaling, encoding</li>
+                <li>Implement uncertainty quantification with MC Dropout</li>
+                <li>Address class imbalance in financial data</li>
+                <li>Evaluate with financial metrics (precision/recall, ROC-AUC)</li>
+                <li>Deploy model decisions with risk thresholds</li>
+            </ul>
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">🔬 Project Components</h2>
+            <div class="space-y-4 text-gray-700">
+                <div class="border-l-4 border-blue-500 pl-4 py-2">
+                    <h3 class="font-semibold text-lg">Phase 1: Data Processing & EDA</h3>
+                    <p>Load credit data (Lending Club, German Credit, or similar), handle missing values, feature engineering</p>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-4 py-2">
+                    <h3 class="font-semibold text-lg">Phase 2: Feedforward Network Implementation</h3>
+                    <p>Build multi-layer network from scratch with ReLU, dropout, batch normalization</p>
+                </div>
+
+                <div class="border-l-4 border-purple-500 pl-4 py-2">
+                    <h3 class="font-semibold text-lg">Phase 3: Training with Class Imbalance</h3>
+                    <p>Implement weighted loss, SMOTE, or focal loss to handle imbalanced defaults</p>
+                </div>
+
+                <div class="border-l-4 border-orange-500 pl-4 py-2">
+                    <h3 class="font-semibold text-lg">Phase 4: Uncertainty Quantification</h3>
+                    <p>MC Dropout for confidence estimation, calibration curves, decision thresholds</p>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 mt-6">📊 Suggested Datasets</h2>
+            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                <li><a href="https://www.kaggle.com/datasets/wordsforthewise/lending-club" class="text-blue-600 hover:underline">Lending Club Loan Data (Kaggle)</a></li>
+                <li><a href="https://archive.ics.uci.edu/ml/datasets/Statlog+(German+Credit+Data)" class="text-blue-600 hover:underline">German Credit Data (UCI)</a></li>
+                <li><a href="https://www.kaggle.com/competitions/home-credit-default-risk" class="text-blue-600 hover:underline">Home Credit Default Risk (Kaggle)</a></li>
+            </ul>
+
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mt-8">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-blue-800">
+                            In the meantime...
+                        </h3>
+                        <div class="mt-2 text-sm text-blue-700">
+                            <p>You can start exploring credit risk datasets and thinking about how feedforward networks differ from CNNs for structured/tabular data. This project focuses purely on feedforward architectures - no convolutional layers needed!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
