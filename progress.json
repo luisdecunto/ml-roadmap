@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-12T15:36:45.944Z",
+  "lastUpdated": "2026-01-12T15:36:47.071Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -258,6 +258,6 @@
     "Module 6: Feedforward Networks from Scratch (20-25 hours)-15": true,
     "Module 6.5: ML Visualization & Interpretability (10-12 hours)-0": true,
     "Module 6.5: ML Visualization & Interpretability (10-12 hours)-1": true,
-    "Module 6: Feedforward Networks from Scratch (20-25 hours)-16": true
+    "Module 6: Feedforward Networks from Scratch (20-25 hours)-16": false
   }
 }
