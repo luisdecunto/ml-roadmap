@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Network Visualization Guide - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #e5e7eb;
+        }
+        .markdown-body h1 { font-size: 2em; font-weight: 700; margin: 1em 0 0.5em 0; color: #60a5fa; }
+        .markdown-body h2 { font-size: 1.5em; font-weight: 600; margin: 1.5em 0 0.5em 0; color: #34d399; border-bottom: 2px solid #374151; padding-bottom: 0.3em; }
+        .markdown-body h3 { font-size: 1.25em; font-weight: 600; margin: 1em 0 0.5em 0; color: #fbbf24; }
+        .markdown-body h4 { font-size: 1.1em; font-weight: 600; margin: 0.8em 0 0.4em 0; color: #a78bfa; }
+        .markdown-body code {
+            background-color: #1f2937;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+        .markdown-body pre {
+            background-color: #1f2937;
+            padding: 1em;
+            border-radius: 6px;
+            overflow-x: auto;
+            border-left: 4px solid #3b82f6;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #e5e7eb;
+        }
+        .markdown-body ul, .markdown-body ol { margin-left: 1.5em; margin-bottom: 1em; }
+        .markdown-body li { margin: 0.5em 0; }
+        .markdown-body a { color: #60a5fa; text-decoration: none; }
+        .markdown-body a:hover { text-decoration: underline; }
+        .markdown-body blockquote {
+            border-left: 4px solid #3b82f6;
+            padding-left: 1em;
+            margin: 1em 0;
+            color: #9ca3af;
+            font-style: italic;
+        }
+        .markdown-body table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+        .markdown-body th, .markdown-body td { border: 1px solid #374151; padding: 0.6em; text-align: left; }
+        .markdown-body th { background-color: #1f2937; font-weight: 600; }
+        .markdown-body strong { color: #fbbf24; font-weight: 600; }
+        .code-block-header {
+            background-color: #374151;
+            color: #9ca3af;
+            padding: 0.5em 1em;
+            border-radius: 6px 6px 0 0;
+            font-size: 0.85em;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="mb-8">
+            <a href="../index.html" class="text-blue-400 hover:text-blue-300 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to Roadmap
+            </a>
+        </div>
+
+        <div id="content" class="markdown-body"></div>
+    </div>
+
+    <script>
+        const markdown = `# Neural Network Visualization Guide
+
+*Module 6.5: Learn to create publication-quality visualizations for neural networks*
+
+---
+
+## 🎯 What You'll Learn
+
+This guide provides **complete, working code** for creating the visualizations you see in TensorFlow Playground, Distill.pub, and academic papers.
+
+**5 Core Visualizations:**
+1. Decision Boundaries (2D classification)
+2. Architecture Diagrams (network structure)
+3. Training Dashboards (loss curves, metrics)
+4. Weight/Activation Histograms (detect issues)
+5. Animated Gradient Descent (optimization paths)
+
+---
+
+## 1. Decision Boundaries
+
+**When to use:** Visualize how your network separates classes in 2D space.
+
+**Perfect for:** XOR, spirals, circles, moons datasets.
+
+### Complete Code
+
+\`\`\`python
+import numpy as np
+import matplotlib.pyplot as plt
+
+def plot_decision_boundary(model, X, y, title="Decision Boundary", resolution=0.02):
+    """
+    Plot decision boundary for a 2D classifier.
+
+    Args:
+        model: Model with forward() method returning probabilities
+        X: Features (n_samples, 2)
+        y: Labels (n_samples,)
+        resolution: Mesh grid resolution (smaller = finer)
+    """
+    # Set up mesh grid
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(
+        np.arange(x_min, x_max, resolution),
+        np.arange(y_min, y_max, resolution)
+    )
+
+    # Predict on mesh points
+    mesh_points = np.c_[xx.ravel(), yy.ravel()]
+    Z = model.forward(mesh_points)
+
+    # Handle different output shapes
+    if Z.ndim > 1:
+        Z = Z.flatten()
+    Z = Z.reshape(xx.shape)
+
+    # Create figure
+    fig, ax = plt.subplots(figsize=(10, 8))
+
+    # Plot decision boundary with probability contours
+    contour = ax.contourf(xx, yy, Z, levels=20, cmap='RdYlBu', alpha=0.6)
+
+    # Add decision boundary line at 0.5
+    ax.contour(xx, yy, Z, levels=[0.5], colors='black', linewidths=2)
+
+    # Plot data points
+    scatter = ax.scatter(X[:, 0], X[:, 1], c=y, cmap='RdYlBu',
+                        edgecolors='black', s=50, linewidth=1.5)
+
+    # Labels and styling
+    ax.set_xlabel('Feature 1', fontsize=12, fontweight='bold')
+    ax.set_ylabel('Feature 2', fontsize=12, fontweight='bold')
+    ax.set_title(title, fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3, linestyle='--')
+
+    # Add colorbar
+    cbar = plt.colorbar(contour, ax=ax)
+    cbar.set_label('P(Class=1)', fontsize=10)
+
+    plt.tight_layout()
+    return fig
+
+# Example usage with your network
+from your_network import CreditRiskNN  # Replace with your network
+
+# Generate XOR data
+X = np.random.randn(200, 2)
+y = np.logical_xor(X[:, 0] > 0, X[:, 1] > 0).astype(int)
+
+# Train your network (simplified)
+model = CreditRiskNN(input_size=2, hidden1=8, hidden2=4)
+# ... training code ...
+
+# Plot
+fig = plot_decision_boundary(model, X, y, "XOR Problem - Neural Network")
+plt.savefig('xor_boundary.png', dpi=150, bbox_inches='tight')
+plt.show()
+\`\`\`
+
+### Advanced: Before/After Comparison
+
+\`\`\`python
+def plot_decision_boundary_evolution(model, X, y, epochs_to_show=[0, 10, 50, 200]):
+    """Show how decision boundary evolves during training."""
+    fig, axes = plt.subplots(2, 2, figsize=(14, 12))
+    axes = axes.flatten()
+
+    for idx, epoch in enumerate(epochs_to_show):
+        # Train to this epoch
+        # ... training code ...
+
+        # Plot on subplot
+        ax = axes[idx]
+
+        # (Same plotting code as above, but on ax)
+        x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+        y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.02),
+                            np.arange(y_min, y_max, 0.02))
+
+        Z = model.forward(np.c_[xx.ravel(), yy.ravel()]).reshape(xx.shape)
+
+        ax.contourf(xx, yy, Z, levels=20, cmap='RdYlBu', alpha=0.6)
+        ax.contour(xx, yy, Z, levels=[0.5], colors='black', linewidths=2)
+        ax.scatter(X[:, 0], X[:, 1], c=y, cmap='RdYlBu',
+                  edgecolors='black', s=30)
+
+        ax.set_title(f'Epoch {epoch}', fontsize=12, fontweight='bold')
+        ax.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    return fig
+\`\`\`
+
+---
+
+## 2. Network Architecture Diagrams
+
+**When to use:** Show network structure with layer dimensions and connections.
+
+### Complete Code
+
+\`\`\`python
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+def plot_network_architecture(layer_sizes, layer_names=None, activation_names=None):
+    """
+    Draw neural network architecture diagram.
+
+    Args:
+        layer_sizes: List of layer sizes [input, hidden1, hidden2, ..., output]
+        layer_names: List of layer names (optional)
+        activation_names: List of activation functions (optional)
+    """
+    fig, ax = plt.subplots(figsize=(12, 8))
+
+    # Configuration
+    layer_spacing = 2.0
+    neuron_spacing = 0.5
+    neuron_radius = 0.2
+
+    # Calculate positions
+    n_layers = len(layer_sizes)
+    max_neurons = max(layer_sizes)
+
+    # Draw each layer
+    for layer_idx, layer_size in enumerate(layer_sizes):
+        x = layer_idx * layer_spacing
+
+        # Center neurons vertically
+        y_offset = (max_neurons - layer_size) * neuron_spacing / 2
+
+        for neuron_idx in range(layer_size):
+            y = neuron_idx * neuron_spacing + y_offset
+
+            # Draw neuron circle
+            if layer_idx == 0:
+                color = '#60a5fa'  # Input layer (blue)
+            elif layer_idx == n_layers - 1:
+                color = '#34d399'  # Output layer (green)
+            else:
+                color = '#fbbf24'  # Hidden layers (yellow)
+
+            circle = patches.Circle((x, y), neuron_radius,
+                                   facecolor=color, edgecolor='black',
+                                   linewidth=2, alpha=0.8)
+            ax.add_patch(circle)
+
+            # Draw connections to next layer
+            if layer_idx < n_layers - 1:
+                next_layer_size = layer_sizes[layer_idx + 1]
+                next_y_offset = (max_neurons - next_layer_size) * neuron_spacing / 2
+
+                for next_neuron_idx in range(next_layer_size):
+                    next_y = next_neuron_idx * neuron_spacing + next_y_offset
+
+                    # Draw connection line
+                    ax.plot([x + neuron_radius, x + layer_spacing - neuron_radius],
+                           [y, next_y],
+                           'gray', linewidth=0.5, alpha=0.3)
+
+    # Add layer labels
+    for layer_idx, layer_size in enumerate(layer_sizes):
+        x = layer_idx * layer_spacing
+        y = -0.8
+
+        if layer_names:
+            label = f"{layer_names[layer_idx]}\\n({layer_size})"
+        else:
+            label = f"Layer {layer_idx}\\n({layer_size})"
+
+        ax.text(x, y, label, ha='center', va='top',
+               fontsize=10, fontweight='bold')
+
+    # Add activation functions
+    if activation_names:
+        for layer_idx in range(len(activation_names)):
+            x = layer_idx * layer_spacing + layer_spacing / 2
+            y = max_neurons * neuron_spacing / 2 + 0.5
+
+            ax.text(x, y, activation_names[layer_idx],
+                   ha='center', va='center',
+                   fontsize=9, style='italic',
+                   bbox=dict(boxstyle='round,pad=0.5', facecolor='white', alpha=0.7))
+
+    # Styling
+    ax.set_xlim(-0.5, (n_layers - 1) * layer_spacing + 0.5)
+    ax.set_ylim(-1.5, max_neurons * neuron_spacing + 0.5)
+    ax.axis('off')
+    ax.set_aspect('equal')
+
+    plt.title('Neural Network Architecture', fontsize=14, fontweight='bold', pad=20)
+    plt.tight_layout()
+
+    return fig
+
+# Example usage
+layer_sizes = [48, 64, 32, 1]
+layer_names = ['Input', 'Hidden 1', 'Hidden 2', 'Output']
+activation_names = ['ReLU', 'ReLU', 'Sigmoid']
+
+fig = plot_network_architecture(layer_sizes, layer_names, activation_names)
+plt.savefig('network_architecture.png', dpi=150, bbox_inches='tight')
+plt.show()
+\`\`\`
+
+### With Parameter Counts
+
+\`\`\`python
+def add_parameter_info(ax, layer_sizes):
+    """Add parameter count annotations to architecture diagram."""
+    layer_spacing = 2.0
+
+    for i in range(len(layer_sizes) - 1):
+        # Calculate parameters: (input_size + 1) * output_size
+        n_params = (layer_sizes[i] + 1) * layer_sizes[i + 1]
+
+        x = i * layer_spacing + layer_spacing / 2
+        y = -1.2
+
+        ax.text(x, y, f'{n_params:,} params',
+               ha='center', fontsize=8, color='gray')
+\`\`\`
+
+---
+
+## 3. Training Dashboards
+
+**When to use:** Track training progress with multiple metrics.
+
+### Complete Code
+
+\`\`\`python
+import matplotlib.pyplot as plt
+import numpy as np
+
+def create_training_dashboard(history, save_path='training_dashboard.png'):
+    """
+    Create comprehensive training dashboard.
+
+    Args:
+        history: Dictionary with keys:
+            - 'train_loss': list of training losses
+            - 'val_loss': list of validation losses
+            - 'train_acc': list of training accuracies
+            - 'val_acc': list of validation accuracies
+            - 'learning_rate': list of learning rates (optional)
+            - 'grad_norm': list of gradient norms (optional)
+    """
+    fig = plt.figure(figsize=(16, 10))
+
+    # Determine grid layout
+    n_plots = 2  # Loss and accuracy (always)
+    if 'learning_rate' in history:
+        n_plots += 1
+    if 'grad_norm' in history:
+        n_plots += 1
+
+    rows = 2
+    cols = (n_plots + 1) // 2
+
+    # Plot 1: Loss curves
+    ax1 = plt.subplot(rows, cols, 1)
+    epochs = range(1, len(history['train_loss']) + 1)
+
+    ax1.plot(epochs, history['train_loss'], 'b-', linewidth=2, label='Training')
+    ax1.plot(epochs, history['val_loss'], 'r-', linewidth=2, label='Validation')
+
+    # Find best validation loss
+    best_epoch = np.argmin(history['val_loss']) + 1
+    best_val_loss = min(history['val_loss'])
+    ax1.axvline(best_epoch, color='green', linestyle='--', alpha=0.7,
+               label=f'Best (Epoch {best_epoch})')
+
+    ax1.set_xlabel('Epoch', fontsize=12, fontweight='bold')
+    ax1.set_ylabel('Loss', fontsize=12, fontweight='bold')
+    ax1.set_title('Training and Validation Loss', fontsize=13, fontweight='bold')
+    ax1.legend(fontsize=10)
+    ax1.grid(True, alpha=0.3)
+
+    # Plot 2: Accuracy curves
+    ax2 = plt.subplot(rows, cols, 2)
+    ax2.plot(epochs, history['train_acc'], 'b-', linewidth=2, label='Training')
+    ax2.plot(epochs, history['val_acc'], 'r-', linewidth=2, label='Validation')
+
+    # Find best validation accuracy
+    best_epoch_acc = np.argmax(history['val_acc']) + 1
+    best_val_acc = max(history['val_acc'])
+    ax2.axvline(best_epoch_acc, color='green', linestyle='--', alpha=0.7,
+               label=f'Best (Epoch {best_epoch_acc})')
+    ax2.axhline(best_val_acc, color='green', linestyle=':', alpha=0.5)
+
+    ax2.set_xlabel('Epoch', fontsize=12, fontweight='bold')
+    ax2.set_ylabel('Accuracy', fontsize=12, fontweight='bold')
+    ax2.set_title('Training and Validation Accuracy', fontsize=13, fontweight='bold')
+    ax2.legend(fontsize=10)
+    ax2.grid(True, alpha=0.3)
+
+    # Plot 3: Learning rate (if available)
+    plot_idx = 3
+    if 'learning_rate' in history:
+        ax3 = plt.subplot(rows, cols, plot_idx)
+        ax3.plot(epochs, history['learning_rate'], 'purple', linewidth=2)
+        ax3.set_xlabel('Epoch', fontsize=12, fontweight='bold')
+        ax3.set_ylabel('Learning Rate', fontsize=12, fontweight='bold')
+        ax3.set_title('Learning Rate Schedule', fontsize=13, fontweight='bold')
+        ax3.set_yscale('log')
+        ax3.grid(True, alpha=0.3)
+        plot_idx += 1
+
+    # Plot 4: Gradient norm (if available)
+    if 'grad_norm' in history:
+        ax4 = plt.subplot(rows, cols, plot_idx)
+        ax4.plot(epochs, history['grad_norm'], 'orange', linewidth=2)
+        ax4.set_xlabel('Epoch', fontsize=12, fontweight='bold')
+        ax4.set_ylabel('Gradient Norm', fontsize=12, fontweight='bold')
+        ax4.set_title('Gradient Norm (Detect Exploding/Vanishing)', fontsize=13, fontweight='bold')
+        ax4.set_yscale('log')
+        ax4.grid(True, alpha=0.3)
+
+        # Add warning zones
+        ax4.axhspan(0, 1e-5, alpha=0.2, color='blue', label='Vanishing')
+        ax4.axhspan(1e2, ax4.get_ylim()[1], alpha=0.2, color='red', label='Exploding')
+        ax4.legend(fontsize=8)
+
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+
+    return fig
+
+# Example usage
+history = {
+    'train_loss': [0.7, 0.5, 0.4, 0.3, 0.25, 0.22, 0.20],
+    'val_loss': [0.72, 0.52, 0.42, 0.35, 0.33, 0.34, 0.35],
+    'train_acc': [0.60, 0.70, 0.75, 0.80, 0.83, 0.85, 0.86],
+    'val_acc': [0.58, 0.68, 0.73, 0.77, 0.78, 0.77, 0.76],
+    'learning_rate': [0.01, 0.01, 0.01, 0.005, 0.005, 0.001, 0.001],
+    'grad_norm': [2.5, 1.8, 1.2, 0.8, 0.6, 0.5, 0.4]
+}
+
+fig = create_training_dashboard(history)
+plt.show()
+\`\`\`
+
+---
+
+## 4. Weight & Activation Histograms
+
+**When to use:** Detect vanishing/exploding gradients or dead neurons.
+
+### Complete Code
+
+\`\`\`python
+def plot_weight_distributions(model, save_path='weight_distributions.png'):
+    """
+    Plot weight distributions for each layer.
+
+    Args:
+        model: Neural network with layers (W1, W2, W3, ...)
+    """
+    # Collect all weight matrices
+    weights = []
+    layer_names = []
+
+    # Adapt this to your network structure
+    if hasattr(model, 'W1'):
+        weights.append(model.W1.flatten())
+        layer_names.append('Layer 1 Weights')
+    if hasattr(model, 'W2'):
+        weights.append(model.W2.flatten())
+        layer_names.append('Layer 2 Weights')
+    if hasattr(model, 'W3'):
+        weights.append(model.W3.flatten())
+        layer_names.append('Output Weights')
+
+    # Create subplots
+    n_layers = len(weights)
+    fig, axes = plt.subplots(2, n_layers, figsize=(5 * n_layers, 8))
+
+    if n_layers == 1:
+        axes = axes.reshape(-1, 1)
+
+    for i, (w, name) in enumerate(zip(weights, layer_names)):
+        # Top row: Histograms
+        ax_hist = axes[0, i]
+        ax_hist.hist(w, bins=50, edgecolor='black', alpha=0.7, color='skyblue')
+        ax_hist.axvline(0, color='red', linestyle='--', linewidth=2)
+        ax_hist.set_xlabel('Weight Value', fontsize=10, fontweight='bold')
+        ax_hist.set_ylabel('Frequency', fontsize=10, fontweight='bold')
+        ax_hist.set_title(f'{name}\\nMean: {w.mean():.4f}, Std: {w.std():.4f}',
+                         fontsize=11, fontweight='bold')
+        ax_hist.grid(True, alpha=0.3)
+
+        # Bottom row: Box plots
+        ax_box = axes[1, i]
+        ax_box.boxplot([w], vert=True)
+        ax_box.set_ylabel('Weight Value', fontsize=10, fontweight='bold')
+        ax_box.set_title('Distribution Summary', fontsize=11, fontweight='bold')
+        ax_box.grid(True, alpha=0.3, axis='y')
+
+    plt.suptitle('Weight Distributions Across Layers', fontsize=14, fontweight='bold')
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+
+    return fig
+
+
+def plot_activation_distributions(activations, layer_names, save_path='activation_distributions.png'):
+    """
+    Plot activation distributions for each layer.
+
+    Args:
+        activations: List of activation arrays from forward pass
+        layer_names: List of layer names
+    """
+    n_layers = len(activations)
+    fig, axes = plt.subplots(1, n_layers, figsize=(5 * n_layers, 4))
+
+    if n_layers == 1:
+        axes = [axes]
+
+    for i, (act, name) in enumerate(zip(activations, layer_names)):
+        ax = axes[i]
+
+        # Flatten activations
+        act_flat = act.flatten()
+
+        # Plot histogram
+        ax.hist(act_flat, bins=50, edgecolor='black', alpha=0.7, color='lightcoral')
+
+        # Statistics
+        mean_act = act_flat.mean()
+        std_act = act_flat.std()
+        dead_neurons = np.sum(act_flat == 0) / len(act_flat) * 100
+
+        ax.axvline(mean_act, color='blue', linestyle='--', linewidth=2, label=f'Mean: {mean_act:.3f}')
+        ax.set_xlabel('Activation Value', fontsize=10, fontweight='bold')
+        ax.set_ylabel('Frequency', fontsize=10, fontweight='bold')
+        ax.set_title(f'{name}\\nStd: {std_act:.3f}, Dead: {dead_neurons:.1f}%',
+                    fontsize=11, fontweight='bold')
+        ax.legend(fontsize=8)
+        ax.grid(True, alpha=0.3)
+
+    plt.suptitle('Activation Distributions During Forward Pass', fontsize=14, fontweight='bold')
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+
+    return fig
+
+# Example usage
+from your_network import CreditRiskNN
+
+model = CreditRiskNN(input_size=48, hidden1=64, hidden2=32)
+
+# After training
+fig = plot_weight_distributions(model)
+plt.show()
+
+# During forward pass, collect activations
+X = ...  # Your data
+a1 = model.relu1.forward(model.fc1.forward(X))
+a2 = model.relu2.forward(model.fc2.forward(a1))
+
+activations = [a1, a2]
+layer_names = ['Hidden 1 (ReLU)', 'Hidden 2 (ReLU)']
+
+fig = plot_activation_distributions(activations, layer_names)
+plt.show()
+\`\`\`
+
+---
+
+## 5. Animated Gradient Descent
+
+**When to use:** Visualize optimization trajectory on loss surface.
+
+### Complete Code
+
+\`\`\`python
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+from mpl_toolkits.mplot3d import Axes3D
+
+def create_loss_surface(func, x_range=(-5, 5), y_range=(-5, 5), resolution=100):
+    """Create 3D loss surface for visualization."""
+    x = np.linspace(x_range[0], x_range[1], resolution)
+    y = np.linspace(y_range[0], y_range[1], resolution)
+    X, Y = np.meshgrid(x, y)
+    Z = func(X, Y)
+    return X, Y, Z
+
+
+def animate_gradient_descent(trajectory, func, title="Gradient Descent Optimization",
+                            save_path='gradient_descent.gif'):
+    """
+    Animate gradient descent trajectory on 3D loss surface.
+
+    Args:
+        trajectory: List of (x, y, loss) tuples
+        func: Loss function f(x, y)
+        title: Plot title
+        save_path: Output file path
+    """
+    # Create loss surface
+    X, Y, Z = create_loss_surface(func)
+
+    # Set up figure
+    fig = plt.figure(figsize=(14, 6))
+
+    # Left plot: 3D surface
+    ax1 = fig.add_subplot(121, projection='3d')
+    ax1.plot_surface(X, Y, Z, cmap='viridis', alpha=0.6, edgecolor='none')
+
+    # Right plot: 2D contour
+    ax2 = fig.add_subplot(122)
+    contour = ax2.contour(X, Y, Z, levels=20, cmap='viridis')
+    ax2.clabel(contour, inline=True, fontsize=8)
+
+    # Initialize trajectory lines
+    line_3d, = ax1.plot([], [], [], 'r.-', linewidth=2, markersize=8)
+    point_3d, = ax1.plot([], [], [], 'ro', markersize=12)
+
+    line_2d, = ax2.plot([], [], 'r.-', linewidth=2, markersize=8)
+    point_2d, = ax2.plot([], [], 'ro', markersize=12)
+
+    # Labels
+    ax1.set_xlabel('Parameter 1')
+    ax1.set_ylabel('Parameter 2')
+    ax1.set_zlabel('Loss')
+    ax1.set_title(f'{title} (3D View)')
+
+    ax2.set_xlabel('Parameter 1')
+    ax2.set_ylabel('Parameter 2')
+    ax2.set_title(f'{title} (Contour View)')
+    ax2.grid(True, alpha=0.3)
+
+    # Animation function
+    def update(frame):
+        # Get trajectory up to current frame
+        x_data = [p[0] for p in trajectory[:frame+1]]
+        y_data = [p[1] for p in trajectory[:frame+1]]
+        z_data = [p[2] for p in trajectory[:frame+1]]
+
+        # Update 3D plot
+        line_3d.set_data(x_data, y_data)
+        line_3d.set_3d_properties(z_data)
+        point_3d.set_data([x_data[-1]], [y_data[-1]])
+        point_3d.set_3d_properties([z_data[-1]])
+
+        # Update 2D plot
+        line_2d.set_data(x_data, y_data)
+        point_2d.set_data([x_data[-1]], [y_data[-1]])
+
+        # Update title with current step
+        fig.suptitle(f'Step {frame+1}/{len(trajectory)} | Loss: {z_data[-1]:.4f}',
+                    fontsize=14, fontweight='bold')
+
+        return line_3d, point_3d, line_2d, point_2d
+
+    # Create animation
+    anim = FuncAnimation(fig, update, frames=len(trajectory),
+                        interval=100, blit=True, repeat=True)
+
+    # Save animation
+    anim.save(save_path, writer='pillow', fps=10)
+
+    return fig, anim
+
+
+# Example: Rosenbrock function (banana function)
+def rosenbrock(x, y):
+    """Rosenbrock function (common test function)."""
+    return (1 - x)**2 + 100 * (y - x**2)**2
+
+
+# Simulate gradient descent trajectory
+def simulate_gd(start, learning_rate, n_steps):
+    """Simulate gradient descent on Rosenbrock function."""
+    trajectory = []
+    x, y = start
+
+    for _ in range(n_steps):
+        # Compute loss
+        loss = rosenbrock(x, y)
+        trajectory.append((x, y, loss))
+
+        # Compute gradients (analytical for Rosenbrock)
+        dx = -2 * (1 - x) - 400 * x * (y - x**2)
+        dy = 200 * (y - x**2)
+
+        # Update parameters
+        x -= learning_rate * dx
+        y -= learning_rate * dy
+
+    return trajectory
+
+
+# Run simulation
+trajectory = simulate_gd(start=(-1.5, 2.5), learning_rate=0.001, n_steps=200)
+
+# Create animation
+fig, anim = animate_gradient_descent(trajectory, rosenbrock,
+                                    title="Gradient Descent on Rosenbrock Function")
+plt.show()
+\`\`\`
+
+### Static Version (No Animation)
+
+\`\`\`python
+def plot_optimization_path(trajectory, func, title="Optimization Path"):
+    """Static plot of optimization trajectory."""
+    X, Y, Z = create_loss_surface(func)
+
+    fig = plt.figure(figsize=(14, 6))
+
+    # 3D plot
+    ax1 = fig.add_subplot(121, projection='3d')
+    ax1.plot_surface(X, Y, Z, cmap='viridis', alpha=0.5)
+
+    # Plot trajectory
+    x_data = [p[0] for p in trajectory]
+    y_data = [p[1] for p in trajectory]
+    z_data = [p[2] for p in trajectory]
+
+    ax1.plot(x_data, y_data, z_data, 'r.-', linewidth=2, markersize=4)
+    ax1.plot([x_data[0]], [y_data[0]], [z_data[0]], 'go', markersize=12, label='Start')
+    ax1.plot([x_data[-1]], [y_data[-1]], [z_data[-1]], 'rs', markersize=12, label='End')
+
+    ax1.set_xlabel('Parameter 1')
+    ax1.set_ylabel('Parameter 2')
+    ax1.set_zlabel('Loss')
+    ax1.set_title(f'{title} (3D)')
+    ax1.legend()
+
+    # 2D contour plot
+    ax2 = fig.add_subplot(122)
+    contour = ax2.contour(X, Y, Z, levels=20, cmap='viridis')
+    ax2.clabel(contour, inline=True, fontsize=8)
+
+    ax2.plot(x_data, y_data, 'r.-', linewidth=2, markersize=4)
+    ax2.plot(x_data[0], y_data[0], 'go', markersize=12, label='Start')
+    ax2.plot(x_data[-1], y_data[-1], 'rs', markersize=12, label='End')
+
+    ax2.set_xlabel('Parameter 1')
+    ax2.set_ylabel('Parameter 2')
+    ax2.set_title(f'{title} (Contour)')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+
+    plt.tight_layout()
+    return fig
+\`\`\`
+
+---
+
+## Tips for Publication-Quality Figures
+
+### 1. Resolution and Size
+\`\`\`python
+# High DPI for papers
+plt.savefig('figure.png', dpi=300, bbox_inches='tight')
+
+# Vector format for scalability
+plt.savefig('figure.pdf', bbox_inches='tight')
+
+# Standard figure sizes
+fig = plt.figure(figsize=(10, 6))  # Single plot
+fig = plt.figure(figsize=(14, 10))  # Multi-panel
+\`\`\`
+
+### 2. Color Schemes
+\`\`\`python
+# Good colormaps for different purposes
+- Sequential: 'viridis', 'plasma', 'inferno'
+- Diverging: 'RdYlBu', 'RdBu', 'coolwarm'
+- Categorical: 'tab10', 'Set2'
+
+# Colorblind-friendly
+from matplotlib.colors import LinearSegmentedColormap
+colors = ['#0173B2', '#DE8F05', '#029E73']  # IBM colorblind safe
+\`\`\`
+
+### 3. Fonts and Labels
+\`\`\`python
+# Use consistent font sizes
+plt.rcParams['font.size'] = 11
+plt.rcParams['axes.labelsize'] = 12
+plt.rcParams['axes.titlesize'] = 13
+plt.rcParams['xtick.labelsize'] = 10
+plt.rcParams['ytick.labelsize'] = 10
+plt.rcParams['legend.fontsize'] = 10
+
+# Bold labels
+ax.set_xlabel('Epoch', fontweight='bold')
+ax.set_title('Training Loss', fontweight='bold')
+\`\`\`
+
+### 4. Grid and Styling
+\`\`\`python
+# Professional grid
+ax.grid(True, alpha=0.3, linestyle='--', linewidth=0.5)
+
+# Remove top and right spines
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+# Tight layout (no wasted space)
+plt.tight_layout()
+\`\`\`
+
+---
+
+## Common Patterns Reference
+
+### Meshgrid for 2D Visualization
+\`\`\`python
+x = np.linspace(-5, 5, 100)
+y = np.linspace(-5, 5, 100)
+X, Y = np.meshgrid(x, y)
+Z = func(X, Y)
+\`\`\`
+
+### Multi-Panel Figures
+\`\`\`python
+fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+for i, ax in enumerate(axes.flat):
+    # Plot on ax
+    ax.plot(data[i])
+    ax.set_title(f'Plot {i+1}')
+\`\`\`
+
+### Shared Axes
+\`\`\`python
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5), sharex=True, sharey=True)
+\`\`\`
+
+### Annotations
+\`\`\`python
+ax.annotate('Important point',
+           xy=(x, y), xytext=(x+1, y+1),
+           arrowprops=dict(arrowstyle='->', color='red'),
+           fontsize=10, fontweight='bold')
+\`\`\`
+
+---
+
+## Apply to Your Projects
+
+### For Module 6 (XOR, MNIST):
+1. Decision boundaries for XOR
+2. Training dashboard for MNIST
+3. Weight histograms before/after training
+
+### For P006 (Credit Risk):
+1. Architecture diagram (48 → 64 → 32 → 1)
+2. Training dashboard (already have!)
+3. Weight distributions to check initialization
+
+### For Module 6.5:
+1. Implement all 5 visualizations
+2. Create reusable functions
+3. Build your visualization library
+
+---
+
+## Next Steps
+
+1. Copy these functions to your projects
+2. Adapt to your network structure
+3. Generate figures for your Module 6 work
+4. Create a \`visualization_utils.py\` file
+5. Reuse in all future projects!
+
+**Remember:** Good visualizations make complex ideas clear. Spend time on them!
+
+`;
+
+        document.getElementById('content').innerHTML = marked.parse(markdown);
+    </script>
+</body>
+</html>
