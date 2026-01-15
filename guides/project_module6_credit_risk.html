@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 6 Mini-Project: Credit Risk Predictor with Uncertainty - ML Roadmap</title>
+    <title>Module 6 Mini-Project: Credit Risk Prediction - ML Roadmap</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
@@ -131,13 +131,13 @@
         <!-- Header -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div class="flex items-center justify-between mb-4">
-                <h1 class="text-2xl font-bold text-gray-800">📦 Mini-Project: Credit Risk Predictor with Uncertainty Quantification</h1>
+                <h1 class="text-2xl font-bold text-gray-800">📦 Mini-Project: Credit Risk Predictor</h1>
                 <a href="../index.html" class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm font-semibold">
                     ← Back to Roadmap
                 </a>
             </div>
             <p class="text-gray-600">
-                <strong>Module 6:</strong> Feedforward Networks from Scratch | <strong>Estimated Time:</strong> 25-30 hours
+                <strong>Module 6:</strong> Neural Networks Foundations | <strong>Estimated Time:</strong> 30-35 hours
             </p>
         </div>
 
@@ -148,21 +148,20 @@
     </div>
 
     <script>
-        const markdown = `# Credit Risk Predictor with Uncertainty Quantification
+        const markdown = `# Credit Risk Predictor
 
 ## 🎯 Project Overview
 
-**Challenge:** Build a feedforward neural network from scratch (no frameworks) to predict credit default risk using tabular financial data, with uncertainty quantification to know when the model is confident vs uncertain about its predictions.
+**Challenge:** Build a feedforward neural network from scratch (no frameworks) to predict credit default risk using tabular financial data.
 
 **Why This Matters:** This project forces you to deeply understand:
 - How feedforward networks process structured/tabular data
 - Why preprocessing matters (normalization, encoding, missing values)
 - How to handle class imbalance in real-world datasets
 - How backpropagation works through multiple hidden layers
-- How dropout provides uncertainty estimates (Monte Carlo Dropout)
-- Why calibration is critical in financial decision-making
+- Why evaluation metrics matter in financial decision-making
 
-You are **NOT** just stacking layers. You are building a **financial decision tool** that knows when it needs a human loan officer's review.
+You are **NOT** just stacking layers. You are building a **financial decision tool** that balances false positives and false negatives appropriately.
 
 ---
 
@@ -172,8 +171,6 @@ Before starting, familiarize yourself with these resources:
 
 ### Research Papers
 - [Deep Learning for Credit Scoring](https://arxiv.org/abs/1811.05265)
-- [Dropout as a Bayesian Approximation](https://arxiv.org/abs/1506.02142) - MC Dropout
-- [On Calibration of Modern Neural Networks](https://arxiv.org/abs/1706.04599)
 - [Learning from Imbalanced Data](https://link.springer.com/article/10.1007/s10994-016-5579-z)
 
 ### Tutorials & Guides
@@ -195,12 +192,10 @@ By completing this project, you will be able to:
 
 1. **Process** real-world tabular data (handle missing values, encode categories, scale features)
 2. **Implement** multi-layer feedforward network from scratch (3+ layers)
-3. **Handle** class imbalance using weighted loss or resampling
+3. **Handle** class imbalance using weighted loss
 4. **Understand** why normalization matters for gradient-based learning
-5. **Quantify** prediction uncertainty using Monte Carlo Dropout
-6. **Evaluate** with financial metrics (precision, recall, F1, ROC-AUC, profit curves)
-7. **Calibrate** confidence to match actual accuracy
-8. **Deploy** decision thresholds for automated vs manual review
+5. **Evaluate** with financial metrics (precision, recall, F1, ROC-AUC, profit curves)
+6. **Deploy** decision thresholds for automated vs manual review
 
 ---
 
@@ -211,11 +206,10 @@ By completing this project, you will be able to:
 Design and implement a credit risk model that:
 
 1. **Processes financial data:** Income, debt, credit history, demographics
-2. **Implements feedforward NN from scratch:** Dense layers, ReLU, Dropout, BatchNorm
+2. **Implements feedforward NN from scratch:** Dense layers, ReLU, Sigmoid
 3. **Provides predictions:** Binary classification (default vs no default)
-4. **Quantifies uncertainty:** Uses MC Dropout to estimate confidence
-5. **Handles class imbalance:** Defaults are typically 5-20% of data
-6. **Optimizes business metrics:** Minimize financial loss, not just maximize accuracy
+4. **Handles class imbalance:** Defaults are typically 5-20% of data
+5. **Optimizes business metrics:** Minimize financial loss, not just maximize accuracy
 
 ### Technical Constraints
 
@@ -237,7 +231,6 @@ These questions should guide your design. **Answer them through experiments:**
 1. **Why do feedforward networks need feature normalization?**
    - What happens if you don't normalize features?
    - Why does gradient descent struggle with unnormalized data?
-   - How does BatchNorm help?
 
 2. **How do you handle categorical variables?**
    - One-hot encoding vs label encoding?
@@ -280,8 +273,6 @@ X_normalized = (X - mean) / std
 # Gradients are balanced
 # Convergence is faster and more stable
 \`\`\`
-
-**BatchNorm does this automatically during training!**
 
 ---
 
@@ -378,57 +369,18 @@ weight_no_default = 1
 
 ### Advanced Questions
 
-5. **How does MC Dropout quantify uncertainty?**
-   - Why does dropout during inference provide uncertainty?
-   - How many forward passes do you need?
-   - What does high variance in predictions mean?
-
-6. **What financial metrics matter?**
+5. **What financial metrics matter?**
    - Why not just use accuracy?
    - What's the cost of false positives vs false negatives?
    - How do you set decision thresholds?
 
-7. **How do you ensure fairness?**
+6. **How do you ensure fairness?**
    - Can the model discriminate by protected attributes?
    - How do you detect and mitigate bias?
    - What's disparate impact?
 
-8. **How do you interpret confidence calibration?**
-   - If model says 80% confident, is it right 80% of the time?
-   - What does it mean if probabilities are overconfident?
-   - How do you fix miscalibration?
-
 <details>
 <summary>💡 Stuck? Click for hints on advanced topics</summary>
-
-### Monte Carlo Dropout
-
-**Standard dropout:**
-\`\`\`python
-# Training: randomly drop neurons
-if training:
-    mask = np.random.binomial(1, keep_prob, size=x.shape)
-    output = x * mask / keep_prob
-else:
-    output = x  # No dropout at test time
-\`\`\`
-
-**MC Dropout (different!):**
-\`\`\`python
-# Keep dropout ON during inference
-predictions = []
-for _ in range(50):  # Multiple forward passes
-    pred = model.forward(x, training=True)  # Dropout enabled!
-    predictions.append(pred)
-
-mean_pred = np.mean(predictions, axis=0)
-uncertainty = np.std(predictions, axis=0)
-
-# High std = model uncertain (different dropout masks disagree)
-# Low std = model confident (all dropout masks agree)
-\`\`\`
-
----
 
 ### Financial Metrics
 
@@ -482,35 +434,6 @@ disparate_impact = approval_rate_B / approval_rate_A
 - Post-processing threshold adjustment per group
 - Regular audits
 
----
-
-### Confidence Calibration
-
-**Calibration plot:**
-\`\`\`python
-# Bin predictions by confidence
-# Plot: predicted confidence vs actual accuracy
-
-bins = np.linspace(0, 1, 10)
-for i in range(len(bins)-1):
-    mask = (confidence >= bins[i]) & (confidence < bins[i+1])
-    avg_confidence = np.mean(confidence[mask])
-    actual_accuracy = np.mean(correct[mask])
-
-    # Perfectly calibrated: avg_confidence == actual_accuracy
-    # Overconfident: avg_confidence > actual_accuracy
-    # Underconfident: avg_confidence < actual_accuracy
-\`\`\`
-
-**Temperature scaling:**
-\`\`\`python
-# Scale logits before softmax
-# T > 1: make predictions less confident
-# T < 1: make predictions more confident
-
-probs = softmax(logits / temperature)
-\`\`\`
-
 </details>
 
 ---
@@ -558,7 +481,7 @@ df = pd.read_csv(url, sep=' ', names=columns)
 df['target'] = (df['target'] == 2).astype(int)
 
 print(f"Dataset shape: {df.shape}")
-print(f"\\nClass distribution:")
+print(f"\nClass distribution:")
 print(df['target'].value_counts())
 print(f"Default rate: {df['target'].mean():.2%}")
 
@@ -570,19 +493,19 @@ y = df['target'].values
 categorical_cols = X.select_dtypes(include=['object']).columns
 numerical_cols = X.select_dtypes(include=[np.number]).columns
 
-print(f"\\nCategorical features: {list(categorical_cols)}")
+print(f"\nCategorical features: {list(categorical_cols)}")
 print(f"Numerical features: {list(numerical_cols)}")
 
 # One-hot encode categoricals
 X_encoded = pd.get_dummies(X, columns=categorical_cols, drop_first=True)
 
-print(f"\\nFeatures after encoding: {X_encoded.shape[1]}")
+print(f"\nFeatures after encoding: {X_encoded.shape[1]}")
 
 # Convert to numpy
 X = X_encoded.values.astype(np.float32)
 
 # Check for missing values
-print(f"\\nMissing values: {np.isnan(X).sum()}")
+print(f"\nMissing values: {np.isnan(X).sum()}")
 if np.isnan(X).sum() > 0:
     # Simple imputation: fill with column mean
     col_mean = np.nanmean(X, axis=0)
@@ -597,7 +520,7 @@ X_train, X_val, y_train, y_val = train_test_split(
     X_temp, y_temp, test_size=0.25, random_state=42, stratify=y_temp
 )  # 0.25 * 0.8 = 0.2 of total
 
-print(f"\\nData splits:")
+print(f"\nData splits:")
 print(f"Train: {X_train.shape}, Default rate: {y_train.mean():.2%}")
 print(f"Val: {X_val.shape}, Default rate: {y_val.mean():.2%}")
 print(f"Test: {X_test.shape}, Default rate: {y_test.mean():.2%}")
@@ -608,7 +531,7 @@ X_train = scaler.fit_transform(X_train)
 X_val = scaler.transform(X_val)
 X_test = scaler.transform(X_test)
 
-print(f"\\nFeature statistics after normalization:")
+print(f"\nFeature statistics after normalization:")
 print(f"Mean: {X_train.mean(axis=0)[:5]}")  # Show first 5
 print(f"Std: {X_train.std(axis=0)[:5]}")
 
@@ -632,7 +555,7 @@ axes[1].grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('data_exploration.png', dpi=150)
-print("\\nSaved data_exploration.png")
+print("\nSaved data_exploration.png")
 
 # Save processed data
 np.savez('credit_data.npz',
@@ -640,7 +563,7 @@ np.savez('credit_data.npz',
          X_val=X_val, y_val=y_val,
          X_test=X_test, y_test=y_test,
          feature_names=X_encoded.columns)
-print("\\nSaved processed data to credit_data.npz")
+print("\nSaved processed data to credit_data.npz")
 \`\`\`
 
 </details>
@@ -652,14 +575,13 @@ Implement from scratch:
 1. Dense (fully connected) layer with forward and backward pass
 2. ReLU activation
 3. Sigmoid activation (for output)
-4. Dropout layer
-5. Binary cross-entropy loss
-6. Verify gradients numerically
+4. Binary cross-entropy loss
+5. Verify gradients numerically
 
 **Architecture requirements:**
 - Input layer: number of features
-- Hidden layer 1: 64-128 neurons + ReLU + Dropout
-- Hidden layer 2: 32-64 neurons + ReLU + Dropout
+- Hidden layer 1: 64-128 neurons + ReLU
+- Hidden layer 2: 32-64 neurons + ReLU
 - Output layer: 1 neuron + Sigmoid
 
 <details>
@@ -728,25 +650,6 @@ class Sigmoid:
         A = self.cache['A']
         return dA * A * (1 - A)
 
-class Dropout:
-    """Dropout regularization."""
-
-    def __init__(self, keep_prob=0.5):
-        self.keep_prob = keep_prob
-        self.cache = {}
-
-    def forward(self, A, training=True):
-        if training:
-            mask = (np.random.rand(*A.shape) < self.keep_prob) / self.keep_prob
-            self.cache['mask'] = mask
-            return A * mask
-        else:
-            return A
-
-    def backward(self, dA):
-        mask = self.cache['mask']
-        return dA * mask
-
 class BinaryCrossEntropy:
     """Binary cross-entropy loss."""
 
@@ -791,15 +694,13 @@ class BinaryCrossEntropy:
 class CreditRiskNN:
     """Feedforward neural network for credit risk prediction."""
 
-    def __init__(self, input_size, hidden1=64, hidden2=32, dropout_rate=0.3):
+    def __init__(self, input_size, hidden1=64, hidden2=32):
         # Layers
         self.fc1 = DenseLayer(input_size, hidden1)
         self.relu1 = ReLU()
-        self.dropout1 = Dropout(keep_prob=1-dropout_rate)
 
         self.fc2 = DenseLayer(hidden1, hidden2)
         self.relu2 = ReLU()
-        self.dropout2 = Dropout(keep_prob=1-dropout_rate)
 
         self.fc3 = DenseLayer(hidden2, 1)
         self.sigmoid = Sigmoid()
@@ -811,12 +712,10 @@ class CreditRiskNN:
         # Layer 1
         Z1 = self.fc1.forward(X)
         A1 = self.relu1.forward(Z1)
-        A1 = self.dropout1.forward(A1, training)
 
         # Layer 2
         Z2 = self.fc2.forward(A1)
         A2 = self.relu2.forward(Z2)
-        A2 = self.dropout2.forward(A2, training)
 
         # Output layer
         Z3 = self.fc3.forward(A2)
@@ -838,12 +737,10 @@ class CreditRiskNN:
         dA2 = self.fc3.backward(dZ3)
 
         # Layer 2
-        dA2 = self.dropout2.backward(dA2)
         dZ2 = self.relu2.backward(dA2)
         dA1 = self.fc2.backward(dZ2)
 
         # Layer 1
-        dA1 = self.dropout1.backward(dA1)
         dZ1 = self.relu1.backward(dA1)
         dX = self.fc1.backward(dZ1)
 
@@ -974,7 +871,7 @@ class WeightedBCE:
         return grad
 
 # Create model with weighted loss
-model = CreditRiskNN(input_size=X_train.shape[1], hidden1=64, hidden2=32, dropout_rate=0.3)
+model = CreditRiskNN(input_size=X_train.shape[1], hidden1=64, hidden2=32)
 model.loss_fn = WeightedBCE(weight_positive=weight_default)
 
 # Training parameters
@@ -994,7 +891,7 @@ history = {
 best_val_loss = float('inf')
 patience_counter = 0
 
-print("\\nTraining...")
+print("\nTraining...")
 print("="*60)
 
 for epoch in range(epochs):
@@ -1102,7 +999,7 @@ axes[2].grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('training_curves.png', dpi=150)
-print("\\nSaved training_curves.png")
+print("\nSaved training_curves.png")
 \`\`\`
 
 </details>
@@ -1132,16 +1029,16 @@ test_probs = model.predict_proba(X_test)
 test_preds = (test_probs >= 0.5).astype(int)
 
 # Classification report
-print("\\n" + "="*60)
+print("\n" + "="*60)
 print("TEST SET EVALUATION")
 print("="*60)
-print("\\nClassification Report:")
+print("\nClassification Report:")
 print(classification_report(y_test, test_preds,
                           target_names=['No Default', 'Default']))
 
 # Confusion matrix
 cm = confusion_matrix(y_test, test_preds)
-print("\\nConfusion Matrix:")
+print("\nConfusion Matrix:")
 print(cm)
 print(f"  TN={cm[0,0]}, FP={cm[0,1]}")
 print(f"  FN={cm[1,0]}, TP={cm[1,1]}")
@@ -1226,234 +1123,22 @@ axes[1, 1].axvline(optimal_threshold, color='red', linestyle='--',
                    label=f'Optimal: {optimal_threshold:.2f}')
 axes[1, 1].set_xlabel('Decision Threshold')
 axes[1, 1].set_ylabel('Total Profit ($)')
-axes[1, 1].set_title(f'Profit vs Threshold\\n(Max: ${optimal_profit:,.0f})')
+axes[1, 1].set_title(f'Profit vs Threshold\n(Max: \${optimal_profit:,.0f})')
 axes[1, 1].legend()
 axes[1, 1].grid(True, alpha=0.3)
 
 plt.tight_layout()
 plt.savefig('evaluation_metrics.png', dpi=150)
-print("\\nSaved evaluation_metrics.png")
+print("\nSaved evaluation_metrics.png")
 
-print(f"\\nOptimal threshold: {optimal_threshold:.2f}")
-print(f"Expected profit: ${optimal_profit:,.0f}")
+print(f"\nOptimal threshold: {optimal_threshold:.2f}")
+print(f"Expected profit: \${optimal_profit:,.0f}")
 
 # Re-evaluate at optimal threshold
 optimal_preds = (test_probs >= optimal_threshold).astype(int)
-print("\\nMetrics at optimal threshold:")
+print("\nMetrics at optimal threshold:")
 print(classification_report(y_test, optimal_preds,
                           target_names=['No Default', 'Default']))
-\`\`\`
-
-</details>
-
-### Phase 5: Uncertainty Quantification (Required)
-
-**Challenge:** Implement MC Dropout for uncertainty estimation.
-
-**Deliverables:**
-1. MC Dropout inference (50+ forward passes)
-2. Confidence estimation from prediction variance
-3. Calibration plots
-4. Decision rules based on uncertainty
-
-<details>
-<summary>💡 Stuck? Click for MC Dropout implementation</summary>
-
-\`\`\`python
-class MCDropoutPredictor:
-    """Monte Carlo Dropout for uncertainty quantification."""
-
-    def __init__(self, model, n_samples=50):
-        self.model = model
-        self.n_samples = n_samples
-
-    def predict_with_uncertainty(self, X):
-        """
-        Make predictions with uncertainty estimates.
-
-        Returns:
-            mean_probs: Mean predicted probabilities
-            std_probs: Standard deviation (uncertainty)
-            predictions: Binary predictions
-            confidence: Confidence scores
-        """
-        all_probs = []
-
-        # Multiple forward passes with dropout enabled
-        for _ in range(self.n_samples):
-            probs, _ = self.model.forward(X, y=None, training=True)  # Dropout ON!
-            all_probs.append(probs.flatten())
-
-        all_probs = np.array(all_probs)  # (n_samples, batch_size)
-
-        # Statistics
-        mean_probs = np.mean(all_probs, axis=0)
-        std_probs = np.std(all_probs, axis=0)
-
-        # Predictions
-        predictions = (mean_probs >= 0.5).astype(int)
-
-        # Confidence: how close to 0 or 1
-        confidence = np.maximum(mean_probs, 1 - mean_probs)
-
-        return {
-            'mean_probs': mean_probs,
-            'std_probs': std_probs,
-            'predictions': predictions,
-            'confidence': confidence,
-            'all_samples': all_probs
-        }
-
-    def plot_uncertainty_examples(self, X, y_true, n_examples=10):
-        """Visualize predictions with uncertainty."""
-        results = self.predict_with_uncertainty(X[:n_examples])
-
-        fig, ax = plt.subplots(figsize=(12, 6))
-
-        x_pos = np.arange(n_examples)
-        colors = ['green' if results['predictions'][i] == y_true[i] else 'red'
-                 for i in range(n_examples)]
-
-        # Bar plot with error bars
-        ax.bar(x_pos, results['mean_probs'], yerr=results['std_probs'],
-               color=colors, alpha=0.6, capsize=5)
-
-        # Add horizontal line at 0.5 threshold
-        ax.axhline(0.5, color='black', linestyle='--', label='Decision Threshold')
-
-        # Add true labels as markers
-        for i in range(n_examples):
-            marker = 'o' if y_true[i] == 1 else 'x'
-            ax.plot(i, y_true[i], marker, markersize=10, color='black')
-
-        ax.set_xlabel('Sample Index')
-        ax.set_ylabel('Predicted Probability')
-        ax.set_title('MC Dropout Predictions with Uncertainty\\n'
-                    '(Green=Correct, Red=Incorrect, Black markers=True label)')
-        ax.set_ylim([-0.1, 1.1])
-        ax.legend()
-        ax.grid(True, alpha=0.3)
-
-        plt.tight_layout()
-        return fig
-
-# Create MC Dropout predictor
-mc_predictor = MCDropoutPredictor(model, n_samples=50)
-
-print("\\nRunning MC Dropout inference...")
-test_results = mc_predictor.predict_with_uncertainty(X_test)
-
-# Analyze uncertainty
-correct = (test_results['predictions'] == y_test)
-
-print("\\nUncertainty Analysis:")
-print(f"Mean uncertainty (correct): {test_results['std_probs'][correct].mean():.4f}")
-print(f"Mean uncertainty (incorrect): {test_results['std_probs'][~correct].mean():.4f}")
-
-# Calibration analysis
-def calibration_curve(y_true, y_pred_probs, n_bins=10):
-    """Compute calibration curve."""
-    bins = np.linspace(0, 1, n_bins + 1)
-    bin_centers = (bins[:-1] + bins[1:]) / 2
-
-    bin_confidences = []
-    bin_accuracies = []
-    bin_counts = []
-
-    for i in range(n_bins):
-        mask = (y_pred_probs >= bins[i]) & (y_pred_probs < bins[i+1])
-        if np.sum(mask) > 0:
-            bin_conf = np.mean(y_pred_probs[mask])
-            bin_acc = np.mean((y_pred_probs[mask] >= 0.5) == y_true[mask])
-            bin_confidences.append(bin_conf)
-            bin_accuracies.append(bin_acc)
-            bin_counts.append(np.sum(mask))
-        else:
-            bin_confidences.append(bin_centers[i])
-            bin_accuracies.append(0)
-            bin_counts.append(0)
-
-    return np.array(bin_confidences), np.array(bin_accuracies), np.array(bin_counts)
-
-# Calibration plots
-fig, axes = plt.subplots(2, 2, figsize=(14, 12))
-
-# Plot 1: Uncertainty examples
-fig_uncertainty = mc_predictor.plot_uncertainty_examples(X_test, y_test, n_examples=20)
-plt.savefig('mc_dropout_examples.png', dpi=150)
-plt.close(fig_uncertainty)
-
-# Plot 1: Calibration curve
-bin_confs, bin_accs, bin_counts = calibration_curve(
-    y_test, test_results['mean_probs']
-)
-
-axes[0, 0].plot([0, 1], [0, 1], 'k--', label='Perfect Calibration')
-axes[0, 0].plot(bin_confs, bin_accs, 'o-', linewidth=2, markersize=8,
-               label='Model')
-axes[0, 0].set_xlabel('Predicted Confidence')
-axes[0, 0].set_ylabel('Actual Accuracy')
-axes[0, 0].set_title('Calibration Curve (MC Dropout)')
-axes[0, 0].legend()
-axes[0, 0].grid(True, alpha=0.3)
-
-# Plot 2: Confidence histogram
-axes[0, 1].hist(test_results['confidence'][correct], bins=20, alpha=0.6,
-               label='Correct', color='green')
-axes[0, 1].hist(test_results['confidence'][~correct], bins=20, alpha=0.6,
-               label='Incorrect', color='red')
-axes[0, 1].set_xlabel('Confidence')
-axes[0, 1].set_ylabel('Count')
-axes[0, 1].set_title('Confidence Distribution')
-axes[0, 1].legend()
-axes[0, 1].grid(True, alpha=0.3)
-
-# Plot 3: Uncertainty histogram
-axes[1, 0].hist(test_results['std_probs'][correct], bins=20, alpha=0.6,
-               label='Correct', color='green')
-axes[1, 0].hist(test_results['std_probs'][~correct], bins=20, alpha=0.6,
-               label='Incorrect', color='red')
-axes[1, 0].set_xlabel('Prediction Uncertainty (Std Dev)')
-axes[1, 0].set_ylabel('Count')
-axes[1, 0].set_title('Uncertainty Distribution')
-axes[1, 0].legend()
-axes[1, 0].grid(True, alpha=0.3)
-
-# Plot 4: Accuracy vs uncertainty threshold
-uncertainty_thresholds = np.linspace(0, 0.3, 30)
-accuracies = []
-coverages = []
-
-for unc_thresh in uncertainty_thresholds:
-    mask = test_results['std_probs'] <= unc_thresh
-    if np.sum(mask) > 0:
-        acc = np.mean(test_results['predictions'][mask] == y_test[mask])
-        cov = np.mean(mask)
-    else:
-        acc = 0
-        cov = 0
-    accuracies.append(acc)
-    coverages.append(cov)
-
-ax2 = axes[1, 1]
-ax2.plot(coverages, accuracies, 'o-', linewidth=2)
-ax2.set_xlabel('Coverage (% of predictions made)')
-ax2.set_ylabel('Accuracy')
-ax2.set_title('Accuracy vs Coverage\\n(reject high uncertainty predictions)')
-ax2.grid(True, alpha=0.3)
-
-plt.tight_layout()
-plt.savefig('mc_dropout_analysis.png', dpi=150)
-print("\\nSaved mc_dropout_analysis.png and mc_dropout_examples.png")
-
-# Decision rules
-print("\\nDecision Rules Based on Uncertainty:")
-for unc_threshold in [0.05, 0.1, 0.15]:
-    high_confidence = test_results['std_probs'] <= unc_threshold
-    if np.sum(high_confidence) > 0:
-        acc = np.mean(test_results['predictions'][high_confidence] == y_test[high_confidence])
-        cov = np.mean(high_confidence)
-        print(f"  Uncertainty < {unc_threshold:.2f}: Accuracy={acc:.3f}, Coverage={cov:.3f}")
 \`\`\`
 
 </details>
@@ -1514,23 +1199,6 @@ for unc_threshold in [0.05, 0.1, 0.15]:
 
 </div>
 
-<div class="milestone-box">
-
-### Milestone 4: Uncertainty Quantification
-
-**Success Criteria:**
-- MC Dropout provides uncertainty estimates
-- High uncertainty correlates with errors
-- Calibration curve shows good calibration
-- Can set confidence thresholds
-
-**Validation:**
-- Incorrect predictions have higher uncertainty
-- Calibration curve close to diagonal
-- Can defer 20% low-confidence cases with accuracy boost
-
-</div>
-
 ---
 
 ## ✅ Final Checklist
@@ -1540,22 +1208,18 @@ Before considering this project complete:
 - [ ] Loaded and preprocessed real credit dataset
 - [ ] Handled missing values and categorical variables
 - [ ] Normalized features properly
-- [ ] Implemented Dense, ReLU, Sigmoid, Dropout layers from scratch
+- [ ] Implemented Dense, ReLU, Sigmoid layers from scratch
 - [ ] Implemented weighted BCE loss for class imbalance
 - [ ] Trained model with early stopping
 - [ ] Achieved ROC-AUC > 0.70 on test set
 - [ ] Computed precision, recall, F1, confusion matrix
 - [ ] Plotted ROC curve and precision-recall curve
 - [ ] Found optimal decision threshold
-- [ ] Implemented MC Dropout for uncertainty
-- [ ] Analyzed calibration
-- [ ] Can explain when to defer to human review
 
 **Most importantly:**
 - [ ] You **understand** why feedforward networks work for tabular data
 - [ ] You **understand** how to handle class imbalance
 - [ ] You have **intuition** for financial tradeoffs (FP vs FN costs)
-- [ ] You can **quantify** when the model is uncertain
 - [ ] You can **explain** to a loan officer how the model works
 
 ---
@@ -1587,14 +1251,14 @@ Good luck! Remember: this is about **understanding how neural networks process s
 
         // Make checkboxes interactive and persistent
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        const storageKey = 'project_module6_credit_risk_checklist';
+        const storageKey = 'project_module6_checklist';
 
         // Load saved state
         const saved = localStorage.getItem(storageKey);
         const checkedState = saved ? JSON.parse(saved) : {};
 
         checkboxes.forEach((checkbox, index) => {
-            const checkboxId = \`checkbox_\${index}\`;
+            const checkboxId = `checkbox_${index}`;
             checkbox.id = checkboxId;
 
             // Restore checked state
