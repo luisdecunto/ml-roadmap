@@ -93,6 +93,8 @@ This guide provides **complete, working code** for creating the visualizations y
 4. Weight/Activation Histograms (detect issues)
 5. Animated Gradient Descent (optimization paths)
 
+> **💡 Pro Tip:** All visualization functions work with both PyTorch models and your from-scratch implementations from Module 6. For Module 6.5, we recommend using PyTorch for training so you can focus on learning visualization techniques. See \`practice/math_foundations/module06.5_visualization/\` for complete PyTorch examples.
+
 ---
 
 ## 1. Decision Boundaries
@@ -160,21 +162,45 @@ def plot_decision_boundary(model, X, y, title="Decision Boundary", resolution=0.
     plt.tight_layout()
     return fig
 
-# Example usage with your network
-from your_network import CreditRiskNN  # Replace with your network
+# Example usage with PyTorch (recommended for Module 6.5)
+import torch
+import torch.nn as nn
+
+class SimpleNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.fc1 = nn.Linear(2, 8)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(8, 1)
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        if isinstance(x, np.ndarray):
+            x = torch.FloatTensor(x)
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.fc2(x)
+        x = self.sigmoid(x)
+        return x.detach().numpy()
 
 # Generate XOR data
 X = np.random.randn(200, 2)
 y = np.logical_xor(X[:, 0] > 0, X[:, 1] > 0).astype(int)
 
-# Train your network (simplified)
-model = CreditRiskNN(input_size=2, hidden1=8, hidden2=4)
+# Train model (simplified - see module06.5_visualization/01_decision_boundaries.py for full code)
+model = SimpleNN()
 # ... training code ...
 
 # Plot
 fig = plot_decision_boundary(model, X, y, "XOR Problem - Neural Network")
 plt.savefig('xor_boundary.png', dpi=150, bbox_inches='tight')
 plt.show()
+
+# OR use your from-scratch network from Module 6
+from your_network import CreditRiskNN
+model = CreditRiskNN(input_size=2, hidden1=8, hidden2=4)
+# ... training code ...
+fig = plot_decision_boundary(model, X, y, "XOR - From Scratch")
 \`\`\`
 
 ### Advanced: Before/After Comparison
