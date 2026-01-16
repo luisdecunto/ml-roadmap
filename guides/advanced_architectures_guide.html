@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Architectures Guide - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #e5e7eb;
+        }
+        .markdown-body h1 { font-size: 2em; font-weight: 700; margin: 1em 0 0.5em 0; color: #60a5fa; }
+        .markdown-body h2 { font-size: 1.5em; font-weight: 600; margin: 1.5em 0 0.5em 0; color: #34d399; border-bottom: 2px solid #374151; padding-bottom: 0.3em; }
+        .markdown-body h3 { font-size: 1.25em; font-weight: 600; margin: 1em 0 0.5em 0; color: #fbbf24; }
+        .markdown-body h4 { font-size: 1.1em; font-weight: 600; margin: 0.8em 0 0.4em 0; color: #a78bfa; }
+        .markdown-body code {
+            background-color: #1f2937;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #fbbf24;
+        }
+        .markdown-body pre {
+            background-color: #1f2937;
+            padding: 1em;
+            border-radius: 6px;
+            overflow-x: auto;
+            border-left: 4px solid #3b82f6;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            color: #e5e7eb;
+        }
+        .markdown-body ul, .markdown-body ol { margin-left: 1.5em; margin-bottom: 1em; }
+        .markdown-body li { margin: 0.5em 0; }
+        .markdown-body a { color: #60a5fa; text-decoration: none; }
+        .markdown-body a:hover { text-decoration: underline; }
+        .markdown-body blockquote {
+            border-left: 4px solid #3b82f6;
+            padding-left: 1em;
+            margin: 1em 0;
+            color: #9ca3af;
+            font-style: italic;
+        }
+        .markdown-body table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+        .markdown-body th, .markdown-body td { border: 1px solid #374151; padding: 0.6em; text-align: left; }
+        .markdown-body th { background-color: #1f2937; font-weight: 600; }
+        .markdown-body strong { color: #fbbf24; font-weight: 600; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="mb-8">
+            <a href="../index.html" class="text-blue-400 hover:text-blue-300 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to Roadmap
+            </a>
+        </div>
+
+        <div id="content" class="markdown-body"></div>
+    </div>
+
+    <script>
+        const markdown = \`# Advanced Architectures Coding Guide
+
+*Module 8: BatchNorm, Dropout, Initialization, and Residual Networks*
+
+---
+
+## 🎯 What You'll Build
+
+This guide provides **complete, working implementations** for the building blocks of modern deep learning:
+
+**5 Core Components:**
+1. Batch Normalization (forward + backward)
+2. Dropout (forward + backward with training mode)
+3. Weight Initialization (Xavier & He)
+4. Residual Blocks (skip connections)
+5. Comparative Experiments (BatchNorm vs LayerNorm vs None)
+
+> **💡 Pro Tip:** These are the techniques used in ALL modern architectures (ResNets, Transformers, etc.). Understanding them from scratch is crucial!
+
+---
+
+## 1. Batch Normalization
+
+**Why:** Stabilizes training, allows higher learning rates, acts as regularization.
+
+**When to use:** After linear/conv layers, before activation (usually).
+
+### Forward Pass
+
+\\\`\\\`\\\`python
+import numpy as np
+
+class BatchNorm:
+    """
+    Batch Normalization layer.
+
+    Normalizes activations across the batch dimension.
+    """
+
+    def __init__(self, num_features, eps=1e-5, momentum=0.1):
+        """
+        Args:
+            num_features: Number of features/channels
+            eps: Small constant for numerical stability
+            momentum: Momentum for running statistics
+        """
+        self.num_features = num_features
+        self.eps = eps
+        self.momentum = momentum
+
+        # Learnable parameters (initialized to 1 and 0)
+        self.gamma = np.ones(num_features)   # Scale
+        self.beta = np.zeros(num_features)   # Shift
+
+        # Running statistics (for inference)
+        self.running_mean = np.zeros(num_features)
+        self.running_var = np.ones(num_features)
+
+        # Cache for backward pass
+        self.cache = {}
+
+    def forward(self, X, training=True):
+        """
+        Forward pass of batch normalization.
+
+        Args:
+            X: Input (batch_size, num_features) or (batch_size, height, width, channels)
+            training: Whether in training mode
+
+        Returns:
+            Normalized and scaled output
+        """
+        if training:
+            # Compute batch statistics
+            batch_mean = np.mean(X, axis=0)
+            batch_var = np.var(X, axis=0)
+
+            # Normalize
+            X_normalized = (X - batch_mean) / np.sqrt(batch_var + self.eps)
+
+            # Update running statistics (exponential moving average)
+            self.running_mean = (1 - self.momentum) * self.running_mean + self.momentum * batch_mean
+            self.running_var = (1 - self.momentum) * self.running_var + self.momentum * batch_var
+
+            # Cache for backward
+            self.cache = {
+                'X': X,
+                'X_normalized': X_normalized,
+                'batch_mean': batch_mean,
+                'batch_var': batch_var
+            }
+        else:
+            # Use running statistics for inference
+            X_normalized = (X - self.running_mean) / np.sqrt(self.running_var + self.eps)
+
+        # Scale and shift
+        out = self.gamma * X_normalized + self.beta
+
+        return out
+
+    def backward(self, dout):
+        """
+        Backward pass of batch normalization.
+
+        This is the tricky part! Follow the chain rule carefully.
+
+        Args:
+            dout: Gradient from next layer (same shape as forward output)
+
+        Returns:
+            dx: Gradient with respect to input
+        """
+        X = self.cache['X']
+        X_normalized = self.cache['X_normalized']
+        batch_mean = self.cache['batch_mean']
+        batch_var = self.cache['batch_var']
+
+        batch_size = X.shape[0]
+
+        # Gradients of learnable parameters
+        self.dgamma = np.sum(dout * X_normalized, axis=0)
+        self.dbeta = np.sum(dout, axis=0)
+
+        # Gradient with respect to normalized input
+        dX_normalized = dout * self.gamma
+
+        # Gradient with respect to variance
+        dvar = np.sum(dX_normalized * (X - batch_mean) * -0.5 * (batch_var + self.eps)**(-1.5), axis=0)
+
+        # Gradient with respect to mean
+        dmean = np.sum(dX_normalized * -1 / np.sqrt(batch_var + self.eps), axis=0)
+        dmean += dvar * np.mean(-2 * (X - batch_mean), axis=0)
+
+        # Gradient with respect to input
+        dx = dX_normalized / np.sqrt(batch_var + self.eps)
+        dx += dvar * 2 * (X - batch_mean) / batch_size
+        dx += dmean / batch_size
+
+        return dx
+
+# Example usage
+if __name__ == "__main__":
+    # Create batch norm layer
+    bn = BatchNorm(num_features=64)
+
+    # Random batch of data (32 samples, 64 features)
+    X = np.random.randn(32, 64)
+
+    # Forward pass (training)
+    out = bn.forward(X, training=True)
+
+    print(f"Input shape: {X.shape}")
+    print(f"Output shape: {out.shape}")
+    print(f"Output mean: {np.mean(out, axis=0)[:5]}  (should be ~beta)")
+    print(f"Output std: {np.std(out, axis=0)[:5]}   (should be ~gamma)")
+
+    # Verify normalization
+    print(f"\\nInput mean: {np.mean(X, axis=0)[:5]}")
+    print(f"Input std: {np.std(X, axis=0)[:5]}")
+\\\`\\\`\\\`
+
+### Numerical Gradient Check
+
+\\\`\\\`\\\`python
+def numerical_gradient_check(bn, X, eps=1e-5):
+    """Verify backward pass with numerical gradients."""
+
+    # Forward pass
+    out = bn.forward(X, training=True)
+
+    # Dummy loss: sum of outputs
+    dout = np.ones_like(out)
+
+    # Analytical gradient
+    dx_analytical = bn.backward(dout)
+
+    # Numerical gradient
+    dx_numerical = np.zeros_like(X)
+
+    for i in range(X.shape[0]):
+        for j in range(X.shape[1]):
+            # Perturb input
+            X_plus = X.copy()
+            X_plus[i, j] += eps
+            out_plus = bn.forward(X_plus, training=True)
+
+            X_minus = X.copy()
+            X_minus[i, j] -= eps
+            out_minus = bn.forward(X_minus, training=True)
+
+            # Numerical gradient
+            dx_numerical[i, j] = (np.sum(out_plus) - np.sum(out_minus)) / (2 * eps)
+
+    # Compare
+    diff = np.abs(dx_analytical - dx_numerical).max()
+    print(f"Max difference: {diff} (should be < 1e-5)")
+
+    return diff < 1e-5
+
+# Test it
+X_test = np.random.randn(8, 16)
+bn_test = BatchNorm(16)
+passed = numerical_gradient_check(bn_test, X_test)
+print(f"Gradient check {'PASSED' if passed else 'FAILED'}!")
+\\\`\\\`\\\`
+
+---
+
+## 2. Dropout
+
+**Why:** Prevents overfitting by randomly dropping neurons during training.
+
+**When to use:** After activation functions, especially in fully-connected layers.
+
+### Complete Implementation
+
+\\\`\\\`\\\`python
+class Dropout:
+    """
+    Dropout layer for regularization.
+
+    Randomly sets activations to zero during training.
+    """
+
+    def __init__(self, keep_prob=0.5):
+        """
+        Args:
+            keep_prob: Probability of keeping a neuron (1 - dropout_rate)
+        """
+        self.keep_prob = keep_prob
+        self.cache = {}
+
+    def forward(self, X, training=True):
+        """
+        Forward pass with dropout.
+
+        Args:
+            X: Input activations
+            training: If False, no dropout is applied (inference mode)
+
+        Returns:
+            Output with dropout applied
+        """
+        if training:
+            # Create dropout mask
+            mask = (np.random.rand(*X.shape) < self.keep_prob)
+
+            # Apply mask and scale (inverted dropout)
+            out = X * mask / self.keep_prob
+
+            # Cache mask for backward
+            self.cache['mask'] = mask
+        else:
+            # No dropout during inference
+            out = X
+
+        return out
+
+    def backward(self, dout):
+        """
+        Backward pass of dropout.
+
+        Simply applies the same mask used in forward pass.
+
+        Args:
+            dout: Gradient from next layer
+
+        Returns:
+            Gradient with dropout mask applied
+        """
+        mask = self.cache['mask']
+        dx = dout * mask / self.keep_prob
+        return dx
+
+# Example usage
+if __name__ == "__main__":
+    dropout = Dropout(keep_prob=0.5)
+
+    X = np.random.randn(32, 128)
+
+    # Training mode
+    out_train = dropout.forward(X, training=True)
+    print(f"Training: {np.sum(out_train == 0)} zeros out of {out_train.size} elements")
+    print(f"Expected: ~{out_train.size * 0.5:.0f} zeros")
+
+    # Inference mode
+    out_test = dropout.forward(X, training=False)
+    print(f"\\nInference: {np.sum(out_test == 0)} zeros (should be 0)")
+    print(f"Mean activation (train): {np.mean(np.abs(out_train)):.4f}")
+    print(f"Mean activation (test): {np.mean(np.abs(out_test)):.4f}")
+    print("These should be similar due to inverted dropout scaling!")
+\\\`\\\`\\\`
+
+### Testing Different Dropout Rates
+
+\\\`\\\`\\\`python
+import matplotlib.pyplot as plt
+
+def test_dropout_rates():
+    """Test different dropout rates."""
+    X = np.random.randn(1000, 100)
+    rates = [0.1, 0.3, 0.5, 0.7, 0.9]
+
+    fig, axes = plt.subplots(1, len(rates), figsize=(15, 3))
+
+    for idx, keep_prob in enumerate(rates):
+        dropout = Dropout(keep_prob=keep_prob)
+        out = dropout.forward(X, training=True)
+
+        ax = axes[idx]
+        ax.hist(out.flatten(), bins=50, alpha=0.7)
+        ax.set_title(f'Keep prob: {keep_prob}\\nDropout rate: {1-keep_prob}')
+        ax.set_xlabel('Activation value')
+        ax.set_ylabel('Frequency')
+
+    plt.tight_layout()
+    plt.savefig('dropout_rates.png', dpi=150)
+    print("Saved: dropout_rates.png")
+
+test_dropout_rates()
+\\\`\\\`\\\`
+
+---
+
+## 3. Weight Initialization
+
+**Why:** Poor initialization can cause vanishing/exploding gradients.
+
+**Key insight:** Scale weights based on layer size and activation function.
+
+### Xavier (Glorot) Initialization
+
+**Use with:** Sigmoid, Tanh activations
+
+\\\`\\\`\\\`python
+def xavier_init(shape):
+    """
+    Xavier/Glorot initialization.
+
+    Good for sigmoid and tanh activations.
+
+    Args:
+        shape: (input_size, output_size)
+
+    Returns:
+        Initialized weights
+    """
+    fan_in, fan_out = shape
+
+    # Uniform distribution
+    limit = np.sqrt(6.0 / (fan_in + fan_out))
+    W = np.random.uniform(-limit, limit, size=shape)
+
+    # Or normal distribution (also valid)
+    # std = np.sqrt(2.0 / (fan_in + fan_out))
+    # W = np.random.randn(*shape) * std
+
+    return W
+
+# Example
+W_xavier = xavier_init((100, 50))
+print(f"Xavier init: mean={W_xavier.mean():.4f}, std={W_xavier.std():.4f}")
+\\\`\\\`\\\`
+
+### He Initialization
+
+**Use with:** ReLU, Leaky ReLU activations
+
+\\\`\\\`\\\`python
+def he_init(shape):
+    """
+    He initialization.
+
+    Specifically designed for ReLU networks.
+    Accounts for the fact that ReLU zeros out half the activations.
+
+    Args:
+        shape: (input_size, output_size)
+
+    Returns:
+        Initialized weights
+    """
+    fan_in, fan_out = shape
+
+    # Normal distribution scaled by sqrt(2/fan_in)
+    std = np.sqrt(2.0 / fan_in)
+    W = np.random.randn(*shape) * std
+
+    return W
+
+# Example
+W_he = he_init((100, 50))
+print(f"He init: mean={W_he.mean():.4f}, std={W_he.std():.4f}")
+\\\`\\\`\\\`
+
+### Comparison: Impact on Training
+
+\\\`\\\`\\\`python
+def compare_initializations():
+    """Compare different initializations during forward pass."""
+
+    layer_sizes = [784, 128, 64, 32, 10]
+    X = np.random.randn(100, 784)
+
+    methods = {
+        'Random (too large)': lambda shape: np.random.randn(*shape) * 1.0,
+        'Random (too small)': lambda shape: np.random.randn(*shape) * 0.01,
+        'Xavier': xavier_init,
+        'He': he_init
+    }
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    axes = axes.flatten()
+
+    for idx, (name, init_fn) in enumerate(methods.items()):
+        # Forward pass through network
+        activations = [X]
+
+        for i in range(len(layer_sizes) - 1):
+            W = init_fn((layer_sizes[i], layer_sizes[i+1]))
+            b = np.zeros(layer_sizes[i+1])
+
+            # Linear transformation
+            z = activations[-1] @ W + b
+
+            # ReLU activation
+            a = np.maximum(0, z)
+            activations.append(a)
+
+        # Plot activation statistics
+        ax = axes[idx]
+        means = [np.mean(a) for a in activations[1:]]
+        stds = [np.std(a) for a in activations[1:]]
+
+        x = np.arange(1, len(activations))
+        ax.plot(x, means, 'o-', label='Mean')
+        ax.plot(x, stds, 's-', label='Std')
+        ax.set_title(name, fontweight='bold')
+        ax.set_xlabel('Layer')
+        ax.set_ylabel('Activation statistics')
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+
+        # Add text annotation
+        if np.any(np.array(stds) < 0.01):
+            ax.text(0.5, 0.95, 'Vanishing!', transform=ax.transAxes,
+                   color='red', fontweight='bold', ha='center')
+        elif np.any(np.array(stds) > 10):
+            ax.text(0.5, 0.95, 'Exploding!', transform=ax.transAxes,
+                   color='red', fontweight='bold', ha='center')
+
+    plt.tight_layout()
+    plt.savefig('initialization_comparison.png', dpi=150)
+    print("Saved: initialization_comparison.png")
+
+compare_initializations()
+\\\`\\\`\\\`
+
+---
+
+## 4. Residual Blocks
+
+**Why:** Enable training of very deep networks by providing gradient highways.
+
+**Key idea:** Add skip connections that bypass one or more layers.
+
+### Basic Residual Block
+
+\\\`\\\`\\\`python
+class ResidualBlock:
+    """
+    Basic residual block: F(x) + x
+
+    where F(x) is a sequence of Conv/Linear + BatchNorm + ReLU layers.
+    """
+
+    def __init__(self, in_channels, out_channels):
+        """
+        Args:
+            in_channels: Number of input channels
+            out_channels: Number of output channels
+        """
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+
+        # Main path (simplified: two linear layers)
+        self.fc1 = np.random.randn(in_channels, out_channels) * np.sqrt(2.0 / in_channels)
+        self.bn1 = BatchNorm(out_channels)
+
+        self.fc2 = np.random.randn(out_channels, out_channels) * np.sqrt(2.0 / out_channels)
+        self.bn2 = BatchNorm(out_channels)
+
+        # Skip connection (identity or projection)
+        if in_channels != out_channels:
+            # Need projection to match dimensions
+            self.skip = np.random.randn(in_channels, out_channels) * np.sqrt(1.0 / in_channels)
+        else:
+            self.skip = None
+
+        self.cache = {}
+
+    def forward(self, X, training=True):
+        """
+        Forward pass: out = F(x) + x
+
+        Args:
+            X: Input (batch_size, in_channels)
+            training: Whether in training mode
+
+        Returns:
+            Output with residual connection
+        """
+        # Save input for skip connection
+        identity = X
+
+        # Main path
+        # Layer 1
+        out = X @ self.fc1
+        out = self.bn1.forward(out, training)
+        out = np.maximum(0, out)  # ReLU
+
+        # Layer 2
+        out = out @ self.fc2
+        out = self.bn2.forward(out, training)
+
+        # Skip connection
+        if self.skip is not None:
+            identity = X @ self.skip
+
+        # Add residual
+        out = out + identity
+
+        # Final activation
+        out = np.maximum(0, out)  # ReLU
+
+        # Cache for backward
+        self.cache = {'X': X, 'identity': identity}
+
+        return out
+
+# Example usage
+if __name__ == "__main__":
+    # Create residual block
+    res_block = ResidualBlock(in_channels=64, out_channels=64)
+
+    # Random input
+    X = np.random.randn(32, 64)
+
+    # Forward pass
+    out = res_block.forward(X, training=True)
+
+    print(f"Input shape: {X.shape}")
+    print(f"Output shape: {out.shape}")
+    print(f"Identity preserved: shapes match!")
+\\\`\\\`\\\`
+
+### Visualizing Gradient Flow
+
+\\\`\\\`\\\`python
+def visualize_gradient_flow():
+    """
+    Show how residual connections help gradient flow.
+
+    Compare vanilla deep network vs ResNet-style.
+    """
+
+    def forward_vanilla(X, weights):
+        """Forward through vanilla network (no skip connections)."""
+        a = X
+        for W in weights:
+            z = a @ W
+            a = np.tanh(z)  # Use tanh to see saturation
+        return a
+
+    def forward_resnet(X, weights):
+        """Forward through ResNet-style (with skip connections)."""
+        a = X
+        for W in weights:
+            z = a @ W
+            a_new = np.tanh(z)
+            a = a + a_new  # Skip connection
+        return a
+
+    # Setup
+    np.random.seed(42)
+    layer_size = 100
+    n_layers = 20
+
+    # Xavier initialization for fair comparison
+    weights = [xavier_init((layer_size, layer_size)) * 0.5 for _ in range(n_layers)]
+
+    X = np.random.randn(1, layer_size)
+
+    # Compute gradient norm at each layer (simplified)
+    vanilla_grads = []
+    resnet_grads = []
+
+    for i in range(n_layers):
+        # Vanilla
+        grad_scale_vanilla = 1.0
+        for W in weights[:i+1]:
+            grad_scale_vanilla *= np.mean(np.abs(W))
+        vanilla_grads.append(grad_scale_vanilla)
+
+        # ResNet (gradient has an additive path)
+        grad_scale_resnet = 1.0  # Skip connection preserves gradient
+        resnet_grads.append(grad_scale_resnet)
+
+    # Plot
+    plt.figure(figsize=(10, 6))
+    plt.semilogy(range(1, n_layers+1), vanilla_grads, 'o-', label='Vanilla Network', linewidth=2)
+    plt.semilogy(range(1, n_layers+1), resnet_grads, 's-', label='ResNet', linewidth=2)
+    plt.xlabel('Layer Depth', fontsize=12)
+    plt.ylabel('Gradient Scale (log)', fontsize=12)
+    plt.title('Gradient Flow: Vanilla vs ResNet', fontsize=14, fontweight='bold')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig('gradient_flow_comparison.png', dpi=150)
+    print("Saved: gradient_flow_comparison.png")
+
+visualize_gradient_flow()
+\\\`\\\`\\\`
+
+---
+
+## 5. Comparative Experiments
+
+**Goal:** Train the same network with different techniques and compare results.
+
+### Experiment Setup
+
+\\\`\\\`\\\`python
+class SimpleNetwork:
+    """
+    Simple network for comparing normalization techniques.
+    """
+
+    def __init__(self, layer_sizes, norm_type='none', dropout_rate=0.0):
+        """
+        Args:
+            layer_sizes: List of layer sizes [input, hidden1, hidden2, output]
+            norm_type: 'none', 'batch', or 'layer'
+            dropout_rate: Dropout rate (0 = no dropout)
+        """
+        self.layer_sizes = layer_sizes
+        self.norm_type = norm_type
+        self.dropout_rate = dropout_rate
+
+        # Initialize weights (He initialization)
+        self.weights = []
+        self.biases = []
+        self.norms = []
+        self.dropouts = []
+
+        for i in range(len(layer_sizes) - 1):
+            W = he_init((layer_sizes[i], layer_sizes[i+1]))
+            b = np.zeros(layer_sizes[i+1])
+            self.weights.append(W)
+            self.biases.append(b)
+
+            # Add normalization layer
+            if norm_type == 'batch' and i < len(layer_sizes) - 2:
+                self.norms.append(BatchNorm(layer_sizes[i+1]))
+            else:
+                self.norms.append(None)
+
+            # Add dropout layer
+            if dropout_rate > 0 and i < len(layer_sizes) - 2:
+                self.dropouts.append(Dropout(keep_prob=1-dropout_rate))
+            else:
+                self.dropouts.append(None)
+
+    def forward(self, X, training=True):
+        """Forward pass through network."""
+        a = X
+
+        for i, (W, b, norm, dropout) in enumerate(zip(self.weights, self.biases,
+                                                        self.norms, self.dropouts)):
+            # Linear transformation
+            z = a @ W + b
+
+            # Normalization (before activation)
+            if norm is not None:
+                z = norm.forward(z, training)
+
+            # Activation
+            if i < len(self.weights) - 1:
+                a = np.maximum(0, z)  # ReLU for hidden layers
+            else:
+                a = z  # No activation for output layer
+
+            # Dropout
+            if dropout is not None:
+                a = dropout.forward(a, training)
+
+        return a
+
+def train_and_compare():
+    """
+    Train networks with different configurations and compare.
+    """
+    from sklearn.datasets import make_classification
+    from sklearn.model_selection import train_test_split
+
+    # Generate synthetic dataset
+    X, y = make_classification(n_samples=1000, n_features=20, n_informative=15,
+                               n_redundant=5, random_state=42)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Normalize input
+    mean = X_train.mean(axis=0)
+    std = X_train.std(axis=0)
+    X_train = (X_train - mean) / (std + 1e-8)
+    X_test = (X_test - mean) / (std + 1e-8)
+
+    # Configurations to test
+    configs = [
+        {'name': 'No Normalization', 'norm_type': 'none', 'dropout_rate': 0.0},
+        {'name': 'BatchNorm', 'norm_type': 'batch', 'dropout_rate': 0.0},
+        {'name': 'BatchNorm + Dropout', 'norm_type': 'batch', 'dropout_rate': 0.5},
+    ]
+
+    results = {}
+
+    for config in configs:
+        print(f"\\nTraining: {config['name']}")
+
+        # Create network
+        network = SimpleNetwork([20, 64, 32, 1],
+                                norm_type=config['norm_type'],
+                                dropout_rate=config['dropout_rate'])
+
+        # Training loop (simplified)
+        losses = []
+        epochs = 100
+        lr = 0.01
+
+        for epoch in range(epochs):
+            # Forward pass
+            logits = network.forward(X_train, training=True)
+
+            # Simple loss (MSE for simplicity)
+            y_train_reshaped = y_train.reshape(-1, 1)
+            loss = np.mean((logits - y_train_reshaped) ** 2)
+            losses.append(loss)
+
+            if (epoch + 1) % 20 == 0:
+                print(f"  Epoch {epoch+1}/{epochs}, Loss: {loss:.4f}")
+
+        results[config['name']] = losses
+
+    # Plot comparison
+    plt.figure(figsize=(12, 6))
+    for name, losses in results.items():
+        plt.plot(losses, label=name, linewidth=2)
+
+    plt.xlabel('Epoch', fontsize=12)
+    plt.ylabel('Loss', fontsize=12)
+    plt.title('Training Loss: Comparing Normalization Techniques',
+             fontsize=14, fontweight='bold')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig('normalization_comparison.png', dpi=150)
+    print("\\nSaved: normalization_comparison.png")
+
+train_and_compare()
+\\\`\\\`\\\`
+
+---
+
+## 6. Complete Example: Modern Network
+
+**Putting it all together:**
+
+\\\`\\\`\\\`python
+class ModernNetwork:
+    """
+    A modern neural network with all the bells and whistles:
+    - He initialization
+    - Batch normalization
+    - Residual connections
+    - Dropout
+    """
+
+    def __init__(self):
+        # Input: 784 (MNIST flattened)
+        # Hidden: 256 -> 256 (with residual) -> 128 -> 10
+
+        self.fc1 = he_init((784, 256))
+        self.bn1 = BatchNorm(256)
+        self.dropout1 = Dropout(keep_prob=0.8)
+
+        # Residual block
+        self.res_block = ResidualBlock(256, 256)
+
+        self.fc2 = he_init((256, 128))
+        self.bn2 = BatchNorm(128)
+        self.dropout2 = Dropout(keep_prob=0.8)
+
+        self.fc_out = he_init((128, 10))
+
+    def forward(self, X, training=True):
+        # Layer 1
+        out = X @ self.fc1
+        out = self.bn1.forward(out, training)
+        out = np.maximum(0, out)
+        out = self.dropout1.forward(out, training)
+
+        # Residual block
+        out = self.res_block.forward(out, training)
+
+        # Layer 2
+        out = out @ self.fc2
+        out = self.bn2.forward(out, training)
+        out = np.maximum(0, out)
+        out = self.dropout2.forward(out, training)
+
+        # Output
+        logits = out @ self.fc_out
+
+        return logits
+
+# Create modern network
+model = ModernNetwork()
+print("Created modern network with:")
+print("- He initialization")
+print("- Batch normalization")
+print("- Residual connections")
+print("- Dropout regularization")
+print("\\nReady to train on MNIST or any other dataset!")
+\\\`\\\`\\\`
+
+---
+
+## Testing Checklist
+
+✅ **Batch Normalization:**
+- [ ] Forward pass normalizes to mean=0, std=1
+- [ ] Running statistics update correctly
+- [ ] Inference uses running statistics
+- [ ] Backward pass matches numerical gradient
+
+✅ **Dropout:**
+- [ ] Training mode drops ~(1-keep_prob) fraction
+- [ ] Inference mode has no dropout
+- [ ] Inverted dropout scales correctly
+- [ ] Backward pass applies same mask
+
+✅ **Initialization:**
+- [ ] Xavier preserves variance for sigmoid/tanh
+- [ ] He preserves variance for ReLU
+- [ ] No vanishing/exploding gradients
+- [ ] Compare activation statistics across layers
+
+✅ **Residual Blocks:**
+- [ ] Skip connection preserves dimensions
+- [ ] Projection works when dimensions change
+- [ ] Gradients flow through skip connection
+- [ ] Training converges faster than vanilla
+
+✅ **Experiments:**
+- [ ] BatchNorm improves convergence speed
+- [ ] Dropout reduces overfitting
+- [ ] Proper initialization is crucial
+- [ ] All components work together
+
+---
+
+## Key Takeaways
+
+1. **Batch Normalization** = Stabilize and accelerate training
+2. **Dropout** = Prevent overfitting through randomness
+3. **He/Xavier Init** = Start training with good gradient flow
+4. **Residual Connections** = Enable very deep networks
+5. **Combining them** = State-of-the-art performance!
+
+These techniques are used in **every modern architecture**:
+- ResNets use all of them
+- Transformers use LayerNorm (similar to BatchNorm) + Dropout
+- Modern CNNs combine BatchNorm + Residuals
+
+**Master these, and you understand the foundation of modern deep learning!** 🚀
+
+\`;
+
+        document.getElementById('content').innerHTML = marked.parse(markdown);
+    </script>
+</body>
+</html>
