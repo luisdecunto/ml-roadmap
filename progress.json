@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-17T10:41:41.642Z",
+  "lastUpdated": "2026-01-17T10:41:48.042Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -266,6 +266,6 @@
     "Module 6.5: Neural Network Visualization (6-8 hours)-3": true,
     "Module 6.5: Neural Network Visualization (6-8 hours)-4": true,
     "Module 6.5: Neural Network Visualization (6-8 hours)-5": true,
-    "Module 6.5: Neural Network Visualization (6-8 hours)-6": true
+    "Module 6.5: Neural Network Visualization (6-8 hours)-6": false
   }
 }
