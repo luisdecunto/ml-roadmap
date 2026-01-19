@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-19T08:07:06.450Z",
+  "lastUpdated": "2026-01-19T09:18:11.396Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -268,6 +268,7 @@
     "Module 6.5: Neural Network Visualization (6-8 hours)-5": true,
     "Module 6.5: Neural Network Visualization (6-8 hours)-6": true,
     "Module 6.5: Neural Network Visualization (6-8 hours)-7": true,
-    "Module 7: CNNs from Scratch (20-25 hours)-1": true
+    "Module 7: CNNs from Scratch (20-25 hours)-1": true,
+    "Module 7: CNNs from Scratch (20-25 hours)-0": true
   }
 }
