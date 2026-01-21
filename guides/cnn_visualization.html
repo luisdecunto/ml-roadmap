@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNN Visualization Tutorial - ML Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .markdown-body {
+            line-height: 1.6;
+        }
+        .markdown-body h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            border-bottom: 3px solid #10b981;
+            padding-bottom: 0.5rem;
+        }
+        .markdown-body h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+        .markdown-body h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #4b5563;
+        }
+        .markdown-body p {
+            margin-bottom: 1rem;
+        }
+        .markdown-body ul, .markdown-body ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .markdown-body li {
+            margin-bottom: 0.5rem;
+        }
+        .markdown-body code {
+            background-color: #f3f4f6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-family: 'Courier New', monospace;
+        }
+        .markdown-body pre {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .markdown-body pre code {
+            background-color: transparent;
+            color: #f9fafb;
+            padding: 0;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #10b981;
+            padding-left: 1rem;
+            margin-left: 0;
+            color: #6b7280;
+            font-style: italic;
+        }
+        .markdown-body strong {
+            font-weight: 700;
+            color: #1f2937;
+        }
+        .markdown-body hr {
+            border: 0;
+            border-top: 2px solid #e5e7eb;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <!-- Header -->
+            <div class="mb-8 pb-6 border-b-2 border-gray-200">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">CNN Visualization Tutorial</h1>
+                <div class="flex flex-wrap gap-4 text-sm">
+                    <div class="flex items-center">
+                        <span class="font-semibold text-gray-700 mr-2">⏱️ Time:</span>
+                        <span class="text-gray-600">3-4 hours</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="font-semibold text-gray-700 mr-2">📊 Difficulty:</span>
+                        <span class="text-gray-600">Intermediate</span>
+                    </div>
+                </div>
+                <p class="mt-4 text-gray-600">Learn how to visualize and understand what your CNN has learned using 5 essential techniques.</p>
+            </div>
+
+            <!-- Content -->
+            <div id="content" class="markdown-body"></div>
+        </div>
+    </div>
+
+    <script>
+        const markdown = `# CNN Visualization Tutorial
+**Learn how to visualize and understand what your CNN has learned**
+
+This tutorial teaches you 5 key techniques for visualizing CNNs. Each section includes:
+- What the technique shows
+- Why it's useful
+- Small code examples to learn from
+- What to look for in the results
+
+---
+
+## Prerequisites
+
+Assume you have a trained SimpleCNN with:
+\`\`\`python
+cnn.conv_kernel  # Shape: (8, 1, 3, 3) - 8 filters
+cnn.conv_bias    # Shape: (8,)
+cnn.fc_weights   # Shape: (1352, 10)
+cnn.fc_bias      # Shape: (10,)
+\`\`\`
+
+---
+
+## 1. Visualizing Learned Filters (Kernels)
+
+**What it shows**: The actual 3×3 weight matrices your CNN learned
+
+**Why useful**: Reveals what features the conv layer detects (edges, corners, textures)
+
+### How to extract a filter:
+\`\`\`python
+# Get the first filter (channel 0)
+filter_0 = cnn.conv_kernel[0, 0]  # Shape: (3, 3)
+print(filter_0)
+
+# Example output:
+# [[ 0.023, -0.041,  0.018],
+#  [-0.052,  0.094, -0.033],
+#  [ 0.011, -0.028,  0.007]]
+\`\`\`
+
+### How to visualize it:
+\`\`\`python
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(2, 4, figsize=(12, 6))
+fig.suptitle('Learned 3x3 Filters')
+
+for i in range(8):
+    ax = axes[i // 4, i % 4]
+    filter_i = cnn.conv_kernel[i, 0]
+
+    # Use RdBu (red-blue) colormap: red=positive, blue=negative
+    im = ax.imshow(filter_i, cmap='RdBu', interpolation='nearest',
+                   vmin=-filter_i.max(), vmax=filter_i.max())
+    ax.set_title(f'Filter {i+1}')
+    ax.axis('off')
+    plt.colorbar(im, ax=ax)
+
+plt.tight_layout()
+plt.savefig('learned_filters.png')
+\`\`\`
+
+**What to look for**:
+- Edge detectors: strong horizontal/vertical/diagonal patterns
+- Blob detectors: center has opposite sign from edges
+- Some filters may look random (not all filters learn useful features)
+
+---
+
+## 2. Visualizing Feature Maps (Activations)
+
+**What it shows**: How each filter responds to a specific input image
+
+**Why useful**: Shows what features the CNN extracts from different digits
+
+### How to get feature maps:
+\`\`\`python
+# Pick a sample image
+image = X[0]  # Shape: (1, 28, 28)
+label = y[0]
+
+# Forward through conv + ReLU
+conv_out = cnn.conv2d_single(image, cnn.conv_kernel, cnn.conv_bias)
+# Shape: (8, 26, 26) - 8 feature maps
+
+relu_out = cnn.relu(conv_out)
+# Shape: (8, 26, 26) - after activation
+\`\`\`
+
+### How to visualize:
+\`\`\`python
+fig, axes = plt.subplots(3, 3, figsize=(12, 12))
+fig.suptitle(f'Feature Maps for Digit {label}')
+
+# Show original image
+axes[0, 0].imshow(image[0], cmap='gray')
+axes[0, 0].set_title('Original')
+axes[0, 0].axis('off')
+
+# Show first 8 feature maps
+for i in range(8):
+    ax = axes[(i+1) // 3, (i+1) % 3]
+    im = ax.imshow(relu_out[i], cmap='viridis')
+    ax.set_title(f'Filter {i+1}')
+    ax.axis('off')
+    plt.colorbar(im, ax=ax)
+
+plt.tight_layout()
+plt.savefig(f'feature_maps_digit_{label}.png')
+\`\`\`
+
+**What to look for**:
+- Different filters activate on different digit features
+- A "3" might strongly activate edge detectors on curves
+- A "1" might activate vertical edge detectors
+- Compare the same digit vs different digits
+
+**Exercise**: Visualize feature maps for digits 0, 3, and 7. Notice how different filters activate differently!
+
+---
+
+## 3. Max-Activating Patches
+
+**What it shows**: Which image patches cause each filter to activate most strongly
+
+**Why useful**: Reveals what visual pattern each filter is "looking for"
+
+### Algorithm:
+\`\`\`python
+def find_max_activating_patches(cnn, images, filter_idx, top_k=9):
+    """Find patches that maximally activate a specific filter"""
+    max_activations = []
+
+    # Search through images
+    for img in images[:1000]:  # Use subset for speed
+        # Get feature maps
+        conv_out = cnn.conv2d_single(img, cnn.conv_kernel, cnn.conv_bias)
+        relu_out = cnn.relu(conv_out)
+
+        # Get max activation for this filter
+        max_val = relu_out[filter_idx].max()
+
+        if max_val > 0:
+            # Find WHERE the max occurred
+            pos = np.unravel_index(
+                np.argmax(relu_out[filter_idx]),
+                relu_out[filter_idx].shape
+            )
+            max_activations.append((max_val, img, pos))
+
+    # Sort by activation strength
+    max_activations.sort(reverse=True, key=lambda x: x[0])
+    return max_activations[:top_k]
+\`\`\`
+
+### How to visualize:
+\`\`\`python
+# Get top 9 patches for filter 0
+patches = find_max_activating_patches(cnn, X, filter_idx=0, top_k=9)
+
+fig, axes = plt.subplots(3, 3, figsize=(10, 10))
+fig.suptitle(f'Top Patches Activating Filter 1')
+
+for i, (activation, img, pos) in enumerate(patches):
+    ax = axes[i // 3, i % 3]
+
+    # Show the full image
+    ax.imshow(img[0], cmap='gray')
+
+    # Highlight the 3x3 receptive field that caused the activation
+    h, w = pos
+    rect = plt.Rectangle((w, h), 3, 3,
+                         linewidth=2, edgecolor='red', facecolor='none')
+    ax.add_patch(rect)
+
+    ax.set_title(f'Activation: {activation:.3f}')
+    ax.axis('off')
+
+plt.tight_layout()
+plt.savefig(f'max_patches_filter_1.png')
+\`\`\`
+
+**What to look for**:
+- Do all patches share a common pattern (edge, corner, curve)?
+- Are they from the same digit or different digits?
+- Does the filter specialize in one type of feature?
+
+---
+
+## 4. Activation Heatmaps
+
+**What it shows**: Where the CNN "pays attention" in an image
+
+**Why useful**: Shows which parts of the digit are important for classification
+
+### How to create heatmap:
+\`\`\`python
+# Pick an image
+image = X[42]
+label = y[42]
+
+# Get activations
+conv_out = cnn.conv2d_single(image, cnn.conv_kernel, cnn.conv_bias)
+relu_out = cnn.relu(conv_out)
+
+# Sum across all filters to get total activation
+activation_sum = np.sum(relu_out, axis=0)
+# Shape: (26, 26) - heatmap
+\`\`\`
+
+### How to visualize:
+\`\`\`python
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+# 1. Original image
+axes[0].imshow(image[0], cmap='gray')
+axes[0].set_title('Original Image')
+axes[0].axis('off')
+
+# 2. Heatmap alone
+im = axes[1].imshow(activation_sum, cmap='hot', interpolation='bilinear')
+axes[1].set_title('Activation Heatmap')
+axes[1].axis('off')
+plt.colorbar(im, ax=axes[1])
+
+# 3. Overlay on original
+axes[2].imshow(image[0], cmap='gray', alpha=0.6)
+axes[2].imshow(activation_sum, cmap='hot', alpha=0.4, interpolation='bilinear')
+axes[2].set_title('Overlay')
+axes[2].axis('off')
+
+plt.suptitle(f'Attention Map for Digit {label}')
+plt.tight_layout()
+plt.savefig(f'heatmap_digit_{label}.png')
+\`\`\`
+
+**What to look for**:
+- CNN should activate strongly on edges and curves of the digit
+- Background should have low activation
+- Compare different digits - does CNN focus on different regions?
+
+**Note**: The heatmap is 26×26 but the image is 28×28 because convolution reduces size. You may want to resize the heatmap for better overlay:
+\`\`\`python
+from scipy.ndimage import zoom
+activation_resized = zoom(activation_sum, 28/26, order=1)
+\`\`\`
+
+---
+
+## 5. Weight Distributions
+
+**What it shows**: Statistical properties of learned weights
+
+**Why useful**: Sanity check that training worked properly
+
+### How to analyze:
+\`\`\`python
+# Extract all weights
+conv_weights = cnn.conv_kernel.flatten()
+fc_weights = cnn.fc_weights.flatten()
+
+print(f"Conv weights - mean: {conv_weights.mean():.4f}, std: {conv_weights.std():.4f}")
+print(f"FC weights - mean: {fc_weights.mean():.4f}, std: {fc_weights.std():.4f}")
+
+# Example healthy output:
+# Conv weights - mean: 0.0021, std: 0.0456
+# FC weights - mean: -0.0003, std: 0.0298
+\`\`\`
+
+### How to visualize:
+\`\`\`python
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
+# Conv weights histogram
+axes[0].hist(conv_weights, bins=50, color='steelblue', alpha=0.7, edgecolor='black')
+axes[0].set_title('Convolutional Weights')
+axes[0].set_xlabel('Weight Value')
+axes[0].set_ylabel('Frequency')
+axes[0].axvline(0, color='red', linestyle='--', linewidth=2, label='Zero')
+axes[0].legend()
+axes[0].grid(alpha=0.3)
+
+# FC weights histogram
+axes[1].hist(fc_weights, bins=50, color='coral', alpha=0.7, edgecolor='black')
+axes[1].set_title('Fully Connected Weights')
+axes[1].set_xlabel('Weight Value')
+axes[1].set_ylabel('Frequency')
+axes[1].axvline(0, color='red', linestyle='--', linewidth=2, label='Zero')
+axes[1].legend()
+axes[1].grid(alpha=0.3)
+
+plt.suptitle('Weight Distributions After Training')
+plt.tight_layout()
+plt.savefig('weight_distributions.png')
+\`\`\`
+
+**What to look for**:
+- Weights should be roughly centered around 0
+- Should look somewhat Gaussian (bell curve)
+- No extreme outliers (weights > 1.0 or < -1.0)
+- If all weights are near 0, model didn't learn much
+- If weights are huge, you may have exploding gradients
+
+**Red flags**:
+- Mean far from 0 → possible bias in updates
+- Very large std (> 0.5) → possible instability
+- Bimodal distribution → something weird happened
+
+---
+
+## Putting It All Together
+
+### Suggested workflow:
+
+1. **Train your CNN** on MNIST until it reaches decent accuracy (>90%)
+
+2. **Visualize filters** to see what features were learned
+
+3. **Visualize feature maps** for different digits:
+   - Pick 3-5 different digits
+   - See which filters activate for each digit
+   - Notice patterns (e.g., "filter 2 always activates on vertical edges")
+
+4. **Find max-activating patches** for 2-3 interesting filters:
+   - Do they consistently find edges? curves? corners?
+
+5. **Create heatmaps** for correct and incorrect predictions:
+   - Does CNN focus on the right parts when correct?
+   - Does it focus on weird parts when wrong?
+
+6. **Check weight distributions**:
+   - Sanity check that training was healthy
+
+---
+
+## Advanced: Saliency Maps (Optional)
+
+**What it shows**: Which input pixels most affect the output
+
+**Requires**: Computing gradients of output w.r.t. input
+
+**Brief concept**:
+\`\`\`python
+# After forward pass with x as input, prediction = argmax(probs)
+# Compute dL/dx where L is loss for true label
+# Absolute value |dL/dx| shows pixel importance
+
+saliency = np.abs(dL_dx[0])  # Shape: (28, 28)
+plt.imshow(saliency, cmap='hot')
+\`\`\`
+
+This requires implementing input gradients in your backprop, which you can add as an extension!
+
+---
+
+## Key Takeaways
+
+1. **Filters learn feature detectors** - edges, corners, textures
+2. **Different filters activate for different digits** - specialization
+3. **CNNs focus on relevant regions** - not random
+4. **Healthy weight distributions** - centered around 0, modest std
+5. **Visualization helps debugging** - if heatmaps look random, something's wrong
+
+## References
+
+- CS231n Lecture 12: Visualizing and Understanding
+- Zeiler & Fergus (2014): "Visualizing and Understanding Convolutional Networks"
+- Distill.pub: "Feature Visualization"
+
+---
+
+## Your Turn!
+
+Now implement these visualizations for your trained SimpleCNN:
+
+1. Start with learned filters (easiest)
+2. Add feature maps for 3 different digits
+3. Try creating activation heatmaps
+4. Check weight distributions
+5. (Advanced) Implement max-activating patches
+
+Good luck!
+`;
+        document.getElementById('content').innerHTML = marked.parse(markdown);
+    </script>
+</body>
+</html>
