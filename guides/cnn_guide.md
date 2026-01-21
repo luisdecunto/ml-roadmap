@@ -907,6 +907,440 @@ SHARPEN = [[0, -1, 0], [-1, 5, -1], [0, -1, 0]]
 
 ---
 
+## Part 6: Training Loop with Backpropagation
+
+Now let's add training! We need to implement backward passes for each layer and connect them.
+
+### Training Architecture
+
+```python
+# train_cnn.py
+import numpy as np
+from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+class TrainableCNN:
+    def __init__(self, lr=0.001):
+        # Conv: 1 -> 8 filters, 3x3
+        self.conv_kernel = np.random.randn(8, 1, 3, 3) * 0.01
+        self.conv_bias = np.zeros(8)
+
+        # FC: 1352 -> 10
+        self.fc_weights = np.random.randn(1352, 10) * 0.01
+        self.fc_bias = np.zeros(10)
+
+        self.lr = lr
+        self.cache = {}
+
+    def relu(self, x):
+        return np.maximum(0, x)
+
+    def relu_backward(self, dout, x):
+        """ReLU gradient: 1 if x > 0, else 0"""
+        dx = dout.copy()
+        dx[x <= 0] = 0
+        return dx
+
+    def softmax(self, x):
+        exp_x = np.exp(x - np.max(x))
+        return exp_x / np.sum(exp_x)
+
+    def cross_entropy_loss(self, probs, label):
+        """Cross-entropy loss"""
+        return -np.log(probs[label] + 1e-8)  # Add epsilon for numerical stability
+
+    def forward(self, x, label=None):
+        """Forward pass with caching for backprop"""
+        self.cache['x'] = x
+
+        # Conv + ReLU
+        conv_out = self.conv_forward(x)
+        self.cache['conv_out'] = conv_out
+
+        relu_out = self.relu(conv_out)
+        self.cache['relu_out'] = relu_out
+
+        # Pool
+        pool_out = self.pool_forward(relu_out)
+        self.cache['pool_out'] = pool_out
+
+        # Flatten
+        flattened = pool_out.reshape(-1)
+        self.cache['flattened'] = flattened
+
+        # FC + Softmax
+        fc_out = flattened @ self.fc_weights + self.fc_bias
+        probs = self.softmax(fc_out)
+
+        if label is not None:
+            loss = self.cross_entropy_loss(probs, label)
+            return probs, loss
+        return probs
+
+    def conv_forward(self, image):
+        """Conv forward using your conv2d function"""
+        from conv2d import conv2d
+        out_channels = self.conv_kernel.shape[0]
+        results = []
+
+        for out_c in range(out_channels):
+            kernel_2d = self.conv_kernel[out_c, 0]
+            result = conv2d(image[0], kernel_2d) + self.conv_bias[out_c]
+            results.append(result)
+
+        return np.stack(results, axis=0)
+
+    def pool_forward(self, image):
+        """Pool forward using your max_pool2d function"""
+        from pooling import max_pool2d
+        return max_pool2d(image, pool_size=2)
+
+    def backward(self, probs, label):
+        """Full backward pass"""
+        # Gradient of loss w.r.t. softmax output
+        dprobs = probs.copy()
+        dprobs[label] -= 1  # Softmax + Cross-entropy gradient
+
+        # FC backward
+        dflattened = dprobs @ self.fc_weights.T
+        dfc_weights = np.outer(self.cache['flattened'], dprobs)
+        dfc_bias = dprobs
+
+        # Unflatten
+        pool_out_shape = self.cache['pool_out'].shape
+        dpool_out = dflattened.reshape(pool_out_shape)
+
+        # Pool backward
+        drelu_out = self.pool_backward(dpool_out)
+
+        # ReLU backward
+        dconv_out = self.relu_backward(drelu_out, self.cache['conv_out'])
+
+        # Conv backward
+        dconv_kernel, dconv_bias = self.conv_backward(dconv_out)
+
+        # Update weights
+        self.fc_weights -= self.lr * dfc_weights
+        self.fc_bias -= self.lr * dfc_bias
+        self.conv_kernel -= self.lr * dconv_kernel
+        self.conv_bias -= self.lr * dconv_bias
+
+    def pool_backward(self, dout):
+        """Max pool backward - gradient flows only through max positions"""
+        from pooling import max_pool2d
+
+        relu_out = self.cache['relu_out']
+        drelu_out = np.zeros_like(relu_out)
+
+        pool_size = 2
+        out_channels, out_H, out_W = dout.shape
+
+        for c in range(out_channels):
+            for i in range(out_H):
+                for j in range(out_W):
+                    h_start = i * pool_size
+                    h_end = h_start + pool_size
+                    w_start = j * pool_size
+                    w_end = w_start + pool_size
+
+                    # Find max position in this pool region
+                    region = relu_out[c, h_start:h_end, w_start:w_end]
+                    max_idx = np.unravel_index(np.argmax(region), region.shape)
+
+                    # Route gradient to max position
+                    drelu_out[c, h_start + max_idx[0], w_start + max_idx[1]] += dout[c, i, j]
+
+        return drelu_out
+
+    def conv_backward(self, dout):
+        """Conv backward - compute kernel and bias gradients"""
+        from conv2d import conv2d
+
+        image = self.cache['x'][0]  # (28, 28)
+        out_channels = self.conv_kernel.shape[0]
+
+        dkernel = np.zeros_like(self.conv_kernel)
+        dbias = np.zeros_like(self.conv_bias)
+
+        for out_c in range(out_channels):
+            # Kernel gradient via correlation
+            dkernel[out_c, 0] = conv2d(image, dout[out_c])
+
+            # Bias gradient is sum of upstream gradients
+            dbias[out_c] = np.sum(dout[out_c])
+
+        return dkernel, dbias
+
+    def train_step(self, x, label):
+        """Single training step"""
+        probs, loss = self.forward(x, label)
+        self.backward(probs, label)
+
+        acc = 1 if np.argmax(probs) == label else 0
+        return loss, acc
+
+# Training script
+print('Loading MNIST...')
+mnist = fetch_openml('mnist_784', version=1, parser='auto')
+X, y = mnist.data.values, mnist.target.values.astype(int)
+X = X / 255.0
+X = X.reshape(-1, 1, 28, 28)
+
+# Use subset for faster training
+X = X[:5000]
+y = y[:5000]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42)
+
+print(f'Training set: {len(X_train)}')
+print(f'Test set: {len(X_test)}')
+
+# Train CNN
+cnn = TrainableCNN(lr=0.005)
+
+print("\nTraining CNN...")
+losses = []
+accuracies = []
+
+for epoch in range(3):
+    print(f'\n--- Epoch {epoch + 1} ---')
+
+    # Shuffle training data
+    indices = np.random.permutation(len(X_train))
+    X_train_shuffled = X_train[indices]
+    y_train_shuffled = y_train[indices]
+
+    epoch_loss = 0
+    epoch_acc = 0
+
+    for i, (x, label) in enumerate(zip(X_train_shuffled, y_train_shuffled)):
+        loss, acc = cnn.train_step(x, label)
+        epoch_loss += loss
+        epoch_acc += acc
+
+        if (i + 1) % 500 == 0:
+            avg_loss = epoch_loss / (i + 1)
+            avg_acc = epoch_acc / (i + 1) * 100
+            print(f'  [{i + 1}/{len(X_train)}] Loss: {avg_loss:.4f}, Acc: {avg_acc:.2f}%')
+
+    # Test accuracy
+    test_correct = 0
+    for x, label in zip(X_test, y_test):
+        probs = cnn.forward(x)
+        if np.argmax(probs) == label:
+            test_correct += 1
+
+    test_acc = test_correct / len(X_test) * 100
+    print(f'  Test Accuracy: {test_acc:.2f}%')
+```
+
+### Test It!
+
+```bash
+python train_cnn.py
+```
+
+Expected output:
+```
+--- Epoch 1 ---
+  [500/4000] Loss: 2.1234, Acc: 25.00%
+  [1000/4000] Loss: 1.8456, Acc: 35.50%
+  ...
+  Test Accuracy: 65.00%
+
+--- Epoch 2 ---
+  ...
+  Test Accuracy: 78.00%
+
+--- Epoch 3 ---
+  ...
+  Test Accuracy: 85.00%
+```
+
+---
+
+## Part 7: Visualizing Learned Filters
+
+Visualize what your CNN learned!
+
+```python
+# visualize_filters.py
+import numpy as np
+import matplotlib.pyplot as plt
+from train_cnn import TrainableCNN
+from sklearn.datasets import fetch_openml
+
+# Load trained model (train it first!)
+print('Loading MNIST and training CNN...')
+mnist = fetch_openml('mnist_784', version=1, parser='auto')
+X = mnist.data.values / 255.0
+X = X.reshape(-1, 1, 28, 28)
+y = mnist.target.values.astype(int)
+
+# Train briefly
+cnn = TrainableCNN(lr=0.005)
+for i in range(min(1000, len(X))):
+    cnn.train_step(X[i], y[i])
+
+# Visualize filters
+fig, axes = plt.subplots(2, 4, figsize=(12, 6))
+fig.suptitle('Learned Convolutional Filters', fontsize=16)
+
+for i, ax in enumerate(axes.flat):
+    if i < cnn.conv_kernel.shape[0]:
+        # Extract filter for this channel
+        kernel = cnn.conv_kernel[i, 0]  # Shape: (3, 3)
+
+        # Plot
+        im = ax.imshow(kernel, cmap='gray', interpolation='nearest')
+        ax.set_title(f'Filter {i + 1}')
+        ax.axis('off')
+
+        # Add colorbar
+        plt.colorbar(im, ax=ax, fraction=0.046)
+
+plt.tight_layout()
+plt.savefig('learned_filters.png', dpi=150, bbox_inches='tight')
+print("Saved learned_filters.png")
+plt.show()
+
+# Visualize feature maps
+def visualize_activations(cnn, image, label):
+    """Visualize conv layer activations"""
+    conv_out = cnn.conv_forward(image)
+    relu_out = cnn.relu(conv_out)
+
+    fig, axes = plt.subplots(2, 4, figsize=(12, 6))
+    fig.suptitle(f'Feature Maps for Digit {label}', fontsize=16)
+
+    for i, ax in enumerate(axes.flat):
+        if i < conv_out.shape[0]:
+            ax.imshow(relu_out[i], cmap='viridis')
+            ax.set_title(f'Channel {i + 1}')
+            ax.axis('off')
+
+    plt.tight_layout()
+    plt.savefig(f'activations_digit_{label}.png', dpi=150, bbox_inches='tight')
+    print(f"Saved activations_digit_{label}.png")
+    plt.show()
+
+# Visualize for a few digits
+for digit in [0, 1, 2]:
+    idx = np.where(y == digit)[0][0]
+    visualize_activations(cnn, X[idx], digit)
+```
+
+### Test It!
+
+```bash
+python visualize_filters.py
+```
+
+Expected: Generates `learned_filters.png` showing 8 filters and activation maps for different digits.
+
+---
+
+## Part 8: MNIST Project - Achieve >98% Accuracy
+
+Final challenge: Build a better CNN and reach >98% accuracy!
+
+### Improvements to Try
+
+1. **Deeper Architecture**
+```python
+# 2 conv layers instead of 1
+Conv(1->16, 3x3) -> ReLU -> Pool
+Conv(16->32, 3x3) -> ReLU -> Pool
+FC(1568->128) -> ReLU
+FC(128->10) -> Softmax
+```
+
+2. **Better Initialization**
+```python
+# He initialization for ReLU layers
+conv_kernel = np.random.randn(16, 1, 3, 3) * np.sqrt(2.0 / (1 * 3 * 3))
+```
+
+3. **Learning Rate Schedule**
+```python
+def get_lr(epoch):
+    if epoch < 5:
+        return 0.01
+    elif epoch < 10:
+        return 0.005
+    else:
+        return 0.001
+```
+
+4. **Data Augmentation** (optional)
+```python
+def random_shift(image, max_shift=2):
+    """Randomly shift image by max_shift pixels"""
+    shift_h = np.random.randint(-max_shift, max_shift + 1)
+    shift_w = np.random.randint(-max_shift, max_shift + 1)
+    return np.roll(np.roll(image, shift_h, axis=1), shift_w, axis=2)
+```
+
+5. **Batch Training** (optional)
+```python
+# Train on mini-batches of size 32
+batch_size = 32
+for i in range(0, len(X_train), batch_size):
+    X_batch = X_train[i:i+batch_size]
+    y_batch = y_train[i:i+batch_size]
+    # Average gradients over batch
+```
+
+### Challenge Template
+
+```python
+# mnist_challenge.py
+import numpy as np
+from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split
+
+class ImprovedCNN:
+    def __init__(self):
+        # TODO: Implement deeper architecture
+        # Conv1: 1 -> 16 filters
+        # Conv2: 16 -> 32 filters
+        # FC1: 1568 -> 128
+        # FC2: 128 -> 10
+        pass
+
+    # TODO: Implement all forward/backward methods
+    # Remember to cache intermediate values!
+
+# Load FULL MNIST (70,000 samples)
+print('Loading full MNIST...')
+mnist = fetch_openml('mnist_784', version=1, parser='auto')
+X = mnist.data.values / 255.0
+X = X.reshape(-1, 1, 28, 28)
+y = mnist.target.values.astype(int)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=10000, random_state=42)
+
+# Train for 10-15 epochs
+# Target: >98% test accuracy
+
+print(f'Final Test Accuracy: {test_acc:.2f}%')
+print('Target: >98%')
+```
+
+### Success Criteria
+
+- ✅ Train on full MNIST (60k training, 10k test)
+- ✅ Achieve >98% test accuracy
+- ✅ Implement using only NumPy (your functions!)
+- ✅ Complete within reasonable time (~30 minutes training max)
+
+**Bonus:** Compare with PyTorch LeNet baseline to validate your implementation!
+
+---
+
 ## Common Issues & Debugging
 
 ### 1. Shape Mismatch
