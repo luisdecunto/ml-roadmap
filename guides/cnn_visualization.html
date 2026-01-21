@@ -109,22 +109,170 @@
         const markdown = `# CNN Visualization Tutorial
 **Learn how to visualize and understand what your CNN has learned**
 
-This tutorial teaches you 5 key techniques for visualizing CNNs. Each section includes:
-- What the technique shows
-- Why it's useful
-- Small code examples to learn from
-- What to look for in the results
+This tutorial teaches you 5 key techniques for visualizing CNNs in a notebook-style format. Follow along by creating your own Jupyter notebook!
 
 ---
 
-## Prerequisites
+## Setup: Imports and Dependencies
 
-Assume you have a trained SimpleCNN with:
+Let's start by importing all the libraries we'll need:
+
 \`\`\`python
-cnn.conv_kernel  # Shape: (8, 1, 3, 3) - 8 filters
-cnn.conv_bias    # Shape: (8,)
-cnn.fc_weights   # Shape: (1352, 10)
-cnn.fc_bias      # Shape: (10,)
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.ndimage import zoom
+
+# Set random seeds for reproducibility
+torch.manual_seed(42)
+np.random.seed(42)
+
+# Check if GPU is available
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using device: {device}')
+\`\`\`
+
+---
+
+## Define the CNN Architecture
+
+We'll create a simple CNN for MNIST classification:
+
+\`\`\`python
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super(SimpleCNN, self).__init__()
+        # Convolutional layers
+        self.conv1 = nn.Conv2d(1, 8, kernel_size=3, stride=1, padding=0)  # 28x28 -> 26x26
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)  # 26x26 -> 13x13
+
+        # Fully connected layers
+        self.fc1 = nn.Linear(8 * 13 * 13, 128)
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        # Conv -> ReLU -> Pool
+        x = self.conv1(x)
+        conv_out = x  # Save for visualization
+        x = F.relu(x)
+        relu_out = x  # Save for visualization
+        x = self.pool(x)
+        pool_out = x  # Save for visualization
+
+        # Flatten
+        x = x.view(-1, 8 * 13 * 13)
+
+        # FC layers
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+
+        return x
+
+    def forward_with_activations(self, x):
+        """Forward pass that returns intermediate activations"""
+        conv_out = self.conv1(x)
+        relu_out = F.relu(conv_out)
+        pool_out = self.pool(relu_out)
+
+        x = pool_out.view(-1, 8 * 13 * 13)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+
+        return x, conv_out, relu_out, pool_out
+
+# Create model
+model = SimpleCNN().to(device)
+print(model)
+\`\`\`
+
+---
+
+## Load MNIST Dataset
+
+\`\`\`python
+# Data preprocessing
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.1307,), (0.3081,))  # MNIST mean and std
+])
+
+# Load datasets
+train_dataset = datasets.MNIST('./data', train=True, download=True, transform=transform)
+test_dataset = datasets.MNIST('./data', train=False, transform=transform)
+
+# Create data loaders
+train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=1000, shuffle=False)
+
+print(f'Training samples: {len(train_dataset)}')
+print(f'Test samples: {len(test_dataset)}')
+\`\`\`
+
+---
+
+## Train the CNN
+
+\`\`\`python
+def train_epoch(model, device, train_loader, optimizer, epoch):
+    model.train()
+    total_loss = 0
+    correct = 0
+
+    for batch_idx, (data, target) in enumerate(train_loader):
+        data, target = data.to(device), target.to(device)
+
+        optimizer.zero_grad()
+        output = model(data)
+        loss = F.cross_entropy(output, target)
+        loss.backward()
+        optimizer.step()
+
+        total_loss += loss.item()
+        pred = output.argmax(dim=1, keepdim=True)
+        correct += pred.eq(target.view_as(pred)).sum().item()
+
+        if batch_idx % 200 == 0:
+            print(f'Epoch {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)}] '
+                  f'Loss: {loss.item():.4f}')
+
+    avg_loss = total_loss / len(train_loader)
+    accuracy = 100. * correct / len(train_loader.dataset)
+    print(f'\\nEpoch {epoch} - Avg Loss: {avg_loss:.4f}, Accuracy: {accuracy:.2f}%\\n')
+    return avg_loss, accuracy
+
+def test(model, device, test_loader):
+    model.eval()
+    test_loss = 0
+    correct = 0
+
+    with torch.no_grad():
+        for data, target in test_loader:
+            data, target = data.to(device), target.to(device)
+            output = model(data)
+            test_loss += F.cross_entropy(output, target, reduction='sum').item()
+            pred = output.argmax(dim=1, keepdim=True)
+            correct += pred.eq(target.view_as(pred)).sum().item()
+
+    test_loss /= len(test_loader.dataset)
+    accuracy = 100. * correct / len(test_loader.dataset)
+    print(f'Test - Avg Loss: {test_loss:.4f}, Accuracy: {accuracy:.2f}%\\n')
+    return test_loss, accuracy
+
+# Train the model
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+print("Training CNN...")
+for epoch in range(1, 4):  # 3 epochs
+    train_loss, train_acc = train_epoch(model, device, train_loader, optimizer, epoch)
+    test_loss, test_acc = test(model, device, test_loader)
+
+print("Training complete!")
 \`\`\`
 
 ---
@@ -135,38 +283,35 @@ cnn.fc_bias      # Shape: (10,)
 
 **Why useful**: Reveals what features the conv layer detects (edges, corners, textures)
 
-### How to extract a filter:
+### Extract and visualize the filters:
+
 \`\`\`python
-# Get the first filter (channel 0)
-filter_0 = cnn.conv_kernel[0, 0]  # Shape: (3, 3)
-print(filter_0)
+# Get conv1 weights: shape (out_channels, in_channels, height, width)
+# For our CNN: (8, 1, 3, 3) - 8 filters, 1 input channel, 3x3 kernel
+conv_weights = model.conv1.weight.data.cpu()
+print(f"Conv1 weights shape: {conv_weights.shape}")
 
-# Example output:
-# [[ 0.023, -0.041,  0.018],
-#  [-0.052,  0.094, -0.033],
-#  [ 0.011, -0.028,  0.007]]
-\`\`\`
-
-### How to visualize it:
-\`\`\`python
-import matplotlib.pyplot as plt
-
+# Visualize all 8 filters
 fig, axes = plt.subplots(2, 4, figsize=(12, 6))
-fig.suptitle('Learned 3x3 Filters')
+fig.suptitle('Learned 3x3 Convolutional Filters', fontsize=16, fontweight='bold')
 
 for i in range(8):
     ax = axes[i // 4, i % 4]
-    filter_i = cnn.conv_kernel[i, 0]
+    filter_i = conv_weights[i, 0].numpy()  # Shape: (3, 3)
 
-    # Use RdBu (red-blue) colormap: red=positive, blue=negative
+    # Use RdBu colormap: red=positive, blue=negative
+    max_abs = np.abs(filter_i).max()
     im = ax.imshow(filter_i, cmap='RdBu', interpolation='nearest',
-                   vmin=-filter_i.max(), vmax=filter_i.max())
-    ax.set_title(f'Filter {i+1}')
+                   vmin=-max_abs, vmax=max_abs)
+    ax.set_title(f'Filter {i+1}', fontweight='bold')
     ax.axis('off')
-    plt.colorbar(im, ax=ax)
+    plt.colorbar(im, ax=ax, fraction=0.046)
 
 plt.tight_layout()
-plt.savefig('learned_filters.png')
+plt.savefig('learned_filters.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+print("✓ Saved as 'learned_filters.png'")
 \`\`\`
 
 **What to look for**:
@@ -182,40 +327,55 @@ plt.savefig('learned_filters.png')
 
 **Why useful**: Shows what features the CNN extracts from different digits
 
-### How to get feature maps:
+### Get feature maps for a sample image:
+
 \`\`\`python
-# Pick a sample image
-image = X[0]  # Shape: (1, 28, 28)
-label = y[0]
+# Pick a sample from test set
+sample_idx = 0  # Try different indices!
+image, label = test_dataset[sample_idx]
+image = image.unsqueeze(0).to(device)  # Add batch dimension
 
-# Forward through conv + ReLU
-conv_out = cnn.conv2d_single(image, cnn.conv_kernel, cnn.conv_bias)
-# Shape: (8, 26, 26) - 8 feature maps
+print(f"Analyzing digit: {label}")
+print(f"Image shape: {image.shape}")  # torch.Size([1, 1, 28, 28])
 
-relu_out = cnn.relu(conv_out)
-# Shape: (8, 26, 26) - after activation
+# Forward pass with activations
+model.eval()
+with torch.no_grad():
+    output, conv_out, relu_out, pool_out = model.forward_with_activations(image)
+
+# Move to CPU for visualization
+conv_out = conv_out.cpu().squeeze(0)  # Remove batch dim -> (8, 26, 26)
+relu_out = relu_out.cpu().squeeze(0)  # (8, 26, 26)
+image_np = image.cpu().squeeze().numpy()  # (28, 28)
+
+print(f"Feature maps shape: {relu_out.shape}")  # (8, 26, 26)
 \`\`\`
 
-### How to visualize:
+### Visualize the feature maps:
+
 \`\`\`python
 fig, axes = plt.subplots(3, 3, figsize=(12, 12))
-fig.suptitle(f'Feature Maps for Digit {label}')
+fig.suptitle(f'Feature Maps for Digit {label}', fontsize=16, fontweight='bold')
 
 # Show original image
-axes[0, 0].imshow(image[0], cmap='gray')
-axes[0, 0].set_title('Original')
+axes[0, 0].imshow(image_np, cmap='gray')
+axes[0, 0].set_title('Original Image', fontweight='bold')
 axes[0, 0].axis('off')
 
-# Show first 8 feature maps
+# Show first 8 feature maps (after ReLU)
 for i in range(8):
     ax = axes[(i+1) // 3, (i+1) % 3]
-    im = ax.imshow(relu_out[i], cmap='viridis')
-    ax.set_title(f'Filter {i+1}')
+    feature_map = relu_out[i].numpy()
+    im = ax.imshow(feature_map, cmap='viridis')
+    ax.set_title(f'Filter {i+1}', fontweight='bold')
     ax.axis('off')
-    plt.colorbar(im, ax=ax)
+    plt.colorbar(im, ax=ax, fraction=0.046)
 
 plt.tight_layout()
-plt.savefig(f'feature_maps_digit_{label}.png')
+plt.savefig(f'feature_maps_digit_{label}.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+print(f"✓ Saved as 'feature_maps_digit_{label}.png'")
 \`\`\`
 
 **What to look for**:
@@ -234,47 +394,59 @@ plt.savefig(f'feature_maps_digit_{label}.png')
 
 **Why useful**: Reveals what visual pattern each filter is "looking for"
 
-### Algorithm:
+### Find max-activating patches:
+
 \`\`\`python
-def find_max_activating_patches(cnn, images, filter_idx, top_k=9):
+def find_max_activating_patches(model, dataset, filter_idx, top_k=9, num_search=1000):
     """Find patches that maximally activate a specific filter"""
     max_activations = []
 
-    # Search through images
-    for img in images[:1000]:  # Use subset for speed
-        # Get feature maps
-        conv_out = cnn.conv2d_single(img, cnn.conv_kernel, cnn.conv_bias)
-        relu_out = cnn.relu(conv_out)
+    print(f"Searching for patches that activate Filter {filter_idx+1}...")
 
-        # Get max activation for this filter
-        max_val = relu_out[filter_idx].max()
+    model.eval()
+    with torch.no_grad():
+        for img_idx in range(min(num_search, len(dataset))):
+            if (img_idx + 1) % 200 == 0:
+                print(f"  Processed {img_idx+1}/{num_search} images...")
 
-        if max_val > 0:
-            # Find WHERE the max occurred
-            pos = np.unravel_index(
-                np.argmax(relu_out[filter_idx]),
-                relu_out[filter_idx].shape
-            )
-            max_activations.append((max_val, img, pos))
+            img, _ = dataset[img_idx]
+            img_batch = img.unsqueeze(0).to(device)
+
+            # Get feature maps
+            _, conv_out, relu_out, _ = model.forward_with_activations(img_batch)
+            relu_out = relu_out.cpu().squeeze(0)  # (8, 26, 26)
+
+            # Get max activation for this filter
+            max_val = relu_out[filter_idx].max().item()
+
+            if max_val > 0:
+                # Find WHERE the max occurred
+                pos = torch.argmax(relu_out[filter_idx]).item()
+                h = pos // 26
+                w = pos % 26
+                max_activations.append((max_val, img.squeeze().numpy(), (h, w), img_idx))
 
     # Sort by activation strength
     max_activations.sort(reverse=True, key=lambda x: x[0])
+    print(f"  Found {len(max_activations)} activating patches")
     return max_activations[:top_k]
+
+# Get top 9 patches for filter 0 (try different filter_idx!)
+filter_idx = 0
+patches = find_max_activating_patches(model, test_dataset, filter_idx=filter_idx, top_k=9)
 \`\`\`
 
-### How to visualize:
+### Visualize the patches:
+
 \`\`\`python
-# Get top 9 patches for filter 0
-patches = find_max_activating_patches(cnn, X, filter_idx=0, top_k=9)
-
 fig, axes = plt.subplots(3, 3, figsize=(10, 10))
-fig.suptitle(f'Top Patches Activating Filter 1')
+fig.suptitle(f'Top Patches Activating Filter {filter_idx+1}', fontsize=16, fontweight='bold')
 
-for i, (activation, img, pos) in enumerate(patches):
+for i, (activation, img, pos, img_idx) in enumerate(patches):
     ax = axes[i // 3, i % 3]
 
     # Show the full image
-    ax.imshow(img[0], cmap='gray')
+    ax.imshow(img, cmap='gray')
 
     # Highlight the 3x3 receptive field that caused the activation
     h, w = pos
@@ -282,11 +454,14 @@ for i, (activation, img, pos) in enumerate(patches):
                          linewidth=2, edgecolor='red', facecolor='none')
     ax.add_patch(rect)
 
-    ax.set_title(f'Activation: {activation:.3f}')
+    ax.set_title(f'Act: {activation:.2f} (img {img_idx})', fontsize=10)
     ax.axis('off')
 
 plt.tight_layout()
-plt.savefig(f'max_patches_filter_1.png')
+plt.savefig(f'max_patches_filter_{filter_idx+1}.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+print(f"✓ Saved as 'max_patches_filter_{filter_idx+1}.png'")
 \`\`\`
 
 **What to look for**:
@@ -302,45 +477,59 @@ plt.savefig(f'max_patches_filter_1.png')
 
 **Why useful**: Shows which parts of the digit are important for classification
 
-### How to create heatmap:
+### Create activation heatmap:
+
 \`\`\`python
-# Pick an image
-image = X[42]
-label = y[42]
+# Pick an image from test set
+sample_idx = 42  # Try different indices!
+image, label = test_dataset[sample_idx]
+image_batch = image.unsqueeze(0).to(device)
 
 # Get activations
-conv_out = cnn.conv2d_single(image, cnn.conv_kernel, cnn.conv_bias)
-relu_out = cnn.relu(conv_out)
+model.eval()
+with torch.no_grad():
+    _, conv_out, relu_out, _ = model.forward_with_activations(image_batch)
 
 # Sum across all filters to get total activation
-activation_sum = np.sum(relu_out, axis=0)
-# Shape: (26, 26) - heatmap
+relu_out = relu_out.cpu().squeeze(0)  # (8, 26, 26)
+activation_sum = torch.sum(relu_out, dim=0).numpy()  # (26, 26)
+image_np = image.squeeze().numpy()  # (28, 28)
+
+print(f"Digit: {label}")
+print(f"Heatmap shape: {activation_sum.shape}")  # (26, 26)
+
+# Resize heatmap to match original image size (28x28)
+activation_resized = zoom(activation_sum, 28/26, order=1)
 \`\`\`
 
-### How to visualize:
+### Visualize the heatmap:
+
 \`\`\`python
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+fig.suptitle(f'Activation Heatmap for Digit {label}', fontsize=16, fontweight='bold')
 
 # 1. Original image
-axes[0].imshow(image[0], cmap='gray')
-axes[0].set_title('Original Image')
+axes[0].imshow(image_np, cmap='gray')
+axes[0].set_title('Original Image', fontsize=14, fontweight='bold')
 axes[0].axis('off')
 
 # 2. Heatmap alone
-im = axes[1].imshow(activation_sum, cmap='hot', interpolation='bilinear')
-axes[1].set_title('Activation Heatmap')
+im = axes[1].imshow(activation_resized, cmap='hot', interpolation='bilinear')
+axes[1].set_title('Activation Heatmap', fontsize=14, fontweight='bold')
 axes[1].axis('off')
-plt.colorbar(im, ax=axes[1])
+plt.colorbar(im, ax=axes[1], fraction=0.046)
 
 # 3. Overlay on original
-axes[2].imshow(image[0], cmap='gray', alpha=0.6)
-axes[2].imshow(activation_sum, cmap='hot', alpha=0.4, interpolation='bilinear')
-axes[2].set_title('Overlay')
+axes[2].imshow(image_np, cmap='gray', alpha=0.6)
+axes[2].imshow(activation_resized, cmap='hot', alpha=0.4, interpolation='bilinear')
+axes[2].set_title('Overlay', fontsize=14, fontweight='bold')
 axes[2].axis('off')
 
-plt.suptitle(f'Attention Map for Digit {label}')
 plt.tight_layout()
-plt.savefig(f'heatmap_digit_{label}.png')
+plt.savefig(f'heatmap_digit_{label}.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+print(f"✓ Saved as 'heatmap_digit_{label}.png'")
 \`\`\`
 
 **What to look for**:
@@ -362,45 +551,61 @@ activation_resized = zoom(activation_sum, 28/26, order=1)
 
 **Why useful**: Sanity check that training worked properly
 
-### How to analyze:
+### Analyze weight statistics:
+
 \`\`\`python
 # Extract all weights
-conv_weights = cnn.conv_kernel.flatten()
-fc_weights = cnn.fc_weights.flatten()
+conv_weights = model.conv1.weight.data.cpu().numpy().flatten()
+fc1_weights = model.fc1.weight.data.cpu().numpy().flatten()
+fc2_weights = model.fc2.weight.data.cpu().numpy().flatten()
 
+print("=== Weight Statistics ===")
 print(f"Conv weights - mean: {conv_weights.mean():.4f}, std: {conv_weights.std():.4f}")
-print(f"FC weights - mean: {fc_weights.mean():.4f}, std: {fc_weights.std():.4f}")
-
-# Example healthy output:
-# Conv weights - mean: 0.0021, std: 0.0456
-# FC weights - mean: -0.0003, std: 0.0298
+print(f"             - min: {conv_weights.min():.4f}, max: {conv_weights.max():.4f}")
+print(f"\\nFC1 weights  - mean: {fc1_weights.mean():.4f}, std: {fc1_weights.std():.4f}")
+print(f"             - min: {fc1_weights.min():.4f}, max: {fc1_weights.max():.4f}")
+print(f"\\nFC2 weights  - mean: {fc2_weights.mean():.4f}, std: {fc2_weights.std():.4f}")
+print(f"             - min: {fc2_weights.min():.4f}, max: {fc2_weights.max():.4f}")
 \`\`\`
 
-### How to visualize:
+### Visualize weight distributions:
+
 \`\`\`python
-fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+fig, axes = plt.subplots(1, 3, figsize=(16, 4))
+fig.suptitle('Weight Distributions After Training', fontsize=16, fontweight='bold')
 
 # Conv weights histogram
 axes[0].hist(conv_weights, bins=50, color='steelblue', alpha=0.7, edgecolor='black')
-axes[0].set_title('Convolutional Weights')
-axes[0].set_xlabel('Weight Value')
-axes[0].set_ylabel('Frequency')
+axes[0].set_title('Conv1 Weights', fontsize=14, fontweight='bold')
+axes[0].set_xlabel('Weight Value', fontsize=12)
+axes[0].set_ylabel('Frequency', fontsize=12)
 axes[0].axvline(0, color='red', linestyle='--', linewidth=2, label='Zero')
-axes[0].legend()
+axes[0].legend(fontsize=12)
 axes[0].grid(alpha=0.3)
 
-# FC weights histogram
-axes[1].hist(fc_weights, bins=50, color='coral', alpha=0.7, edgecolor='black')
-axes[1].set_title('Fully Connected Weights')
-axes[1].set_xlabel('Weight Value')
-axes[1].set_ylabel('Frequency')
+# FC1 weights histogram
+axes[1].hist(fc1_weights, bins=50, color='coral', alpha=0.7, edgecolor='black')
+axes[1].set_title('FC1 Weights', fontsize=14, fontweight='bold')
+axes[1].set_xlabel('Weight Value', fontsize=12)
+axes[1].set_ylabel('Frequency', fontsize=12)
 axes[1].axvline(0, color='red', linestyle='--', linewidth=2, label='Zero')
-axes[1].legend()
+axes[1].legend(fontsize=12)
 axes[1].grid(alpha=0.3)
 
-plt.suptitle('Weight Distributions After Training')
+# FC2 weights histogram
+axes[2].hist(fc2_weights, bins=50, color='mediumseagreen', alpha=0.7, edgecolor='black')
+axes[2].set_title('FC2 Weights', fontsize=14, fontweight='bold')
+axes[2].set_xlabel('Weight Value', fontsize=12)
+axes[2].set_ylabel('Frequency', fontsize=12)
+axes[2].axvline(0, color='red', linestyle='--', linewidth=2, label='Zero')
+axes[2].legend(fontsize=12)
+axes[2].grid(alpha=0.3)
+
 plt.tight_layout()
-plt.savefig('weight_distributions.png')
+plt.savefig('weight_distributions.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+print("✓ Saved as 'weight_distributions.png'")
 \`\`\`
 
 **What to look for**:
@@ -442,53 +647,97 @@ plt.savefig('weight_distributions.png')
 
 ---
 
-## Advanced: Saliency Maps (Optional)
+## Bonus: Saliency Maps (Optional)
 
-**What it shows**: Which input pixels most affect the output
+**What it shows**: Which input pixels most affect the output prediction
 
-**Requires**: Computing gradients of output w.r.t. input
+**Why useful**: Highlights the most important pixels for classification
 
-**Brief concept**:
+### Compute saliency using gradients:
+
 \`\`\`python
-# After forward pass with x as input, prediction = argmax(probs)
-# Compute dL/dx where L is loss for true label
-# Absolute value |dL/dx| shows pixel importance
+# Pick a sample
+sample_idx = 10
+image, label = test_dataset[sample_idx]
+image_input = image.unsqueeze(0).to(device)
+image_input.requires_grad = True  # Enable gradient computation
 
-saliency = np.abs(dL_dx[0])  # Shape: (28, 28)
-plt.imshow(saliency, cmap='hot')
+# Forward pass
+model.eval()
+output = model(image_input)
+pred = output.argmax(dim=1).item()
+
+print(f"True label: {label}, Predicted: {pred}")
+
+# Backward pass to compute gradients w.r.t. input
+model.zero_grad()
+output[0, pred].backward()  # Gradient of predicted class score
+
+# Get saliency map
+saliency = image_input.grad.data.abs().cpu().squeeze().numpy()
+
+# Visualize
+fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+fig.suptitle(f'Saliency Map - True: {label}, Pred: {pred}', fontsize=14, fontweight='bold')
+
+axes[0].imshow(image.squeeze(), cmap='gray')
+axes[0].set_title('Original')
+axes[0].axis('off')
+
+axes[1].imshow(saliency, cmap='hot')
+axes[1].set_title('Saliency Map')
+axes[1].axis('off')
+
+axes[2].imshow(image.squeeze(), cmap='gray', alpha=0.6)
+axes[2].imshow(saliency, cmap='hot', alpha=0.4)
+axes[2].set_title('Overlay')
+axes[2].axis('off')
+
+plt.tight_layout()
+plt.savefig('saliency_map.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+print("✓ Saved as 'saliency_map.png'")
 \`\`\`
-
-This requires implementing input gradients in your backprop, which you can add as an extension!
 
 ---
 
-## Key Takeaways
+## Summary and Key Takeaways
 
-1. **Filters learn feature detectors** - edges, corners, textures
-2. **Different filters activate for different digits** - specialization
-3. **CNNs focus on relevant regions** - not random
-4. **Healthy weight distributions** - centered around 0, modest std
-5. **Visualization helps debugging** - if heatmaps look random, something's wrong
+Congratulations! You've learned 5 essential techniques for visualizing CNNs:
+
+1. **Learned Filters** → See what low-level features the CNN detects (edges, corners, textures)
+2. **Feature Maps** → Understand how different filters activate for different inputs
+3. **Max-Activating Patches** → Discover what visual patterns each filter "looks for"
+4. **Activation Heatmaps** → Visualize where the CNN "pays attention"
+5. **Weight Distributions** → Sanity check that training worked properly
+
+### Key Insights:
+
+- ✅ **Filters learn meaningful features** - not random noise
+- ✅ **Different filters specialize** - some detect edges, others detect curves
+- ✅ **CNNs focus on relevant regions** - edges and key features, not background
+- ✅ **Healthy networks have centered weight distributions** - mean ≈ 0, modest std
+- ✅ **Visualization helps debugging** - if visualizations look random, something's wrong!
+
+### Suggested Next Steps:
+
+1. Compare visualizations before and after training - see how filters evolve
+2. Analyze both correct and incorrect predictions - what's different?
+3. Try different CNN architectures - how do deeper networks differ?
+4. Experiment with other datasets (CIFAR-10, Fashion-MNIST)
+5. Implement Grad-CAM for better localization
 
 ## References
 
-- CS231n Lecture 12: Visualizing and Understanding
-- Zeiler & Fergus (2014): "Visualizing and Understanding Convolutional Networks"
-- Distill.pub: "Feature Visualization"
+- **CS231n Lecture 12**: [Visualizing and Understanding](https://cs231n.github.io/understanding-cnn/)
+- **Zeiler & Fergus (2014)**: "Visualizing and Understanding Convolutional Networks"
+- **Distill.pub**: [Feature Visualization](https://distill.pub/2017/feature-visualization/)
+- **Grad-CAM Paper**: [Grad-CAM: Visual Explanations from Deep Networks](https://arxiv.org/abs/1610.02391)
 
 ---
 
-## Your Turn!
-
-Now implement these visualizations for your trained SimpleCNN:
-
-1. Start with learned filters (easiest)
-2. Add feature maps for 3 different digits
-3. Try creating activation heatmaps
-4. Check weight distributions
-5. (Advanced) Implement max-activating patches
-
-Good luck!
+**Now create your own Jupyter notebook and code along!** 🎨
 `;
         document.getElementById('content').innerHTML = marked.parse(markdown);
     </script>
