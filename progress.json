@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-20T17:15:01.112Z",
+  "lastUpdated": "2026-01-21T11:58:50.082Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -277,6 +277,7 @@
     "Module 7: CNNs from Scratch (20-25 hours)-6": true,
     "Module 7: CNNs from Scratch (20-25 hours)-7": true,
     "Module 7: CNNs from Scratch (20-25 hours)-9": true,
-    "Module 7: CNNs from Scratch (20-25 hours)-8": true
+    "Module 7: CNNs from Scratch (20-25 hours)-8": true,
+    "Module 7: CNNs from Scratch (20-25 hours)-10": true
   }
 }
