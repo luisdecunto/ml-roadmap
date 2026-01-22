@@ -97,11 +97,16 @@
                     <div class="flex-1">
                         <h3>Exercise 1.1: 2D Convolution by Hand</h3>
                         <div class="content-text">
-                            4×4 input, 3×3 kernel (edge detector):
+                            <strong>Given:</strong>
+                            <ul class="list-disc ml-6 my-2">
+                                <li>Input 4×4: [[1,2,3,0], [0,1,2,3], [3,0,1,2], [2,3,0,1]]</li>
+                                <li>Kernel 3×3 (edge detector): [[1,0,-1], [1,0,-1], [1,0,-1]]</li>
+                                <li>No padding, stride=1</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Compute convolution output (no padding, stride=1)</li>
-                                <li>What is output size? Formula: (n - k + 1)</li>
-                                <li>Calculate first output value</li>
+                                <li>What is output size? Use formula: (n - k + 1)</li>
+                                <li>Calculate first output value at position [0,0]</li>
                                 <li>Calculate all 4 output values</li>
                             </ol>
                         </div>
@@ -115,12 +120,16 @@
                     <div class="flex-1">
                         <h3>Exercise 1.2: Padding Effects</h3>
                         <div class="content-text">
-                            Same input and kernel:
+                            <strong>Given:</strong> Same input and kernel from Exercise 1.1
+                            <ul class="list-disc ml-6 my-2">
+                                <li>Input 4×4: [[1,2,3,0], [0,1,2,3], [3,0,1,2], [2,3,0,1]]</li>
+                                <li>Kernel 3×3: [[1,0,-1], [1,0,-1], [1,0,-1]]</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Add zero padding (pad=1) → new size?</li>
-                                <li>Compute output with padding</li>
-                                <li>What is output size now?</li>
-                                <li>Why use padding?</li>
+                                <li>Add zero padding (pad=1) → what is new padded input size?</li>
+                                <li>What is output size with padding? Use: (n + 2p - k + 1)</li>
+                                <li>Why use padding? (List benefits)</li>
                             </ol>
                         </div>
                     </div>
@@ -133,12 +142,17 @@
                     <div class="flex-1">
                         <h3>Exercise 1.3: Stride Effects</h3>
                         <div class="content-text">
-                            5×5 input, 3×3 kernel, stride=2:
+                            <strong>Given:</strong>
+                            <ul class="list-disc ml-6 my-2">
+                                <li>Input 5×5 (you can use any values)</li>
+                                <li>Kernel 3×3 (you can use any values)</li>
+                                <li>Stride=2, no padding</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Calculate output size: (n - k)/stride + 1</li>
-                                <li>Perform convolution</li>
-                                <li>Compare with stride=1</li>
-                                <li>Why use larger strides?</li>
+                                <li>Calculate output size using: ((n - k)/stride) + 1</li>
+                                <li>Compare with stride=1 output size</li>
+                                <li>Why use larger strides? (List benefits and trade-offs)</li>
                             </ol>
                         </div>
                     </div>
@@ -151,12 +165,18 @@
                     <div class="flex-1">
                         <h3>Exercise 1.4: Multiple Channels</h3>
                         <div class="content-text">
-                            Input: 3×3×2 (2 channels), Kernel: 3×3×2:
+                            <strong>Given:</strong>
+                            <ul class="list-disc ml-6 my-2">
+                                <li>Input: 3×3×2 (width×height×2 channels, you can use any values)</li>
+                                <li>Kernel: 3×3×2 (one 3×3 filter per input channel)</li>
+                                <li>No padding, stride=1</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Convolve each channel with corresponding kernel</li>
-                                <li>Sum results across channels</li>
-                                <li>Output is single value</li>
-                                <li>How many multiplications?</li>
+                                <li>Convolve each input channel with its corresponding kernel slice</li>
+                                <li>Sum the results across all channels to get a single output value</li>
+                                <li>What is the output size?</li>
+                                <li>How many multiplications per output value? (k × k × C)</li>
                             </ol>
                         </div>
                     </div>
@@ -171,12 +191,17 @@
                     <div class="flex-1">
                         <h3>Exercise 2.1: Max Pooling</h3>
                         <div class="content-text">
-                            4×4 input, 2×2 max pooling, stride=2:
+                            <strong>Given:</strong>
+                            <ul class="list-disc ml-6 my-2">
+                                <li>Input 4×4: [[1,3,2,4], [5,6,7,8], [9,2,3,1], [4,5,6,7]]</li>
+                                <li>2×2 max pooling, stride=2</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Divide into 2×2 regions</li>
+                                <li>Divide into four 2×2 regions</li>
                                 <li>Take max of each region</li>
-                                <li>Output size?</li>
-                                <li>Why max pooling?</li>
+                                <li>What is the output size? Use: (n / pool_size)</li>
+                                <li>Why use max pooling? (List benefits)</li>
                             </ol>
                         </div>
                     </div>
@@ -189,11 +214,16 @@
                     <div class="flex-1">
                         <h3>Exercise 2.2: Average Pooling</h3>
                         <div class="content-text">
-                            Same input, 2×2 average pooling:
+                            <strong>Given:</strong> Same input from Exercise 2.1
+                            <ul class="list-disc ml-6 my-2">
+                                <li>Input 4×4: [[1,3,2,4], [5,6,7,8], [9,2,3,1], [4,5,6,7]]</li>
+                                <li>2×2 average pooling, stride=2</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Apply average pooling</li>
-                                <li>Compare with max pooling</li>
-                                <li>When to use average vs max?</li>
+                                <li>Apply average pooling (compute mean of each 2×2 region)</li>
+                                <li>Compare results with max pooling from Exercise 2.1</li>
+                                <li>When to use average vs max pooling?</li>
                             </ol>
                         </div>
                     </div>
@@ -206,12 +236,16 @@
                     <div class="flex-1">
                         <h3>Exercise 2.3: Global Average Pooling</h3>
                         <div class="content-text">
-                            Input 4×4×3 (3 channels):
+                            <strong>Given:</strong>
+                            <ul class="list-disc ml-6 my-2">
+                                <li>Input 4×4×3 (width×height×3 channels, you can use any values)</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Compute mean of each channel → 3 values</li>
-                                <li>Output shape: (3,)</li>
-                                <li>Use case: replace FC at end</li>
-                                <li>Benefit: no parameters</li>
+                                <li>Compute mean of each channel across all spatial positions → 3 scalar values</li>
+                                <li>What is the output shape?</li>
+                                <li>What is a common use case? (Hint: replacing FC layers)</li>
+                                <li>What is the main benefit? (Hint: parameters)</li>
                             </ol>
                         </div>
                     </div>
@@ -244,11 +278,16 @@
                     <div class="flex-1">
                         <h3>Exercise 3.2: Conv + ReLU + Pool</h3>
                         <div class="content-text">
-                            Input: 8×8×1, 2 layers:
+                            <strong>Given:</strong> Input 8×8×1
+                            <ul class="list-disc ml-6 my-2">
+                                <li><strong>Layer 1:</strong> Conv 3×3, 4 filters, stride=1, pad=1 → ReLU → MaxPool 2×2</li>
+                                <li><strong>Layer 2:</strong> Conv 3×3, 8 filters, stride=1, pad=1 → ReLU → MaxPool 2×2</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>After Layer 1 Conv, Pool: size?</li>
-                                <li>After Layer 2 Conv, Pool: size?</li>
-                                <li>Total parameters?</li>
+                                <li>What shape after Layer 1 Conv? After Pool?</li>
+                                <li>What shape after Layer 2 Conv? After Pool?</li>
+                                <li>Total parameters in both conv layers? (weights + biases)</li>
                             </ol>
                         </div>
                     </div>
@@ -355,12 +394,19 @@
                     <div class="flex-1">
                         <h3>Exercise 5.1: BatchNorm Forward</h3>
                         <div class="content-text">
-                            Batch of 4 samples, 3 features each:
+                            <strong>Given:</strong> Batch of 4 samples, 3 features each
+                            <ul class="list-disc ml-6 my-2">
+                                <li>X = [[1,2,3], [4,5,6], [7,8,9], [10,11,12]]</li>
+                                <li>γ (gamma) = 1, β (beta) = 0</li>
+                                <li>ε (epsilon) = 1e-8</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Compute mean μ per feature</li>
-                                <li>Compute variance σ²</li>
-                                <li>Normalize: (X - μ) / √(σ² + ε)</li>
-                                <li>Scale and shift: γ·X_norm + β</li>
+                                <li>Compute mean μ per feature (column-wise)</li>
+                                <li>Compute variance σ² per feature</li>
+                                <li>Normalize: X_norm = (X - μ) / √(σ² + ε)</li>
+                                <li>Scale and shift: Y = γ·X_norm + β (in this case Y = X_norm)</li>
+                                <li>Verify: output should have mean≈0, variance≈1 per feature</li>
                             </ol>
                         </div>
                     </div>
@@ -447,12 +493,18 @@
                     <div class="flex-1">
                         <h3>Exercise 6.3: ResNet Skip Connection</h3>
                         <div class="content-text">
-                            Residual block: F(x) + x:
+                            <strong>Given:</strong> Residual block with skip connection
+                            <ul class="list-disc ml-6 my-2">
+                                <li>Input: 16×16×64</li>
+                                <li>Output: 16×16×64 (same dimensions)</li>
+                                <li>Formula: output = F(x) + x</li>
+                            </ul>
+                            <strong>Tasks:</strong>
                             <ol class="list-decimal ml-6 my-2">
-                                <li>Implement: x → Conv → BN → ReLU → Conv → BN</li>
-                                <li>Add input: out = F(x) + x</li>
-                                <li>Apply ReLU</li>
-                                <li>Why does skip connection help?</li>
+                                <li>Design the block: x → Conv 3×3, 64 → BN → ReLU → Conv 3×3, 64 → BN</li>
+                                <li>Add skip connection: out = F(x) + x (element-wise addition)</li>
+                                <li>Apply final ReLU</li>
+                                <li>Why does skip connection help gradient flow during training?</li>
                             </ol>
                         </div>
                     </div>
