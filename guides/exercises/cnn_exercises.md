@@ -114,6 +114,9 @@ Layer 2: Conv 3×3, 8 filters, stride=1, pad=1 → ReLU → MaxPool 2×2
 5. Total parameters?
 
 ### Exercise 3.3: Receptive Field
+
+> **📚 Background**: Review the [Receptive Field section](../cnn_guide.html#receptive-fields) in the CNN Guide if you need a refresher on the concept and calculation formula.
+
 3-layer CNN: Conv 3×3 → Conv 3×3 → Conv 3×3
 
 1. First layer receptive field: 3×3

@@ -513,6 +513,135 @@ Expected: All 3 tests pass.
 
 ---
 
+## Understanding Receptive Fields {#receptive-fields}
+
+### What is a Receptive Field?
+
+The **receptive field** of a neuron in layer L is the region of the input image that can affect that neuron's activation.
+
+**Example**:
+- First conv layer (3×3 kernel): Each output neuron "sees" a 3×3 region of input
+- Second conv layer (3×3 kernel): Each output neuron sees a 5×5 region of original input
+- Why? The second layer combines 3×3 regions that each already "saw" 3×3 regions
+
+**Visual Intuition:**
+```
+Input (7×7)          Layer 1 (5×5)       Layer 2 (3×3)
+[ ][ ][ ][ ][ ][ ][ ]
+[ ][X][X][X][ ][ ][ ]   [ ][ ][ ][ ][ ]
+[ ][X][X][X][ ][ ][ ]   [ ][Y][Y][Y][ ]   [ ][ ][ ]
+[ ][X][X][X][ ][ ][ ]   [ ][Y][Y][Y][ ]   [ ][Z][ ]
+[ ][ ][ ][ ][ ][ ][ ]   [ ][Y][Y][Y][ ]   [ ][ ][ ]
+[ ][ ][ ][ ][ ][ ][ ]   [ ][ ][ ][ ][ ]
+[ ][ ][ ][ ][ ][ ][ ]
+
+X = Layer 1 neuron sees 3×3 input region
+Y = Layer 2 neuron sees 3×3 of Layer 1
+Z = Layer 2 neuron effectively sees 5×5 of original input
+```
+
+### Calculation Formula
+
+For a stack of convolution layers with kernel sizes k₁, k₂, ..., kₙ and all stride=1:
+
+**Receptive Field = 1 + (k₁ - 1) + (k₂ - 1) + ... + (kₙ - 1)**
+
+Or more compactly: **RF = 1 + Σ(kᵢ - 1)**
+
+With stride > 1, the formula becomes:
+**RF = 1 + Σ[(kᵢ - 1) × ∏(sⱼ for j < i)]**
+
+where sⱼ is the stride of layer j.
+
+### Worked Example
+
+**Network**: Conv(3×3, stride=1) → Conv(3×3, stride=1) → Conv(3×3, stride=1)
+
+**Layer 1**: RF = 3 (directly sees 3×3 input region)
+
+**Layer 2**:
+- Each neuron sees 3×3 region of Layer 1 output
+- Each Layer 1 pixel saw 3×3 of input
+- Total: 3 + (3-1) = 5×5 of original input
+
+**Layer 3**:
+- Each neuron sees 3×3 region of Layer 2 output
+- Each Layer 2 pixel saw 5×5 of input
+- Total: 5 + (3-1) = 7×7 of original input
+
+**Using formula**: RF = 1 + (3-1) + (3-1) + (3-1) = 1 + 2 + 2 + 2 = 7 ✓
+
+### Effect of Pooling
+
+Max pooling with stride > 1 **accelerates** receptive field growth:
+
+**Without pooling**: Conv(3×3) → Conv(3×3) → RF = 5×5
+```
+Layer 1: RF = 3
+Layer 2: RF = 3 + (3-1) = 5
+```
+
+**With pooling**: Conv(3×3) → MaxPool(2×2, stride=2) → Conv(3×3) → RF = 8×8
+```
+Layer 1: RF = 3
+After pool: stride=2 multiplier takes effect
+Layer 2: RF = 3 + (3-1)×2 = 3 + 4 = 7
+```
+
+**Why?** Stride=2 means each position in the next layer corresponds to 2 pixels in the previous layer, so kernel coverage expands faster.
+
+**General rule**: Pooling with stride s multiplies subsequent kernel contributions by s.
+
+### Why It Matters
+
+**Architecture Design**:
+- Small receptive fields → network can't capture large patterns
+- Need sufficient depth for receptive field to cover important features
+- Example: Facial recognition needs RF large enough to see entire faces (64×64+)
+- Rule of thumb: Final RF should be at least 1/4 of input size for classification
+
+**Debugging**:
+- If model doesn't learn large patterns, check if final RF is too small
+- If RF > input size, you're wasting computation (deeper layers are redundant)
+- Use receptive field to decide network depth for your task
+
+**Practical Example**:
+```python
+def calculate_receptive_field(layers):
+    """
+    Calculate receptive field for a sequence of conv/pool layers.
+    layers: list of (kernel_size, stride) tuples
+    """
+    rf = 1
+    stride_product = 1
+
+    for kernel_size, stride in layers:
+        rf += (kernel_size - 1) * stride_product
+        stride_product *= stride
+
+    return rf
+
+# Example: Simple CNN
+layers = [
+    (3, 1),  # Conv 3×3, stride=1
+    (2, 2),  # MaxPool 2×2, stride=2
+    (3, 1),  # Conv 3×3, stride=1
+    (2, 2),  # MaxPool 2×2, stride=2
+    (3, 1),  # Conv 3×3, stride=1
+]
+
+rf = calculate_receptive_field(layers)
+print(f"Receptive field: {rf}×{rf}")  # Output: 19×19
+```
+
+### Visualization
+
+Want to see receptive fields in action? Check out the [CNN Visualization Guide](cnn_visualization.html) for interactive examples showing which input pixels affect each output neuron.
+
+**Key Takeaway**: Receptive field determines how much "context" each neuron can see. Deeper layers see larger regions, enabling hierarchical feature learning: edges → textures → parts → objects.
+
+---
+
 ## Part 4: Backpropagation
 
 ### Theory
