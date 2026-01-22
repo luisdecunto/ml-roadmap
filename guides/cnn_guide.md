@@ -1379,18 +1379,19 @@ Final challenge: Build a better CNN and reach >98% accuracy!
 
 1. **Deeper Architecture**
 ```python
-# 2 conv layers instead of 1
-Conv(1->16, 3x3) -> ReLU -> Pool(2x2)
-Conv(16->32, 3x3) -> ReLU
-FC(3872->128) -> ReLU
+# 2 conv layers with padding + 2 pooling layers
+Conv(1->16, 3x3, pad=1) -> ReLU -> Pool(2x2)
+Conv(16->32, 3x3, pad=1) -> ReLU -> Pool(2x2)
+FC(1568->128) -> ReLU
 FC(128->10) -> Softmax
 
 # Shape progression:
-# Input:  28×28×1
-# Conv1:  26×26×16  (28-3+1)
-# Pool1:  13×13×16  (26/2)
-# Conv2:  11×11×32  (13-3+1)
-# Flatten: 11×11×32 = 3872
+# Input:   28×28×1
+# Conv1:   28×28×16  (28-3+2*1+1 = 28)
+# Pool1:   14×14×16  (28/2 = 14)
+# Conv2:   14×14×32  (14-3+2*1+1 = 14)
+# Pool2:   7×7×32    (14/2 = 7)
+# Flatten: 7×7×32 = 1568 ✓
 ```
 
 2. **Better Initialization**
@@ -1440,10 +1441,11 @@ from sklearn.model_selection import train_test_split
 class ImprovedCNN:
     def __init__(self):
         # TODO: Implement deeper architecture
-        # Conv1: 1 -> 16 filters, 3×3
+        # Conv1: 1 -> 16 filters, 3×3, pad=1
         # Pool1: 2×2
-        # Conv2: 16 -> 32 filters, 3×3
-        # FC1: 3872 -> 128  (11×11×32 = 3872)
+        # Conv2: 16 -> 32 filters, 3×3, pad=1
+        # Pool2: 2×2
+        # FC1: 1568 -> 128  (7×7×32 = 1568)
         # FC2: 128 -> 10
         pass
 
