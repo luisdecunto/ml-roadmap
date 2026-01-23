@@ -67,3 +67,7 @@ logs/
 # Personal notes
 notes/
 scratch/
+
+# Claude temp files
+tmpclaude-*
+.claude/
