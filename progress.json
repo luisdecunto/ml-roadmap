@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-26T18:06:55.965Z",
+  "lastUpdated": "2026-02-01T12:17:13.797Z",
   "exerciseCompletions": {
     "linear-algebra-1.1": true,
     "linear-algebra-1.2": true,
@@ -298,6 +298,7 @@
     "Module 7.5: CNN Applications with PyTorch (15-20 hours)-2": true,
     "Module 7.5: CNN Applications with PyTorch (15-20 hours)-1": true,
     "Module 7.5: CNN Applications with PyTorch (15-20 hours)-0": true,
-    "Module 7.5: CNN Applications with PyTorch (15-20 hours)-5": true
+    "Module 7.5: CNN Applications with PyTorch (15-20 hours)-5": true,
+    "Module 7.5: CNN Applications with PyTorch (15-20 hours)-3": true
   }
 }
