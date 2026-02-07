@@ -173,7 +173,35 @@
 
 ---
 
-## Module 8: Advanced Architectures
+## Module 8: Reinforcement Learning Fundamentals
+
+**Time:** 20-25 hours
+
+### Tasks
+- [ ] Read Sutton & Barto Ch 1-4 (Intro, Multi-armed Bandits, MDPs, Dynamic Programming)
+- [ ] Watch David Silver's RL Course Lectures 1-3
+- [ ] Study Markov Decision Processes (MDPs) - states, actions, rewards, transitions
+- [ ] Understand Bellman equations (value functions, Q-functions)
+- [ ] Implement tabular Q-Learning for FrozenLake (OpenAI Gym)
+- [ ] Study temporal difference (TD) learning
+- [ ] Read DQN paper (Playing Atari with Deep RL)
+- [ ] Implement DQN from scratch for CartPole
+- [ ] Study policy gradient methods (REINFORCE algorithm)
+- [ ] Learn Actor-Critic methods (A2C/A3C)
+- [ ] Implement PPO or A3C for LunarLander
+- [ ] Train agent to play Atari Pong (use CleanRL implementation)
+- [ ] Compare Q-Learning vs DQN vs Policy Gradients
+
+**Resources:**
+- [Sutton & Barto: Reinforcement Learning (Free PDF)](http://incompleteideas.net/book/the-book.html)
+- [David Silver's RL Course (UCL)](https://www.davidsilver.uk/teaching/)
+- [Spinning Up in Deep RL (OpenAI)](https://spinningup.openai.com/)
+- [CleanRL: Readable RL Implementations](https://github.com/vwxyzjn/cleanrl)
+- [Deep RL Course (Hugging Face)](https://huggingface.co/learn/deep-rl-course/unit0/introduction)
+
+---
+
+## Module 9: Advanced Architectures
 
 **Time:** 15-20 hours
 
@@ -195,7 +223,7 @@
 
 ---
 
-## Module 9: Attention Mechanisms
+## Module 10: Attention Mechanisms
 
 **Time:** 20-25 hours
 
@@ -218,7 +246,7 @@
 
 ---
 
-## Module 10: Transformer Architecture
+## Module 11: Transformer Architecture
 
 **Time:** 20-25 hours
 
@@ -240,7 +268,7 @@
 
 ---
 
-## Module 11: LLM Mathematics
+## Module 12: LLM Mathematics
 
 **Time:** 25-30 hours
 
@@ -262,7 +290,7 @@
 
 ---
 
-## Module 12: Optimization Deep Dive
+## Module 13: Optimization Deep Dive
 
 **Time:** 15-20 hours
 
@@ -284,7 +312,7 @@
 
 ---
 
-## Module 13: Regularization & Generalization
+## Module 14: Regularization & Generalization
 
 **Time:** 15-20 hours
 
@@ -306,7 +334,7 @@
 
 ---
 
-## Module 14: Modern Architectures
+## Module 15: Modern Architectures
 
 **Time:** 20-25 hours
 
@@ -381,15 +409,16 @@
 - Work on Module 6 (Feedforward Networks from Scratch)
 
 **Weeks 9-12 (Transformers + LLMs):**
-- Work on Modules 9-11 (Attention, Transformers, LLMs)
+- Work on Modules 10-12 (Attention, Transformers, LLMs)
 - This directly complements your main roadmap work
 
 **Weeks 13-16 (K8s + Jobs):**
 - Work on Modules 4-5 (Probability, Info Theory)
-- Work on Modules 12-13 (Optimization, Regularization)
+- Work on Module 8 (Reinforcement Learning)
+- Work on Modules 13-14 (Optimization, Regularization)
 
 **After Week 16:**
-- Complete Module 14 (Modern Architectures)
+- Complete Module 15 (Modern Architectures)
 - Work on Projects 1-2 as time allows
 
 ---
@@ -435,11 +464,12 @@ Use checkboxes above to track your progress. Aim for:
 
 When you interview for ML Engineer positions, you'll be able to:
 
-✅ "I implemented backpropagation from first principles in NumPy"  
-✅ "I built a transformer architecture from scratch and understand the math"  
-✅ "I can derive the gradient equations for Adam optimizer"  
-✅ "I understand attention mechanisms mathematically, not just `nn.MultiheadAttention`"  
+✅ "I implemented backpropagation from first principles in NumPy"
+✅ "I built a transformer architecture from scratch and understand the math"
+✅ "I can derive the gradient equations for Adam optimizer"
+✅ "I understand attention mechanisms mathematically, not just `nn.MultiheadAttention`"
 ✅ "I implemented CNNs in pure NumPy to understand convolution backprop"
+✅ "I trained RL agents from scratch - Q-Learning, DQN, and policy gradients"
 
 **This is what separates senior ML Engineers from bootcamp graduates.** 🚀
 

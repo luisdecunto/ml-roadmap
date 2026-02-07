@@ -27,28 +27,29 @@ This document lists all available guides and guides that need to be created.
 10. **[Optimization Algorithms](guides/optimization_coding_guide.html)** - GD, SGD, Momentum, RMSprop, Adam (6-8 hrs)
 11. **[Neural Networks from Scratch](guides/neural_networks_guide.html)** - Neurons, backprop, MNIST (12-16 hrs)
 12. **[CNNs from Scratch](guides/cnn_guide.html)** - Convolution, pooling, complete CNN (15-20 hrs)
-13. **[Transformers from Scratch](guides/transformer_guide.html)** - Attention, multi-head, encoder/decoder (20-25 hrs)
-14. **[Probability & Information Theory](guides/probability_guide.html)** - Distributions, entropy, KL divergence (6-8 hrs)
+13. **[Reinforcement Learning Fundamentals](guides/reinforcement_learning_guide.html)** - Q-Learning, DQN, Policy Gradients, Actor-Critic (20-25 hrs)
+14. **[Transformers from Scratch](guides/transformer_guide.html)** - Attention, multi-head, encoder/decoder (20-25 hrs)
+15. **[Probability & Information Theory](guides/probability_guide.html)** - Distributions, entropy, KL divergence (6-8 hrs)
 
 ### Advanced Deep Learning Guides
-15. **[LLM Mathematics](guides/llm_mathematics_guide.html)** - Micrograd, Bigram, GPT, Sampling strategies (25-30 hrs)
-16. **[Optimization Deep Dive](guides/optimization_deep_dive_guide.html)** - LR schedules, warmup, loss landscapes, gradient clipping (15-20 hrs)
-17. **[Regularization & Generalization](guides/regularization_guide.html)** - L1/L2/Elastic Net, data augmentation, bias-variance (15-20 hrs)
-18. **[Modern Architectures](guides/modern_architectures_guide.html)** - ViT, VAE, GAN, Diffusion Models (20-25 hrs)
+16. **[LLM Mathematics](guides/llm_mathematics_guide.html)** - Micrograd, Bigram, GPT, Sampling strategies (25-30 hrs)
+17. **[Optimization Deep Dive](guides/optimization_deep_dive_guide.html)** - LR schedules, warmup, loss landscapes, gradient clipping (15-20 hrs)
+18. **[Regularization & Generalization](guides/regularization_guide.html)** - L1/L2/Elastic Net, data augmentation, bias-variance (15-20 hrs)
+19. **[Modern Architectures](guides/modern_architectures_guide.html)** - ViT, VAE, GAN, Diffusion Models (20-25 hrs)
 
 ### Capstone Project Guides
-19. **[Build Your Own Deep Learning Framework](guides/deep_learning_framework_guide.html)** - Complete autograd engine, layers, optimizers, DataLoader (40-50 hrs)
-20. **[Implement Classic Papers](guides/classic_papers_guide.html)** - LeNet, AlexNet, ResNet, U-Net, Seq2Seq, BERT, GPT-2, GAN, VAE (50-60 hrs)
+20. **[Build Your Own Deep Learning Framework](guides/deep_learning_framework_guide.html)** - Complete autograd engine, layers, optimizers, DataLoader (40-50 hrs)
+21. **[Implement Classic Papers](guides/classic_papers_guide.html)** - LeNet, AlexNet, ResNet, U-Net, Seq2Seq, BERT, GPT-2, GAN, VAE (50-60 hrs)
 
 ### Exercise Sets (with Solutions)
-21. **[Linear Algebra Exercises](guides/exercises/linear_algebra_exercises.html)** - 22 exercises (3-4 hrs)
-22. **[Calculus & Gradients Exercises](guides/exercises/calculus_gradients_exercises.html)** - 23 exercises (3-4 hrs)
-23. **[Optimization Exercises](guides/exercises/optimization_exercises.html)** - 20 exercises (2-3 hrs)
-24. **[Probability & Statistics Exercises](guides/exercises/probability_statistics_exercises.html)** - 19 exercises (3-4 hrs)
-25. **[Information Theory Exercises](guides/exercises/information_theory_exercises.html)** - 18 exercises (2-3 hrs)
-26. **[Neural Networks Exercises](guides/exercises/neural_networks_exercises.html)** - 22 exercises (4-5 hrs)
-27. **[CNN Exercises](guides/exercises/cnn_exercises.html)** - 22 exercises (4-5 hrs)
-28. **[Transformer Exercises](guides/exercises/transformer_exercises.html)** - 22 exercises (4-5 hrs)
+22. **[Linear Algebra Exercises](guides/exercises/linear_algebra_exercises.html)** - 22 exercises (3-4 hrs)
+23. **[Calculus & Gradients Exercises](guides/exercises/calculus_gradients_exercises.html)** - 23 exercises (3-4 hrs)
+24. **[Optimization Exercises](guides/exercises/optimization_exercises.html)** - 20 exercises (2-3 hrs)
+25. **[Probability & Statistics Exercises](guides/exercises/probability_statistics_exercises.html)** - 19 exercises (3-4 hrs)
+26. **[Information Theory Exercises](guides/exercises/information_theory_exercises.html)** - 18 exercises (2-3 hrs)
+27. **[Neural Networks Exercises](guides/exercises/neural_networks_exercises.html)** - 22 exercises (4-5 hrs)
+28. **[CNN Exercises](guides/exercises/cnn_exercises.html)** - 22 exercises (4-5 hrs)
+29. **[Transformer Exercises](guides/exercises/transformer_exercises.html)** - 22 exercises (4-5 hrs)
 
 ---
 
@@ -169,14 +170,14 @@ When creating a new guide:
 
 **Coding Guides:** 15 complete (Linear Algebra, Matrix Calculus, Optimization, Neural Networks, CNNs, Transformers, Probability, LLM Math, Optimization Deep Dive, Regularization, Modern Architectures)
 **Capstone Guides:** 2 complete (Deep Learning Framework, Classic Papers)
-**SQL Practice Guides:** 3 complete (CTEs, Window Functions, Query Optimization) **NEW!**
+**SQL Practice Guides:** 3 complete (CTEs, Window Functions, Query Optimization)
 **Exercise Sets:** 8 complete (all with solutions)
 **Setup Guides:** 3 complete
 
 **Total Complete:** 31 guides
-**Still TODO:** 0 guides
+**Still TODO:** 1 guide (Reinforcement Learning Fundamentals)
 
-**Coverage:** ✅ 100% COMPLETE - All modules, SQL practice, and capstone projects covered!
+**Coverage:** 🔄 31/32 guides complete - RL guide needed!
 
 ---
 
