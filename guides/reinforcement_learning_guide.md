@@ -1057,7 +1057,7 @@ python cleanrl/dqn_atari.py --env-id PongNoFrameskip-v4
 ## Resources
 
 ### Books
-- [Sutton & Barto: Reinforcement Learning](http://incompleteideas.net/book/the-book.html) - The RL bible
+- [Sutton & Barto: Reinforcement Learning (Free PDF)](http://incompleteideas.net/book/RLbook2020.pdf) - The RL bible
 - [Spinning Up in Deep RL (OpenAI)](https://spinningup.openai.com/) - Practical guide
 
 ### Courses

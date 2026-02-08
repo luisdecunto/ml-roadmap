@@ -193,7 +193,7 @@
 - [ ] Compare Q-Learning vs DQN vs Policy Gradients
 
 **Resources:**
-- [Sutton & Barto: Reinforcement Learning (Free PDF)](http://incompleteideas.net/book/the-book.html)
+- [Sutton & Barto: Reinforcement Learning (Free PDF)](http://incompleteideas.net/book/RLbook2020.pdf)
 - [David Silver's RL Course (UCL)](https://www.davidsilver.uk/teaching/)
 - [Spinning Up in Deep RL (OpenAI)](https://spinningup.openai.com/)
 - [CleanRL: Readable RL Implementations](https://github.com/vwxyzjn/cleanrl)
