@@ -183,13 +183,15 @@
 - [ ] Study Markov Decision Processes (MDPs) - states, actions, rewards, transitions
 - [ ] Understand Bellman equations (value functions, Q-functions)
 - [ ] Implement tabular Q-Learning for FrozenLake (OpenAI Gym)
+- [ ] Fun Project: Build a Maze Solver with Q-Learning (visualize agent learning)
 - [ ] Study temporal difference (TD) learning
 - [ ] Read DQN paper (Playing Atari with Deep RL)
 - [ ] Implement DQN from scratch for CartPole
+- [ ] Fun Project: Train DQN to play Snake (watch agent improve)
 - [ ] Study policy gradient methods (REINFORCE algorithm)
+- [ ] Fun Project: Build Flappy Bird clone with REINFORCE
 - [ ] Learn Actor-Critic methods (A2C/A3C)
-- [ ] Implement PPO or A3C for LunarLander
-- [ ] Train agent to play Atari Pong (use CleanRL implementation)
+- [ ] Fun Project: Build Tic-Tac-Toe AI with self-play (play against it!)
 - [ ] Compare Q-Learning vs DQN vs Policy Gradients
 
 **Resources:**

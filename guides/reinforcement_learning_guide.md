@@ -6,12 +6,12 @@
 
 ## What You'll Build
 
-Implement core RL algorithms from scratch:
-1. Tabular Q-Learning (FrozenLake environment)
-2. Deep Q-Network (DQN) for CartPole
-3. Policy Gradients (REINFORCE algorithm)
-4. Actor-Critic methods (A2C)
-5. **Final Project:** Train agent to play Atari Pong or solve LunarLander
+Implement core RL algorithms from scratch, with a fun project after each one:
+1. Tabular Q-Learning (FrozenLake) → **Fun Project: Maze Solver**
+2. Deep Q-Network (DQN) for CartPole → **Fun Project: Snake Game**
+3. Policy Gradients (REINFORCE) → **Fun Project: Flappy Bird Clone**
+4. Actor-Critic methods (A2C) → **Fun Project: Tic-Tac-Toe AI (Self-Play)**
+5. **Optional:** Train agent to play Atari Pong or solve LunarLander
 
 ---
 
@@ -284,6 +284,36 @@ python q_learning.py
 2. Adjust learning rate (0.01, 0.1, 0.5)
 3. Adjust discount factor (0.9, 0.95, 0.99)
 4. Change epsilon decay rate
+
+### Fun Project: Maze Solver
+
+Now apply Q-Learning to something visual! Build a maze solver where you watch the agent learn to navigate from start to goal.
+
+**Why this is fun:** You can literally see the agent go from random wandering to optimal pathfinding. The Q-value heatmap lights up as the agent learns, and policy arrows show the discovered strategy.
+
+**How it works:**
+- A maze is a grid (10x10) with walls, a start cell, and a goal cell
+- Each cell = one state, agent has 4 actions (Up/Down/Left/Right)
+- Rewards: -1 per step (encourages shortest path), +10 for goal, -1 for walls
+- Uses the exact same `QLearningAgent` class from above!
+- Train for ~1000 episodes, then visualize with matplotlib
+
+```
+Maze Grid                    After Training
++---+---+---+---+           +---+---+---+---+
+| S |   | # |   |           | → | → | # | ↓ |
++---+---+---+---+           +---+---+---+---+
+| # |   | # |   |    -->    | # | ↓ | # | ↓ |
++---+---+---+---+           +---+---+---+---+
+|   |   |   | G |           | → | → | → | G |
++---+---+---+---+           +---+---+---+---+
+```
+
+**Visualizations:** Animated agent navigation, Q-value heatmap, policy arrows, learning curve (steps-to-goal vs episode).
+
+**File:** `practice/math_foundations/module08_reinforcement_learning/05_maze_solver.py`
+
+**CPU time:** ~1 minute to train
 
 ---
 
@@ -578,6 +608,36 @@ python dqn.py
 4. Adjust replay buffer size
 5. Change target network update frequency
 
+### Fun Project: Snake Game
+
+Now apply DQN to a real game! Train a neural network to play Snake — watch it grow from random moves to strategic food-hunting.
+
+**Why this is fun:** Everyone knows Snake. Watching an AI learn to play it from zero is incredibly satisfying. The agent starts dying immediately, then slowly learns to chase food, and eventually develops smart strategies to avoid trapping itself.
+
+**How it works:**
+- Snake has too many board states for a Q-table — we need the DQN from above
+- State encoding: 11 binary features (danger straight/left/right, direction, food direction)
+- 3 relative actions: go straight, turn left, turn right
+- Rewards: +10 eat food, -10 die, small bonus for approaching food
+- Reuses the `DQNAgent`, `QNetwork`, and `ReplayBuffer` classes from above!
+
+```
+Snake State (11 features)          Action Selection
++-----------------------------+
+| danger_straight:  0 or 1    |    DQN Network
+| danger_left:      0 or 1    |    Input(11) → 256 → 256 → 3
+| danger_right:     0 or 1    |         ↓
+| direction:     4 one-hot    |    Q-values: [straight, left, right]
+| food_direction: 4 one-hot   |         ↓
++-----------------------------+    argmax → action
+```
+
+**Visualizations:** Grid rendering via `plt.imshow` (snake=green, food=red), score curve over episodes, demo mode to watch trained agent play.
+
+**File:** `practice/math_foundations/module08_reinforcement_learning/06_snake_dqn.py`
+
+**CPU time:** ~10-20 minutes to train
+
 ---
 
 ## Part 3: Policy Gradients (REINFORCE)
@@ -780,6 +840,40 @@ if __name__ == "__main__":
     agent = train_reinforce(n_episodes=1000)
 ```
 
+### Fun Project: Flappy Bird
+
+Now apply REINFORCE to a physics game! Build a Flappy Bird clone and train a policy network to fly through pipes.
+
+**Why this is fun:** The agent starts by flapping randomly and dying instantly. Over ~500-1000 episodes, it learns the precise timing needed to navigate through pipe gaps. Very satisfying to watch!
+
+**How it works:**
+- Simple physics: bird falls with gravity, flapping gives upward velocity
+- Pipes scroll from right to left with random gap positions
+- State: 4 continuous values (bird Y, velocity, pipe distance, gap Y position)
+- Binary action: flap (1) or don't flap (0)
+- Policy network outputs P(flap) — sample from Bernoulli distribution
+- Uses the same REINFORCE approach from above, adapted for binary action
+
+```
+Game Physics                    Policy Network
++------------------+
+|  ___             |           Input(4)
+| |bird|           |              ↓
+|  ---             |           Linear(4→64) + ReLU
+|                  |              ↓
+|   ||||    ||||   |           Linear(64→64) + ReLU
+|   |||| gap ||||  |              ↓
+|   ||||    ||||   |           Linear(64→1) + Sigmoid
+|                  |              ↓
++------------------+           P(flap) = 0.73
+```
+
+**Visualizations:** Animated game via matplotlib rectangles (bird, pipes, ground), score curve (frames survived per episode), demo of trained agent flying.
+
+**File:** `practice/math_foundations/module08_reinforcement_learning/07_flappy_bird.py`
+
+**CPU time:** ~15-30 minutes to train
+
 ---
 
 ## Part 4: Actor-Critic Methods
@@ -969,9 +1063,49 @@ if __name__ == "__main__":
     agent = train_a2c(n_episodes=500)
 ```
 
+### Fun Project: Tic-Tac-Toe AI (Self-Play)
+
+Now apply what you've learned to multi-agent RL! Train two agents against each other, then challenge the AI yourself.
+
+**Why this is fun:** You train the AI with self-play — no hand-crafted opponent needed — and then try to beat it. The agent discovers strategy (center control, corner play, blocking) purely from experience. You'll be surprised how hard it is to win!
+
+**How it works:**
+- Tic-Tac-Toe has ~5,000 reachable states — small enough for Q-tables (dictionaries)
+- State: board as tuple of 9 values (0=empty, 1=X, 2=O)
+- Two Q-learning agents alternate turns, learning simultaneously
+- Rewards: +1 win, -1 lose, +0.5 draw (draws show defensive skill)
+- After 50,000 games of self-play, play against it via terminal input!
+
+```
+Self-Play Training
+
+Agent X (Q-table)        Agent O (Q-table)
+     ↓                        ↓
+picks cell (ε-greedy)   picks cell (ε-greedy)
+     ↓                        ↓
++----+----+----+        +----+----+----+
+| X  |    |    |  -->   | X  |    | O  |
+|    |    |    |        |    |    |    |
++----+----+----+        +----+----+----+
+
+After training → Human vs AI:
+ 1 | X | 3
+---+---+---
+ 4 | O | 6
+---+---+---
+ 7 | 8 | 9
+Your move (1-9):
+```
+
+**Visualizations:** Win rate curves during training, opening move heatmap, interactive terminal play mode.
+
+**File:** `practice/math_foundations/module08_reinforcement_learning/08_tictactoe_selfplay.py`
+
+**CPU time:** ~2-5 minutes to train
+
 ---
 
-## Part 5: Advanced Projects
+## Part 5: Advanced Projects (Optional)
 
 ### Project 1: LunarLander
 
