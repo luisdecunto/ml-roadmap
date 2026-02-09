@@ -1060,9 +1060,10 @@ python cleanrl/dqn_atari.py --env-id PongNoFrameskip-v4
 - [Sutton & Barto: Reinforcement Learning (Free PDF)](http://incompleteideas.net/book/RLbook2020.pdf) - The RL bible
 - [Spinning Up in Deep RL (OpenAI)](https://spinningup.openai.com/) - Practical guide
 
-### Courses
+### Courses & Tutorials
 - [David Silver's RL Course](https://www.davidsilver.uk/teaching/) - Foundational lectures
 - [Deep RL Course (Hugging Face)](https://huggingface.co/learn/deep-rl-course/) - Hands-on tutorials
+- [Karpathy: Deep RL - Pong from Pixels](https://karpathy.github.io/2016/05/31/rl/) - Excellent practical walkthrough of Policy Gradients
 
 ### Implementations
 - [CleanRL](https://github.com/vwxyzjn/cleanrl) - Clean, single-file implementations

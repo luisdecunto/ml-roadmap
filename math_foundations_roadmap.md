@@ -195,6 +195,7 @@
 **Resources:**
 - [Sutton & Barto: Reinforcement Learning (Free PDF)](http://incompleteideas.net/book/RLbook2020.pdf)
 - [David Silver's RL Course (UCL)](https://www.davidsilver.uk/teaching/)
+- [Karpathy: Deep RL - Pong from Pixels](https://karpathy.github.io/2016/05/31/rl/) - Excellent practical guide
 - [Spinning Up in Deep RL (OpenAI)](https://spinningup.openai.com/)
 - [CleanRL: Readable RL Implementations](https://github.com/vwxyzjn/cleanrl)
 - [Deep RL Course (Hugging Face)](https://huggingface.co/learn/deep-rl-course/unit0/introduction)
